@@ -9,8 +9,8 @@
                 <i class="fa-solid fa-arrow-left-long text-danger"></i>
               </router-link>
 
-              <div class="row justify-content-center">
-                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+              <div class="row justify-content-center" >
+                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1" style="border-right: 2px #ccc solid; padding-right:50px">
                   <p
                     class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-danger"
                   >
