@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  
 
   <div
     class="container"
@@ -51,7 +51,7 @@
   
   <script>
 // @ is an alias to /src
-import Header from "../components/Header.vue";
+import Header from "../components/HeaderView.vue";
 import Sidebar from "../components/Sidebar.vue";
 import Footer from "../components/Footer.vue";
 

@@ -1,10 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomePage from '../views/HomePage.vue'
-import Header from '../components/Header.vue'
-import Sidebar from '../components/Sidebar.vue'
-import TestView from '../views/TestView.vue'
-import Product from "../components/ProductCarousel.vue";
+
 
 
 const routes = [

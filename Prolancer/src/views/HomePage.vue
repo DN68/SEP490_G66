@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  
 
   <div
     class="container"
@@ -9,7 +9,7 @@
       <Header></Header>
     </header>
     <nav id="navCategory" class="navbar navbar-inverse">
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto" style="text-align:center">
         <!-- Links -->
         <h6 class="fw-bold my-1 navCategory">Category</h6>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -215,7 +215,7 @@
 
 <script>
 // @ is an alias to /src
-import Header from "../components/Header.vue";
+import Header from "../components/HeaderView.vue";
 import Sidebar from "../components/Sidebar.vue";
 import Footer from "../components/Footer.vue";
 import Product from "../components/ProductCarousel.vue";
@@ -339,5 +339,8 @@ export default {
   min-height: 40px px;
   border-radius: 8px;
   margin-right: 12px;
+}
+::before {
+    margin-left: 25%;
 }
 </style>
