@@ -4,7 +4,7 @@ let dbConnection
 
 module.exports = {
     connectToDb: (cb) => {
-        MongoClient.connect('mongodb://127.0.0.1:27017/Prolancer')
+        MongoClient.connect('mongodb://localhost:27017/Prolancer')
         // MongoClient.connect('mongodb+srv://anpqhe160968:Pqa13112002@cluster0.6ac0vz8.mongodb.net/')
             .then((client) => {
                 dbConnection = client.db()
