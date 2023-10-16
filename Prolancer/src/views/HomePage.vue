@@ -97,7 +97,7 @@
                     </div> -->
                   </div>
                 </div>
-                <div class="row" style="justify-content: space-between">
+                <div class="row" style="justify-content: space-between; margin: 0 auto;">
                   <div class="col-sm-2 guildeIteam">
                     <div class="guildeBack">
                       <i class="bi bi-database" style="font-size: 20px"></i>
@@ -145,7 +145,7 @@
                     >&nbsp;
                   </h4>
                 </div>
-                <Product></Product>
+                <GigCarousel></GigCarousel>
               </div>
             </section>
 
@@ -157,7 +157,7 @@
                 >
                   <h4><span>Gigs may you find</span>&nbsp;</h4>
                 </div>
-                <ProductCarouselSuggest></ProductCarouselSuggest>
+                <!-- <ProductCarouselSuggest></ProductCarouselSuggest> -->
               </div>
             </section>
             <section>
@@ -178,7 +178,7 @@
                     >&nbsp;
                   </h4>
                 </div>
-                <ProductList></ProductList>
+                <GigList></GigList>
               </div>
             </section>
             <hr class="featurette-divider" />
@@ -218,9 +218,9 @@
 import Header from "../components/Header.vue";
 import Sidebar from "../components/Sidebar.vue";
 import Footer from "../components/Footer.vue";
-import Product from "../components/ProductCarousel.vue";
-import ProductList from "../components/ProductList.vue";
-import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
+import GigCarousel from "../components/GigCarousel.vue";
+import GigList from "../components/GigList.vue";
+// import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
 
 export default {
   name: "HomePage",
@@ -228,9 +228,9 @@ export default {
     Header,
     Sidebar,
     Footer,
-    Product,
-    ProductList,
-    ProductCarouselSuggest,
+    GigCarousel ,
+    GigList,
+    // ProductCarouselSuggest,
   },
   data() {
     return {
@@ -306,7 +306,7 @@ export default {
   margin-bottom: 20px;
 }
 .featurette-divider {
-  margin: 10px 0;
+  margin: 30px 0;
 }
 
 .personalized-header h4 {
