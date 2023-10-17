@@ -1,18 +1,19 @@
 <template>
-  <div>
+  
     <!-- Sidebar -->
-    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white" style="position: relative">
-      <div class="position-sticky" style="position: absolute">
-        <div class="content" >
+    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+      
+      
+        
           <img
             src="../assets/image/large_1588936738888.png"
-            style="width:50%"
+            
             alt=""
           />
           <br />
-          <p >Duy Nguyen</p>
-        </div>
-      </div>
+          <h5>Duy Nguyen</h5>
+        
+      
     </nav>
     <!-- Sidebar -->
 
@@ -35,7 +36,7 @@
             
     </nav> -->
     <!-- Navbar -->
-  </div>
+  
   <!--Main Navigation-->
 
   <!--Main layout-->
@@ -94,5 +95,22 @@ export default {};
 .list-group-item.active {
   background-color: #e37e7f;
   border: none;
+}
+
+#sidebarMenu > img{
+  width: 60%;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 60%;
+  border-radius: 40% ;
+}
+h5{
+  text-align: center;
+  font-family: face;
+}
+@font-face {
+  font-family: face;
+  src: url(D:\Prolancers\SEP490_G66\Prolancer\src\assets\font\Tilt_Neon\TiltNeon-Regular-VariableFont_XROT,YROT.ttf);
 }
 </style>

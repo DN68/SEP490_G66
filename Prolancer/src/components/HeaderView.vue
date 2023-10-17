@@ -105,7 +105,7 @@
           </li> -->
           
 
-          <li class="nav-item dropdown" style="display: none">
+          <li class="nav-item dropdown" style="display:none">
             <a
               class="nav-link dropdown-toggle d-flex align-items-center"
               href="#"
@@ -123,10 +123,11 @@
               />
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">My profile</a></li>
-              <li><a class="dropdown-item" href="#">Change password</a></li>
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li><router-link class="dropdown-item" to="/profile">My Profile</router-link></li>
+              <li><router-link class="dropdown-item" to="#">Change password</router-link></li>
+              <li><router-link class="dropdown-item" to="#">Settings</router-link></li>
+              <li><router-link class="dropdown-item" to="#">Logout</router-link></li>
+              
             </ul>
           </li>
         </ul>
@@ -136,8 +137,8 @@
     </div>
     <!-- Container wrapper -->
   </nav>
-  <header>
-    <!-- Sidebar -->
+  <div class="header">
+ <!-- Sidebar -->
     <nav
       style="display: none; padding-top: 140px"
       id="sidebarMenuNomarl"
@@ -180,7 +181,8 @@
         </div>
       </div>
     </nav>
-  </header>
+  </div>
+
   <!-- Navbar -->
 </template>
 
