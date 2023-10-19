@@ -1,24 +1,19 @@
 <template>
+  <!-- Sidebar -->
+  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+    <img src="../assets/image/large_1588936738888.png" alt="" />
+    <br />
+    <div class="info-user">
+      <h5 class="username">Duy Nguyen</h5>
+      <p class="email">duynguyen68@gmail.com</p>
+      <h5 class="preview">Preview Profile</h5>
+    </div>
+  </nav>
   
-    <!-- Sidebar -->
-    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-      
-      
-        
-          <img
-            src="../assets/image/large_1588936738888.png"
-            
-            alt=""
-          />
-          <br />
-          <h5>Duy Nguyen</h5>
-        
-      
-    </nav>
-    <!-- Sidebar -->
+  <!-- Sidebar -->
 
-    <!-- Navbar -->
-    <!-- <nav
+  <!-- Navbar -->
+  <!-- <nav
       id="main-navbar"
       class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
     >
@@ -35,8 +30,8 @@
         </button>
             
     </nav> -->
-    <!-- Navbar -->
-  
+  <!-- Navbar -->
+
   <!--Main Navigation-->
 
   <!--Main layout-->
@@ -60,16 +55,9 @@ export default {};
 }
 
 /* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  padding: 58px 0 0; /* Height of navbar */
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
-  width: 240px;
-  z-index: 600;
-}
+
+/*  
+*/
 
 @media (max-width: 991.98px) {
   .sidebar {
@@ -97,20 +85,35 @@ export default {};
   border: none;
 }
 
-#sidebarMenu > img{
+#sidebarMenu > img {
   width: 60%;
   display: block;
   margin-right: auto;
   margin-left: auto;
   margin-top: 60%;
-  border-radius: 40% ;
+  border-radius: 40%;
 }
-h5{
+.info-user {
   text-align: center;
   font-family: face;
+}
+.email{
+  opacity: 0.6;
 }
 @font-face {
   font-family: face;
   src: url(D:\Prolancers\SEP490_G66\Prolancer\src\assets\font\Tilt_Neon\TiltNeon-Regular-VariableFont_XROT,YROT.ttf);
+}
+.preview{
+  border: 1px #ccc solid;
+  width: 70%;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.preview:hover{
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
 }
 </style>
