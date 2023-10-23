@@ -2,7 +2,7 @@ import express from "express";
 
 import{
     showUsers,
-    showUserByUserPassword,
+    showUserByEmailPassword,
     createUser,
 } from "../controllers/user.js"
 
@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/users", showUsers);
 
 //get user by username & password
-router.get("/user",  showUserByUserPassword);
+router.get("/user",  showUserByEmailPassword);
 
 //create new user
 router.post("/users", createUser);

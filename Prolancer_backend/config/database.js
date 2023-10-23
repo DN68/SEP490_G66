@@ -5,7 +5,7 @@ const db = mysql.createConnection({
     host:"localhost",
     user:"root",
     password:"",
-    database:"pos_db"
+    database:"prolancer"
 })
 
 export default db;

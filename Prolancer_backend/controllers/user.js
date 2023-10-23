@@ -1,7 +1,7 @@
 // import functions from User model
 import {
     getUsers,
-    getUserByUserPassword,
+    getUserByEmailPassword,
     insertUser,
 } from "../models/UserModel.js"
 
@@ -18,8 +18,8 @@ export const showUsers = (req, res) => {
 
 
 //get user by username, password
-export const showUserByUserPassword = (req, res) => {
-    getUserByUserPassword(req.params.username, req.params.password, (err, results) => {
+export const showUserByEmailPassword = (req, res) => {
+    getUserByEmailPassword(req.params.username, req.params.password, (err, results) => {
         if (err) {
             res.send(err);
         } else {

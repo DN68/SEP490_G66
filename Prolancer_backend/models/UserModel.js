@@ -13,10 +13,10 @@ export const getUsers = (result) => {
 }
 
 
-//get single user by username & password
-export const getUserByUserPassword = (username, password, result) => {
-    db.query("SELEECT * FROM Users WHERE username = ? AND password = ?",
-        [username], [password], (err, result) => {
+//get single user by email & password
+export const getUserByEmailPassword = (email, password, result) => {
+    db.query("SELEECT * FROM Users WHERE email = ? AND password = ?",
+        [email], [password], (err, results) => {
             if (err) {
                 console.log(err);
                 result(err, null);
