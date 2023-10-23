@@ -1,6 +1,4 @@
 <template>
-  <div></div>
-
   <div
     class="container"
     style="height: auto; max-width: -webkit-fill-available"
@@ -8,56 +6,7 @@
     <header class="row">
       <Header></Header>
     </header>
-    <nav id="navCategory" class="navbar navbar-inverse">
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="#">Action</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another action</a>
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </div>
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="#">Action</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another action</a>
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-    </nav>
+    <NavCategory :listCategories="categories"></NavCategory>
     <div class="container">
       <div class="row">
         <!-- <aside class="col-sm-3">
@@ -145,7 +94,7 @@
                     >&nbsp;
                   </h4>
                 </div>
-                <GigCarousel></GigCarousel>
+                <GigCarousel :listGigs="gigs"></GigCarousel>
               </div>
             </section>
 
@@ -155,7 +104,7 @@
                   data-testid="personalized-header"
                   class="personalized-header"
                 >
-                  <h4><span>Gigs may you find</span>&nbsp;</h4>
+                  <!-- <h4><span>Gigs may you find</span>&nbsp;</h4> -->
                 </div>
                 <!-- <ProductCarouselSuggest></ProductCarouselSuggest> -->
               </div>
@@ -178,19 +127,18 @@
                     >&nbsp;
                   </h4>
                 </div>
-                <GigList></GigList>
+                <GigList :listGigs="gigs"></GigList>
               </div>
             </section>
             <hr class="featurette-divider" />
             <div class="row featurette">
               <div class="col-md-7">
-                <h2 class="featurette-heading">
-                  First featurette heading.
+                <h3 class="featurette-heading">
+                  Connecting Businesses with Top Freelancers, Seamlessly.
                   <span class="text-muted">It’ll blow your mind.</span>
-                </h2>
+                </h3>
                 <p class="lead">
-                  Some great placeholder content for the first featurette here.
-                  Imagine some exciting prose here.
+                  Your Project, Our Freelancers: A Perfect Match Every Time.
                 </p>
               </div>
               <div class="col-md-5">
@@ -216,60 +164,44 @@
 <script>
 // @ is an alias to /src
 import Header from "../components/Header.vue";
-import Sidebar from "../components/Sidebar.vue";
 import Footer from "../components/Footer.vue";
 import GigCarousel from "../components/GigCarousel.vue";
 import GigList from "../components/GigList.vue";
 // import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
+import NavCategory from "../components/NavCategory.vue";
+import axios from 'axios';
 
 export default {
   name: "HomePage",
   components: {
     Header,
-    Sidebar,
     Footer,
     GigCarousel ,
-    GigList,
+    GigList, NavCategory
     // ProductCarouselSuggest,
   },
   data() {
     return {
-      isShow: function () {
-        alert("Xin chào ");
-      },
-      counter: 0,
+      categories: [],
+      gigs:[]
     };
-  },
+  }, async created() {
+    const responseCategory = await axios.get('/categories/get');
+    const categories = responseCategory.data;
+    this.categories = categories;
+
+    const responseGig = await axios.get('/gigs/index');
+    const gigs = responseGig.data;
+    console.log(responseGig.data[0].Title+'1')
+
+    this.gigs = gigs;
+    
+    
+  }
 };
 </script>
 
 <style>
-.dropdown-menu {
-  width: 300px;
-  position: fixed;
-  margin-top: 8px;
-  margin-left: 5%;
-}
-.dropdown-menu::before {
-  content: "";
-  height: 10px;
-  left: 0;
-  right: 0;
-  top: 100%;
-  position: absolute;
-  background-color: transparent;
-  transform: translateY(-1400%);
-}
-
-@media screen and (max-width: 990px) {
-  #navCategory {
-    display: none;
-  }
-  /* .topnav a.icon {
-    float: right;
-    display: block;
-  } */
-}
 .personalized-header {
   min-height: 24px;
   margin-top: 24px;
@@ -293,15 +225,6 @@ export default {
   overflow: hidden;
   margin-bottom: 20px;
 }
-.navCategory {
-  color: #62646a;
-  font: 400 16px/24px Macan, Helvetica Neue, Helvetica, Arial, sans-serif !important;
-  display: block;
-  font-size: 18px !important;
-  line-height: 15px !important;
-  position: relative;
-}
-
 .guildeMessage {
   margin-bottom: 20px;
 }

@@ -33,830 +33,242 @@
               <div class="carousel-inner">
                 <div class="item carousel-item active">
                   <div class="row">
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
+                    <div
+                      class="col-sm-3 itemList"
+                      v-for="(gig, index) in listGigs"
+                      :key="index"
+                    >
+                      <router-link
+                        :to="'/gigdetail/' + gig.GigID"
+                        style="text-decoration: none"
+                      >
+                        <div class="thumb-wrapper">
+                          <span class="wish-icon"
+                            ><i class="fa fa-heart-o"></i
+                          ></span>
+                          <div class="img-box">
+                            <img
+                              :src="gig.Gig_IMG"
+                              class="img-fluid rounded"
+                              alt="Macbook"
+                            />
                           </div>
+                          <div class="thumb-content">
+                            <div class="row userRow">
+                              <div class="col-md-12">
+                                <img
+                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  class="rounded-circle"
+                                  height="25"
+                                  alt=""
+                                  loading="lazy"
+                                  style="width: 30px; border: 1px solid"
+                                />
+                                <span
+                                  class="userInfor"
+                                  style="text-align: left; color: #222325"
+                                  >anhlt1901</span
+                                >
+                              </div>
+                              <!-- <div class="col-md-4">
+                                <h3 class="userLevel">Level 3</h3>
+                              </div> -->
+                            </div>
 
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <!-- <div class="col-sm-2"> -->
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
+                            <h3 class="gigDescription">
+                              {{ gig.Title }}
+                            </h3>
+                            <div class="row">
+                              <div class="star-rating">
+                                <ul class="list-inline starRatingUl">
+                                  <li class="list-inline-item">
+                                    <div style="display: inline">
+                                      <i class="fa fa-star"
+                                        ><b class="ratingScore">5.0</b></i
+                                      >
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
-                            <!-- </div> -->
-                            <!-- <div class="col-sm-10">
-
-
-                      </div> -->
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
-                          </div>
-
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <!-- <div class="col-sm-2"> -->
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                            <!-- </div> -->
-                            <!-- <div class="col-sm-10">
-
-
-                      </div> -->
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
+                            <div class="row">
+                              <div class="orderPrice col-md-3">
+                                <span class="gigPrice"
+                                  >From&nbsp;<span
+                                    >US${{ gig.Price }}</span
+                                  ></span
+                                >
+                              </div>
+                              <div class="getOrder col-md-9">
+                                <a href="#" class="btn btn-primary btnOrder"
+                                  >Get Order</a
+                                >
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
-                          </div>
-
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <!-- <div class="col-sm-2"> -->
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                            <!-- </div> -->
-                            <!-- <div class="col-sm-10">
-
-
-                      </div> -->
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
-                          </div>
-
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <!-- <div class="col-sm-2"> -->
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                            <!-- </div> -->
-                            <!-- <div class="col-sm-10">
-
-
-                      </div> -->
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      </router-link>
                     </div>
                   </div>
                 </div>
                 <div class="item carousel-item">
                   <div class="row">
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
+                    <div
+                      class="col-sm-3 itemList"
+                      v-for="(gig, index) in listGigs"
+                      :key="index"
+                    >
+                      <router-link
+                        :to="'/gigdetail/' + gig.GigID"
+                        style="text-decoration: none"
+                      >
+                        <div class="thumb-wrapper">
+                          <span class="wish-icon"
+                            ><i class="fa fa-heart-o"></i
+                          ></span>
+                          <div class="img-box">
+                            <img
+                              :src="gig.Gig_IMG"
+                              class="img-fluid rounded"
+                              alt="Macbook"
+                            />
                           </div>
+                          <div class="thumb-content">
+                            <div class="row userRow">
+                              <div class="col-md-12">
+                                <img
+                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  class="rounded-circle"
+                                  height="25"
+                                  alt=""
+                                  loading="lazy"
+                                  style="width: 30px; border: 1px solid"
+                                />
+                                <span
+                                  class="userInfor"
+                                  style="text-align: left; color: #222325"
+                                  >anhlt1901</span
+                                >
+                              </div>
+                              <!-- <div class="col-md-4">
+                                <h3 class="userLevel">Level 3</h3>
+                              </div> -->
+                            </div>
 
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
+                            <h3 class="gigDescription">                           
+                              {{ gig.Title }}
+                            </h3>
+                            <div class="row">
+                              <div class="star-rating">
+                                <ul class="list-inline starRatingUl">
+                                  <li class="list-inline-item">
+                                    <div style="display: inline">
+                                      <i class="fa fa-star"
+                                        ><b class="ratingScore">5.0</b></i
+                                      >
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
-                         
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
-                          </div>
-
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                       
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
+                            <div class="row">
+                              <div class="orderPrice col-md-3">
+                                <span class="gigPrice"
+                                  >From&nbsp;<span
+                                    >US${{ gig.Price }}</span
+                                  ></span
+                                >
+                              </div>
+                              <div class="getOrder col-md-9">
+                                <a href="#" class="btn btn-primary btnOrder"
+                                  >Get Order</a
+                                >
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
-                          </div>
-
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3 itemList">
-                      <div class="thumb-wrapper">
-                        <span class="wish-icon"
-                          ><i class="fa fa-heart-o"></i
-                        ></span>
-                        <div class="img-box">
-                          <img
-                            src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                            class="img-fluid rounded"
-                            alt="Macbook"
-                          />
-                        </div>
-                        <div class="thumb-content">
-                          <div class="row userRow">
-                            <div class="col-md-8">
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                                class="rounded-circle"
-                                height="25"
-                                alt=""
-                                loading="lazy"
-                                style="width: 30px; border: 1px solid"
-                              />
-                              <span
-                                class="userInfor"
-                                style="text-align: left; color: #222325"
-                                >anhlt1901</span
-                              >
-                            </div>
-                            <div class="col-md-4">
-                              <h3 class="userLevel">Level 3</h3>
-                            </div>
-                          </div>
-
-                          <h3 class="gigDescription">
-                            I will write js and fix bug for you will write js
-                            and fix bug for you
-                          </h3>
-                          <div class="row">
-                            <div class="star-rating">
-                              <ul class="list-inline starRatingUl">
-                                <li class="list-inline-item">
-                                  <div style="display: inline">
-                                    <i class="fa fa-star"
-                                      ><b class="ratingScore">5.0</b></i
-                                    >
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                         
-                          </div>
-                          <div class="row">
-                            <div class="orderPrice col-md-3">
-                              <span class="gigPrice"
-                                >From&nbsp;<span>US$5</span></span
-                              >
-                            </div>
-                            <div class="getOrder col-md-9">
-                              <a href="#" class="btn btn-primary btnOrder"
-                                >Get Order</a
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      </router-link>
                     </div>
                   </div>
                 </div>
                 <div class="item carousel-item">
                   <div class="row">
-                    <div class="col-sm-3 itemList">
-                <div class="thumb-wrapper">
-                  <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                  <div class="img-box">
-                    <img
-                      src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                      class="img-fluid rounded"
-                      alt="Macbook"
-                    />
-                  </div>
-                  <div class="thumb-content">
-                    <div class="row userRow">
-                      <div class="col-md-8">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                          class="rounded-circle"
-                          height="25"
-                          alt=""
-                          loading="lazy"
-                          style="width: 30px; border: 1px solid"
-                        />
-                        <span
-                          class="userInfor"
-                          style="text-align: left; color: #222325"
-                          >anhlt1901</span
-                        >
-                      </div>
-                      <div class="col-md-4">
-                        <h3 class="userLevel">Level 3</h3>
-                      </div>
-                    </div>
-
-                    <h3 class="gigDescription">
-                      I will write js and fix bug for you will write js and fix
-                      bug for you
-                    </h3>
-                    <div class="row">
-                      <div class="star-rating">
-                        <ul class="list-inline starRatingUl">
-                          <li class="list-inline-item">
-                            <div style="display: inline">
-                              <i class="fa fa-star"
-                                ><b class="ratingScore">5.0</b></i
-                              >
+                    <div
+                      class="col-sm-3 itemList"
+                      v-for="(gig, index) in listGigs"
+                      :key="index"
+                    >
+                      <router-link
+                        :to="'/gigdetail/' + gig.GigID"
+                        style="text-decoration: none"
+                      >
+                        <div class="thumb-wrapper">
+                          <span class="wish-icon"
+                            ><i class="fa fa-heart-o"></i
+                          ></span>
+                          <div class="img-box">
+                            <img
+                              :src="gig.Gig_IMG"
+                              class="img-fluid rounded"
+                              alt="Macbook"
+                            />
+                          </div>
+                          <div class="thumb-content">
+                            <div class="row userRow">
+                              <div class="col-md-12">
+                                <img
+                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  class="rounded-circle"
+                                  height="25"
+                                  alt=""
+                                  loading="lazy"
+                                  style="width: 30px; border: 1px solid"
+                                />
+                                <span
+                                  class="userInfor"
+                                  style="text-align: left; color: #222325"
+                                  >anhlt1901</span
+                                >
+                              </div>
+                              <!-- <div class="col-md-4">
+                                <h3 class="userLevel">Level 3</h3>
+                              </div> -->
                             </div>
-                          </li>
-                        </ul>
-                      </div>
-                   
-                    </div>
-                    <div class="row">
-                      <div class="orderPrice col-md-3">
-                        <span class="gigPrice"
-                          >From&nbsp;<span>US$5</span></span
-                        >
-                      </div>
-                      <div class="getOrder col-md-9">
-                        <a href="#" class="btn btn-primary btnOrder"
-                          >Get Order</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-3 itemList">
-                <div class="thumb-wrapper">
-                  <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                  <div class="img-box">
-                    <img
-                      src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                      class="img-fluid rounded"
-                      alt="Macbook"
-                    />
-                  </div>
-                  <div class="thumb-content">
-                    <div class="row userRow">
-                      <div class="col-md-8">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                          class="rounded-circle"
-                          height="25"
-                          alt=""
-                          loading="lazy"
-                          style="width: 30px; border: 1px solid"
-                        />
-                        <span
-                          class="userInfor"
-                          style="text-align: left; color: #222325"
-                          >anhlt1901</span
-                        >
-                      </div>
-                      <div class="col-md-4">
-                        <h3 class="userLevel">Level 3</h3>
-                      </div>
-                    </div>
 
-                    <h3 class="gigDescription">
-                      I will write js and fix bug for you will write js and fix
-                      bug for you
-                    </h3>
-                    <div class="row">
-                      <div class="star-rating">
-                        <ul class="list-inline starRatingUl">
-                          <li class="list-inline-item">
-                            <div style="display: inline">
-                              <i class="fa fa-star"
-                                ><b class="ratingScore">5.0</b></i
-                              >
+                            <h3 class="gigDescription">                           
+                              {{ gig.Title }}
+                            </h3>
+                            <div class="row">
+                              <div class="star-rating">
+                                <ul class="list-inline starRatingUl">
+                                  <li class="list-inline-item">
+                                    <div style="display: inline">
+                                      <i class="fa fa-star"
+                                        ><b class="ratingScore">5.0</b></i
+                                      >
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
-                          </li>
-                        </ul>
-                      </div>
-                     
-                    </div>
-                    <div class="row">
-                      <div class="orderPrice col-md-3">
-                        <span class="gigPrice"
-                          >From&nbsp;<span>US$5</span></span
-                        >
-                      </div>
-                      <div class="getOrder col-md-9">
-                        <a href="#" class="btn btn-primary btnOrder"
-                          >Get Order</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-3 itemList">
-                <div class="thumb-wrapper">
-                  <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                  <div class="img-box">
-                    <img
-                      src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                      class="img-fluid rounded"
-                      alt="Macbook"
-                    />
-                  </div>
-                  <div class="thumb-content">
-                    <div class="row userRow">
-                      <div class="col-md-8">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                          class="rounded-circle"
-                          height="25"
-                          alt=""
-                          loading="lazy"
-                          style="width: 30px; border: 1px solid"
-                        />
-                        <span
-                          class="userInfor"
-                          style="text-align: left; color: #222325"
-                          >anhlt1901</span
-                        >
-                      </div>
-                      <div class="col-md-4">
-                        <h3 class="userLevel">Level 3</h3>
-                      </div>
-                    </div>
-
-                    <h3 class="gigDescription">
-                      I will write js and fix bug for you will write js and fix
-                      bug for you
-                    </h3>
-                    <div class="row">
-                      <div class="star-rating">
-                        <ul class="list-inline starRatingUl">
-                          <li class="list-inline-item">
-                            <div style="display: inline">
-                              <i class="fa fa-star"
-                                ><b class="ratingScore">5.0</b></i
-                              >
+                            <div class="row">
+                              <div class="orderPrice col-md-3">
+                                <span class="gigPrice"
+                                  >From&nbsp;<span
+                                    >US${{ gig.Price }}</span
+                                  ></span
+                                >
+                              </div>
+                              <div class="getOrder col-md-9">
+                                <a href="#" class="btn btn-primary btnOrder"
+                                  >Get Order</a
+                                >
+                              </div>
                             </div>
-                          </li>
-                        </ul>
-                      </div>
-
+                          </div>
+                        </div>
+                      </router-link>
                     </div>
-                    <div class="row">
-                      <div class="orderPrice col-md-3">
-                        <span class="gigPrice"
-                          >From&nbsp;<span>US$5</span></span
-                        >
-                      </div>
-                      <div class="getOrder col-md-9">
-                        <a href="#" class="btn btn-primary btnOrder"
-                          >Get Order</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-3 itemList">
-                <div class="thumb-wrapper">
-                  <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
-                  <div class="img-box">
-                    <img
-                      src="https://vcdn-sohoa.vnecdn.net/2023/08/22/iPhone-15-Pro-Burgandy-Feature-1241-3763-1692676036.jpg"
-                      class="img-fluid rounded"
-                      alt="Macbook"
-                    />
-                  </div>
-                  <div class="thumb-content">
-                    <div class="row userRow">
-                      <div class="col-md-8">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
-                          class="rounded-circle"
-                          height="25"
-                          alt=""
-                          loading="lazy"
-                          style="width: 30px; border: 1px solid"
-                        />
-                        <span
-                          class="userInfor"
-                          style="text-align: left; color: #222325"
-                          >anhlt1901</span
-                        >
-                      </div>
-                      <div class="col-md-4">
-                        <h3 class="userLevel">Level 3</h3>
-                      </div>
-                    </div>
-
-                    <h3 class="gigDescription">
-                      I will write js and fix bug for you will write js and fix
-                      bug for you
-                    </h3>
-                    <div class="row">
-                      <div class="star-rating">
-                        <ul class="list-inline starRatingUl">
-                          <li class="list-inline-item">
-                            <div style="display: inline">
-                              <i class="fa fa-star"
-                                ><b class="ratingScore">5.0</b></i
-                              >
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    
-                    </div>
-                    <div class="row">
-                      <div class="orderPrice col-md-3">
-                        <span class="gigPrice"
-                          >From&nbsp;<span>US$5</span></span
-                        >
-                      </div>
-                      <div class="getOrder col-md-9">
-                        <a href="#" class="btn btn-primary btnOrder"
-                          >Get Order</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
                   </div>
                 </div>
               </div>
@@ -884,7 +296,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: [
+    'listGigs'
+  ]
+
+};
 </script>
 
 <style>
@@ -908,14 +325,14 @@ export default {};
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .carousel .img-box img {
-    max-width: 100%;
-    max-height: 100%;
-    display: inline-block;
-    position: absolute;
-    bottom: 0;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
 }
 .carousel .item .img-box {
   height: 120px;
@@ -924,7 +341,7 @@ export default {};
   position: relative;
 }
 .fa-heart-o:before {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 .carousel .item h4 {
   font-size: 18px;
@@ -1036,5 +453,9 @@ export default {};
 }
 .listCarouse {
   list-style-type: none;
+}
+.carousel-item .btnOrder {
+  float: right;
+  position: relative;
 }
 </style>

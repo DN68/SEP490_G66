@@ -6,56 +6,7 @@
     <header class="row">
       <Header></Header>
     </header>
-    <nav id="navCategory" class="navbar navbar-inverse">
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="#">Action</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another action</a>
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </div>
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="#">Action</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another action</a>
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-    </nav>
+    <NavCategory :listCategories="categories"></NavCategory>
     <div class="container">
       <div class="row">
         <!-- <aside class="col-sm-3">
@@ -282,10 +233,10 @@
           </div>
         </div>
         <div class="gig_content">
-          <GigList></GigList>
-          <GigList></GigList>
-          <GigList></GigList>
-          <GigList></GigList>
+          <GigList :listGigs="gigs"></GigList>
+          <GigList :listGigs="gigs"></GigList>
+          <GigList :listGigs="gigs"></GigList>
+          <GigList :listGigs="gigs"></GigList>
         </div>
       </div>
       <div class="pagination">
@@ -302,26 +253,7 @@
     <footer class="panel panel-default">
       <Footer></Footer>
     </footer>
-    <button @click="isshowModal = !isshowModal">Toggle</button>
-    <div class="modal fade show" style="display: block;" v-if="isshowModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Modal Title</h5>
-              <button type="button" class="btn-close" @click="isshowModal =!isshowModal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p class="modal-title">Modal text here</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" >Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-
-      </div>
-
-    </div>
+    
   </div>
 </template>
       
@@ -331,6 +263,9 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import GigList from "../components/GigList.vue";
 import vClickOutside from "click-outside-vue3";
+import NavCategory from "../components/NavCategory.vue";
+import axios from 'axios';
+
 export default {
   name: "HomePage",
   directives: {
@@ -339,14 +274,15 @@ export default {
   components: {
     Header,
     Footer,
-    GigList,
+    GigList, NavCategory
   },
   data() {
     return {
       isshowlistfilter: false,
       isshowListProgram: false,
       isshowListFreelancer: false,
-      isshowListBuget: false, isshowModal: false
+      isshowListBuget: false, isshowModal: false, categories: [],
+      gigs:[]
     };
   },
   methods: {
@@ -361,33 +297,20 @@ export default {
         this.isshowlistfilter = false;
       }
     },
-  },
+  }, async created() {
+    const responseCategory = await axios.get('/categories/get');
+    const categories = responseCategory.data;
+    this.categories = categories;
+
+    const responseGig = await axios.get('/gigs/index');
+    const gigs = responseGig.data;
+    this.gigs = gigs;
+    
+  }
 };
 </script>
       
-      <style>
-.dropdown-menu {
-  width: 300px;
-  position: fixed;
-  margin-top: 8px;
-  margin-left: 5%;
-}
-.dropdown-menu::before {
-  content: "";
-  height: 10px;
-  left: 0;
-  right: 0;
-  top: 100%;
-  position: absolute;
-  background-color: transparent;
-  transform: translateY(-1400%);
-}
-
-@media screen and (max-width: 990px) {
-  #navCategory {
-    display: none;
-  }
-}
+<style>
 .personalized-header {
   min-height: 24px;
   margin-top: 24px;
@@ -399,14 +322,6 @@ export default {
   text-align: left;
 }
 
-.navCategory {
-  color: #62646a;
-  font: 400 16px/24px Macan, Helvetica Neue, Helvetica, Arial, sans-serif !important;
-  display: block;
-  font-size: 18px !important;
-  line-height: 15px !important;
-  position: relative;
-}
 .guildeFilterIteam {
   display: flex;
   align-items: center;
