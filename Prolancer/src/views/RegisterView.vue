@@ -121,7 +121,7 @@ export default {
     async Register() {
       try {
         if (this.password == this.repeatPassword) {
-          await axios.post("http://localhost:3000/users", {
+          await axios.post("http://localhost:3000/users/create", {
             username: this.username,
             email: this.email,
             password: this.password,
