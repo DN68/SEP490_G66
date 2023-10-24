@@ -114,15 +114,25 @@ app.post('/login', function (req, res) {
             if (err) {
                 res.send(err);
             } else {
-                if(results){
+                if (results) {
                     req.session.user = results;
                     // res.json(results);
                     res.json(req.session.user);
-                }else{
+                } else {
                     res.send("Wrong email or password!");
                 }
             }
         })
+})
+
+
+//Logout
+app.get('/logout', function (req, res) {
+    req.session.destroy(function (err) {
+        if (!err) {
+            res.send("Log out!")
+        }
+    })
 })
 
 const PORT = process.env.PORT || 3000;
