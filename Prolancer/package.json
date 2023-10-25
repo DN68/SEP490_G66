@@ -10,6 +10,8 @@
   "dependencies": {
     "bootstrap-icons": "^1.11.1",
     "core-js": "^3.8.3",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
@@ -43,5 +45,18 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "description": "```\r npm install\r ```",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DN68/SEP490_G66.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DN68/SEP490_G66/issues"
+  },
+  "homepage": "https://github.com/DN68/SEP490_G66#readme",
+  "keywords": []
 }

@@ -49,7 +49,7 @@
 
 <script>
 import Headers from "../components/HeaderView.vue";
-import Sidebar from "../components/SideBarView.vue";
+import Sidebar from "../components/SideBarudpfView.vue";
 
 export default {
   name: "App",

@@ -6,7 +6,8 @@
     <div class="info-user">
       <h5 class="username">Duy Nguyen</h5>
       <p class="email">duynguyen68@gmail.com</p>
-      <h5 class="preview">Preview Profile</h5>
+      <router-link to="/profile" style="text-decoration: none; color: #000"><h5 class="preview">Preview Profile</h5></router-link>
+      
     </div>
   </nav>
   

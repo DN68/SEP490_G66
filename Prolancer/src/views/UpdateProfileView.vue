@@ -1,0 +1,148 @@
+<template>
+  <div class="header">
+    <Headers></Headers>
+  </div>
+  <div class="Sidebarudpf">
+    <Sidebarudpf></Sidebarudpf>
+  </div>
+  <div id="content" class="">
+    <div class="container-profile">
+      <form action="/update" class="form-profile">
+        <div class="field">
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Username</label
+          >
+          <input
+            type="username"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            
+          />
+          <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <div class="left" style="width:40%">
+               <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >First Name</label
+          >
+          <input
+            type="firstname"
+            id="form3Example3"
+            class="form-control form-control-lg"
+          />
+            </div>
+            <div class="right" style="width:40%">
+              <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Last Name</label
+          >
+          <input
+            type="lastname"
+            id="form3Example3"
+            class="form-control form-control-lg"
+          />
+            </div>
+             
+          </div>
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Phone Number</label>
+          <input
+            type="phoneno"
+            id="form3Example3"
+            class="form-control form-control-lg"
+          />
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Description</label>
+            <textarea
+            type="description"
+            id="form3Example3"
+            class="form-control form-control-lg"
+          />
+          <div class="mt-5" style="display:flex;flex-direction:row;justify-content:space-between">
+            <div class="left" style="width:40%">
+              <span class="form-label mt-5">Upload CV</span>
+            </div>
+            <div class="right" style="width:15%">
+              <input type="button" value="Upload">
+            </div>
+          </div>
+          <button id="btn-sub" type="submit" class="btn btn-primary">
+            Update
+          </button>
+        </div>
+
+      
+          
+        
+      </form>
+    </div>
+  </div>
+</template>
+
+<script>
+import Headers from "../components/HeaderView.vue";
+import Sidebarudpf from "../components/SideBarudpfView.vue";
+
+export default {
+  name: "App",
+  components: {
+    Headers,
+    Sidebarudpf,
+  },
+};
+</script>
+
+<style>
+html {
+  background-color: #ededed;
+}
+.Sidebarudpf {
+  float: left;
+  width: 17%;
+}
+#content {
+  float: right;
+  width: 80%;
+  padding-top: 10%;
+  /* position: fixed; */
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 85.8px 0 0;
+  margin-top: 3%;
+
+  z-index: 600;
+  position: sticky;
+
+}
+
+.container-profile {
+  margin: 10px 10%;
+  width: 110%;
+  height: 100%;
+}
+#btn-sub {
+  display: block;
+  margin-top: 30px;
+  border-radius: 10px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #dc3545 !important;
+  border: none;
+}
+.form-profile {
+  border: 1px #ccc solid;
+  background-color: #fff;
+  padding: 30px;
+  width: 60%;
+  position: relative;
+  height: 750px;
+}
+.field {
+  float: left;
+  /* padding-right: 100px; */
+  width: 60%;
+  margin-left: 20%;
+  position: absolute;
+}
+
+
+</style>

@@ -3,49 +3,40 @@
     <Headers></Headers>
   </div>
   <div class="sidebar">
-    <Sidebar></Sidebar>
+    <Sidebarprf></Sidebarprf>
   </div>
   <div id="content" class="">
-    <div class="left col-sm-4">
-      <div class="info">
-        <div>
-          <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >Description</label
-          >
-          <p class="form-label mt-5" style="float: right" id="test">
-            Edit Description
-          </p>
+    <div class="container-profile">
+      <form action="/update" class="form-profile">
+        <div class="field">
+            <div class="d-flex justify-content-between total font-weight-bold mt-4"><span>Username:</span><span>$7,197.00</span></div>
+            
         </div>
-        <br>
-        <p style="font-weight: lighter;">
-          Please send me a message and I'll get back to you as fast as possible.
-          Providing the best quality service for my clients is my #1 priority.
-          Thank you for checking my profile.
-        </p>
-      </div>
-    </div>
-    <div class="right col-sm-5">
-      <p>dsadbhsajhdbsjah</p>
+
+      
+          
+        
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import Headers from "../components/HeaderView.vue";
-import Sidebar from "../components/SideBarView.vue";
+import Sidebarprf from "../components/Sidebarprf.vue";
 
 export default {
   name: "App",
   components: {
     Headers,
-    Sidebar,
+    Sidebarprf,
   },
 };
 </script>
 
 <style>
-.html {
-  background-color: #fff;
+html {
+  background-color: #ededed;
 }
 .sidebar {
   float: left;
@@ -55,7 +46,7 @@ export default {
   float: right;
   width: 80%;
   padding-top: 10%;
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   bottom: 0;
   right: 0;
@@ -63,31 +54,40 @@ export default {
   margin-top: 3%;
 
   z-index: 600;
+  position: sticky;
+
 }
-.left {
+
+.container-profile {
+  margin: 10px 10%;
+  width: 110%;
+  height: 100%;
+}
+#btn-sub {
+  display: block;
+  margin-top: 30px;
+  border-radius: 10px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #dc3545 !important;
+  border: none;
+}
+.form-profile {
+  border: 1px #ccc solid;
   background-color: #fff;
+  padding: 30px;
+  width: 60%;
+  position: relative;
+  height: 750px;
+}
+.field {
   float: left;
-  margin-left: 5%;
-  height: 100%;
-  border: 1px solid #dadbdd;
-  font-weight: bold;
+  /* padding-right: 100px; */
+  width: 60%;
+  margin-left: 20%;
+  position: absolute;
 }
-.right {
-  background-color: #fff;
-  float: right;
-  border: 1px solid #dadbdd;
-  height: 100%;
-  margin-right: 5%;
-}
-.info {
-  margin: 10px 20px;
-}
-#test {
-  font-weight: lighter;
-  color: rgb(90, 90, 139);
-}
-#test:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
+
+
 </style>
