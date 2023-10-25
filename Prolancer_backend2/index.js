@@ -126,13 +126,43 @@ app.post('/login', function (req, res) {
 })
 
 
-//Logout
+//Logout (not working)
 app.get('/logout', function (req, res) {
     req.session.destroy(function (err) {
         if (!err) {
             res.send("Log out!")
         }
     })
+})
+
+
+//Change password
+app.put('/user/:email/changepw', function (req, res) {
+    const { email } = req.params;
+    const data = req.body;
+    db.query("UPDATE Users SET password = ? WHERE email = ?",
+        [data.password, email], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
+})
+
+
+//Update user profile
+app.put('/user/:email/profile/update', function (req, res) {
+    const { email } = req.params;
+    const data = req.body;
+    db.query("UPDATE Users SET email= ?, username = ?, password = ? WHERE email = ?",
+        [data.email, data.username, data.password, email], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
 })
 
 const PORT = process.env.PORT || 3000;
