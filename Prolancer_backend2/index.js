@@ -165,6 +165,20 @@ app.put('/user/:email/profile/update', function (req, res) {
         })
 })
 
+
+//Get user profile
+app.get('/user/:email/profile', function (req, res) {
+    const { email } = req.params;
+    db.query("SELECT * FROM Users WHERE email = ?",
+        [email], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("Server is running at port: " + PORT)
