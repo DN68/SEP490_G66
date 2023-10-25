@@ -179,6 +179,32 @@ app.get('/user/:email/profile', function (req, res) {
         })
 })
 
+
+//get gig list
+app.get('/gigs', function (req, res) {
+    db.query("SELECT * FROM Gigs", (err, results) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(results);
+        }
+    })
+})
+
+
+//View 1 gig detail
+app.get('/gigs/:id', function (req, res) {
+    const {id} = req.params
+    db.query("SELECT * FROM Gigs WHERE id = ?",
+    [id], (err, results) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(results);
+        }
+    })
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("Server is running at port: " + PORT)
