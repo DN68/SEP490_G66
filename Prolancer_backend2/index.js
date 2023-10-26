@@ -191,9 +191,20 @@ app.get('/gigs', function (req, res) {
     })
 })
 
+//View gigs list by user id
+app.get('/gigs/:userId/view', function(req, res) {
+    const userId = req.params.userId
+    db.query("SELECT * FROM Gigs WHERE freelancerId = ?",[userId], (err, results) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(results);
+        }
+    })
+})
 
 //View 1 gig detail
-app.get('/gigs/:id', function (req, res) {
+app.get('/gigs/detail/:id', function (req, res) {
     const {id} = req.params
     db.query("SELECT * FROM Gigs WHERE id = ?",
     [id], (err, results) => {
@@ -204,6 +215,78 @@ app.get('/gigs/:id', function (req, res) {
         }
     })
 })
+
+
+//Create gig
+app.post('/gigs/create', function(req, res){
+    const data = req.body;
+    db.query("INSERT INTO Gigs SET ?", [data], (err, results) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.json(results)
+        }
+    })
+})
+
+
+//Update gig
+app.put('/gigs/:id/update', function(req, res){
+    const data = req.body;
+    const id = req.params.id;
+    db.query("UPDATE Gigs SET name= ?, description = ?, price = ? WHERE id = ?",
+    [data.name, data.description, data.price, id], (err, results) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.json(results);
+        }                                                      
+    })
+})
+
+//Delete gigs
+app.delete('/gigs/:id/delete', function(req, res){
+    const id = req.params.id;
+    db.query("DELETE FROM Gigs WHERE id = ?", 
+    [id], (err, results) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.json(results);
+        }
+    })
+
+})
+
+
+//Block gig
+app.put('/gigs/:id/block', function(req, res){
+    const id = req.params.id;
+    db.query("UPDATE Gigs SET isBlocked = 1 WHERE id = ?",
+    [id], (err, results) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.json(results);
+        }                                                      
+    })
+})
+
+//Unblock gigs
+app.put('/gigs/:id/unblock', function(req, res){
+    const id = req.params.id;
+    db.query("UPDATE Gigs SET isBlocked = 0 WHERE id = ?",
+    [id], (err, results) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.json(results);
+        }                                                      
+    })
+})
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
