@@ -7,57 +7,17 @@
       <a class="navbar-brand" href="http://localhost:8080/">
         <img src="../assets/image/logo2.png" height="40" alt="" loading="lazy"
       /></a>
-      <!-- Search form -->
-      <form class="input-group" style="width: 700px">
-        <input
-          type="search"
-          class="form-control"
-          placeholder="What are you looking for ?"
-          aria-label="Search"
-        />
-        <button
-          id="btn_search"
-          class="btn btn-outline-primary"
-          type="button"
-          data-mdb-ripple-color="dark"
-          style="padding: 0.45rem 1.5rem 0.35rem"
-        >
-          <i class="bi bi-search" style="color: white"></i>
-        </button>
-      </form>
-
-      <!-- Toggle button -->
-      <button
-        v-on:click="isShow = !isShow"
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-bars"></i>
-      </button>
-
       <!-- Collapsible wrapper -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left links -->
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <!-- <li class="nav-item">
-          <a class="nav-link active d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-home fa-lg"></i><span class="small">Home</span></a>
-        </li> -->
-
-          <!-- <li class="nav-item">
-          <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-user-friends fa-lg"></i><span class="small">My Network</span></a>
-        </li> -->
+        <ul class="navbar-nav mb-2 mb-lg-0">
+        
           <li class="nav-item">
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="#"
-              ><i class="bi bi-box-seam"></i
-              ><span class="small">Orders</span></a
+              ><span class="small" style="font-size: 20px;margin-left: 25px;">Dashboard</span></a
             >
           </li>
           <li class="nav-item">
@@ -65,7 +25,7 @@
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="#"
-              ><i class="bi bi-chat"></i><span class="small">Messaging</span></a
+              ><span class="small" style="font-size: 20px;margin-left: 25px;">Orders</span></a
             >
           </li>
           <li class="nav-item">
@@ -73,39 +33,20 @@
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="#"
-              ><i class="bi bi-heart"></i>
-              <span class="small">Favourite</span></a
+              >
+              <span class="small" style="font-size: 20px;margin-left: 25px;">Gigs</span></a
             >
           </li>
           <li class="nav-item">
-            <!-- <a
-              class="nav-link d-flex flex-column text-center"
-              aria-current="page"
-              href="#"
-              ><i class="bi bi-heart"></i>
-              <span class="small">Favourite</span></a
-            > -->
-            <router-link to="/login"
-             class="text_decoration:none nav-link d-flex flex-column text-center" aria-current="page" style="margin:8px 0px 8px 50px">
-             
-             <i class="fa-solid fa-right-to-bracket" style="color: #7c8088;"></i>
-             <span class="small">Login</span></router-link>
-          </li>
-
-          <!-- <li class="nav-item" style="text-decoration:none">
-            <router-link to="/login">
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="#"
+              >
+              <span class="small" style="font-size: 20px;margin-left: 25px;">Earnings</span></a
             >
-              <span class="small" style="margin-top: 10px">Login In/Register</span></a>
-            </router-link>
-            
-          </li> -->
-          
-
-          <li class="nav-item dropdown" style="">
+          </li>
+          <li class="nav-item dropdown " style="margin-left: 200%">
             <a
               class="nav-link dropdown-toggle d-flex align-items-center"
               href="#"
@@ -130,6 +71,21 @@
               
             </ul>
           </li>
+
+          <!-- <li class="nav-item" style="text-decoration:none">
+            <router-link to="/login">
+            <a
+              class="nav-link d-flex flex-column text-center"
+              aria-current="page"
+              href="#"
+            >
+              <span class="small" style="margin-top: 10px">Login In/Register</span></a>
+            </router-link>
+            
+          </li> -->
+          
+
+          
         </ul>
         <!-- Left links -->
       </div>
@@ -253,5 +209,9 @@ export default {
     float: right;
     display: block;
   } */
+}
+span{
+    
+    font-weight: 500;
 }
 </style>

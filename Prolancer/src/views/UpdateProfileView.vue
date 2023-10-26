@@ -3,7 +3,7 @@
     <Headers></Headers>
   </div>
   <div class="Sidebarudpf">
-    <Sidebarudpf></Sidebarudpf>
+    <Sidebarpf></Sidebarpf>
   </div>
   <div id="content" class="">
     <div class="container-profile">
@@ -78,13 +78,13 @@
 
 <script>
 import Headers from "../components/HeaderView.vue";
-import Sidebarudpf from "../components/SideBarudpfView.vue";
+import Sidebarpf from "../components/Sidebarprf.vue";
 
 export default {
   name: "App",
   components: {
     Headers,
-    Sidebarudpf,
+    Sidebarpf,
   },
 };
 </script>
