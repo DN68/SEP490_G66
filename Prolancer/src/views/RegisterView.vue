@@ -9,8 +9,11 @@
                 <i class="fa-solid fa-arrow-left-long text-danger"></i>
               </router-link>
 
-              <div class="row justify-content-center" >
-                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1" style="border-right: 2px #ccc solid; padding-right:50px">
+              <div class="row justify-content-center">
+                <div
+                  class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1"
+                  style="border-right: 2px #ccc solid; padding-right: 50px"
+                >
                   <p
                     class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-danger"
                   >
@@ -26,6 +29,7 @@
                           id="form3Example1c"
                           class="form-control"
                           placeholder="Your Name"
+                          v-model="username"
                         />
                       </div>
                     </div>
@@ -38,6 +42,7 @@
                           id="form3Example3c"
                           class="form-control"
                           placeholder="Your Email"
+                          v-model="email"
                         />
                       </div>
                     </div>
@@ -50,6 +55,7 @@
                           id="form3Example4c"
                           class="form-control"
                           placeholder="Password"
+                          v-model="password"
                         />
                       </div>
                     </div>
@@ -62,6 +68,7 @@
                           id="form3Example4cd"
                           class="form-control"
                           placeholder="Repeat your password"
+                          v-model="repeatPassword"
                         />
                       </div>
                     </div>
@@ -72,6 +79,7 @@
                       <button
                         type="button"
                         class="btn bg-danger bg-gradient text-light btn-lg"
+                        @click="Register"
                       >
                         Register
                       </button>
@@ -81,9 +89,12 @@
                 <div
                   class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2"
                 >
-                   <router-link to="/"><img src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
-          class="img-fluid" alt="Sample image"></router-link>
-        
+                  <router-link to="/"
+                    ><img
+                      src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
+                      class="img-fluid"
+                      alt="Sample image"
+                  /></router-link>
                 </div>
               </div>
             </div>
@@ -93,4 +104,36 @@
     </div>
   </section>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      username: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
+    };
+  },
+  methods: {
+    async Register() {
+      try {
+        if (this.password == this.repeatPassword) {
+          await axios.post("http://localhost:3000/users/create", {
+            username: this.username,
+            email: this.email,
+            password: this.password,
+          });
+          this.$router.push("/login")
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+};
+</script>
+
 <style scoped></style>
