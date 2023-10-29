@@ -9,7 +9,7 @@ class CategoryController {
         if(err) {console.log(err);}
         else{
         res.json(rows);
-
+        
         }
 
 

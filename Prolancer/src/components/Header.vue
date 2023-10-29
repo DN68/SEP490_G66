@@ -13,17 +13,19 @@
             loading="lazy"
         /></a>
         <!-- Search form -->
-        <form class="input-group" style="width: 700px">
+        <form class="input-group" style="width: 700px" action="/giglist" >
           <input
             type="search"
             class="form-control"
             placeholder="What are you looking for ?"
             aria-label="Search"
+            :value= "searchText"
+            name="search"
           />
           <button
             id="btn_search"
             class="btn btn-outline-primary"
-            type="button"
+            type="submit"
             data-mdb-ripple-color="dark"
             style="padding: 0.45rem 1.5rem 0.35rem"
           >
@@ -218,10 +220,11 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 export default {
+  props: [
+    'searchText'
+  ],
   data() {
-    return {
-      isShow: false,
-    };
+   
   },
 };
 </script>

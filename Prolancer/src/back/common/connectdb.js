@@ -7,6 +7,7 @@ try {
     password: 'QhPc3Yxkkc',
     database: 'sql12654961',
     port: 3306,
+    connectionLimit : 100
   });
   console.log('Connect DB success')
 

@@ -4,7 +4,7 @@ const gigController = require('../controllers/GigController');
 
 
 router.get('/index',
-    gigController.getAll
+    gigController.getGigWithFilterAndPagingAndSearching
 
 
 );

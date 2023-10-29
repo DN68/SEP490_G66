@@ -4,7 +4,7 @@
     style="height: auto; max-width: -webkit-fill-available"
   >
     <header class="row">
-      <Header></Header>
+      <Header :searchText="search"></Header>
     </header>
     <NavCategory :listCategories="categories"></NavCategory>
     <div class="container">
@@ -66,7 +66,7 @@
           <div class="col-md-6 row list_filter">
             <div
               class="col-sm-2 guildeFilterIteam"
-              @click="isshowListProgram = !isshowListProgram, console.log(isshowListProgram+'sm2')"
+              @click="isshowListProgram = !isshowListProgram"
               v-click-outside="() => onClickOutside(1)"
             >
               <p class="textDefault">Programming language</p>
@@ -75,32 +75,23 @@
                 class="dropdown-menu program_dropdown"
                 :style="{ display: isshowListProgram ? 'block' : 'none' }"
               >
-                <li>
-                  <a
+                <li v-for="category in categories" :key="category.id">
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >Javascript</a
+                    @click="filterBy1 = category.CategoryID,selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: '1',
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: category.CategoryID,
+                        filterBy2: this.filterBy2,
+                        filterBy3: this.filterBy3,
+                      },
+                    }"
                   >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    >Java</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    >PHP</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    >Python</a
+                    {{ category.Category_Name }}</router-link
                   >
                 </li>
               </ul>
@@ -110,38 +101,87 @@
               @click="isshowListFreelancer = !isshowListFreelancer"
               v-click-outside="() => onClickOutside(2)"
             >
-              <p class="textDefault">Freelancer</p>
+              <p class="textDefault">Delivery Time</p>
               <i class="bi bi-chevron-down"></i>
               <ul
                 class="dropdown-menu freelancer_dropdown"
                 :style="{ display: isshowListFreelancer ? 'block' : '' }"
               >
                 <li>
-                  <a
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >Javascript</a
+                    @click="filterBy2 = '1',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: '1',
+                        filterBy3: filterBy3,
+                      },
+                    }"
+                  >
+                    1 day</router-link
+                  >
+                  <!-- <a class="dropdown-item" href="#">1 day</a> -->
+                </li>
+                <li>
+                  <router-link
+                    class="dropdown-item"
+                    @click="filterBy2 = '3',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: '3',
+                        filterBy3: filterBy3,
+                      },
+                    }"
+                  >
+                    Up to 3 days</router-link
                   >
                 </li>
                 <li>
-                  <a
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >Java</a
+                    @click="filterBy2 = '7',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: '7',
+                        filterBy3: filterBy3,
+                      },
+                    }"
+                  >
+                    Up to 7 days</router-link
                   >
                 </li>
                 <li>
-                  <a
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >PHP</a
+                    @click="filterBy2 = 'Anytime',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: 'Anytime',
+                        filterBy3: filterBy3,
+                      },
+                    }"
                   >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    >Python</a
+                    Anytime</router-link
                   >
                 </li>
               </ul>
@@ -158,31 +198,79 @@
                 :style="{ display: isshowListBuget ? 'block' : '' }"
               >
                 <li>
-                  <a
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >Javascript</a
+                    @click="filterBy3 = '10',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: filterBy2,
+                        filterBy3: '10',
+                      },
+                    }"
+                  >
+                    Up to 10$</router-link
                   >
                 </li>
                 <li>
-                  <a
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >Java</a
+                    @click="filterBy3 = '50',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: filterBy2,
+                        filterBy3: '50',
+                      },
+                    }"
+                  >
+                    Up to 50$</router-link
                   >
                 </li>
                 <li>
-                  <a
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >PHP</a
+                    @click="filterBy3 = '100',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: filterBy2,
+                        filterBy3: '100',
+                      },
+                    }"
+                  >
+                    Up to 100$</router-link
                   >
                 </li>
                 <li>
-                  <a
+                  <router-link
                     class="dropdown-item"
-                    href="#"
-                    >Python</a
+                    @click="filterBy3 = '1000',selectedPage='1'"
+                    :to="{
+                      path: '/giglist',
+                      query: {
+                        page: selectedPage,
+                        search: this.$route.query.search,
+                        sort: sortBy,
+                        filterBy1: filterBy1,
+                        filterBy2: filterBy2,
+                        filterBy3: '1000',
+                      },
+                    }"
+                  >
+                    Up to 1000$</router-link
                   >
                 </li>
               </ul>
@@ -198,62 +286,120 @@
               <span
                 class="filter_type"
                 @click="isshowlistfilter = !isshowlistfilter"
-                >Best Seller <i class="bi bi-chevron-down"></i
+                >{{ sortBy }}<i class="bi bi-chevron-down"></i
               ></span>
             </span>
             <ul
               class="dropdown-menu filter_dropdown"
               :style="{ display: isshowlistfilter ? 'block' : '' }"
             >
+              
               <li>
-                <a
+                <router-link
                   class="dropdown-item"
-                  href="#"
-                  @click="isshowlistfilter = !isshowlistfilter"
-                  >Rating</a
+                  @click="
+                    (isshowlistfilter = !isshowlistfilter), (sortBy = 'Best Seller')
+                  "
+                  :to="{
+                    path: '/giglist',
+                    query: {
+                      page: this.$route.query.page,
+                      search: this.$route.query.search,
+                      sort: 'BestSeller',
+                      filterBy1: filterBy1,
+                      filterBy2: filterBy2,
+                      filterBy3: filterBy3,
+                    },
+                  }"
+                >
+                Best Seller</router-link
                 >
               </li>
               <li>
-                <a
+                <router-link
                   class="dropdown-item"
-                  href="#"
-                  @click="isshowlistfilter = !isshowlistfilter"
-                  >Best Seller</a
+                  @click="
+                    (isshowlistfilter = !isshowlistfilter), (sortBy = 'Price')
+                  "
+                  :to="{
+                    path: '/giglist',
+                    query: {
+                      page: this.$route.query.page,
+                      search: this.$route.query.search,
+                      sort: 'Price',
+                      filterBy1: filterBy1,
+                      filterBy2: filterBy2,
+                      filterBy3: filterBy3,
+                    },
+                  }"
                 >
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click="isshowlistfilter = !isshowlistfilter"
-                  >Price</a
+                  Price</router-link
                 >
+
               </li>
             </ul>
           </div>
         </div>
         <div class="gig_content">
-          <GigList :listGigs="gigs"></GigList>
-          <GigList :listGigs="gigs"></GigList>
-          <GigList :listGigs="gigs"></GigList>
-          <GigList :listGigs="gigs"></GigList>
+          <GigList :listGigs="sortFilter"></GigList>
+
         </div>
       </div>
+
       <div class="pagination">
-        <a class="page-number" href="#"><i class="bi bi-arrow-left"></i></a>
-        <a class="page-number" href="#"><span>1</span></a>
-        <a class="page-number active" href="#"><span>2</span></a>
-        <a class="page-number" href="#"><span>3</span></a>
-        <a class="page-number" href="#"><span>4</span></a>
-        <a class="page-number" href="#"><span>5</span></a>
-        <a class="page-number" href="#"><span>6</span></a>
-        <a class="page-number" href="#"><i class="bi bi-arrow-right"></i></a>
+        <router-link
+          v-if="pagination.page - 1 > 0"
+          class="page-number"
+          @click="selectedPage = (pagination.page - 1)"
+          :to="{
+          path:'/giglist',query: {
+                      page: (pagination.page - 1),
+                      search: this.$route.query.search,
+                      sort: sortBy,
+                      filterBy1: filterBy1,
+                      filterBy2: filterBy2,
+                      filterBy3: filterBy3,
+                    }}"
+          ><i class="bi bi-arrow-left"></i
+        ></router-link>
+        <router-link :to="{
+          path:'/giglist',query: {
+                      page: index,
+                      search: this.$route.query.search,
+                      sort: sortBy,
+                      filterBy1: filterBy1,
+                      filterBy2: filterBy2,
+                      filterBy3: filterBy3,
+                    }}"
+          class="page-number" @click="selectedPage = index" v-for="index in pagination.totalPage" :key="index" href="#"  :class="{active: index==pagination.page}"><span>{{ index }}</span> </router-link>
+
+        <router-link
+          v-if="pagination.page + 1 <= pagination.totalPage"
+          class="page-number"
+          @click="selectedPage = (pagination.page + 1)"
+          :to="{
+          path:'/giglist',query: {
+                      page: (pagination.page + 1),
+                      search: this.$route.query.search,
+                      sort: sortBy,
+                      filterBy1: filterBy1,
+                      filterBy2: filterBy2,
+                      filterBy3: filterBy3,
+                    }}"
+          ><i class="bi bi-arrow-right"></i
+        ></router-link>
       </div>
     </div>
     <footer class="panel panel-default">
       <Footer></Footer>
     </footer>
-    
+    <input
+      type="search"
+      class="form-control"
+      placeholder="What are you looking for ?"
+      aria-label="Search"
+      v-model="search"
+    />
   </div>
 </template>
       
@@ -264,9 +410,10 @@ import Footer from "../components/Footer.vue";
 import GigList from "../components/GigList.vue";
 import vClickOutside from "click-outside-vue3";
 import NavCategory from "../components/NavCategory.vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
+  /* eslint-disable */
   name: "HomePage",
   directives: {
     ClickOutside: vClickOutside.directive,
@@ -274,15 +421,26 @@ export default {
   components: {
     Header,
     Footer,
-    GigList, NavCategory
+    GigList,
+    NavCategory,
   },
   data() {
     return {
       isshowlistfilter: false,
       isshowListProgram: false,
       isshowListFreelancer: false,
-      isshowListBuget: false, isshowModal: false, categories: [],
-      gigs:[]
+      isshowListBuget: false,
+      isshowModal: false,
+      categories: [],
+      gigs: [],
+      pagination: [],
+      search: "",
+      sortBy: "Best Seller",
+      filterBy1: "",
+      filterBy2: "",
+      filterBy3: "",
+      searchQuery: [],
+      selectedPage: "1"
     };
   },
   methods: {
@@ -296,16 +454,102 @@ export default {
       } else if (type == 4) {
         this.isshowlistfilter = false;
       }
-    },
-  }, async created() {
-    const responseCategory = await axios.get('/categories/get');
+    }, 
+
+    
+
+  },
+  async created() {
+
+    const responseCategory = await axios.get("/categories/get");
     const categories = responseCategory.data;
     this.categories = categories;
 
-    const responseGig = await axios.get('/gigs/index');
-    const gigs = responseGig.data;
+    console.log("created");
+
+    var searchFilterQuery = this.$route.query;
+    console.log(searchFilterQuery.searchQuery + "1");
+    const responseGig = await axios.get("/gigs/index", {
+      params: {
+        page: '1',
+        search: '',
+            filterBy1: this.filterBy1,
+            filterBy2: this.filterBy2,
+            filterBy3: this.filterBy3,
+      },
+    });
+    const gigs = responseGig.data.gig;
     this.gigs = gigs;
     
+    const paging = responseGig.data.pagination;
+    this.pagination = paging;
+
+  },
+  
+  async beforeRouteUpdate   () {
+  
+     var searchFilterQuery = this.$route.query;
+
+        console.log('Category Here '+this.filterBy1)
+        console.log('Delivery Here '+this.filterBy2)
+        console.log('Buget Here '+this.filterBy3)
+
+             const responseWithFilter =await axios.get("/gigs/index", {
+          params: {
+            page: this.selectedPage,
+            search: searchFilterQuery.search,
+            filterBy1: this.filterBy1,
+            filterBy2: this.filterBy2,
+            filterBy3: this.filterBy3,
+          },
+        });
+        
+        const gigsFilter = responseWithFilter.data.gig;
+        this.gigs = gigsFilter;
+
+        const searchQuery = responseWithFilter.data.searchQuery;
+        this.searchQuery = searchQuery;
+        this.filterBy1 = searchQuery.filterBy1
+        console.log('filterBy1 ID = '+this.filterBy1)
+        this.filterBy2 = searchQuery.filterBy2
+        console.log('filterBy2 ID = '+this.filterBy2)
+        this.filterBy3 = searchQuery.filterBy3
+        console.log('filterBy3 ID = '+this.filterBy3)
+        const paging = responseWithFilter.data.pagination;
+        this.pagination = paging;
+  },
+  computed: {
+    sortFilter: function () {
+      this.search = this.$route.query.search;
+      var sortQuery = this.$route.query.sort;
+      if (sortQuery != null) {
+
+        var filterGig = this.gigs;
+        console.log("Sorted By "+sortQuery);
+
+        if ((this.$route.query.sort == "Price")) {
+          console.log("Sorted");
+          console.log("================");
+
+          return filterGig.sort((a, b) => {
+            if (a.Price < b.Price) return -1;
+            if (a.Price > b.Price) return 1;
+            return 0;
+          });
+        } else {
+        console.log("Sorted By Best sell");
+
+          return filterGig.sort((a, b) => {
+            if (a.GigID < b.GigID) return -1;
+            if (a.GigID > b.GigID) return 1;
+            return 0;
+          });;
+        }
+      } else {
+        console.log("run here");
+        return this.gigs;
+      }
+    },
   }
 };
 </script>
