@@ -13,7 +13,15 @@ const userData = {
 
 var app = express()
 
-app.use(cors());
+
+const corsOptions = {
+    origin: 'http://localhost:8080',
+    credentials: true
+  }
+  
+  app.use(cors(corsOptions))
+// app.use(cors());
+
 
 //interpret json data, sql can recognize when receive json
 app.use(express.json({}));
@@ -51,7 +59,7 @@ var sessionStore = new MySQLStore({
 
 //session info
 app.use(session({
-    key: 'keyIn',
+    // key: 'keyIn',
     secret: 'my secret',
     store: sessionStore,
     resave: false,
@@ -115,9 +123,9 @@ app.post('/login', function (req, res) {
                 res.send(err);
             } else {
                 if (results) {
-                    req.session.user = results;
+                    req.session.isAuth = true
                     // res.json(results);
-                    res.json(req.session.user);
+                    res.json("Logged in successfully");
                 } else {
                     res.send("Wrong email or password!");
                 }
@@ -126,7 +134,7 @@ app.post('/login', function (req, res) {
 })
 
 
-//Logout (not working)
+//Logout
 app.get('/logout', function (req, res) {
     req.session.destroy(function (err) {
         if (!err) {

@@ -134,10 +134,10 @@ export default {
   methods:{
     async Login(){
       try{
-        await axios.post("http://localhost:3000/login", {
+        await axios.post("http://localhost:3000/login",{
           email: this.email,
           password: this.password,
-        })
+        }, { withCredentials: true})
         this.$router.push("/")
       }catch(err){
         console.log(err)
