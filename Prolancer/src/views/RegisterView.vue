@@ -119,17 +119,20 @@ export default {
   },
   methods: {
     async Register() {
-      try {
-        if (this.password == this.repeatPassword) {
-          await axios.post("http://localhost:3000/users/create", {
-            username: this.username,
-            email: this.email,
-            password: this.password,
-          });
-          this.$router.push("/login")
-        }
-      } catch (err) {
-        console.log(err);
+      if (this.password == this.repeatPassword) {
+        axios.post("http://localhost:3000/users/create", {
+          email: this.email,
+          username: this.username,
+          password: this.password
+        }).then(
+          (res) => {
+            this.error = "";
+            this.$router.push("/login");
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
       }
     },
   },

@@ -122,29 +122,36 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 
 export default {
-  data(){
-    return{
+  data() {
+    return {
       email: "",
       password: "",
-    }
+      error: "",
+    };
   },
-  methods:{
-    async Login(){
-      try{
-        await axios.post("http://localhost:3000/login",{
-          email: this.email,
-          password: this.password,
-        }, { withCredentials: true})
-        this.$router.push("/")
-      }catch(err){
-        console.log(err)
+  methods: {
+    async Login() {
+      let user = {
+        email: this.email,
+        password: this.password
       }
-    }
-  }
-}
+      axios.post('http://localhost:3000/login', user)
+        .then(res => {
+          //if successfull
+          if (res.status === 200) {
+            localStorage.setItem('token', res.data.token);
+            this.$router.push('/');
+          }
+        }, err => {
+          console.log(err.response);
+          this.error = err.response.data.error
+        })
+    },
+  },
+};
 </script>
 
 

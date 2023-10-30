@@ -3,6 +3,9 @@ const mysql = require("mysql");
 const session = require("express-session")
 const MySQLStore = require("express-mysql-session")(session);
 const cors = require("cors")
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 
 //fake data
 const userData = {
@@ -17,9 +20,9 @@ var app = express()
 const corsOptions = {
     origin: 'http://localhost:8080',
     credentials: true
-  }
-  
-  app.use(cors(corsOptions))
+}
+
+app.use(cors(corsOptions))
 // app.use(cors());
 
 
@@ -104,32 +107,52 @@ app.use(session({
 
 //Create user
 app.post('/users/create', function (req, res) {
-    const data = req.body;
-    db.query("INSERT INTO Users SET ?", [data], (err, results) => {
+    const email = req.body.email;
+    const username = req.body.username;
+    const password = bcrypt.hashSync(req.body.password, 10);
+    db.query("INSERT INTO Users SET email = ?, username = ?, password = ?", [email, username, password], (err, results) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json(results);
+            return res.status(400).json({
+                title: 'error',
+                error: 'email in use'
+            })
         }
+        return res.status(200).json({
+            title: 'signup success'
+        })
     })
 })
 
 //User login
 app.post('/login', function (req, res) {
-    const data = req.body;
-    db.query("SELECT * FROM Users WHERE email = ? AND password = ? LIMIT 1",
-        [data.email, data.password], (err, results) => {
+    db.query("SELECT * FROM Users WHERE email = ?",
+        [req.body.email], (err, results) => {
             if (err) {
-                res.send(err);
-            } else {
-                if (results) {
-                    req.session.isAuth = true
-                    // res.json(results);
-                    res.json("Logged in successfully");
-                } else {
-                    res.send("Wrong email or password!");
-                }
+                return res.status(500).json({
+                    title: 'server error',
+                    error: err
+                })
             }
+            if (!results) {
+                return res.status(401).json({
+                    title: 'user not found',
+                    error: 'invalid credentials'
+                })
+            }
+            if (!bcrypt.compareSync(req.body.password, results[0].password)) {
+                return res.status(401).json({
+                    title: 'login failed',
+                    error: 'invalid credentials'
+                })
+            }
+            //IF ALL IS GOOD create a token and send to frontend
+            let token = jwt.sign({ email: results[0].email }, 'secretkey');
+            // console.log(token)
+            return res.status(200).json({
+                title: 'login sucess',
+                token: token
+            })
+       
         })
 })
 
@@ -200,9 +223,9 @@ app.get('/gigs', function (req, res) {
 })
 
 //View gigs list by user id
-app.get('/gigs/:userId/view', function(req, res) {
+app.get('/gigs/:userId/view', function (req, res) {
     const userId = req.params.userId
-    db.query("SELECT * FROM Gigs WHERE freelancerId = ?",[userId], (err, results) => {
+    db.query("SELECT * FROM Gigs WHERE freelancerId = ?", [userId], (err, results) => {
         if (err) {
             res.send(err);
         } else {
@@ -213,23 +236,23 @@ app.get('/gigs/:userId/view', function(req, res) {
 
 //View 1 gig detail
 app.get('/gigs/detail/:id', function (req, res) {
-    const {id} = req.params
+    const { id } = req.params
     db.query("SELECT * FROM Gigs WHERE id = ?",
-    [id], (err, results) => {
-        if (err) {
-            res.send(err);
-        } else {
-            res.json(results);
-        }
-    })
+        [id], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
 })
 
 
 //Create gig
-app.post('/gigs/create', function(req, res){
+app.post('/gigs/create', function (req, res) {
     const data = req.body;
     db.query("INSERT INTO Gigs SET ?", [data], (err, results) => {
-        if(err){
+        if (err) {
             res.send(err);
         } else {
             res.json(results)
@@ -239,58 +262,58 @@ app.post('/gigs/create', function(req, res){
 
 
 //Update gig
-app.put('/gigs/:id/update', function(req, res){
+app.put('/gigs/:id/update', function (req, res) {
     const data = req.body;
     const id = req.params.id;
     db.query("UPDATE Gigs SET name= ?, description = ?, price = ? WHERE id = ?",
-    [data.name, data.description, data.price, id], (err, results) => {
-        if(err){
-            res.send(err);
-        } else {
-            res.json(results);
-        }                                                      
-    })
+        [data.name, data.description, data.price, id], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
 })
 
 //Delete gigs
-app.delete('/gigs/:id/delete', function(req, res){
+app.delete('/gigs/:id/delete', function (req, res) {
     const id = req.params.id;
-    db.query("DELETE FROM Gigs WHERE id = ?", 
-    [id], (err, results) => {
-        if(err){
-            res.send(err);
-        } else {
-            res.json(results);
-        }
-    })
+    db.query("DELETE FROM Gigs WHERE id = ?",
+        [id], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
 
 })
 
 
 //Block gig
-app.put('/gigs/:id/block', function(req, res){
+app.put('/gigs/:id/block', function (req, res) {
     const id = req.params.id;
     db.query("UPDATE Gigs SET isBlocked = 1 WHERE id = ?",
-    [id], (err, results) => {
-        if(err){
-            res.send(err);
-        } else {
-            res.json(results);
-        }                                                      
-    })
+        [id], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
 })
 
 //Unblock gigs
-app.put('/gigs/:id/unblock', function(req, res){
+app.put('/gigs/:id/unblock', function (req, res) {
     const id = req.params.id;
     db.query("UPDATE Gigs SET isBlocked = 0 WHERE id = ?",
-    [id], (err, results) => {
-        if(err){
-            res.send(err);
-        } else {
-            res.json(results);
-        }                                                      
-    })
+        [id], (err, results) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(results);
+            }
+        })
 })
 
 
