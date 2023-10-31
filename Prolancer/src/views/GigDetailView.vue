@@ -174,7 +174,7 @@
                                   d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"
                                 ></path>
                                 <path d="M9 4H7v5h5V7H9V4z"></path></svg></span
-                            ><b class="delivery">1 Day Delivery</b>
+                            ><b class="delivery">{{gig.Delivery_Day}} Day Delivery</b>
                           </div>
                         </div>
                       </div>
@@ -184,14 +184,22 @@
                           <span class="price">US${{gig.Price}}</span>
                         </h3>
                       </div>
+                      <router-link :to="{path:'/createorderdetail',query: {
+                      gigID: gig.GigID}}"> 
                       <div class="get_order">
+                       
                         <button
                           class="co-white bg-co-black order_btn"
                           type="button"
                         >
+                       
                           Get Order
+
                         </button>
+
                       </div>
+                    </router-link>
+
                     </div>
                     <article></article>
                   </div>
@@ -360,7 +368,7 @@ export default {
   line-height: 16px;
   border-radius: 20px;
 }
-.seller_overview .user_image img {
+.gig-page .seller_overview .user_image img {
   width: 120px;
   height: 120px;
   font-size: 2.4em;
@@ -369,7 +377,7 @@ export default {
 .user_other_information {
   margin: 20px 0;
 }
-.seller_overview {
+.gig-page .seller_overview {
   margin: 30px 0;
 }
 .something_about_me {
@@ -460,7 +468,7 @@ export default {
   width: 80%;
   margin: 30px 0;
 }
-.package-content {
+.gig-page .package-content {
   border: 1px solid #dadbdd;
   margin-bottom: 32px;
   padding-top: 30px;

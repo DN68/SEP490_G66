@@ -42,7 +42,7 @@
                         :to="'/gigdetail/' + gig.GigID"
                         style="text-decoration: none"
                       >
-                        <div class="thumb-wrapper">
+                        <div class="thumb-wrapper" v-if="index<4">
                           <span class="wish-icon"
                             ><i class="fa fa-heart-o"></i
                           ></span>
@@ -115,14 +115,16 @@
                   <div class="row">
                     <div
                       class="col-sm-3 itemList"
-                      v-for="(gig, index) in listGigs"
+                      v-for="(gig, index) in listGigs" 
                       :key="index"
+                      
+
                     >
                       <router-link
                         :to="'/gigdetail/' + gig.GigID"
                         style="text-decoration: none"
                       >
-                        <div class="thumb-wrapper">
+                        <div class="thumb-wrapper" v-if="index >=4&&index<8">
                           <span class="wish-icon"
                             ><i class="fa fa-heart-o"></i
                           ></span>
@@ -133,7 +135,7 @@
                               alt="Macbook"
                             />
                           </div>
-                          <div class="thumb-content">
+                          <div class="thumb-content" >
                             <div class="row userRow">
                               <div class="col-md-12">
                                 <img
@@ -202,7 +204,7 @@
                         :to="'/gigdetail/' + gig.GigID"
                         style="text-decoration: none"
                       >
-                        <div class="thumb-wrapper">
+                        <div class="thumb-wrapper" v-if="index >=8&&index<12">
                           <span class="wish-icon"
                             ><i class="fa fa-heart-o"></i
                           ></span>

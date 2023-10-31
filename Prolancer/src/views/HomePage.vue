@@ -191,8 +191,8 @@ export default {
     this.categories = categories;
 
     const responseGig = await axios.get('/gigs/index');
-    const gigs = responseGig.data;
-    console.log(responseGig.data[0].Title+'1')
+    const gigs = responseGig.data.gig;
+    console.log(gigs[0].Title+'1')
 
     this.gigs = gigs;
     

@@ -1,7 +1,9 @@
-const express = require('express')
+const express = require('express');
 const app = express();
-const route = require('../back/routes/index.js')
+const route = require('../back/routes/index.js');
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
 
 app.use(express.json());
 route(app);

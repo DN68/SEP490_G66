@@ -49,8 +49,7 @@
                   <div class="row gig_overview">
                     <div class="">
                       <h4 class="gig_description">
-                        I will convert your design layout into email template
-                        HTML coding
+                        {{ gig.Title }} 
                       </h4>
                       <div style="display: inline">
                         <i class="fa fa-star"></i>
@@ -63,9 +62,11 @@
                         <span class="col-md-2 qty_title">Qty</span>
                         <input
                           type="number"
-                          value="1"
                           class="form-control form-icon-trailing"
                           style="width: 10%"
+                          min="1"
+
+                          v-model="order.orderAmout"
                         />
                       </div>
                     </div>
@@ -85,10 +86,7 @@
                       </p>
                       <div class="collapse" id="collapseExample">
                         <div class="card card-body">
-                          I am an Expert Email coder. Also, I have knowledge of
-                          lots of ESP: MailChimp, Campaign Monitor, Salesforce,
-                          Exact Target, Pardot, Sendgrid, Dotmailer, iContact,
-                          Bronto, Marketo, Hubspot, Constant Contact & more...
+                          {{ gig.description }}
                         </div>
                       </div>
                     </div>
@@ -325,6 +323,7 @@
                       <textarea
                         class="form-control"
                         id="textAreaExample6"
+                        v-model="order.orderDescription"
                         rows="5"
                         required
                       ></textarea>
@@ -350,7 +349,7 @@
                         style="display: none;"
                       >
                       
-                    </div>
+                    </div>                   
                     <div class="confirm_submit">
                       <input
                         class="form-check-input col-md-2"
@@ -367,8 +366,8 @@
                     <div class="start_order">
                       <button
                         class="co-white bg-co-black start_btn"
-                        type="submit"
-                        
+                        type="button"
+                        @click="startOrder()"
                       >
                         Start Order
                       </button>
@@ -384,20 +383,20 @@
                     <span class="price_summary">Price summary</span>
                     <div class="subtotal row">
                       <span class="col-md-6">Subtotal</span>
-                      <span class="col-md-6 subtotal_price">$20</span>
+                      <span class="col-md-6 subtotal_price">${{gig.Price}}x{{ order.orderAmout }}</span>
                     </div>
                     <div class="service_fee row">
                       <span class="col-md-6">Service Fee</span>
-                      <span class="col-md-6 service_price">$2</span>
+                      <span class="col-md-6 service_price">${{gig.Price *order.orderAmout*0.1}}</span>
                     </div>
                     <hr class="featurette-divider" />
                     <div class="total_price row">
                       <span class="col-md-6">Total</span>
-                      <span class="col-md-6 total_all">$22</span>
+                      <span class="col-md-6 total_all">${{gig.Price *order.orderAmout}}</span>
                     </div>
                     <div class="delivery_time row">
                       <span class="col-md-6">Delivery Time</span>
-                      <span class="col-md-6 delivery_day">1 day</span>
+                      <span class="col-md-6 delivery_day">{{gig.Delivery_Day}} day</span>
                     </div>
                     <div class="checkout_order">
                       <button
@@ -424,19 +423,35 @@
 
 <script>
 import Header from "../components/Header.vue";
+import axios from 'axios';
+
 export default {
   name: "OrderDetailPage",
   components: {
     Header,
-  },
+  },async created() {
+  
+  const responseGig = await axios.get('/gigs/details/'+ this.$route.query.gigID);
+  const gig = responseGig.data[0];
+  this.gig = gig;
+  console.log("Run here 1")
+  
+},
   data() {
+
     return {
       iscreditcard: true,
       isstep1: true,
       isstep2: false,
       isstep3: false,
       currentStep: 2,
+      gig: {},
+      
+      
+      order: {orderID:"", orderCustomerID: "4", orderFreelancerID: "", orderGigID: "", orderDate:  new Date(), orderAmout: "1", orderStatus: "Active", orderDescription:""}
     };
+
+
   },
   methods: {
     changeTypePayment: function (type) {
@@ -467,6 +482,17 @@ export default {
         this.currentStep = 2;
       }
     },
+    async startOrder (){
+      this.order.orderFreelancerID = this.gig.FreelancerID
+      this.order.orderGigID = this.gig.GigID
+      const data = await axios.post('/orders/index', {
+      order: this.order,
+  }
+    
+    );
+      console.log("🚀 ~ file: CreateOrderDetailView.vue:482 ~ startOrder ~ data:", data)
+      
+    }
   },
 };
 </script>
@@ -505,7 +531,7 @@ export default {
   font-weight: 700;
 }
 
-.package-content {
+.order-page .package-content {
   margin-left: 20%;
   border: 1px solid #dadbdd;
   margin-bottom: 32px;

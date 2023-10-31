@@ -393,13 +393,6 @@
     <footer class="panel panel-default">
       <Footer></Footer>
     </footer>
-    <input
-      type="search"
-      class="form-control"
-      placeholder="What are you looking for ?"
-      aria-label="Search"
-      v-model="search"
-    />
   </div>
 </template>
       

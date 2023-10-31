@@ -1,16 +1,16 @@
 const connectDb = require('../common/connectdb.js');
 
 var Gig = function(gig){
-    this.gigId     = gig.gigId;
-    this.title      = gig.title;
-    this.description          = gig.description;
-    this.gigImg          = gig.gigImg;
-    this.categoryId   = gig.categoryId;
-    this.price    = gig.price;
-    this.deliveryDay = gig.deliveryDay;
-    this.freelancerId     = gig.freelancerId;
-    this.creationDate     = new Date();
-    this.status     = gig.status;
+    this.gigId     = gig.GigID;
+    this.title      = gig.Title;
+    this.description          = gig.Description;
+    this.gigImg          = gig.Gig_IMG;
+    this.categoryId   = gig.CategoryID;
+    this.price    = gig.Price;
+    this.deliveryDay = gig.Delivery_Day;
+    this.freelancerId     = gig.FreelancerID;
+    this.creationDate     = gig.Creation_Date;
+    this.status     = gig.Status;
   };
   
   Gig.getAll = function (result) {
