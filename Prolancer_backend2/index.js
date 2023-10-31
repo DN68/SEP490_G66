@@ -202,6 +202,7 @@ app.get('/user/info', function (req, res) {
     let token = req.headers.token;
     jwt.verify(token, 'secretkey', (err, decoded) => {
         if (err){
+            res.redirect('/login')
             return res.status(401).json({
                 title: 'unauthorized'
             })

@@ -206,8 +206,8 @@ export default {
   },
   created() {
     //user is not authorized
-    if (localStorage.getItem('token') === null) {
-      this.$router.push('/login');
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
     }
   },
   mounted() {
@@ -215,14 +215,15 @@ export default {
       .get("http://localhost:3000/user/info", {
         headers: { token: localStorage.getItem("token") },
       })
-      .then((res) => {
-        if (res.status === 401) {
-          this.$router.push("/login");
-        } else {
+      .then(
+        (res) => {
           this.name = res.data.user.username;
           this.email = res.data.user.email;
+        },
+        (err) => {
+          console.log(err.response);
         }
-      });
+      );
   },
   methods: {
     Logout() {

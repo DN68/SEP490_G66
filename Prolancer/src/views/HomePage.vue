@@ -1,6 +1,4 @@
 <template>
-  
-
   <div
     class="container"
     style="height: auto; max-width: -webkit-fill-available"
@@ -9,7 +7,10 @@
       <Header></Header>
     </header>
     <nav id="navCategory" class="navbar navbar-inverse">
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto" style="text-align:center">
+      <div
+        class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto"
+        style="text-align: center"
+      >
         <!-- Links -->
         <h6 class="fw-bold my-1 navCategory">Category</h6>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -108,7 +109,7 @@
                     <div class="guildeBack">
                       <i class="bi bi-easel" style="font-size: 20px"></i>
                     </div>
-                    
+
                     <p class="textDefault">Website Design</p>
                   </div>
                   <div class="col-sm-2 guildeIteam">
@@ -221,7 +222,7 @@ import Footer from "../components/Footer.vue";
 import Product from "../components/ProductCarousel.vue";
 import ProductList from "../components/ProductList.vue";
 import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
-import axios from "axios"
+import axios from "axios";
 
 export default {
   name: "HomePage",
@@ -245,16 +246,24 @@ export default {
   },
   created() {
     //user is not authorized
-    if (localStorage.getItem('token') === null) {
-      this.$router.push('/login');
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
     }
   },
-  mounted(){
-    axios.get('http://localhost:3000/user/info', {headers: {token:localStorage.getItem('token')}})
-    .then(res => {
-      this.name = res.data.user.username;
-      this.email = res.data.user.email;
-    })
+  mounted() {
+    axios
+      .get("http://localhost:3000/user/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.name = res.data.user.username;
+          this.email = res.data.user.email;
+        },
+        err => {
+          console.log(err.response);
+        }
+      );
   },
 };
 </script>
@@ -343,7 +352,6 @@ export default {
   cursor: pointer;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
   width: 300px;
-
 }
 .textDefault {
   margin: 0;
@@ -357,6 +365,6 @@ export default {
   margin-right: 12px;
 }
 ::before {
-    margin-left: 25%;
+  margin-left: 25%;
 }
 </style>
