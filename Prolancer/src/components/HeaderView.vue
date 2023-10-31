@@ -132,7 +132,7 @@
               <li><router-link class="dropdown-item" to="/updateprofile">My Profile</router-link></li>
               <li><router-link class="dropdown-item" to="/change">Change password</router-link></li>
               <li><router-link class="dropdown-item" to="#">Settings</router-link></li>
-              <li><router-link class="dropdown-item" to="#">Logout</router-link></li>
+              <li><router-link class="dropdown-item" to="/logout">Logout</router-link></li>
               
             </ul>
           </li>

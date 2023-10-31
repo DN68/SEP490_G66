@@ -102,7 +102,7 @@ export default {};
 }
 @font-face {
   font-family: face;
-  src: url(D:\Prolancers\SEP490_G66\Prolancer\src\assets\font\Tilt_Neon\TiltNeon-Regular-VariableFont_XROT,YROT.ttf);
+  src: url(D:\SEP490_G66\Prolancer\src\assets\font\Tilt_Neon\TiltNeon-Regular-VariableFont_XROT,YROT.ttf);
 }
 .preview{
   border: 1px #ccc solid;
