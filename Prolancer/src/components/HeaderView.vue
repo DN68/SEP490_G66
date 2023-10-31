@@ -77,7 +77,7 @@
               <span class="small">Favourite</span></a
             >
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="!email">
             <!-- <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
@@ -85,11 +85,18 @@
               ><i class="bi bi-heart"></i>
               <span class="small">Favourite</span></a
             > -->
-            <router-link to="/login"
-             class="text_decoration:none nav-link d-flex flex-column text-center" aria-current="page" style="margin:8px 0px 8px 50px">
-             
-             <i class="fa-solid fa-right-to-bracket" style="color: #7c8088;"></i>
-             <span class="small">Login</span></router-link>
+            <router-link
+              to="/login"
+              class="text_decoration:none nav-link d-flex flex-column text-center"
+              aria-current="page"
+              style="margin: 8px 0px 8px 50px"
+            >
+              <i
+                class="fa-solid fa-right-to-bracket"
+                style="color: #7c8088"
+              ></i>
+              <span class="small">Login</span></router-link
+            >
           </li>
 
           <!-- <li class="nav-item" style="text-decoration:none">
@@ -103,7 +110,6 @@
             </router-link>
             
           </li> -->
-          
 
           <li class="nav-item dropdown" style="display: none">
             <a
@@ -174,7 +180,10 @@
             ><span>Change Password</span></a
           >
 
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
+          <a
+            href="#"
+            @click="Logout"
+            class="list-group-item list-group-item-action py-2 ripple"
             ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
           >
         </div>
@@ -186,11 +195,40 @@
 
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
 export default {
   data() {
     return {
       isShow: false,
+      name: "",
+      email: "",
     };
+  },
+  created() {
+    //user is not authorized
+    if (localStorage.getItem('token') === null) {
+      this.$router.push('/login');
+    }
+  },
+  mounted() {
+    axios
+      .get("http://localhost:3000/user/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then((res) => {
+        if (res.status === 401) {
+          this.$router.push("/login");
+        } else {
+          this.name = res.data.user.username;
+          this.email = res.data.user.email;
+        }
+      });
+  },
+  methods: {
+    Logout() {
+      localStorage.clear();
+      this.$router.push("/login");
+    },
   },
 };
 </script>

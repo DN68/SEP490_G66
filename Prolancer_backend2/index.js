@@ -133,7 +133,7 @@ app.post('/login', function (req, res) {
                     error: err
                 })
             }
-            if (!results) {
+            if (!results[0]) {
                 return res.status(401).json({
                     title: 'user not found',
                     error: 'invalid credentials'
@@ -152,7 +152,7 @@ app.post('/login', function (req, res) {
                 title: 'login sucess',
                 token: token
             })
-       
+
         })
 })
 
@@ -198,16 +198,31 @@ app.put('/user/:email/profile/update', function (req, res) {
 
 
 //Get user profile
-app.get('/user/:email/profile', function (req, res) {
-    const { email } = req.params;
-    db.query("SELECT * FROM Users WHERE email = ?",
-        [email], (err, results) => {
-            if (err) {
-                res.send(err);
-            } else {
-                res.json(results);
-            }
-        })
+app.get('/user/info', function (req, res) {
+    let token = req.headers.token;
+    jwt.verify(token, 'secretkey', (err, decoded) => {
+        if (err){
+            return res.status(401).json({
+                title: 'unauthorized'
+            })
+        } 
+        const email = decoded.email
+        console.log(email)
+        db.query("SELECT * FROM Users WHERE email = ?",
+            [email], (err, results) => {
+                if (err) {
+                    return console.log(err)
+                }
+                return res.status(200).json({
+                    title: 'user grabbed',
+                    user: {
+                        email: results[0].email,
+                        username: results[0].username
+                    }
+                })
+            })
+    })
+
 })
 
 

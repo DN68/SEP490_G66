@@ -147,7 +147,6 @@ export default {
           }
         }, err => {
           console.log(err.response);
-          this.error = err.response.data.error
         })
     },
   },

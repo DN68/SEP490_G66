@@ -72,7 +72,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, anhlt1901
+                Hello, {{ name }}
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -221,6 +221,7 @@ import Footer from "../components/Footer.vue";
 import Product from "../components/ProductCarousel.vue";
 import ProductList from "../components/ProductList.vue";
 import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
+import axios from "axios"
 
 export default {
   name: "HomePage",
@@ -234,11 +235,26 @@ export default {
   },
   data() {
     return {
+      email: "",
+      name: "",
       isShow: function () {
         alert("Xin chào ");
       },
       counter: 0,
     };
+  },
+  created() {
+    //user is not authorized
+    if (localStorage.getItem('token') === null) {
+      this.$router.push('/login');
+    }
+  },
+  mounted(){
+    axios.get('http://localhost:3000/user/info', {headers: {token:localStorage.getItem('token')}})
+    .then(res => {
+      this.name = res.data.user.username;
+      this.email = res.data.user.email;
+    })
   },
 };
 </script>
