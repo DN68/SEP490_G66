@@ -47,14 +47,33 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/ForgetPasswordView.vue')
   },
   {
-    path: '/profile',
-    name: 'profile',
+    path: '/updateprofile',
+    name: 'updateprofile',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/ProfileView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/UpdateProfileView.vue')
 
-  }
+  },
+  {
+    path: '/change',
+    name: 'change',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChangePasswordView.vue')
+
+  },
+  {
+    path: '/cusdash',
+    name: 'cusdash',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/SellerDashBoardView.vue')
+
+  },
+  
 ]
 
 const router = createRouter({
