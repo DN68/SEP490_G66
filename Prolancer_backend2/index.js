@@ -231,10 +231,12 @@ app.get('/user/info', function (req, res) {
 app.get('/gigs', function (req, res) {
     db.query("SELECT * FROM Gigs", (err, results) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json(results);
+            return console.log(err)
         }
+        return res.status(200).json({
+            title: 'gigs grabbed',
+            gigs: results
+        })
     })
 })
 
