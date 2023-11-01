@@ -216,7 +216,7 @@
   <script>
 import Header from "../components/Header.vue";
 export default {
-  name: "OrderDetailPage",
+  name: "CreateOrderDetailPage",
   components: {
     Header,
   },

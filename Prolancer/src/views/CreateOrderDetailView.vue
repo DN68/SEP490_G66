@@ -3,20 +3,19 @@
     <Header></Header>
     <div class="container">
       <div class="row">
-        
         <article class="col-sm-12">
           <div class="row order_header">
             <div
               class="col-sm-3 order_header_item"
               :class="{ active: isstep1 }"
-              @click="isstep2 ? changeStep(1):''"
+              @click="isstep2 ? changeStep(1) : ''"
             >
               <span>1. Order Details</span> <i class="bi bi-chevron-right"></i>
             </div>
             <div
               class="col-sm-3 order_header_item"
               :class="{ active: isstep2 }"
-              @click="isstep3 ? changeStep(2):''"
+              @click="isstep3 ? changeStep(2) : ''"
             >
               <span>2. Confirm & Payment</span>
               <i class="bi bi-chevron-right"></i>
@@ -24,7 +23,7 @@
             <div
               class="col-sm-3 order_header_item"
               :class="{ active: isstep3 }"
-              @click="isstep2 ? changeStep(2):''"
+              @click="isstep2 ? changeStep(2) : ''"
             >
               <span>3. Submit Requirements</span>
             </div>
@@ -39,7 +38,7 @@
               <div class="seller_overview row">
                 <div class="user_image col-md-3">
                   <img
-                    src="https://fiverr-res.cloudinary.com/t_profile_original,q_auto,f_auto/attachments/profile/photo/795d7cb1444717c90dd23c3333fed16b-1604937118910/71a4c9ab-9941-441d-a03f-aa7e320f05ec.jpg"
+                    :src="gig.Gig_IMG"
                     class="profile-pict-img jumkns0"
                     alt="riketa"
                     style="width: 100%"
@@ -49,7 +48,7 @@
                   <div class="row gig_overview">
                     <div class="">
                       <h4 class="gig_description">
-                        {{ gig.Title }} 
+                        {{ gig.Title }}
                       </h4>
                       <div style="display: inline">
                         <i class="fa fa-star"></i>
@@ -65,7 +64,6 @@
                           class="form-control form-icon-trailing"
                           style="width: 10%"
                           min="1"
-
                           v-model="order.orderAmout"
                         />
                       </div>
@@ -86,7 +84,7 @@
                       </p>
                       <div class="collapse" id="collapseExample">
                         <div class="card card-body">
-                          {{ gig.description }}
+                          {{ gig.Description }}
                         </div>
                       </div>
                     </div>
@@ -307,11 +305,9 @@
               <div class="container" style="text-align: left">
                 <div class="rqm_header">
                   <form>
-                    <h4 >
-                      Submit Requirement to send your order
-                    </h4>
+                    <h4>Submit Requirement to send your order</h4>
                     <hr class="featurette-divider rqm_featurette" />
-                    <h5 >
+                    <h5>
                       You need to provide the information to start working on
                       your order:
                     </h5>
@@ -331,36 +327,24 @@
                     </div>
 
                     <p>
-                      2. You can attach image, doc, file about your project
-                      here:
+                      2. You can send more requiremnet after start your order
                     </p>
-                    <div class="custom-file">
-                      <div class="attach_file">
-                      <label
-                        class="custom-file-label"
-                        for="inputGroupFile"
-                      > <i class="bi bi-paperclip"></i><span>Attach file</span></label>
-                      </div>
-                      <input
-                        type="file"
-                        class="custom-file-input"
-                        id="inputGroupFile"
-                        aria-describedby="inputGroupFile"
-                        style="display: none;"
-                      >
-                      
-                    </div>                   
+
                     <div class="confirm_submit">
                       <input
                         class="form-check-input col-md-2"
                         type="checkbox"
-                        value=""
+                        v-model="confirmSubmit"
                         id="flexCheckChecked"
                         required
                       />
-                      <label class="form-check-label col-md-10 check_legal" for="flexCheckChecked">
-                        The information I provided is accurate and complete. Any changes will require the seller's approval, and may be subject to additional costs.
-
+                      <label
+                        class="form-check-label col-md-10 check_legal"
+                        for="flexCheckChecked"
+                      >
+                        The information I provided is accurate and complete. Any
+                        changes will require the seller's approval, and may be
+                        subject to additional costs.
                       </label>
                     </div>
                     <div class="start_order">
@@ -383,27 +367,38 @@
                     <span class="price_summary">Price summary</span>
                     <div class="subtotal row">
                       <span class="col-md-6">Subtotal</span>
-                      <span class="col-md-6 subtotal_price">${{gig.Price}}x{{ order.orderAmout }}</span>
+                      <span class="col-md-6 subtotal_price"
+                        >${{ gig.Price }}x{{ order.orderAmout }}</span
+                      >
                     </div>
                     <div class="service_fee row">
                       <span class="col-md-6">Service Fee</span>
-                      <span class="col-md-6 service_price">${{gig.Price *order.orderAmout*0.1}}</span>
+                      <span class="col-md-6 service_price"
+                        >${{ gig.Price * order.orderAmout * 0.1 }}</span
+                      >
                     </div>
                     <hr class="featurette-divider" />
                     <div class="total_price row">
                       <span class="col-md-6">Total</span>
-                      <span class="col-md-6 total_all">${{gig.Price *order.orderAmout}}</span>
+                      <span class="col-md-6 total_all"
+                        >${{
+                          gig.Price * order.orderAmout +
+                          gig.Price * order.orderAmout * 0.1
+                        }}</span
+                      >
                     </div>
                     <div class="delivery_time row">
                       <span class="col-md-6">Delivery Time</span>
-                      <span class="col-md-6 delivery_day">{{gig.Delivery_Day}} day</span>
+                      <span class="col-md-6 delivery_day"
+                        >{{ gig.Delivery_Day }} day</span
+                      >
                     </div>
                     <div class="checkout_order">
                       <button
                         class="co-white bg-co-black checkout_btn"
                         type="button"
                         @click="changeStep(currentStep)"
-                        :style="{display: isstep3 ?'none':''}"
+                        :style="{ display: isstep3 ? 'none' : '' }"
                       >
                         Continue
                       </button>
@@ -422,36 +417,46 @@
 </template>
 
 <script>
-import Header from "../components/Header.vue";
-import axios from 'axios';
+/* eslint-disable */
 
+import Header from "../components/Header.vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   name: "OrderDetailPage",
   components: {
     Header,
-  },async created() {
-  
-  const responseGig = await axios.get('/gigs/details/'+ this.$route.query.gigID);
-  const gig = responseGig.data[0];
-  this.gig = gig;
-  console.log("Run here 1")
-  
-},
+  },
+  async created() {
+    const responseGig = await axios.get(
+      "/gigs/details/" + this.$route.query.gigID
+    );
+    const gig = responseGig.data[0];
+    this.gig = gig;
+    console.log("Run here 1");
+  },
   data() {
-
     return {
       iscreditcard: true,
       isstep1: true,
       isstep2: false,
       isstep3: false,
       currentStep: 2,
+      confirmSubmit: "",
       gig: {},
-      
-      
-      order: {orderID:"", orderCustomerID: "4", orderFreelancerID: "", orderGigID: "", orderDate:  new Date(), orderAmout: "1", orderStatus: "Active", orderDescription:""}
+
+      order: {
+        orderID: "",
+        orderCustomerID: "4",
+        orderFreelancerID: "",
+        orderGigID: "",
+        orderDate: new Date(),
+        orderAmout: "1",
+        orderStatus: "Active",
+        orderDescription: "",
+      },
     };
-
-
   },
   methods: {
     changeTypePayment: function (type) {
@@ -467,32 +472,45 @@ export default {
         this.isstep1 = false;
         this.isstep3 = false;
         this.currentStep = 3;
-
-        
       } else if (step == 3) {
         this.isstep2 = false;
         this.isstep1 = false;
         this.isstep3 = true;
         this.currentStep = 4;
-        
-      }else{
+      } else {
         this.isstep2 = false;
         this.isstep1 = true;
         this.isstep3 = false;
         this.currentStep = 2;
       }
     },
-    async startOrder (){
-      this.order.orderFreelancerID = this.gig.FreelancerID
-      this.order.orderGigID = this.gig.GigID
-      const data = await axios.post('/orders/index', {
-      order: this.order,
-  }
-    
-    );
-      console.log("🚀 ~ file: CreateOrderDetailView.vue:482 ~ startOrder ~ data:", data)
+    async startOrder() {
       
-    }
+
+      if ((this.order.orderDescription == "" || !this.confirmSubmit)) {
+        console.log("Please Submit Requirt", this.order.orderDescription);
+        alert('Please Submit Requirment And Click On Confirm!');
+      } else {
+        this.order.orderFreelancerID = this.gig.FreelancerID;
+        this.order.orderGigID = this.gig.GigID;
+        const data = await axios.post("/orders/index", {
+          order: this.order,
+          
+        });
+        console.log(
+          "🚀 ~ file: CreateOrderDetailView.vue:482 ~ startOrder ~ data:",
+          this.order
+        );
+        if ((data.data = "Create Order Success")) {
+          toast.success("Create Order Successfully!", {
+            theme: "colored",
+            autoClose: 2000,
+          });
+        } else {
+          toast.warn("Create Order Faild!", { autoClose: 2000 });
+        }
+      }
+    },
   },
 };
 </script>
@@ -644,23 +662,22 @@ export default {
   border: none;
 }
 
-.confirm_submit{
+.confirm_submit {
   margin: 20px 0;
 }
 
-.rqm_header h4,h5{
+.rqm_header h4,
+h5 {
   font-weight: 700;
-
 }
 
-.rqm_header p{
+.rqm_header p {
   margin-top: 15px;
-
 }
-.check_legal{
+.check_legal {
   font-size: 15px;
 }
-.rqm_header .rqm_featurette{
+.rqm_header .rqm_featurette {
   margin: 15px 0;
 }
 

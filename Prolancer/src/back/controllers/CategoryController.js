@@ -14,9 +14,7 @@ class CategoryController {
 
 
         });
-        // const data = rows;
-        
-        // return data
+   
     }
 
     index (req,res){
