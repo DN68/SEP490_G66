@@ -77,7 +77,7 @@
               <span class="small">Favourite</span></a
             >
           </li>
-          <li class="nav-item" v-if="!email">
+          <li class="nav-item" v-if="!user.email">
             <!-- <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
@@ -121,7 +121,7 @@
               aria-expanded="false"
             >
               <img
-                src="https://static.thenounproject.com/png/363640-200.png"
+                :src="user.image"
                 class="rounded-circle"
                 height="30"
                 alt=""
@@ -202,8 +202,7 @@ export default {
   data() {
     return {
       isShow: false,
-      name: "",
-      email: "",
+      user: {}
     };
   },
   created() {
@@ -219,8 +218,7 @@ export default {
       })
       .then(
         (res) => {
-          this.name = res.data.user.username;
-          this.email = res.data.user.email;
+          this.user = res.data.user;
         },
         (err) => {
           console.log(err.response);

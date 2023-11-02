@@ -7,7 +7,7 @@
   </div>
   <div id="content" class="">
     <div class="container-profile">
-      <form action="/update" class="form-profile">
+      <form  class="form-profile">
         <div class="field">
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Username</label
@@ -16,7 +16,7 @@
             type="username"
             id="form3Example3"
             class="form-control form-control-lg"
-            
+            v-model="user.username"
           />
           <div style="display: flex; flex-direction: row; justify-content: space-between">
             <div class="left" style="width:40%">
@@ -27,6 +27,7 @@
             type="firstname"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.firstName"
           />
             </div>
             <div class="right" style="width:40%">
@@ -37,6 +38,7 @@
             type="lastname"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.lastName"
           />
             </div>
              
@@ -47,6 +49,7 @@
             type="phoneno"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.phone"
           />
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Description</label>
@@ -54,6 +57,7 @@
             type="description"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.description"
           />
           <div class="mt-5" style="display:flex;flex-direction:row;justify-content:space-between">
             <div class="left" style="width:40%">
@@ -63,7 +67,7 @@
               <input type="button" value="Upload">
             </div>
           </div>
-          <button id="btn-sub" type="submit" class="btn btn-primary">
+          <button id="btn-sub" type="submit" @click="updateProfile" class="btn btn-primary">
             Update
           </button>
         </div>
@@ -79,6 +83,7 @@
 <script>
 import Headers from "../components/HeaderView.vue";
 import Sidebarpf from "../components/Sidebarprf.vue";
+import axios from "axios"
 
 export default {
   name: "App",
@@ -86,6 +91,44 @@ export default {
     Headers,
     Sidebarpf,
   },
+  data(){
+    return{
+      user: {},
+    }
+  },
+  created(){
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+   
+  },
+  mounted(){
+    axios
+      .get("http://localhost:3000/user/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        err => {
+          console.log(err.response);
+        }
+      );
+  },
+  methods:{
+    updateProfile(){
+      axios.put(`http://localhost:3000/user/${this.user.email}/info/update`, {
+        //add more fields here
+        username: this.user.username,
+        firstName: this.user.firstName,
+        lastName: this.user.firstName,
+        phone: this.user.phone,
+        description: this.user.description,
+      })
+    }
+  }
 };
 </script>
 

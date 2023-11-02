@@ -183,11 +183,11 @@ app.put('/user/:email/changepw', function (req, res) {
 
 
 //Update user profile
-app.put('/user/:email/profile/update', function (req, res) {
+app.put('/user/:email/info/update', function (req, res) {
     const { email } = req.params;
     const data = req.body;
-    db.query("UPDATE Users SET email= ?, username = ?, password = ? WHERE email = ?",
-        [data.email, data.username, data.password, email], (err, results) => {
+    db.query("UPDATE Users SET ? WHERE email = ?",
+        [data, email], (err, results) => {
             if (err) {
                 res.send(err);
             } else {
@@ -216,9 +216,15 @@ app.get('/user/info', function (req, res) {
                 }
                 return res.status(200).json({
                     title: 'user grabbed',
+                    //can add more fields
                     user: {
                         email: results[0].email,
-                        username: results[0].username
+                        username: results[0].username,
+                        firstName: results[0].firstName,
+                        lastName: results[0].lastName,
+                        phone: results[0].phone,
+                        description: results[0].description,
+                        image: results[0].image
                     }
                 })
             })
