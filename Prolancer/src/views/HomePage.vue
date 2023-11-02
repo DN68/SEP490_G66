@@ -73,7 +73,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, {{ name }}
+                Hello, {{ user.username }}
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -236,8 +236,7 @@ export default {
   },
   data() {
     return {
-      email: "",
-      name: "",
+      user: {},
       isShow: function () {
         alert("Xin chào ");
       },
@@ -257,8 +256,7 @@ export default {
       })
       .then(
         (res) => {
-          this.name = res.data.user.username;
-          this.email = res.data.user.email;
+          this.user = res.data.user;
         },
         err => {
           console.log(err.response);

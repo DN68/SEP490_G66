@@ -13,7 +13,7 @@
             >Username</label
           >
           <input
-            type="username"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
             v-model="user.username"
@@ -24,7 +24,7 @@
             >First Name</label
           >
           <input
-            type="firstname"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
             v-model="user.firstName"
@@ -35,7 +35,7 @@
             >Last Name</label
           >
           <input
-            type="lastname"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
             v-model="user.lastName"
@@ -46,7 +46,7 @@
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Phone Number</label>
           <input
-            type="phoneno"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
             v-model="user.phone"
@@ -54,11 +54,19 @@
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Description</label>
             <textarea
-            type="description"
             id="form3Example3"
             class="form-control form-control-lg"
             v-model="user.description"
           />
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Image</label>
+            <input
+            type="text"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.image"
+          />
+        
           <div class="mt-5" style="display:flex;flex-direction:row;justify-content:space-between">
             <div class="left" style="width:40%">
               <span class="form-label mt-5">Upload CV</span>
@@ -126,6 +134,7 @@ export default {
         lastName: this.user.firstName,
         phone: this.user.phone,
         description: this.user.description,
+        image: this.user.image
       })
     }
   }

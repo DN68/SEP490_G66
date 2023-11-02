@@ -170,9 +170,19 @@ app.get('/logout', function (req, res) {
 //Change password
 app.put('/user/:email/changepw', function (req, res) {
     const { email } = req.params;
-    const data = req.body;
+    const inputOldPassword = req.body.inputOldPassword;
+    const oldPassword = req.body.oldPassword;
+    const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
+
+    // console.log(bcrypt.compareSync(inputOldPassword, oldPassword))
+    if(!bcrypt.compareSync(inputOldPassword, oldPassword)){
+        return res.status(401).json({
+            title: 'change pass failed',
+            error: 'wrong password'
+        })
+    }
     db.query("UPDATE Users SET password = ? WHERE email = ?",
-        [data.password, email], (err, results) => {
+        [newPassword, email], (err, results) => {
             if (err) {
                 res.send(err);
             } else {
@@ -208,7 +218,7 @@ app.get('/user/info', function (req, res) {
             })
         } 
         const email = decoded.email
-        console.log(email)
+        // console.log(email)
         db.query("SELECT * FROM Users WHERE email = ?",
             [email], (err, results) => {
                 if (err) {
@@ -224,7 +234,8 @@ app.get('/user/info', function (req, res) {
                         lastName: results[0].lastName,
                         phone: results[0].phone,
                         description: results[0].description,
-                        image: results[0].image
+                        image: results[0].image,
+                        password: results[0].password
                     }
                 })
             })
