@@ -72,7 +72,7 @@ var Gig = function(gig){
     });
   };
 
-  Gig.getById = function (id,result) {
+  Gig.getGigById = function (id,result) {
     
     connectDb.query("Select * from Gig Where GigID = ?", [id], function (err, res) {
           if(err) {

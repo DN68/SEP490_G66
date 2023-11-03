@@ -87,11 +87,11 @@ class GigController {
 
   };
 
-  getById = function (req, res) {
+  getGigById = function (req, res) {
     var id = req.params.id;
     console.log('Id '+id)
 
-    Gig.getById(id, function (err, gig) {
+    Gig.getGigById(id, function (err, gig) {
       console.log('controller')
       if (err)
         res.send(err);

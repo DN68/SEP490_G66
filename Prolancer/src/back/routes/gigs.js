@@ -9,7 +9,7 @@ router.get('/index',
 
 );
 router.get('/details/:id',
-    gigController.getById
+    gigController.getGigById
 
 
 );
