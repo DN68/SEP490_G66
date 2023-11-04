@@ -46,7 +46,7 @@
               <span class="small" style="font-size: 20px;margin-left: 25px;">Earnings</span></a
             >
           </li>
-          <li class="nav-item dropdown " style="margin-left: 200%">
+          <li class="nav-item dropdown" style="margin-left:130%">
             <a
               class="nav-link dropdown-toggle d-flex align-items-center"
               href="#"
@@ -63,7 +63,7 @@
                 loading="lazy"
               />
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="width: 200px">
               <li><router-link class="dropdown-item" to="/updateprofile">My Profile</router-link></li>
               <li><router-link class="dropdown-item" to="/change">Change password</router-link></li>
               <li><router-link class="dropdown-item" to="#">Settings</router-link></li>
@@ -72,19 +72,7 @@
             </ul>
           </li>
 
-          <!-- <li class="nav-item" style="text-decoration:none">
-            <router-link to="/login">
-            <a
-              class="nav-link d-flex flex-column text-center"
-              aria-current="page"
-              href="#"
-            >
-              <span class="small" style="margin-top: 10px">Login In/Register</span></a>
-            </router-link>
-            
-          </li> -->
-          
-
+         
           
         </ul>
         <!-- Left links -->

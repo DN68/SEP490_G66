@@ -65,12 +65,21 @@ const routes = [
 
   },
   {
-    path: '/cusdash',
-    name: 'cusdash',
+    path: '/seldash',
+    name: 'seldash',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/SellerDashBoardView.vue')
+
+  },
+  {
+    path: '/creategig',
+    name: 'creategig',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/CreateGigView.vue')
 
   },
   
