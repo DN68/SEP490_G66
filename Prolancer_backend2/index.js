@@ -157,7 +157,7 @@ app.post('/login', function (req, res) {
                 })
             }
             //IF ALL IS GOOD create a token and send to frontend
-            let token = jwt.sign({ email: results[0].email, role: results[0].role }, 'secretkey');
+            let token = jwt.sign({ email: results[0].email, role: results[0].role }, 'secretkey', {expiresIn: 43200});
             // console.log(token)
             return res.status(200).json({
                 title: 'login sucess',
@@ -197,7 +197,6 @@ app.put('/user/:email/changepw', function (req, res) {
             if (err) {
                 res.send(err);
             } else {
-                5
                 res.json(results);
             }
         })
@@ -219,13 +218,14 @@ app.post('/user/forgotPassword', function (req, res) {
                     error: 'no user with this email'
                 })
             }
+            //Send new random password to email
             const newPassword = generateRandomString(10)
-            const encodedNewPassword = bcrypt.hashSync(newPassword,10)
+            const encodedNewPassword = bcrypt.hashSync(newPassword, 10)
             db.query("UPDATE Users SET password = ? WHERE email = ?",
                 [encodedNewPassword, email], (err, results) => {
                     if (!results) {
                         res.send(err);
-                    } 
+                    }
                 })
             const accessToken = oAuth2Client.getAccessToken();
             const transport = nodemailer.createTransport({
@@ -281,6 +281,9 @@ app.get('/user/info', function (req, res) {
             })
         }
         const email = decoded.email
+        // const exp = decoded.exp
+        // consoleDate.now()
+        // console.log(exp)
         // console.log(email)
         db.query("SELECT * FROM Users WHERE email = ?",
             [email], (err, results) => {
