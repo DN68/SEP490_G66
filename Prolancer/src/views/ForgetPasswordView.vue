@@ -30,6 +30,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 placeholder="Enter your email"
+                v-model="email"
               />
             </div>
 
@@ -40,10 +41,12 @@
                 type="button"
                 class="btn bg-danger bg-gradient text-light btn-lg"
                 style="padding-left: 2.5rem; padding-right: 2.5rem"
+                @click="resetPassword"
               >
                 Reset Password
               </button>
-              
+              &nbsp;
+              <span ref="message">{{ message }}</span>
             </div>
           </form>
         </div>
@@ -51,6 +54,36 @@
     </div>
   </section>
 </template>
+
+<script>
+import axios from "axios"
+
+export default {
+  data(){
+    return{
+      email: "",
+      message: ""
+    }
+  },
+  methods:{
+    resetPassword(){
+      axios.post("http://localhost:3000/user/forgotPassword", {
+        email: this.email
+      }).then(
+        (res) => {
+          this.message = "New password has been sent to your email"
+          this.$refs.message.style.color = "green"
+        },
+        (err) => {
+          this.message = "No user with this email"
+          this.$refs.message.style.color = "red"
+        }
+      )
+    }
+  }
+}
+</script>
+
 <style scoped>
 .divider:after,
 .divider:before {

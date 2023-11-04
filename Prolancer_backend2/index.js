@@ -1,11 +1,66 @@
 const express = require("express");
 const mysql = require("mysql");
 const session = require("express-session")
-const MySQLStore = require("express-mysql-session")(session);
+// const MySQLStore = require("express-mysql-session")(session);
 const cors = require("cors")
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { google } = require('googleapis')
+const nodemailer = require('nodemailer')
+require('dotenv').config();
 
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+const REDIRECT_URI = process.env.REDIRECT_URI
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN
+
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+// Send message to email
+// const sendMail = async () => {
+//     try {
+//         const accessToken = await oAuth2Client.getAccessToken();
+//         const transport = nodemailer.createTransport({
+//             service: 'gmail',
+//             auth: {
+//                 type: 'OAuth2',
+//                 user: 'anpqhe160968@fpt.edu.vn',
+//                 clientId: CLIENT_ID,
+//                 clientSecret: CLIENT_SECRET,
+//                 refreshToken: REFRESH_TOKEN,
+//                 accessToken: accessToken
+//             }
+//         })
+//         const info = await transport.sendMail({
+//             from: '"Fred Foo 👻" <anpqhe160968@fpt.edu.vn>', // sender address
+//             to: "gameseeker630@gmail.com", // list of receivers
+//             subject: "Hello ✔", // Subject line
+//             text: "Hello world?", // plain text body
+//             html: "<b>Hello ajinomoto</b>", // html body
+//         });
+
+//         console.log(info)
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
+
+// sendMail()
+
+//create random string
+const generateRandomString = (myLength) => {
+    const chars =
+        "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
+    const randomArray = Array.from(
+        { length: myLength },
+        (v, k) => chars[Math.floor(Math.random() * chars.length)]
+    );
+
+    const randomString = randomArray.join("");
+    return randomString;
+};
+// console.log(generateRandomString(10))
 
 //fake data
 const userData = {
@@ -44,66 +99,22 @@ var options = {
 }
 const db = mysql.createConnection(options)
 
-//mysql session config
-var sessionConnection = mysql.createConnection(options);
-var sessionStore = new MySQLStore({
-    expiration: 10800000,
-    createDatabaseTable: true,
-    //temp table for storing session data
-    schema: {
-        tableName: 'sessiontbl',
-        columnNames: {
-            session_id: 'session_id',
-            expires: 'expires',
-            data: 'data',
-        }
-    }
-}, sessionConnection)
-
-//session info
-app.use(session({
-    // key: 'keyIn',
-    secret: 'my secret',
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: true
-}))
-
-
-// //login (with fake data)
-// app.use('/login', function(req, res){
-//     const {username, password} = req.body
-//     if(username != userData.username || password != userData.password){
-//         return res.status(401).json({
-//             error: true,
-//             message: "Username or Password is invalid"
-//         })
-//     }else{
-//         // assign value to session named userInfo
-//         req.session.userInfo = userData.fullname
-//         res.send("Landing success!")
-//     }
-// })
-
-
-// //logout(with fake data)
-// app.use('/logout', function(req, res){
-//     req.session.destroy(function(err){
-//         if(!err){
-//             res.send("Log out!")
+// //mysql session config
+// var sessionConnection = mysql.createConnection(options);
+// var sessionStore = new MySQLStore({
+//     expiration: 10800000,
+//     createDatabaseTable: true,
+//     //temp table for storing session data
+//     schema: {
+//         tableName: 'sessiontbl',
+//         columnNames: {
+//             session_id: 'session_id',
+//             expires: 'expires',
+//             data: 'data',
 //         }
-//     })
-// })
-
-
-// //check logged in (with fake data)
-// app.use('/', function(req, res){
-//     if(req.session.userInfo){
-//         res.send("Hello " + req.session.userInfo + " Welcome")
-//     }else{
-//         res.send("Not Logged in")
 //     }
-// })
+// }, sessionConnection)
+
 
 //Create user
 app.post('/users/create', function (req, res) {
@@ -146,7 +157,7 @@ app.post('/login', function (req, res) {
                 })
             }
             //IF ALL IS GOOD create a token and send to frontend
-            let token = jwt.sign({ email: results[0].email }, 'secretkey');
+            let token = jwt.sign({ email: results[0].email, role: results[0].role }, 'secretkey');
             // console.log(token)
             return res.status(200).json({
                 title: 'login sucess',
@@ -175,7 +186,7 @@ app.put('/user/:email/changepw', function (req, res) {
     const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
 
     // console.log(bcrypt.compareSync(inputOldPassword, oldPassword))
-    if(!bcrypt.compareSync(inputOldPassword, oldPassword)){
+    if (!bcrypt.compareSync(inputOldPassword, oldPassword)) {
         return res.status(401).json({
             title: 'change pass failed',
             error: 'wrong password'
@@ -186,8 +197,60 @@ app.put('/user/:email/changepw', function (req, res) {
             if (err) {
                 res.send(err);
             } else {
+                5
                 res.json(results);
             }
+        })
+})
+
+
+// send password to specified email
+app.post('/user/forgotPassword', function (req, res) {
+    const email = req.body.email;
+    db.query("SELECT * FROM Users WHERE email = ?",
+        [email], (err, results) => {
+            if (err) {
+                return console.log(err)
+            }
+            // console.log(results[0])
+            if (!results[0]) {
+                return res.status(401).json({
+                    title: 'error',
+                    error: 'no user with this email'
+                })
+            }
+            const newPassword = generateRandomString(10)
+            const encodedNewPassword = bcrypt.hashSync(newPassword,10)
+            db.query("UPDATE Users SET password = ? WHERE email = ?",
+                [encodedNewPassword, email], (err, results) => {
+                    if (!results) {
+                        res.send(err);
+                    } 
+                })
+            const accessToken = oAuth2Client.getAccessToken();
+            const transport = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    type: 'OAuth2',
+                    user: 'anpqhe160968@fpt.edu.vn',
+                    clientId: CLIENT_ID,
+                    clientSecret: CLIENT_SECRET,
+                    refreshToken: REFRESH_TOKEN,
+                    accessToken: accessToken
+                }
+            })
+            const info = transport.sendMail({
+                from: '"Prolancer" <anpqhe160968@fpt.edu.vn>', // sender address
+                to: "" + email + "", // list of receivers
+                subject: "Forgot password", // Subject line
+                text: "Hello world?", // plain text body
+                html: "<b>This is your new password: " + newPassword + "</b>", // html body
+            });
+            return res.status(200).json({
+                title: 'success',
+                message: 'Sent password to mail'
+            })
+            // console.log(info)
         })
 })
 
@@ -211,12 +274,12 @@ app.put('/user/:email/info/update', function (req, res) {
 app.get('/user/info', function (req, res) {
     let token = req.headers.token;
     jwt.verify(token, 'secretkey', (err, decoded) => {
-        if (err){
+        if (err) {
             res.redirect('/login')
             return res.status(401).json({
                 title: 'unauthorized'
             })
-        } 
+        }
         const email = decoded.email
         // console.log(email)
         db.query("SELECT * FROM Users WHERE email = ?",
@@ -235,7 +298,8 @@ app.get('/user/info', function (req, res) {
                         phone: results[0].phone,
                         description: results[0].description,
                         image: results[0].image,
-                        password: results[0].password
+                        password: results[0].password,
+                        role: results[0].role
                     }
                 })
             })
