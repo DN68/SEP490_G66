@@ -51,15 +51,12 @@ var Gig = function(gig){
     var check =connectDb.query(sql+ " CategoryID LIKE ? AND Title LIKE ? LIMIT ? OFFSET ?", ['%'+filterByCategory+'%','%'+search+'%',limit, offset], function (err, res) {
           if(err) {
             console.log("error: ", err);
-            // result(null, err);
           }
           else{
-            // console.log("gig: ", res);
 
             gig(res);
           }
       });
-      // console.log("error: ", check);
 
       connectDb.query(sqlCount+" CategoryID LIKE ? AND Title LIKE ?", ['%'+filterByCategory+'%','%'+search+'%'], function (err, res) {
         if(err) {

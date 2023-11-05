@@ -29,7 +29,7 @@ var Order = function(order){
 
   Order.getOrderById = function (id,result) {
     
-  const a=  connectDb.query("SELECT *,Order.Description as OrderDescription, Order.Status as OrderStatus FROM `Order` INNER JOIN Gig ON Order.GigID = Gig.GigID WHERE OrderID = ?", [id], function (err, res) {
+   connectDb.query("SELECT *,Order.Description as OrderDescription, Order.Status as OrderStatus FROM `Order` INNER JOIN Gig ON Order.GigID = Gig.GigID WHERE OrderID = ?", [id], function (err, res) {
           if(err) {
             result(null, err);
           }
@@ -37,7 +37,6 @@ var Order = function(order){
             result(null, res);
           }
       });
-      console.log(a);
   };
 
   module.exports= Order;

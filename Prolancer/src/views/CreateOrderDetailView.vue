@@ -312,7 +312,7 @@
                       your order:
                     </h5>
                     <p>
-                      1. Writing your requiremnet here. Do you have any ideals
+                      1. Writing your requirement here. Do you have any ideals
                       of what you want ?
                     </p>
                     <div class="form-outline mb-4">
@@ -327,7 +327,7 @@
                     </div>
 
                     <p>
-                      2. You can send more requiremnet after start your order
+                      2. You can send more requirement after start your order
                     </p>
 
                     <div class="confirm_submit">

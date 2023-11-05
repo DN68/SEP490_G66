@@ -17,11 +17,6 @@ class CategoryController {
    
     }
 
-    index (req,res){
-              console.log( 'success');
-                res.send('New Detail');
-      
-    }
 
 }
 module.exports = new CategoryController;
