@@ -16,14 +16,14 @@
 
         <div class="order_detail_page row">
           <div
-            class="col-md-8 order_detail_information step1"
+            class="col-md-8 order_detail_information pb-4 step1"
             :style="{ display: isdetail ? 'block' : 'none' }"
           >
             <div class="container">
               <div class="order_detail_overview">
                 <div class="order_detail_overview_head row">
                   <div class="col-md-8 order_detail_title">
-                    <h5 class="text-start">I will design an eye catchy...</h5>
+                    <h5 class="text-start">{{order.Title}}</h5>
                   </div>
                   <div class="col-md-4 order_detail_title">
                     <h5 class="text-end" style="font-size: 20px">
@@ -38,15 +38,18 @@
                         <span class="ordered_from_left">Ordered from </span>
                         <span class="ordered_from_right">leorubiano </span>
                         <span class="" style="margin: 0 10px"> | </span>
-                        <span class="delivery_time_left">Delivery Time </span>
+                        <span class="delivery_time_left">Delivery Day </span>
                         <span class="col-md-6 delivery_time_right text-end"
-                          >5 days</span
+                          >{{moment(order.Order_Date).add((24*order.Delivery_Day), 'h').format("MMMM Do, h:mm A")}} </span
                         >
                       </div>
                     </div>
                   </div>
                   <div class="col-md-3 order_detail_title">
-                    <h5 class="text-end" style="font-size: 20px">$17.00</h5>
+                    <h5 class="text-end" style="font-size: 20px">${{
+                          order.Price * order.Total_Amount +
+                          order.Price * order.Total_Amount * 0.1
+                        }}</h5>
                   </div>
                 </div>
               </div>
@@ -56,7 +59,7 @@
                   <span class="col-md-6 order_number_right"
                     ><i class="bi bi-box-seam me-1"></i>YOUR ORDER
                   </span>
-                  <span class="delivery_time_left fst-italic">31/10/2023 </span>
+                  <span class="delivery_time_left fst-italic">{{moment(order.Order_Date).format("MMMM Do, h:mm A")}} </span>
                 </div>
                 <div class="order_detail_table">
                   <table class="table table-borderless">
@@ -70,10 +73,10 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td scope="row">I will design an eye catchy...</td>
-                        <td>1</td>
-                        <td>5 days</td>
-                        <td>$50</td>
+                        <td scope="row">{{order.Title}}</td>
+                        <td>{{order.Total_Amount}}</td>
+                        <td>{{order.Delivery_Day}} days</td>
+                        <td>${{order.Price}}</td>
                       </tr>
                       <tr>
                         <td scope="row"></td>
@@ -93,18 +96,25 @@
                       <tr class="backgroud_gray">
                         <th scope="row">SUBTOTAL</th>
                         <td colspan="2"></td>
-                        <td class="order_price">$50</td>
+                        <td class="order_price">${{
+                          order.Price * order.Total_Amount
+                        }}</td>
                       </tr>
                       <tr class="backgroud_gray">
                         <th scope="row">SERVICE FEE</th>
                         <td colspan="2"></td>
-                        <td class="order_price">$5</td>
+                        <td class="order_price">${{                       
+                          order.Price * order.Total_Amount * 0.1
+                        }}</td>
                       </tr>
 
                       <tr class="backgroud_gray">
                         <th scope="row">TOTAL</th>
                         <td colspan="2"></td>
-                        <td class="order_price">$55</td>
+                        <td class="order_price">${{
+                          order.Price * order.Total_Amount +
+                          order.Price * order.Total_Amount * 0.1
+                        }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -136,7 +146,7 @@
                     industry. Lorem Ipsum has been the industry's standard dummy
                     text ever since the 1500s, when an unknown printer took a
                     galley of type and scrambled it to make a type specimen
-                    book.
+                    book. {{order.OrderDescription}}
                   </p>
                   <div class="text_thanks">
                     <span>Thanks!</span>
@@ -188,7 +198,7 @@
                       Packages Delivered at the Speed of Need. Please wait.
                     </h6>
                     <div class="delivery_infomation">
-                      <span class="ordered_from_right">leorubiano </span> <span class="delivery_infomation_date"> shoul deliver this order on 31/10/2023</span>
+                      <span class="ordered_from_right">leorubiano </span> <span class="delivery_infomation_date"> shoul deliver this order on {{moment(order.Order_Date).add((24*order.Delivery_Day), 'h').format("MMMM Do, h:mm A")}}</span>
                     </div>
                   </div>
                 </div>
@@ -203,20 +213,20 @@
                   <span class="order_detail_head">Order Details</span>
                   <div class="row">
                     <div class="order_detail_tab_inside row">
-                      <div class="order_detail_tab_gig_img col-md-4">
+                      <div class="order_detail_tab_gig_img col-md-6">
                         <img
-                          src="https://fiverr-res.cloudinary.com/t_profile_original,q_auto,f_auto/attachments/profile/photo/795d7cb1444717c90dd23c3333fed16b-1604937118910/71a4c9ab-9941-441d-a03f-aa7e320f05ec.jpg"
+                          :src="order.Gig_IMG"
                           class="profile-pict-img jumkns0"
                           alt="riketa"
-                          style="width: 70px; height: 70px"
+                          style="width: 100px; height: 70px"
                         />
                       </div>
-                      <div class="order_detail_tab_information col-md-8">
+                      <div class="order_detail_tab_information col-md-6">
                         <div class="row">
                           <div class="information_gig_title col-md-4">
                             <a>
                               <h6 class="information_gig_title_h6">
-                                I will design an eye catchy...
+                                {{order.Title}}
                               </h6></a
                             >
                           </div>
@@ -244,40 +254,64 @@
                       >Delivery Time</span
                     >
                     <span class="col-md-6 delivery_time_right text-end"
-                      >5 day</span
+                      >{{order.Delivery_Day}} days</span
                     >
                   </div>
                   <div class="total_price row">
                     <span class="col-md-6 total_price_left">Total price</span>
                     <span class="col-md-6 total_price_right text-end"
-                      >$50
+                      >${{
+                          order.Price * order.Total_Amount +
+                          order.Price * order.Total_Amount * 0.1
+                        }}
                     </span>
                   </div>
                   <div class="order_number row">
                     <span class="col-md-6 order_number_left">Order number</span>
                     <span class="col-md-6 order_number_right text-end"
-                      >#FO2141515
+                      >#FO200{{order.OrderID}}
                     </span>
                   </div>
                   <hr class="featurette-divider" />
                   <span class="order_detail_head">Track Order</span>
                   <div class="track_order row">
-                    <div class="col-md-12 track_order_requirement">
+                    <div class="col-md-12 track_order_requirement" v-if="order.OrderDescription!=''">
                       <i class="bi bi-check-circle-fill checked_active"></i>
                       <span
                         class="col-md-6 track_order_requirment_text text-end"
                         >Requirement submitted</span
                       >
                     </div>
-                    <div class="col-md-12 track_order_progress">
+                    <div class="col-md-12 track_order_progress" v-if="order.OrderStatus=='Active'">
                       <i class="bi bi-play-circle-fill checked_active"></i>
                       <span class="col-md-6 track_order_progress_text text-end"
                         >Order in progress</span
                       >
                     </div>
-                    <div class="col-md-12 track_order_completed">
-                      <i class="bi bi-circle"></i>
-                      <span class="col-md-6 track_order_completed_text text-end"
+                    
+                    <div class="col-md-12 track_order_cancel " v-if="order.OrderStatus=='Cancel'">
+                      <i class="bi bi-x-circle-fill checked_active"></i>
+                      <span class="col-md-6 track_order_text text-end"
+                        >Order cancelled</span
+                      >
+                    </div>
+                    <div class="col-md-12 track_order_late " v-if="order.OrderStatus=='Late'">
+                      <i class="bi bi-exclamation-circle-fill checked_active"></i>
+                      <span class="col-md-6 track_order_text text-end"
+                        >Order late</span
+                      >
+                    </div>
+                    <div class="col-md-12 track_order_delivered" v-if="order.OrderStatus=='Delivered'">
+                      <i class="bi bi-play-circle-fill checked_active"></i>
+                      <span class="col-md-6 track_order_text text-end"
+                        >Order delivered</span
+                      >
+                    </div>
+
+                    <div class="col-md-12 track_order_completed_status" v-if="order.OrderStatus=='Completed'">
+                      <i class="bi bi-check-circle-fill checked_active"></i>
+
+                      <span class="col-md-6 track_order_text text-end"
                         >Order completed</span
                       >
                     </div>
@@ -294,7 +328,8 @@
 
 <script>
 import Header from "../components/Header.vue";
-
+import axios from "axios";
+var moment = require('moment');
 export default {
   name: "OrderDetailView",
   components: {
@@ -305,8 +340,15 @@ export default {
       isdetail:true,
       isrequirement:false,
       isdelivery:false,
+      order: {},
+      moment: moment
     };
   },
+  async created() {
+    const responseOrder = await axios.get('/orders/details/'+  this.$route.params.id);
+    const order = responseOrder.data[0];
+    this.order = order;
+  }
 };
 </script>
 
@@ -417,12 +459,12 @@ export default {
 
 .order_detail_tab .track_order_requirment_text,
 .track_order_progress_text,
-.track_order_completed_text {
+.track_order_text {
   margin-left: 15px;
   font-weight: 550;
 }
-.order_detail_tab .track_order_progress,
-.track_order_completed {
+.order_detail_tab .track_order_progress, .track_order_cancel, .track_order_late, .track_order_delivered, 
+.track_order_completed_status {
   margin: 5px 0;
 }
 .order_detail_tab .track_order_requirment_text {

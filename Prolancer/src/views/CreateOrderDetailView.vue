@@ -485,27 +485,24 @@ export default {
       }
     },
     async startOrder() {
-      
-
-      if ((this.order.orderDescription == "" || !this.confirmSubmit)) {
+      if (this.order.orderDescription == "" || !this.confirmSubmit) {
         console.log("Please Submit Requirt", this.order.orderDescription);
-        alert('Please Submit Requirment And Click On Confirm!');
+        alert("Please Submit Requirment And Click On Confirm!");
       } else {
         this.order.orderFreelancerID = this.gig.FreelancerID;
         this.order.orderGigID = this.gig.GigID;
         const data = await axios.post("/orders/index", {
           order: this.order,
-          
-        });
-        console.log(
-          "🚀 ~ file: CreateOrderDetailView.vue:482 ~ startOrder ~ data:",
-          this.order
-        );
-        if ((data.data = "Create Order Success")) {
+        });       
+
+        if (data.data.message == "Create Order Success") {
           toast.success("Create Order Successfully!", {
             theme: "colored",
             autoClose: 2000,
           });
+          window.setTimeout(function () {
+            window.location.href = '/vieworderdetail/'+data.data.insertId;
+          }, 3000);
         } else {
           toast.warn("Create Order Faild!", { autoClose: 2000 });
         }

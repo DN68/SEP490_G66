@@ -91,7 +91,7 @@ const routes = [
 
   },
   {
-    path: '/vieworderdetail',
+    path: '/vieworderdetail/:id',
     name: 'vieworderdetail',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
