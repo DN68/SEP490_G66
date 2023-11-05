@@ -7,12 +7,18 @@
             ><img
               src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
               class="img-fluid"
-              alt="Sample image" style="border-right: 2px #ccc solid;"
+              alt="Sample image"
+              style="border-right: 2px #ccc solid"
           /></router-link>
         </div>
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
           <form>
-            <p class="text-center h1 fw-bold mb-5 mx-1 mt-4" style="color: #e37e7f">Welcome to Prolancer</p>
+            <p
+              class="text-center h1 fw-bold mb-5 mx-1 mt-4"
+              style="color: #e37e7f"
+            >
+              Welcome to Prolancer
+            </p>
             <div
               class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start"
             >
@@ -53,6 +59,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 placeholder="Enter a valid email address"
+                v-model="email"
               />
             </div>
 
@@ -66,6 +73,7 @@
                 id="form3Example4"
                 class="form-control form-control-lg"
                 placeholder="Enter password"
+                v-model="password"
               />
             </div>
 
@@ -95,6 +103,7 @@
                 type="button"
                 class="btn bg-danger bg-gradient text-light btn-lg"
                 style="padding-left: 2.5rem; padding-right: 2.5rem"
+                @click="Login"
               >
                 Login
               </button>
@@ -111,6 +120,40 @@
     </div>
   </section>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+      error: "",
+    };
+  },
+  methods: {
+    async Login() {
+      let user = {
+        email: this.email,
+        password: this.password
+      }
+      axios.post('/users/login', user)
+        .then(res => {
+          //if successfull
+          if (res.status === 200) {
+            localStorage.setItem('token', res.data.token);
+            this.$router.push('/');
+          }
+        }, err => {
+          console.log(err.response);
+        })
+    },
+  },
+};
+</script>
+
+
 <style scoped>
 .divider:after,
 .divider:before {

@@ -77,7 +77,7 @@
               <span class="small">Favourite</span></a
             >
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="!user.email">
             <!-- <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
@@ -85,11 +85,18 @@
               ><i class="bi bi-heart"></i>
               <span class="small">Favourite</span></a
             > -->
-            <router-link to="/login"
-             class="text_decoration:none nav-link d-flex flex-column text-center" aria-current="page" style="margin:8px 0px 8px 50px">
-             
-             <i class="fa-solid fa-right-to-bracket" style="color: #7c8088;"></i>
-             <span class="small">Login</span></router-link>
+            <router-link
+              to="/login"
+              class="text_decoration:none nav-link d-flex flex-column text-center"
+              aria-current="page"
+              style="margin: 8px 0px 8px 50px"
+            >
+              <i
+                class="fa-solid fa-right-to-bracket"
+                style="color: #7c8088"
+              ></i>
+              <span class="small">Login</span></router-link
+            >
           </li>
 
           <!-- <li class="nav-item" style="text-decoration:none">
@@ -103,9 +110,8 @@
             </router-link>
             
           </li> -->
-          
 
-          <li class="nav-item dropdown" style="display: none">
+          <li class="nav-item dropdown" style="">
             <a
               class="nav-link dropdown-toggle d-flex align-items-center"
               href="#"
@@ -115,7 +121,7 @@
               aria-expanded="false"
             >
               <img
-                src="https://static.thenounproject.com/png/363640-200.png"
+                :src="user.image"
                 class="rounded-circle"
                 height="30"
                 alt=""
@@ -123,10 +129,11 @@
               />
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">My profile</a></li>
-              <li><a class="dropdown-item" href="#">Change password</a></li>
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li><router-link class="dropdown-item" to="/updateprofile">My Profile</router-link></li>
+              <li><router-link class="dropdown-item" to="/change">Change password</router-link></li>
+              <li><router-link class="dropdown-item" to="#">Settings</router-link></li>
+              <li><router-link class="dropdown-item" to="/logout">Logout</router-link></li>
+              
             </ul>
           </li>
         </ul>
@@ -136,8 +143,8 @@
     </div>
     <!-- Container wrapper -->
   </nav>
-  <header>
-    <!-- Sidebar -->
+  <div class="header">
+ <!-- Sidebar -->
     <nav
       style="display: none; padding-top: 140px"
       id="sidebarMenuNomarl"
@@ -174,23 +181,55 @@
             ><span>Change Password</span></a
           >
 
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
+          <a
+            href="#"
+            @click="Logout"
+            class="list-group-item list-group-item-action py-2 ripple"
             ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
           >
         </div>
       </div>
     </nav>
-  </header>
+  </div>
+
   <!-- Navbar -->
 </template>
 
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
 export default {
   data() {
     return {
       isShow: false,
+      user: {}
     };
+  },
+  created() {
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+  },
+  mounted() {
+    axios
+      .get("http://localhost:3000/user/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+  },
+  methods: {
+    Logout() {
+      localStorage.clear();
+      this.$router.push("/login");
+    },
   },
 };
 </script>

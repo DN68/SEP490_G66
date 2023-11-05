@@ -21,7 +21,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, anhlt1901
+                Hello, {{user.username}}
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -183,9 +183,15 @@ export default {
   data() {
     return {
       categories: [],
-      gigs:[]
+      gigs:[],
+      user:{}
     };
-  }, async created() {
+  }, 
+  async created() {
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
     const responseCategory = await axios.get('/categories/get');
     const categories = responseCategory.data;
     this.categories = categories;
@@ -197,7 +203,21 @@ export default {
     this.gigs = gigs;
     
     
-  }
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        err => {
+          console.log(err.response);
+        }
+      );
+  },
 };
 </script>
 

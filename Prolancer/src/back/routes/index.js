@@ -1,6 +1,7 @@
 const categoryRoute = require('./category');
 const gigRoute = require('./gigs');
 const orderRoute = require('./orders');
+const userRoute = require('./users')
 
 function route(app) {
     // app.get("/", function(req,res){
@@ -15,6 +16,7 @@ function route(app) {
     app.use("/categories", categoryRoute);  
     app.use("/gigs", gigRoute);  
     app.use("/orders", orderRoute);  
+    app.use("/users", userRoute);  
 
 }
 
