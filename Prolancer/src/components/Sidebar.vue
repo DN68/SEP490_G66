@@ -68,9 +68,7 @@
   <!--Main Navigation-->
 
   <!--Main layout-->
-  <main style="margin-top: 58px">
-    <div class="container pt-4"></div>
-  </main>
+ 
 </template>
 
 <script>
