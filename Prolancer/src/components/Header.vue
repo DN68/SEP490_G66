@@ -13,13 +13,13 @@
             loading="lazy"
         /></a>
         <!-- Search form -->
-        <form class="input-group" style="width: 700px" action="/giglist" >
+        <form class="input-group" style="width: 700px" action="/giglist">
           <input
             type="search"
             class="form-control"
             placeholder="What are you looking for ?"
             aria-label="Search"
-            :value= "searchText"
+            :value="searchText"
             name="search"
           />
           <button
@@ -86,16 +86,51 @@
               >
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item dropdown" style="">
               <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
+                class="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
               >
-                <span class="small" style="margin-top: 10px">Sign In</span></a
+                <img
+                  :src="user.image"
+                  class="rounded-circle"
+                  height="30"
+                  alt=""
+                  loading="lazy"
+                />
+              </a>
+              <ul
+                class="dropdown-menu"
+                aria-labelledby="navbarDropdownMenuLink"
               >
+                <li>
+                  <router-link class="dropdown-item" to="/updateprofile"
+                    >My Profile</router-link
+                  >
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/change"
+                    >Change password</router-link
+                  >
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="#"
+                    >Settings</router-link
+                  >
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/logout"
+                    >Logout</router-link
+                  >
+                </li>
+              </ul>
             </li>
-            <li class="nav-item">
+
+            <!-- <li class="nav-item">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -103,7 +138,7 @@
               >
                 <span class="small" style="margin-top: 10px">Register</span></a
               >
-            </li>
+            </li> -->
 
             <li class="nav-item dropdown" style="display: none">
               <a
@@ -219,12 +254,35 @@
 
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios"
+
 export default {
-  props: [
-    'searchText'
-  ],
+  props: ["searchText"],
   data() {
-   
+    return {
+      isShow: false,
+      user: {}
+    };
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+  },
+  methods: {
+    Logout() {
+      localStorage.clear();
+      this.$router.push("/login");
+    },
   },
 };
 </script>

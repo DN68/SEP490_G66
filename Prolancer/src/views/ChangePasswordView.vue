@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import Headers from "../components/HeaderView.vue";
+import Headers from "../components/Header.vue";
 import Sidebar from "../components/SideBarudpfView.vue";
 import axios from "axios";
 
@@ -78,7 +78,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:3000/user/info", {
+      .get("/users/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
@@ -95,8 +95,11 @@ export default {
       if (this.newPassword != this.reNewPassword) {
         console.log("Wrong password confirm");
       } else {
+        // console.log(this.inputOldPassword);
+        // console.log(this.user.password);
+        // console.log(this.newPassword);
         axios
-          .put(`http://localhost:3000/user/${this.user.email}/changepw`, {
+          .put(`/users/${this.user.email}/changepw`, {
             inputOldPassword: this.inputOldPassword,
             oldPassword: this.user.password,
             newPassword: this.newPassword,

@@ -5,6 +5,7 @@
   <div class="Sidebarudpf">
     <Sidebarpf></Sidebarpf>
   </div>
+  
   <div id="content" class="">
     <div class="container-profile">
       <form  class="form-profile">
@@ -89,7 +90,7 @@
 </template>
 
 <script>
-import Headers from "../components/HeaderView.vue";
+import Headers from "../components/Header.vue";
 import Sidebarpf from "../components/Sidebarprf.vue";
 import axios from "axios"
 
@@ -109,11 +110,10 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     }
-   
   },
   mounted(){
     axios
-      .get("http://localhost:3000/user/info", {
+      .get("/users/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
@@ -127,14 +127,15 @@ export default {
   },
   methods:{
     updateProfile(){
-      axios.put(`http://localhost:3000/user/${this.user.email}/info/update`, {
+      // console.log(this.user)
+      axios.put(`users/${this.user.email}/info/update`, {
         //add more fields here
-        username: this.user.username,
-        firstName: this.user.firstName,
-        lastName: this.user.firstName,
-        phone: this.user.phone,
-        description: this.user.description,
-        image: this.user.image
+        Username: this.user.username,
+        First_Name: this.user.firstName,
+        Last_Name: this.user.lastName,
+        Phoneno: this.user.phone,
+        Description: this.user.description,
+        Profile_Picture: this.user.image
       })
     }
   }

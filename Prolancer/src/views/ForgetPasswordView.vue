@@ -72,7 +72,7 @@ export default {
   methods: {
     resetPassword() {
       axios
-        .post("http://localhost:3000/user/forgotPassword", {
+        .post("/users/forgotPassword", {
           email: this.email,
         })
         .then(

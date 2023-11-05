@@ -138,7 +138,7 @@ export default {
         email: this.email,
         password: this.password
       }
-      axios.post('http://localhost:3000/login', user)
+      axios.post('/users/login', user)
         .then(res => {
           //if successfull
           if (res.status === 200) {
