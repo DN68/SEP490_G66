@@ -1,6 +1,4 @@
 <template>
-  
-
   <div
     class="container"
     style="height: auto; max-width: -webkit-fill-available"
@@ -43,7 +41,6 @@
       
     </div>
     <!-- <footer class="panel panel-default">
-      <Footer></Footer>
     </footer> -->
   </div>
 
@@ -51,16 +48,14 @@
   
   <script>
 // @ is an alias to /src
-import Header from "../components/HeaderView.vue";
+import Header from "../components/Header.vue";
 import Sidebar from "../components/Sidebar.vue";
-import Footer from "../components/Footer.vue";
 
 export default {
   name: "HomePage",
   components: {
     Header,
     Sidebar,
-    Footer,
   },
 };
 </script>
