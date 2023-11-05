@@ -6,50 +6,55 @@
     <Sidebar></Sidebar>
   </div>
   <div id="content" class="">
-    
-      <div class="container-change">
-        <form action="" class="form-change">
-        <label class="form-label mt-5" style="float: left" for="form3Example3"
-          >Old Password</label
-        >
-        <input
-          type="password"
-          id="form3Example3"
-          class="form-control form-control-lg"
-          placeholder="Enter your old password"
-        />
-        <label class="form-label mt-5" style="float: left" for="form3Example3"
-          >New Password</label
-        >
-        <input
-          type="password"
-          id="form3Example3"
-          class="form-control form-control-lg"
-          placeholder="Enter your new password"
-        />
-        <label class="form-label mt-5" style="float: left" for="form3Example3"
-          >Re-enter New Password</label
-        >
-        <input
-          type="password"
-          id="form3Example3"
-          class="form-control form-control-lg"
-          placeholder="Enter your new password again"
-        />
-        <button id="btn-sub" type="submit" class="btn btn-primary">Submit</button>
-        </form>
-
-        
-      </div>
-      
-    
-    
+    <div class="container-change">
+      <!-- <form action="" class="form-change"> -->
+      <label class="form-label mt-5" style="float: left" for="form3Example3"
+        >Old Password</label
+      >
+      <input
+        type="password"
+        id="form3Example3"
+        class="form-control form-control-lg"
+        placeholder="Enter your old password"
+        v-model="inputOldPassword"
+      />
+      <label class="form-label mt-5" style="float: left" for="form3Example3"
+        >New Password</label
+      >
+      <input
+        type="password"
+        id="form3Example3"
+        class="form-control form-control-lg"
+        placeholder="Enter your new password"
+        v-model="newPassword"
+      />
+      <label class="form-label mt-5" style="float: left" for="form3Example3"
+        >Re-enter New Password</label
+      >
+      <input
+        type="password"
+        id="form3Example3"
+        class="form-control form-control-lg"
+        placeholder="Enter your new password again"
+        v-model="reNewPassword"
+      />
+      <button
+        id="btn-sub"
+        type="submit"
+        @click="changePassword"
+        class="btn btn-primary"
+      >
+        Submit
+      </button>
+      <!-- </form> -->
+    </div>
   </div>
 </template>
 
 <script>
-import Headers from "../components/HeaderView.vue";
+import Headers from "../components/Header.vue";
 import Sidebar from "../components/SideBarudpfView.vue";
+import axios from "axios";
 
 export default {
   name: "App",
@@ -57,12 +62,66 @@ export default {
     Headers,
     Sidebar,
   },
+  data() {
+    return {
+      user: {},
+      inputOldPassword: "",
+      newPassword: "",
+      reNewPassword: "",
+    };
+  },
+  created() {
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+  },
+  methods: {
+    changePassword() {
+      if (this.newPassword != this.reNewPassword) {
+        console.log("Wrong password confirm");
+      } else {
+        // console.log(this.inputOldPassword);
+        // console.log(this.user.password);
+        // console.log(this.newPassword);
+        axios
+          .put(`/users/${this.user.email}/changepw`, {
+            inputOldPassword: this.inputOldPassword,
+            oldPassword: this.user.password,
+            newPassword: this.newPassword,
+          })
+          .then(
+            (res) => {
+              console.log("change pass success");
+              this.$router.push("/logout")
+            },
+            (err) => {
+              console.log("change pass failed");
+            }
+          );
+      }
+    },
+  },
 };
 </script>
 
 <style>
-html{
-    background-color: #ededed;
+html {
+  background-color: #ededed;
 }
 .sidebar {
   float: left;
@@ -87,18 +146,18 @@ html{
   width: 50%;
 }
 #btn-sub {
-    display: block;
-    margin-top: 30px;
-    border-radius: 10px;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    background-color:#dc3545!important;
-    border: none;
+  display: block;
+  margin-top: 30px;
+  border-radius: 10px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #dc3545 !important;
+  border: none;
 }
-.form-change{
-    border: 1px #ccc solid;
-    background-color: #fff;
-    padding: 30px
+.form-change {
+  border: 1px #ccc solid;
+  background-color: #fff;
+  padding: 30px;
 }
 </style>

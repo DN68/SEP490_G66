@@ -5,18 +5,19 @@
   <div class="Sidebarudpf">
     <Sidebarpf></Sidebarpf>
   </div>
+  
   <div id="content" class="">
     <div class="container-profile">
-      <form action="/update" class="form-profile">
+      <form  class="form-profile">
         <div class="field">
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Username</label
           >
           <input
-            type="username"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
-            
+            v-model="user.username"
           />
           <div style="display: flex; flex-direction: row; justify-content: space-between">
             <div class="left" style="width:40%">
@@ -24,9 +25,10 @@
             >First Name</label
           >
           <input
-            type="firstname"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.firstName"
           />
             </div>
             <div class="right" style="width:40%">
@@ -34,9 +36,10 @@
             >Last Name</label
           >
           <input
-            type="lastname"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.lastName"
           />
             </div>
              
@@ -44,17 +47,27 @@
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Phone Number</label>
           <input
-            type="phoneno"
+            type="text"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.phone"
           />
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Description</label>
             <textarea
-            type="description"
             id="form3Example3"
             class="form-control form-control-lg"
+            v-model="user.description"
           />
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Image</label>
+            <input
+            type="text"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.image"
+          />
+        
           <div class="mt-5" style="display:flex;flex-direction:row;justify-content:space-between">
             <div class="left" style="width:40%">
               <span class="form-label mt-5">Upload CV</span>
@@ -63,7 +76,7 @@
               <input type="button" value="Upload">
             </div>
           </div>
-          <button id="btn-sub" type="submit" class="btn btn-primary">
+          <button id="btn-sub" type="submit" @click="updateProfile" class="btn btn-primary">
             Update
           </button>
         </div>
@@ -78,9 +91,14 @@
 </template>
 
 <script>
-import Headers from "../components/HeaderView.vue";
+import Headers from "../components/Header.vue";
 import Sidebarpf from "../components/Sidebarprf.vue";
+
 import Footer from "../components/Footer.vue";
+
+import axios from "axios"
+
+
 export default {
   name: "App",
   components: {
@@ -88,6 +106,45 @@ export default {
     Sidebarpf,
     Footer,
   },
+  data(){
+    return{
+      user: {},
+    }
+  },
+  created(){
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+  },
+  mounted(){
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        err => {
+          console.log(err.response);
+        }
+      );
+  },
+  methods:{
+    updateProfile(){
+      // console.log(this.user)
+      axios.put(`users/${this.user.email}/info/update`, {
+        //add more fields here
+        Username: this.user.username,
+        First_Name: this.user.firstName,
+        Last_Name: this.user.lastName,
+        Phoneno: this.user.phone,
+        Description: this.user.description,
+        Profile_Picture: this.user.image
+      })
+    }
+  }
 };
 </script>
 

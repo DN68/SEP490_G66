@@ -1,16 +1,17 @@
 <template>
   <!-- Sidebar -->
   <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-    <img src="../assets/image/large_1588936738888.png" alt="" />
+    <img :src="user.image" alt="" />
     <br />
     <div class="info-user">
-      <h5 class="username">Duy Nguyen</h5>
-      <p class="email">duynguyen68@gmail.com</p>
-      <router-link to="/profile" style="text-decoration: none; color: #000"><h5 class="preview">Preview Profile</h5></router-link>
-      
+      <h5 class="username">{{user.username}}</h5>
+      <p class="email">{{user.email}}</p>
+      <router-link to="/profile" style="text-decoration: none; color: #000"
+        ><h5 class="preview">Preview Profile</h5></router-link
+      >
     </div>
   </nav>
-  
+
   <!-- Sidebar -->
 
   <!-- Navbar -->
@@ -42,7 +43,35 @@
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      user: {},
+    };
+  },
+  created() {
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+  },
+};
 </script>
 
 <style>
@@ -98,21 +127,21 @@ export default {};
   text-align: center;
   font-family: face;
 }
-.email{
+.email {
   opacity: 0.6;
 }
 @font-face {
   font-family: face;
-  src: url(D:\Prolancers\SEP490_G66\Prolancer\src\assets\font\Tilt_Neon\TiltNeon-Regular-VariableFont_XROT,YROT.ttf);
+  src: url(D:\SEP490_G66\Prolancer\src\assets\font\Tilt_Neon\TiltNeon-Regular-VariableFont_XROT,YROT.ttf);
 }
-.preview{
+.preview {
   border: 1px #ccc solid;
   width: 70%;
   padding: 5px;
   margin-left: auto;
   margin-right: auto;
 }
-.preview:hover{
+.preview:hover {
   background-color: #000;
   color: #fff;
   cursor: pointer;
