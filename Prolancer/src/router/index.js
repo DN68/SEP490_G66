@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 
 
-
 const routes = [
   {
     path: '/',
@@ -47,42 +46,59 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/ForgetPasswordView.vue')
   },
   {
-    path: '/updateprofile',
-    name: 'updateprofile',
+    path: '/profile',
+    name: 'profile',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/UpdateProfileView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ProfileView.vue')
 
   },
   {
-    path: '/change',
-    name: 'change',
+    path: '/gigdetail/:id',
+    name: 'gigdetail',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/ChangePasswordView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/GigDetailView.vue')
 
   },
   {
-    path: '/cusdash',
-    name: 'cusdash',
+    path: '/createorderdetail',
+    name: 'createorderdetail',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/SellerDashBoardView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/CreateOrderDetailView.vue')
 
   },
   {
-    path: '/logout',
-    name: 'logout',
+    path: '/manageorder',
+    name: 'manageorder',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../components/Logout.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageOrderView.vue')
 
   },
-  
+  {
+    path: '/giglist',
+    name: 'giglist',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/GigListView.vue')
+
+  },
+  {
+    path: '/vieworderdetail/:id',
+    name: 'vieworderdetail',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/OrderDetailView.vue')
+
+  }
 ]
 
 const router = createRouter({
