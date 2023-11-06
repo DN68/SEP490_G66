@@ -137,6 +137,18 @@ export default {
         this.message = "Wrong email format";
         return false;
       }
+      // axios.get(`/users/${this.email}/check`).then(
+      //   (res) => {
+      //     console.log(res.data);
+      //     if (res.data) {
+      //       this.message = "Email already exists";
+      //       return false;
+      //     }
+      //   },
+      //   (err) => {
+      //     console.log(err.response);
+      //   }
+      // );
       if (!this.password) {
         this.message = "you must enter password";
         return false;

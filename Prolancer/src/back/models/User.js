@@ -17,7 +17,7 @@ var User = function (user) {
 };
 
 User.createUser = function (email, username, password, result) {
-    connectDb.query("INSERT INTO User SET Email = ?, Username = ?, Password = ?", 
+    connectDb.query("INSERT INTO User SET Email = ?, Username = ?, Password = ?, Role = 'C'", 
     [email, username, password], function (err, res) {
         if (err) {
             result(null, err);

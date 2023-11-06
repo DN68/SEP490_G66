@@ -34,13 +34,11 @@ class UserController {
         const email = req.body.email;
         const username = req.body.username;
         const password = bcrypt.hashSync(req.body.password, 10);
-        User.createUser(email, username, password, function (result) {
-            if (result) {
-                return res.send({ message: 'Register Successfully' });
-            }
-            else {
-                return res.send('Register Failed');
-
+        User.createUser(email, username, password, function (err, result) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(result);
             }
         })
     }
@@ -187,11 +185,25 @@ class UserController {
     }
 
 
+    // checkMailExist = function (req, res) {
+    //     const email = req.params.email;
+    //     User.getUserByEmail(email, function (err, results) {
+    //         if (err) {
+    //             return console.log(err)
+    //         }
+    //         if(!results[0]){
+    //             return res.status(200).send(false)
+    //         }
+    //         return res.status(200).send(true)
+            
+    //     })
+    // }
+
     updateProfile = function (req, res) {
-        const  email  = req.params.email;
+        const email = req.params.email;
         const data = req.body;
         console.log(data)
-        User.updateUserInfo(data, email, function(err, results){
+        User.updateUserInfo(data, email, function (err, results) {
             if (err) {
                 res.send(err);
             } else {
