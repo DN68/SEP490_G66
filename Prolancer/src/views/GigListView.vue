@@ -461,14 +461,13 @@ export default {
     console.log("created");
 
     var searchFilterQuery = this.$route.query;
-    console.log(searchFilterQuery.searchQuery + "1");
     const responseGig = await axios.get("/gigs/index", {
       params: {
         page: '1',
-        search: '',
-            filterBy1: this.filterBy1,
-            filterBy2: this.filterBy2,
-            filterBy3: this.filterBy3,
+        search: searchFilterQuery.search,
+            filterBy1: searchFilterQuery.filterBy1,
+            filterBy2: searchFilterQuery.filterBy2,
+            filterBy3: searchFilterQuery.filterBy3,
       },
     });
     const gigs = responseGig.data.gig;

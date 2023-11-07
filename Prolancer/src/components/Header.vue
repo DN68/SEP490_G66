@@ -62,7 +62,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="#"
+                href="/manageorder"
                 ><i class="bi bi-box-seam"></i
                 ><span class="small">Orders</span></a
               >

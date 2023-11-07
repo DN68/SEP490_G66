@@ -114,6 +114,7 @@ class UserController {
             }
             //Send new random password to email
             const newPassword = generateRandomString(10)
+            console.log(newPassword)
             const encodedNewPassword = bcrypt.hashSync(newPassword, 10)
             User.updateUserPassword(encodedNewPassword, email, function (err, results) {
                 if (!results) {
@@ -166,6 +167,7 @@ class UserController {
                     title: 'user grabbed',
                     //can add more fields
                     user: {
+                        userId: results[0].UserID,
                         email: results[0].Email,
                         username: results[0].Username,
                         firstName: results[0].First_Name,
