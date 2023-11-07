@@ -40,6 +40,19 @@ User.getUserByEmail = function(email, results){
     })
 }
 
+
+User.getUserByEmailOrUsername = function(emailOrUsername, results){
+    connectDb.query("SELECT * FROM User WHERE Email = ? OR Username = ?", 
+    [emailOrUsername, emailOrUsername], function(err, res){
+        if (err) {
+            results(null,err);
+        }
+        else {
+            results(null,res);
+        }
+    })
+}
+
 User.updateUserInfo = function(data, email, results){
     connectDb.query("UPDATE User SET ? WHERE Email = ?",
         [data, email], (err, res) => {

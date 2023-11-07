@@ -45,9 +45,9 @@ class UserController {
 
 
     login = function (req, res) {
-        const email = req.body.email
-        User.getUserByEmail(email, function (err, results) {
-            // console.log(results)
+        const emailOrUsername = req.body.emailOrUsername
+        User.getUserByEmailOrUsername(emailOrUsername, function (err, results) {
+            console.log(results)
             if (err) {
                 return res.status(500).json({
                     title: 'server error',
