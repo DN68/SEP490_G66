@@ -17,7 +17,7 @@ var User = function (user) {
 };
 
 User.createUser = function (email, username, password, result) {
-    connectDb.query("INSERT INTO User SET Email = ?, Username = ?, Password = ?", 
+    connectDb.query("INSERT INTO User SET Email = ?, Username = ?, Password = ?, Role = 'C', Profile_Picture = 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'", 
     [email, username, password], function (err, res) {
         if (err) {
             result(null, err);
@@ -31,6 +31,19 @@ User.createUser = function (email, username, password, result) {
 User.getUserByEmail = function(email, results){
     connectDb.query("SELECT * FROM User WHERE Email = ?", 
     [email], function(err, res){
+        if (err) {
+            results(null,err);
+        }
+        else {
+            results(null,res);
+        }
+    })
+}
+
+
+User.getUserByEmailOrUsername = function(emailOrUsername, results){
+    connectDb.query("SELECT * FROM User WHERE Email = ? OR Username = ?", 
+    [emailOrUsername, emailOrUsername], function(err, res){
         if (err) {
             results(null,err);
         }

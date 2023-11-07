@@ -188,10 +188,10 @@ export default {
     };
   }, 
   async created() {
-    //user is not authorized
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
+    // //user is not authorized
+    // if (localStorage.getItem("token") === null) {
+    //   this.$router.push("/login");
+    // }
     const responseCategory = await axios.get('/categories/get');
     const categories = responseCategory.data;
     this.categories = categories;
@@ -202,6 +202,27 @@ export default {
 
     this.gigs = gigs;
     
+    try {
+    const responseUserInfor = await axios.get(
+      "/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      } 
+    )
+    const userInfor = responseUserInfor.data;
+    this.user = userInfor;
+    console.error('User:',this.user )
+
+    } catch (error) {
+    console.error('Error:', error.response.data);
+    if(error.response.data.title){
+
+      // window.location.href = '/login/'
+
+
+    }else{
+      console.error('Error:',error )
+    }
+    }
     
   },
   mounted() {
