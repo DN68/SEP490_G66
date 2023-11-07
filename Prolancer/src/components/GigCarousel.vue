@@ -57,7 +57,7 @@
                             <div class="row userRow">
                               <div class="col-md-12">
                                 <img
-                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  :src="gig.Profile_Picture"
                                   class="rounded-circle"
                                   height="25"
                                   alt=""
@@ -139,7 +139,7 @@
                             <div class="row userRow">
                               <div class="col-md-12">
                                 <img
-                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  :src="gig.Profile_Picture"
                                   class="rounded-circle"
                                   height="25"
                                   alt=""
@@ -219,7 +219,7 @@
                             <div class="row userRow">
                               <div class="col-md-12">
                                 <img
-                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  :src="gig.Profile_Picture"
                                   class="rounded-circle"
                                   height="25"
                                   alt=""
