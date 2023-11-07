@@ -83,6 +83,7 @@
                       >
                         Register
                       </button>
+                      {{ message }}
                     </div>
                   </form>
                 </div>
@@ -115,24 +116,74 @@ export default {
       email: "",
       password: "",
       repeatPassword: "",
+      message: "",
     };
   },
+  computed: {
+    isValidEmail() {
+      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.email);
+    },
+    checkInput() {
+      //input validation here
+      if (!this.username) {
+        this.message = "you must enter username";
+        return false;
+      }
+      if (!this.email) {
+        this.message = "you must enter Email";
+        return false;
+      }
+      if (!this.isValidEmail) {
+        this.message = "Wrong email format";
+        return false;
+      }
+      // axios.get(`/users/${this.email}/check`).then(
+      //   (res) => {
+      //     console.log(res.data);
+      //     if (res.data) {
+      //       this.message = "Email already exists";
+      //       return false;
+      //     }
+      //   },
+      //   (err) => {
+      //     console.log(err.response);
+      //   }
+      // );
+      if (!this.password) {
+        this.message = "you must enter password";
+        return false;
+      }
+      if (!this.repeatPassword) {
+        this.message = "you must enter repeat password";
+        return false;
+      }
+      if (this.password != this.repeatPassword) {
+        this.message = "Wrong password confirmation";
+        return false;
+      }
+
+      return true;
+    },
+  },
+
   methods: {
     async Register() {
-      if (this.password == this.repeatPassword) {
-        axios.post("http://localhost:3000/users/create", {
-          email: this.email,
-          username: this.username,
-          password: this.password
-        }).then(
-          (res) => {
-            this.error = "";
-            this.$router.push("/login");
-          },
-          (err) => {
-            console.log(err.response);
-          }
-        );
+      if (this.checkInput) {
+        axios
+          .post("/users/create", {
+            email: this.email,
+            username: this.username,
+            password: this.password,
+          })
+          .then(
+            (res) => {
+              this.$router.push("/login");
+              // console.log("Added successfully");
+            },
+            (err) => {
+              console.log(err.response);
+            }
+          );
       }
     },
   },

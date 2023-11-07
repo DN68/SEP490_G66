@@ -6,8 +6,89 @@
     <Sidebarpf></Sidebarpf>
   </div>
   
-  <div id="content" class="">
+  <!-- <div id="content" class="">
     <div class="container-profile">
+      <form  class="form-profile">
+        <div class="field">
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Username</label
+          >
+          <input
+            type="text"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.username"
+          />
+          <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <div class="left" style="width:40%">
+               <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >First Name</label
+          >
+          <input
+            type="text"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.firstName"
+          />
+            </div>
+            <div class="right" style="width:40%">
+              <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Last Name</label
+          >
+          <input
+            type="text"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.lastName"
+          />
+            </div>
+             
+          </div>
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Phone Number</label>
+          <input
+            type="text"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.phone"
+          />
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Description</label>
+            <textarea
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.description"
+          />
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Image</label>
+            <input
+            type="text"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            v-model="user.image"
+          />
+        
+          <div class="mt-5" style="display:flex;flex-direction:row;justify-content:space-between">
+            <div class="left" style="width:40%">
+              <span class="form-label mt-5">Upload CV</span>
+            </div>
+            <div class="right" style="width:15%">
+              <input type="button" value="Upload">
+            </div>
+          </div>
+          <button id="btn-sub" type="submit" @click="updateProfile" class="btn btn-primary">
+            Update
+          </button>
+        </div>
+
+      
+          
+        
+      </form>
+    </div>
+  </div> -->
+ <div id="content" class="">
+     <div class="container-profile">
       <form  class="form-profile">
         <div class="field">
           <label class="form-label mt-5" style="float: left" for="form3Example3"
@@ -151,6 +232,7 @@ export default {
 <style>
 html {
   background-color: #ededed;
+  
 }
 .Sidebarudpf {
   float: left;
@@ -167,7 +249,7 @@ html {
 #content {
   float: right;
   width: 80%;
-  padding-top: 10%;
+  padding-top: 2%;
   /* position: fixed; */
   top: 0;
   bottom: 0;
@@ -181,9 +263,11 @@ html {
 }
 
 .container-profile {
-  margin: 10px 10%;
-  width: 110%;
-  height: 100%;
+  margin: 10px 20% 50px;
+  width: 60%;
+  border: 1px #ccc solid;
+  padding: 35px;
+  background-color: #fff;
 }
 #btn-sub {
   display: block;
@@ -196,13 +280,13 @@ html {
   border: none;
 }
 .form-profile {
-  border: 1px #ccc solid;
-  background-color: #fff;
+  
   padding: 30px;
-  width: 60%;
+  
   position: relative;
-  height: 750px;
+  height: 900px;
 }
+
 .field {
   float: left;
   /* padding-right: 100px; */
@@ -210,6 +294,13 @@ html {
   margin-left: 20%;
   position: absolute;
 }
-
+.content-uppro{
+  height: 100px;
+  border: 1px #ccc solid;
+  background-color: #fff;
+  float: right;
+  width: 80%;
+  margin-top: 2%;
+}
 
 </style>

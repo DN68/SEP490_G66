@@ -8,46 +8,46 @@
   </div>
   <div id="content" class="">
     <div class="container-change">
-      <!-- <form action="" class="form-change"> -->
-      <label class="form-label mt-5" style="float: left" for="form3Example3"
-        >Old Password</label
-      >
-      <input
-        type="password"
-        id="form3Example3"
-        class="form-control form-control-lg"
-        placeholder="Enter your old password"
-        v-model="inputOldPassword"
-      />
-      <label class="form-label mt-5" style="float: left" for="form3Example3"
-        >New Password</label
-      >
-      <input
-        type="password"
-        id="form3Example3"
-        class="form-control form-control-lg"
-        placeholder="Enter your new password"
-        v-model="newPassword"
-      />
-      <label class="form-label mt-5" style="float: left" for="form3Example3"
-        >Re-enter New Password</label
-      >
-      <input
-        type="password"
-        id="form3Example3"
-        class="form-control form-control-lg"
-        placeholder="Enter your new password again"
-        v-model="reNewPassword"
-      />
-      <button
-        id="btn-sub"
-        type="submit"
-        @click="changePassword"
-        class="btn btn-primary"
-      >
-        Submit
-      </button>
-      <!-- </form> -->
+      <div class="form-change">
+        <label class="form-label mt-5" style="float: left" for="form3Example3"
+          >Old Password</label
+        >
+        <input
+          type="password"
+          id="form3Example3"
+          class="form-control form-control-lg"
+          placeholder="Enter your old password"
+          v-model="inputOldPassword"
+        />
+        <label class="form-label mt-5" style="float: left" for="form3Example3"
+          >New Password</label
+        >
+        <input
+          type="password"
+          id="form3Example3"
+          class="form-control form-control-lg"
+          placeholder="Enter your new password"
+          v-model="newPassword"
+        />
+        <label class="form-label mt-5" style="float: left" for="form3Example3"
+          >Re-enter New Password</label
+        >
+        <input
+          type="password"
+          id="form3Example3"
+          class="form-control form-control-lg"
+          placeholder="Enter your new password again"
+          v-model="reNewPassword"
+        />
+        <button
+          id="btn-sub"
+          type="submit"
+          @click="changePassword"
+          class="btn btn-primary"
+        >
+          Submit
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -55,7 +55,7 @@
 
 <script>
 import Headers from "../components/Header.vue";
-import Sidebar from "../components/SideBarudpfView.vue";
+import Sidebar from "../components/Sidebarprf.vue";
 import axios from "axios";
 
 export default {
@@ -109,7 +109,7 @@ export default {
           .then(
             (res) => {
               console.log("change pass success");
-              this.$router.push("/logout")
+              this.$router.push("/logout");
             },
             (err) => {
               console.log("change pass failed");

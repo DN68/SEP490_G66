@@ -1,13 +1,24 @@
 <template>
   <!-- Sidebar -->
-  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-    <!-- <img src="../assets/image/large_1588936738888.png" alt="" /> -->
+  <!-- <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
     <img :src="user.image" alt="" />
     <br />
     <div class="info-user">
       <h5 class="username">{{user.username}}</h5>
       <p class="email">{{user.email}}</p>
     </div>
+  </nav> -->
+  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+      <div class="position-sticky">
+        <div class="list-group list-group-flush mx-3 mt-4">
+          <img class="imgsidebar" :src="user.image" alt="" />
+    <br />
+    <div class="info-user">
+      <h5 class="username">{{user.username}}</h5>
+      <p class="email">{{user.email}}</p>
+    </div>
+        </div>
+      </div>
   </nav>
 
   <!-- Sidebar -->
@@ -87,6 +98,17 @@ export default {
 /*  
 */
 
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 58px 0 0; /* Height of navbar */
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+  width: 240px;
+  z-index: 600;
+}
+
 @media (max-width: 991.98px) {
   .sidebar {
     width: 100%;
@@ -109,11 +131,12 @@ export default {
   text-align: left;
 }
 .list-group-item.active {
-  background-color: #e37e7f;
+  background-color: #e37e7f
+;
   border: none;
 }
 
-#sidebarMenu > img {
+.imgsidebar {
   width: 60%;
   display: block;
   margin-right: auto;
@@ -123,6 +146,7 @@ export default {
 }
 .info-user {
   text-align: center;
+
 }
 .email {
   opacity: 0.6;
