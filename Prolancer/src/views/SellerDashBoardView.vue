@@ -12,7 +12,7 @@
           <h5 class="">Duy Nguyen</h5>
         </div>
       </nav>
-      <div class="inbox-content">
+      <div class="inbox-content nonetextalign">
         <div
           class="first"
           style="
@@ -53,14 +53,15 @@
     </div>
   </div>
   <div
-    class="content"
+    class="content nonetextalign"
     style="float: right; width: 70%; margin-top: 2%; margin-bottom: 25%"
   >
     <h1>Welcome,D</h1>
     <p style="color: #818181; margin-bottom: 30px">
       Find important messages, tips, and links to helpful resources here:
     </p>
-    <div class="activeorder mb-5">
+    <div class="abc">
+<div class="activeorder mb-5">
       <span>Active orders - 0</span>
       <span>Completed Orders - 0</span>
       <span>Cancel Orders - 0</span>
@@ -82,6 +83,8 @@
       </p>
     </div>
     </router-link>
+    </div>
+    
     
     
   </div>
@@ -126,6 +129,7 @@ html {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  
 }
 .adddevlang,
 .inbox {
@@ -161,12 +165,9 @@ h5 {
   padding-left: 25px;
   border-left: 1px #ccc solid;
 }
-.col {
-  display: flex;
-  flex-direction: column;
+.nonetextalign{
+  text-align: start;
+  line-height: 1.6;
 }
-.row {
-  display: flex;
-  flex-direction: row;
-}
+
 </style>

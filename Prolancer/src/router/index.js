@@ -128,7 +128,7 @@ const routes = [
 
   },
   
-
+  {
     path: '/giglist',
     name: 'giglist',
     // route level code-splitting
