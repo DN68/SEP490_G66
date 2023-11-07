@@ -108,7 +108,7 @@
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <router-link class="dropdown-item" to="/updateprofile"
+                  <router-link class="dropdown-item" to="/uppro"
                     >My Profile</router-link
                   >
                 </li>
@@ -118,10 +118,11 @@
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="#"
+                  <router-link class="dropdown-item" to="/setting"
                     >Settings</router-link
                   >
                 </li>
+                
                 <li>
                   <router-link class="dropdown-item" to="/logout"
                     >Logout</router-link

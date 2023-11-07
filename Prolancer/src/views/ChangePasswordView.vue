@@ -53,7 +53,7 @@
 
 <script>
 import Headers from "../components/Header.vue";
-import Sidebar from "../components/SideBarudpfView.vue";
+import Sidebar from "../components/Sidebarprf.vue";
 import axios from "axios";
 
 export default {
@@ -143,7 +143,10 @@ html {
 
 .container-change {
   margin: 10px 20%;
-  width: 50%;
+  width: 60%;
+  border: 1px #ccc solid;
+  padding: 35px;
+  background-color: #fff;
 }
 #btn-sub {
   display: block;
