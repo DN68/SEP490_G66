@@ -87,18 +87,24 @@
       </form>
     </div>
   </div>
+ 
 </template>
 
 <script>
 import Headers from "../components/Header.vue";
 import Sidebarpf from "../components/Sidebarprf.vue";
+
+import Footer from "../components/Footer.vue";
+
 import axios from "axios"
+
 
 export default {
   name: "App",
   components: {
     Headers,
     Sidebarpf,
+    Footer,
   },
   data(){
     return{
@@ -149,6 +155,14 @@ html {
 .Sidebarudpf {
   float: left;
   width: 17%;
+}
+.footer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  z-index: 600;
+  margin-top: 15px;
 }
 #content {
   float: right;

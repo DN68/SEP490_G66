@@ -99,8 +99,18 @@ const routes = [
 
   },
   {
+
+    path: '/seldash',
+    name: 'seldash',
+     // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/SellerDashBoardView.vue')
+  },
+  {
     path: '/manageorder',
     name: 'manageorder',
+
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -108,6 +118,17 @@ const routes = [
 
   },
   {
+
+    path: '/creategig',
+    name: 'creategig',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/CreateGigView.vue')
+
+  },
+  
+
     path: '/giglist',
     name: 'giglist',
     // route level code-splitting
@@ -125,6 +146,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/OrderDetailView.vue')
 
   }
+
 ]
 
 const router = createRouter({
