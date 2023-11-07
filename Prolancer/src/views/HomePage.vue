@@ -188,10 +188,6 @@ export default {
     };
   }, 
   async created() {
-    //user is not authorized
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
     const responseCategory = await axios.get('/categories/get');
     const categories = responseCategory.data;
     this.categories = categories;

@@ -86,7 +86,7 @@
               >
             </li>
 
-            <li class="nav-item dropdown" style="">
+            <li class="nav-item dropdown" style="" v-if="user">
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
@@ -130,15 +130,20 @@
               </ul>
             </li>
 
-            <!-- <li class="nav-item">
-              <a
-                class="nav-link d-flex flex-column text-center"
+            <li class="nav-item" v-else>
+              <router-link
+                to="/login"
+                class="text_decoration:none nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="#"
+                style="margin: 8px 0px 8px 50px"
               >
-                <span class="small" style="margin-top: 10px">Register</span></a
+                <i
+                  class="fa-solid fa-right-to-bracket"
+                  style="color: #7c8088"
+                ></i>
+                <span class="small">Login</span></router-link
               >
-            </li> -->
+            </li>
 
             <li class="nav-item dropdown" style="display: none">
               <a
@@ -161,8 +166,12 @@
                 class="dropdown-menu"
                 aria-labelledby="navbarDropdownMenuLink"
               >
-                <li><a class="dropdown-item" href="/updateprofile">My profile</a></li>
-                <li><a class="dropdown-item" href="/change">Change password</a></li>
+                <li>
+                  <a class="dropdown-item" href="/updateprofile">My profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/change">Change password</a>
+                </li>
                 <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="/logout">Logout</a></li>
               </ul>
@@ -254,29 +263,34 @@
 
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
-import axios from "axios"
+import axios from "axios";
 
 export default {
   props: ["searchText"],
   data() {
     return {
       isShow: false,
-      user: {}
+      user: {},
     };
   },
   mounted() {
-    axios
-      .get("/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.user = res.data.user;
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.user = null;
+    } else {
+      axios
+        .get("/users/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.user = res.data.user;
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    }
   },
   methods: {
     Logout() {
