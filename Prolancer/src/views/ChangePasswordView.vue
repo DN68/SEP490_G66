@@ -1,5 +1,4 @@
 <template>
-  <div>
   <div class="header">
     <Headers></Headers>
   </div>
@@ -50,7 +49,6 @@
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>

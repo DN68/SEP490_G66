@@ -146,12 +146,15 @@ export default {
 }
 .info-user {
   text-align: center;
-
+  /* font-family: face; */
 }
 .email {
   opacity: 0.6;
 }
-
+/* @font-face {
+  font-family: face;
+  src: url(D:\SEP490_G66\Prolancer\src\assets\font\Tilt_Neon\TiltNeon-Regular-VariableFont_XROT,YROT.ttf);
+} */
 .preview {
   border: 1px #ccc solid;
   width: 70%;

@@ -13,17 +13,17 @@ class GigController {
     var filterByDeliveryDay = '';
     var filterByPrice = '';
 
-    if (pageQuery.filterBy1 != ''&&pageQuery.filterBy1 != null&&pageQuery.filterBy1 != undefined) {
+    if (pageQuery.filterBy1 != ''&&pageQuery.filterBy1 != null) {
       filterByCategory = pageQuery.filterBy1;
       console.log('filterBy1');
 
     }
-    if (pageQuery.filterBy2 != ''&&pageQuery.filterBy2 != null&&pageQuery.filterBy2 != 'Anytime'&&pageQuery.filterBy1 != undefined) {
+    if (pageQuery.filterBy2 != ''&&pageQuery.filterBy1 != null&&pageQuery.filterBy2 != 'Anytime') {
       filterByDeliveryDay = pageQuery.filterBy2;
       console.log('filterBy2');
 
     }
-    if (pageQuery.filterBy3 != ''&&pageQuery.filterBy3 != null&&pageQuery.filterBy3 != undefined) {
+    if (pageQuery.filterBy3 != ''&&pageQuery.filterBy1 != null) {
       filterByPrice = pageQuery.filterBy3;
       console.log('filterBy3');
 
@@ -47,30 +47,21 @@ class GigController {
 
     const offset = (page - 1) * limit;
     console.log(offset);
-    let gig, totalRows;
+    let gig, totalPage;
 
     // Create a Promise to handle the asynchronous operation
     const fetchData = new Promise((resolve, reject) => {
-      Gig.getGigWithFilterAndPagingAndSearching(filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err,gigData) {
-        if (err) {
-
-          reject(err);
-        } else {
+      Gig.getGigWithFilterAndPagingAndSearching(filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (gigData) {
         gig = gigData;
-        if (totalRows !== undefined) {
+        if (totalPage !== undefined) {
           resolve();
         }
-        }
-      }, function (err,totalRowsData) {
-        if (err) {
-          reject(err);
-        } else {
-        totalRows = totalRowsData;
+      }, function (totalPageData) {
+        totalPage = totalPageData;
         if (gig !== undefined) {
-          console.log(totalRows[0].count)
+          console.log(totalPage[0].count)
 
           resolve();
-        }
         }
       });
     });
@@ -79,8 +70,8 @@ class GigController {
       // Both callbacks have been called, so you can send the response now.
       res.send({
         gig, pagination: {
-          totalPage: Math.ceil(totalRows[0].count / 16),
-          page: parseInt(page)
+          totalPage: Math.ceil(totalPage[0].count / 16),
+          page: page
         }, searchQuery: {
           search: search,
           filterBy1: filterByCategory,
@@ -88,10 +79,7 @@ class GigController {
           filterBy3: filterByPrice
         }
       });
-    }, (err) => {
-      res.send(err);
-    }
-    ).catch(error => {
+    }).catch(error => {
       console.error(error);
       res.status(500).send("An error occurred");
     });

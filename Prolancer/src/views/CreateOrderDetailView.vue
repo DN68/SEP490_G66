@@ -434,29 +434,7 @@ export default {
     );
     const gig = responseGig.data[0];
     this.gig = gig;
-    console.log("Run here 12");
-
-    try {
-    const responseUserInfor = await axios.get(
-      "/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      } 
-    )
-    const userInfor = responseUserInfor.data;
-    this.user = userInfor;
-
-    } catch (error) {
-    if(error.response.data.title){
-
-      this.$router.push("/login");
-
-
-    }else{
-      console.error('Error:',error )
-    }
-    }
-    
-
+    console.log("Run here 1");
   },
   data() {
     return {
@@ -467,7 +445,7 @@ export default {
       currentStep: 2,
       confirmSubmit: "",
       gig: {},
-      user:{},
+
       order: {
         orderID: "",
         orderCustomerID: "4",
@@ -511,7 +489,6 @@ export default {
         console.log("Please Submit Requirt", this.order.orderDescription);
         alert("Please Submit Requirment And Click On Confirm!");
       } else {
-        this.order.orderCustomerID = this.user.user.userId;
         this.order.orderFreelancerID = this.gig.FreelancerID;
         this.order.orderGigID = this.gig.GigID;
         const data = await axios.post("/orders/index", {
