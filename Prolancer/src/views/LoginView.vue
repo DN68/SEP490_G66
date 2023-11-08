@@ -52,14 +52,14 @@
             <!-- Email input -->
             <div class="form-outline mb-3">
               <label class="form-label" style="float: left" for="form3Example3"
-                >Email address</label
+                >Username or Email address</label
               >
               <input
-                type="email"
+                type="text"
                 id="form3Example3"
                 class="form-control form-control-lg"
                 placeholder="Enter a valid email address"
-                v-model="email"
+                v-model="emailOrUsername"
               />
             </div>
 
@@ -122,29 +122,35 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 
 export default {
-  data(){
-    return{
-      email: "",
+  data() {
+    return {
+      emailOrUsername: "",
       password: "",
-    }
+      error: "",
+    };
   },
-  methods:{
-    async Login(){
-      try{
-        await axios.post("http://localhost:3000/login", {
-          email: this.email,
-          password: this.password,
-        })
-        this.$router.push("/")
-      }catch(err){
-        console.log(err)
+  methods: {
+    async Login() {
+      let user = {
+        emailOrUsername: this.emailOrUsername,
+        password: this.password
       }
-    }
-  }
-}
+      axios.post('/users/login', user)
+        .then(res => {
+          //if successfull
+          if (res.status === 200) {
+            localStorage.setItem('token', res.data.token);
+            this.$router.push('/');
+          }
+        }, err => {
+          console.log(err.response);
+        })
+    },
+  },
+};
 </script>
 
 

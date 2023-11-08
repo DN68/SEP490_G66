@@ -8,42 +8,48 @@
               src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
               class="img-fluid"
               alt="Sample image"
-              style="border-right: 2px #ccc solid;"
+              style="border-right: 2px #ccc solid"
           /></router-link>
         </div>
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
           <form>
             <router-link to="/login">
-                <i class="fa-solid fa-arrow-left-long text-danger"></i>
-              </router-link>
-            <p class="text-center h1 fw-bold mb-5 mx-1 mt-4" style="color: #e37e7f">Forgot Password?</p>
-            
-
-           
+              <i class="fa-solid fa-arrow-left-long text-danger"></i>
+            </router-link>
+            <p
+              class="text-center h1 fw-bold mb-5 mx-1 mt-4"
+              style="color: #e37e7f"
+            >
+              Forgot Password?
+            </p>
 
             <!-- Email input -->
             <div class="form-outline mb-3">
               <label class="form-label" style="float: left" for="form3Example3"
-                >Enter your email that have registered to this website.</label>
+                >Enter your email that have registered to this website.</label
+              >
               <input
                 type="email"
                 id="form3Example3"
                 class="form-control form-control-lg"
                 placeholder="Enter your email"
+                v-model="email"
               />
             </div>
 
-            
-
-            <div class="text-center  mt-4 pt-2">
+            <div class="text-center mt-4 pt-2">
               <button
                 type="button"
                 class="btn bg-danger bg-gradient text-light btn-lg"
                 style="padding-left: 2.5rem; padding-right: 2.5rem"
+                @click="resetPassword"
+                :disabled="isButtonDisabled"
+                ref="resetButton"
               >
                 Reset Password
               </button>
-              
+              &nbsp;
+              <span ref="message">{{ message }}</span>
             </div>
           </form>
         </div>
@@ -51,6 +57,45 @@
     </div>
   </section>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      email: "",
+      message: "",
+      isButtonDisabled: false,
+    };
+  },
+  methods: {
+    resetPassword() {
+      axios
+        .post("/users/forgotPassword", {
+          email: this.email,
+        })
+        .then(
+          (res) => {
+            this.message = "New password has been sent to your email";
+            this.$refs.message.style.color = "green";
+            this.isButtonDisabled = true;
+            this.$refs.resetButton.setAttribute("class", "btn bg-secondary bg-gradient text-light btn-lg")
+            setTimeout(() => {
+              this.isButtonDisabled = false;
+              this.$refs.resetButton.setAttribute("class", "btn bg-danger bg-gradient text-light btn-lg")
+            }, 10000);
+          },
+          (err) => {
+            this.message = "No user with this email";
+            this.$refs.message.style.color = "red";
+          }
+        );
+    },
+  },
+};
+</script>
+
 <style scoped>
 .divider:after,
 .divider:before {

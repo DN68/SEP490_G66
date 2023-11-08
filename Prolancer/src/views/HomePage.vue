@@ -1,6 +1,4 @@
 <template>
-  
-
   <div
     class="container"
     style="height: auto; max-width: -webkit-fill-available"
@@ -8,56 +6,7 @@
     <header class="row">
       <Header></Header>
     </header>
-    <nav id="navCategory" class="navbar navbar-inverse">
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto" style="text-align:center">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="#">Action</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another action</a>
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </div>
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="#">Action</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another action</a>
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Category</h6>
-      </div>
-    </nav>
+    <NavCategory :listCategories="categories"></NavCategory>
     <div class="container">
       <div class="row">
         <!-- <aside class="col-sm-3">
@@ -72,7 +21,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, anhlt1901
+                Hello, {{user.username}}
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -97,7 +46,7 @@
                     </div> -->
                   </div>
                 </div>
-                <div class="row" style="justify-content: space-between">
+                <div class="row" style="justify-content: space-between; margin: 0 auto;">
                   <div class="col-sm-2 guildeIteam">
                     <div class="guildeBack">
                       <i class="bi bi-database" style="font-size: 20px"></i>
@@ -145,7 +94,7 @@
                     >&nbsp;
                   </h4>
                 </div>
-                <Product></Product>
+                <GigCarousel :listGigs="gigs"></GigCarousel>
               </div>
             </section>
 
@@ -155,9 +104,9 @@
                   data-testid="personalized-header"
                   class="personalized-header"
                 >
-                  <h4><span>Gigs may you find</span>&nbsp;</h4>
+                  <!-- <h4><span>Gigs may you find</span>&nbsp;</h4> -->
                 </div>
-                <ProductCarouselSuggest></ProductCarouselSuggest>
+                <!-- <ProductCarouselSuggest></ProductCarouselSuggest> -->
               </div>
             </section>
             <section>
@@ -178,19 +127,18 @@
                     >&nbsp;
                   </h4>
                 </div>
-                <ProductList></ProductList>
+                <GigList :listGigs="gigs"></GigList>
               </div>
             </section>
             <hr class="featurette-divider" />
             <div class="row featurette">
               <div class="col-md-7">
-                <h2 class="featurette-heading">
-                  First featurette heading.
+                <h3 class="featurette-heading">
+                  Connecting Businesses with Top Freelancers, Seamlessly.
                   <span class="text-muted">It’ll blow your mind.</span>
-                </h2>
+                </h3>
                 <p class="lead">
-                  Some great placeholder content for the first featurette here.
-                  Imagine some exciting prose here.
+                  Your Project, Our Freelancers: A Perfect Match Every Time.
                 </p>
               </div>
               <div class="col-md-5">
@@ -215,61 +163,86 @@
 
 <script>
 // @ is an alias to /src
-import Header from "../components/HeaderView.vue";
-import Sidebar from "../components/Sidebar.vue";
+import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
-import Product from "../components/ProductCarousel.vue";
-import ProductList from "../components/ProductList.vue";
-import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
+import GigCarousel from "../components/GigCarousel.vue";
+import GigList from "../components/GigList.vue";
+// import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
+import NavCategory from "../components/NavCategory.vue";
+import axios from 'axios';
 
 export default {
   name: "HomePage",
   components: {
     Header,
-    Sidebar,
     Footer,
-    Product,
-    ProductList,
-    ProductCarouselSuggest,
+    GigCarousel ,
+    GigList, NavCategory
+    // ProductCarouselSuggest,
   },
   data() {
     return {
-      isShow: function () {
-        alert("Xin chào ");
-      },
-      counter: 0,
+      categories: [],
+      gigs:[],
+      user:{}
     };
+  }, 
+  async created() {
+    // //user is not authorized
+    // if (localStorage.getItem("token") === null) {
+    //   this.$router.push("/login");
+    // }
+    const responseCategory = await axios.get('/categories/get');
+    const categories = responseCategory.data;
+    this.categories = categories;
+
+    const responseGig = await axios.get('/gigs/index');
+    const gigs = responseGig.data.gig;
+    console.log(gigs[0].Title+'1')
+
+    this.gigs = gigs;
+    
+    try {
+    const responseUserInfor = await axios.get(
+      "/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      } 
+    )
+    const userInfor = responseUserInfor.data;
+    this.user = userInfor;
+    console.error('User:',this.user )
+
+    } catch (error) {
+    console.error('Error:', error.response.data);
+    if(error.response.data.title){
+
+      // window.location.href = '/login/'
+
+
+    }else{
+      console.error('Error:',error )
+    }
+    }
+    
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        err => {
+          console.log(err.response);
+        }
+      );
   },
 };
 </script>
 
 <style>
-.dropdown-menu {
-  width: 300px;
-  position: fixed;
-  margin-top: 8px;
-  margin-left: 5%;
-}
-.dropdown-menu::before {
-  content: "";
-  height: 10px;
-  left: 0;
-  right: 0;
-  top: 100%;
-  position: absolute;
-  background-color: transparent;
-  transform: translateY(-1400%);
-}
-
-@media screen and (max-width: 990px) {
-  #navCategory {
-    display: none;
-  }
-  /* .topnav a.icon {
-    float: right;
-    display: block;
-  } */
-}
 .personalized-header {
   min-height: 24px;
   margin-top: 24px;
@@ -293,20 +266,11 @@ export default {
   overflow: hidden;
   margin-bottom: 20px;
 }
-.navCategory {
-  color: #62646a;
-  font: 400 16px/24px Macan, Helvetica Neue, Helvetica, Arial, sans-serif !important;
-  display: block;
-  font-size: 18px !important;
-  line-height: 15px !important;
-  position: relative;
-}
-
 .guildeMessage {
   margin-bottom: 20px;
 }
 .featurette-divider {
-  margin: 10px 0;
+  margin: 30px 0;
 }
 
 .personalized-header h4 {
@@ -339,8 +303,5 @@ export default {
   min-height: 40px px;
   border-radius: 8px;
   margin-right: 12px;
-}
-::before {
-    margin-left: 25%;
 }
 </style>
