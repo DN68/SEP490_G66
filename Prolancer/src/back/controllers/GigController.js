@@ -98,5 +98,23 @@ class GigController {
 
   };
 
+
+  createGig = function (req, res){
+    const Title = req.body.Title
+    const Description = req.body.Description
+    const Gig_IMG = req.body.Gig_IMG
+    const Price = req.body.Price
+    const Delivery_Day = req.body.Delivery_Day
+    const FreelancerID = req.body.FreelancerID
+    const CategoryID = req.body.CategoryID
+    const Numberpage = req.body.Numberpage
+    Gig.createGig(Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, function(err, result){
+      if (err) {
+        res.send(err);
+    } else {
+        res.json(result);
+    }
+    })
+  }
 }
 module.exports = new GigController;

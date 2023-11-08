@@ -10,8 +10,10 @@ router.get('/index',
 );
 router.get('/details/:id',
     gigController.getGigById
-
-
 );
+
+router.post('/create', 
+    gigController.createGig
+)
 
 module.exports = router;
