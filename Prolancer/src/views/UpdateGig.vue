@@ -104,7 +104,7 @@
       </div>
       <div class="button">
         <button id="btn-sub" type="submit"  class="btn btn-primary bg-danger" style="border:none;width:100px;margin-top:40px">
-            Save
+            Update
           </button>
       </div>
     </div>
