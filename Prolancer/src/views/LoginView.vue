@@ -107,6 +107,7 @@
               >
                 Login
               </button>
+              <span>{{ message }}</span>
               <p class="small fw-bold mt-2 pt-1 mb-0">
                 Don't have an account?
                 <router-link class="text-danger" to="/register"
@@ -129,12 +130,26 @@ export default {
     return {
       emailOrUsername: "",
       password: "",
-      error: "",
+      message: ""
     };
+  },
+  computed:{
+    checkInput(){
+      if (!this.emailOrUsername) {
+        this.message = "you must enter username or email";
+        return false;
+      }
+      if (!this.password) {
+        this.message = "you must enter password";
+        return false;
+      }
+      return true
+    }
   },
   methods: {
     async Login() {
-      let user = {
+      if(this.checkInput){
+        let user = {
         emailOrUsername: this.emailOrUsername,
         password: this.password
       }
@@ -147,7 +162,9 @@ export default {
           }
         }, err => {
           console.log(err.response);
+          this.message = "Wrong email or password"
         })
+      }
     },
   },
 };
