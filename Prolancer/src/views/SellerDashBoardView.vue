@@ -43,11 +43,10 @@
             src="../assets/image/large_1588936738888.png"
             alt=""
           />
-          <div class="right" style="float: right;width:75%">
-            <span class="" >Duy Nguyen</span> <br>
-            <span style="font-weight:400">The key to your success</span>
+          <div class="right" style="float: right; width: 75%">
+            <span class="">Duy Nguyen</span> <br />
+            <span style="font-weight: 400">The key to your success</span>
           </div>
-          
         </div>
       </div>
     </div>
@@ -61,32 +60,30 @@
       Find important messages, tips, and links to helpful resources here:
     </p>
     <div class="abc">
-<div class="activeorder mb-5">
-      <span>Active orders - 0</span>
-      <span>Completed Orders - 0</span>
-      <span>Cancel Orders - 0</span>
+      <div class="activeorder mb-5">
+        <span>Active orders - 0</span>
+        <span>Completed Orders - 0</span>
+        <span>Cancel Orders - 0</span>
+      </div>
+      <router-link to="#" style="text-decoration: none; color: black">
+        <div class="adddevlang mb-5">
+          <span>Add your dev language to get buyers</span>
+          <p style="font-weight: 300; font-size: 15px">
+            Fiverr search results will include dev languages soon, so make sure
+            to add all of yours under your profile skills.
+          </p>
+        </div>
+      </router-link>
+      <router-link to="#" style="text-decoration: none; color: black">
+        <div class="inbox">
+          <span>Set up inbox auto replies</span>
+          <p style="font-weight: 300; font-size: 15px">
+            Greet new potential buyers with an auto reply to their first
+            message.
+          </p>
+        </div>
+      </router-link>
     </div>
-    <router-link to="#" style="text-decoration:none;color:black">
-      <div class="adddevlang mb-5">
-      <span>Add your dev language to get buyers</span>
-      <p style="font-weight: 300; font-size: 15px">
-        Fiverr search results will include dev languages soon, so make sure to
-        add all of yours under your profile skills.
-      </p>
-    </div>
-    </router-link>
-    <router-link to="#" style="text-decoration:none;color:black">
-      <div class="inbox">
-      <span>Set up inbox auto replies</span>
-      <p style="font-weight: 300; font-size: 15px">
-        Greet new potential buyers with an auto reply to their first message.
-      </p>
-    </div>
-    </router-link>
-    </div>
-    
-    
-    
   </div>
   <div class="footer">
     <Footer></Footer>
@@ -97,12 +94,36 @@
 import Headerseller from "../components/HeaderSeller.vue";
 import Footer from "../components/Footer.vue";
 import SideBar from "../components/Sidebarprf.vue";
+import axios from "axios"
+
 export default {
   name: "App",
   components: {
     Headerseller,
     Footer,
     SideBar,
+  },
+  data() {
+    return {
+      role: "",
+    };
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.role = res.data.user.role;
+          if (this.role != "F") {
+            this.$router.push("/");
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
   },
 };
 </script>
@@ -129,7 +150,6 @@ html {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  
 }
 .adddevlang,
 .inbox {
@@ -165,9 +185,8 @@ h5 {
   padding-left: 25px;
   border-left: 1px #ccc solid;
 }
-.nonetextalign{
+.nonetextalign {
   text-align: start;
   line-height: 1.6;
 }
-
 </style>
