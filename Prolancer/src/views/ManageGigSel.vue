@@ -40,7 +40,8 @@
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Active' }"
         >
-          <router-link
+        <a href="/managegigsel/Active" class="text-decoration-none" style="color: gray">Active</a>
+          <!-- <router-link
             @click="(this.status = 'Active'), (selectedPage = '1')"
             :to="{
               path: '/managegigsel',
@@ -58,14 +59,15 @@
                 pagination.totalRow
               }}</span>
             </h6></router-link
-          >
+          > -->
         </div>
 
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Paused' }"
         >
-          <router-link
+        <a href="/managegigsel/Paused" class="text-decoration-none" style="color: gray">Paused</a>
+          <!-- <router-link
             @click="(this.status = 'Paused'), (selectedPage = '1')"
             :to="{
               path: '/managegigsel',
@@ -85,13 +87,14 @@
                 >{{ pagination.totalRow }}</span
               >
             </h6>
-          </router-link>
+          </router-link> -->
         </div>
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Deleted' }"
         >
-          <router-link
+        <a href="/managegigsel/Deleted" class="text-decoration-none" style="color: gray">Deleted</a>
+          <!-- <router-link
             @click="(this.status = 'Deleted'), (selectedPage = '1')"
             :to="{
               path: '/managegigsel',
@@ -111,7 +114,7 @@
                 >{{ pagination.totalRow }}</span
               >
             </h6>
-          </router-link>
+          </router-link> -->
         </div>
         <div class="col-md-2" style="margin-left: 60%">
           <router-link to="/creategig" style="text-decoration: none">
@@ -132,26 +135,111 @@
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
-              <th class="th_gig">GIG</th>
-              <th>ORDERS</th>
-              <th>CANCELLATIONS</th>
-              <th>ACTIONS</th>
+              <th class="th_no">NO.</th>
+              <th class="th_Title">TITLE</th>
+              <th class="th_description">DESCRIPTION</th>
+              <th class="th_img">GIG IMAGE</th>
+              <th class="th_category">CATEGORY NAME</th>
+              <th class="th_creationDate">CREATION DATE</th>
+              <th class="th_deliveryDays">DELEVERY DAY</th>
+              <th class="th_status">STATUS</th>
+              <th class="th_numberPage">NUMBER OF PAGE</th>
+              <th class="th_price">PRICE</th>
+              <th class="th_actions">ACTIONS</th>
             </tr>
           </thead>
-          <tbody v-if="orders.length >= 1">
-            <tr v-for="(order, index) in orders" :key="index">
-              <td class="td_gigs">
+          <tbody v-if="gigs.length >= 1">
+            <tr v-for="(gig, index) in gigs" :key="index">
+              <td class="td_no">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                     coding -->
-                    {{ order.Title }}
+                    {{ index + 1 }}
                   </p>
                 </div>
               </td>
-              <td class="td_orders"></td>
-
-              <td class="td_cancels"></td>
+              <td class="td_title">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Title }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_description">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Description }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_image">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Gig_IMG }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_category">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Category_Name }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_creationDate">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ getFormattedDate(gig.Creation_Date) }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_deliveryDay">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Delivery_Day }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_status">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Status }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_numberPage">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Numberpage }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_price">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Price }}
+                  </p>
+                </div>
+              </td>
               <td class="td_actions">
                 <div class="dropdown">
                   <button
@@ -162,17 +250,40 @@
                     ...
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Active</a></li>
-                    <li><a class="dropdown-item" href="#">Paused</a></li>
-                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        :href="'/changeStatus/' + gig.GigID + '/Active'"
+                        >Active</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        :href="'/changeStatus/' + gig.GigID + '/Paused'"
+                        >Paused</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        :href="'/changeStatus/' + gig.GigID + '/Deleted'"
+                        >Delete</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" :href="'/updategig/' + gig.GigID"
+                        >Update</a
+                      >
+                    </li>
                   </ul>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <div v-if="orders.length == 0" class="text-center">
-          <h5>Order Not Found</h5>
+        <div v-if="gigs.length == 0" class="text-center">
+          <h5>Gig Not Found</h5>
         </div>
 
         <div class="pagination">
@@ -258,59 +369,103 @@ export default {
   },
   data() {
     return {
-      user: [],
-      orders: [],
+      user: {},
+      gigs: [],
       pagination: [],
       moment: moment,
-      searchOrder: "",
-      selectedPage: 1,
-      status: "Active",
+      searchGig: "",
+      // selectedPage: 1,
+      // status: "Active",
     };
   },
   async created() {
+    console.log(`${this.$route.status}`)
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
+    } else {
+      const responseUserInfo = await axios.get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      });
+      this.user = responseUserInfo.data.user;
+      console.log(this.user);
     }
-    const responseUserInfor = await axios.get("/users/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const userInfor = responseUserInfor.data.user;
-    this.user = userInfor;
-    console.log(this.user.userId);
-    const responseData = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        userID: this.user.userId,
-        status: this.status,
+    await axios.get(`/gigs/${this.user.id}/${this.$route.params.Status}`).then(
+      (res) => {
+        this.gigs = res.data;
+        console.log(this.gigs);
       },
-    });
-    const orders = responseData.data.order;
-    this.orders = orders;
-    const paging = responseData.data.pagination;
-    this.pagination = paging;
-    console.log(this.pagination);
+      (err) => {
+        console.log(err.response);
+      }
+    );
   },
-  async beforeRouteUpdate() {
-    console.log("Run Here");
-    const responseDateWithPage = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        userID: this.user.userId,
-        status: this.status,
-      },
-    });
-
-    const orders = responseDateWithPage.data.order;
-    this.orders = orders;
-
-    const searchQuery = responseDateWithPage.data.searchQuery;
-    this.searchOrder = searchQuery.search;
-    const paging = responseDateWithPage.data.pagination;
-    this.pagination = paging;
-    console.log("this.selectedPage " + (this.pagination.page + 1));
+  methods: {
+    //format date
+    getFormattedDate(date) {
+      return moment(date).format("YYYY-MM-DD");
+    },
   },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.role = res.data.user.role;
+          if (this.role != "F") {
+            this.$router.push("/");
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+  },
+  // async created() {
+  // if (localStorage.getItem("token") === null) {
+  //   this.$router.push("/login");
+  // }
+  //   const responseUserInfor = await axios.get("/users/info", {
+  //     headers: { token: localStorage.getItem("token") },
+  //   });
+  //   const userInfor = responseUserInfor.data.user;
+  //   this.user = userInfor;
+  //   console.log(this.user.userId);
+  //   const responseData = await axios.get("/orders/index", {
+  //     params: {
+  //       page: this.selectedPage,
+  //       search: this.searchOrder,
+  //       userID: this.user.userId,
+  //       status: this.status,
+  //     },
+  //   });
+  //   const orders = responseData.data.order;
+  //   this.orders = orders;
+  //   const paging = responseData.data.pagination;
+  //   this.pagination = paging;
+  //   console.log(this.pagination);
+  // },
+  // async beforeRouteUpdate() {
+  //   console.log("Run Here");
+  //   const responseDateWithPage = await axios.get("/orders/index", {
+  //     params: {
+  //       page: this.selectedPage,
+  //       search: this.searchOrder,
+  //       userID: this.user.userId,
+  //       status: this.status,
+  //     },
+  //   });
+
+  //   const orders = responseDateWithPage.data.order;
+  //   this.orders = orders;
+
+  //   const searchQuery = responseDateWithPage.data.searchQuery;
+  //   this.searchOrder = searchQuery.search;
+  //   const paging = responseDateWithPage.data.pagination;
+  //   this.pagination = paging;
+  //   console.log("this.selectedPage " + (this.pagination.page + 1));
+  // },
 };
 </script>
   

@@ -10,120 +10,28 @@
               type="search"
               class="form-control order_search"
               placeholder="Search Order History ..."
-              v-model="searchOrder"
               aria-label="Search"
               aria-describedby="search-addon"
             />
-            <router-link
-              :to="{
-                path: '/manageorder',
-                query: {
-                  search: searchOrder,
-                  userID: user.userId,
-                  status: status,
-                },
-              }"
-              class="text-decoration-none"
+            <span
+              class="input-group-text border-0 icon_search"
+              id="search-addon"
             >
-              <span
-                class="input-group-text border-0 icon_search"
-                id="search-addon"
-              >
-                <i class="fas fa-search"></i>
-              </span>
-            </router-link>
+              <i class="fas fa-search"></i>
+            </span>
           </div>
         </div>
       </div>
       <div class="order_status row">
-        <div class="col-md-2 status_item " :class="{status_item_active: this.status == 'Active'}">
-          <router-link
-            @click="this.status = 'Active',selectedPage='1'"
-            :to="{
-              path: '/manageorder',
-              query: {
-                search: searchOrder,
-                userID: user.userId,
-                status: 'Active',
-              },
-            }"
-            class="text-decoration-none"
-          >
-            <h6>
-              Active <span v-if="this.status == 'Active'" class="badge bg-secondary">{{pagination.totalRow}}</span>
-            </h6></router-link
-          >
+        <div class="col-md-2 status_item status_item_active">
+          <h6>Active <span class="badge bg-secondary">4</span></h6>
         </div>
         <div class="col-md-2 status_item"><h6>New</h6></div>
 
-        <div class="col-md-2 status_item" :class="{status_item_active: this.status == 'Late'}">
-          <router-link
-            @click="this.status = 'Late',selectedPage='1'"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                userID: user.userId,
-                status: 'Late',
-              },
-            }"
-            class="text-decoration-none"
-          >
-            <h6>Late<span v-if="this.status == 'Late'" class="badge bg-secondary">{{pagination.totalRow}}</span></h6>
-          </router-link>
-        </div>
-        <div class="col-md-2 status_item" :class="{status_item_active: this.status == 'Delivered'}">
-          <router-link
-            @click="this.status = 'Delivered',selectedPage='1'"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                userID: user.userId,
-                status: 'Delivered',
-              },
-            }"
-            class="text-decoration-none"
-          >
-          <h6>Delivered<span v-if="this.status == 'Delivered'" class="badge bg-secondary">{{pagination.totalRow}}</span></h6>
-        </router-link>
-        </div>
-        <div class="col-md-2 status_item" :class="{status_item_active: this.status == 'Completed'}">
-          <router-link
-            @click="this.status = 'Completed',selectedPage='1'"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                userID: user.userId,
-                status: 'Completed',
-              },
-            }"
-            class="text-decoration-none"
-          >
-          <h6>Completed<span v-if="this.status == 'Completed'" class="badge bg-secondary">{{pagination.totalRow}}</span></h6>
-        </router-link>
-        </div>
-        <div class="col-md-2 status_item" :class="{status_item_active: this.status == 'Cancelled'}">
-          <router-link
-            @click="this.status = 'Cancelled',selectedPage='1'"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                userID: user.userId,
-                status: 'Cancelled',
-              },
-            }"
-            class="text-decoration-none"
-          >
-          <h6>Cancelled<span v-if="this.status == 'Cancelled'" class="badge bg-secondary">{{pagination.totalRow}}</span></h6>
-        </router-link>
-        </div>
+        <div class="col-md-2 status_item"><h6>Late</h6></div>
+        <div class="col-md-2 status_item"><h6>Delivered</h6></div>
+        <div class="col-md-2 status_item"><h6>Completed</h6></div>
+        <div class="col-md-2 status_item"><h6>Cancelled</h6></div>
       </div>
       <div class="order_table">
         <table class="table align-middle mb-0 bg-white">
@@ -132,139 +40,173 @@
               <th class="th_user"><span>FREELANCER</span></th>
               <th class="th_gig">GIG</th>
               <th>DUE ON</th>
-              <th>QTY</th>
               <th>TOTAL</th>
+              <th>NOTE</th>
               <th>STATUS</th>
             </tr>
           </thead>
-          <tbody v-if="orders.length>=1">
-            <tr v-for="(order, index) in orders" :key="index">
+          <tbody>
+            <tr>
               <td class="td_user">
                 <div class="d-flex align-items-center">
                   <img
-                    :src="order.Profile_Picture"
+                    src="https://mdbootstrap.com/img/new/avatars/8.jpg"
                     alt=""
                     style="width: 45px; height: 45px"
                     class="rounded-circle"
                   />
                   <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{
-                        order.CustomerFirstName + " " + order.CustomerLastName
-                      }}
-                    </p>
+                    <p class="fw-bold mb-1">John Doe</p>
                   </div>
                 </div>
               </td>
               <td class="td_gig">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ order.Title }}
+                    I will convert your design layout into email template HTML
+                    coding
                   </p>
                 </div>
               </td>
-              <td class="td_dueon">
-                {{
-                  moment(order.Order_Date)
-                    .add(24 * order.Delivery_Day, "h")
-                    .format("MMMM Do")
-                }}
-              </td>
-              <td class="td_note">{{ order.Total_Amount }}</td>
-
-              <td class="td_price">
-                ${{
-                  order.Price * order.Total_Amount +
-                  order.Price * order.Total_Amount * 0.1
-                }}
-              </td>
+              <td class="td_dueon">Mar 14</td>
+              <td class="td_price">$20</td>
+              <td class="td_note">No</td>
               <td class="td_status">
-                <span v-if="order.OrderStatus=='Active'" class="badge bg-primary rounded-pill d-inline">
+                <span class="badge bg-primary rounded-pill d-inline">
                   In Progress</span
                 >
-                <span v-if="order.OrderStatus=='Late'" class="badge rounded-pill bg-danger">Late</span>
-                <span v-if="order.OrderStatus=='Delivered'" class="badge rounded-pill bg-info">Delivered</span>
-                <span v-if="order.OrderStatus=='Completed'" class="badge rounded-pill bg-success d-inline">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img
+                    src="https://mdbootstrap.com/img/new/avatars/6.jpg"
+                    class="rounded-circle"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">Alex Ray</p>
+                  </div>
+                </div>
+              </td>
+              <td class="td_gig">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    I will convert your design layout into email template HTML
+                    coding
+                  </p>
+                </div>
+              </td>
+              <td class="td_dueon">Mar 14</td>
+              <td class="td_price">$20</td>
+              <td class="td_note">No</td>
+              <td class="td_status">
+                <span class="badge rounded-pill bg-success d-inline">
                   Completed</span
                 >
-                <span v-if="order.OrderStatus=='Cancelled'" class="badge rounded-pill bg-secondary d-inline"
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img
+                    src="https://mdbootstrap.com/img/new/avatars/7.jpg"
+                    class="rounded-circle"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">Kate Hunington</p>
+                  </div>
+                </div>
+              </td>
+              <td class="td_gig">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    I will convert your design layout into email template HTML
+                    coding
+                  </p>
+                </div>
+              </td>
+              <td class="td_dueon">Mar 14</td>
+              <td class="td_price">$20</td>
+              <td class="td_note">No</td>
+              <td class="td_status">
+                <span class="badge rounded-pill bg-secondary d-inline"
                   >Cancel</span
                 >
               </td>
             </tr>
-            
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img
+                    src="https://mdbootstrap.com/img/new/avatars/7.jpg"
+                    class="rounded-circle"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">Kate Hunington</p>
+                  </div>
+                </div>
+              </td>
+              <td class="td_gig">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    I will convert your design layout into email template HTML
+                    coding
+                  </p>
+                </div>
+              </td>
+              <td class="td_dueon">Mar 14</td>
+              <td class="td_price">$20</td>
+              <td class="td_note">No</td>
+              <td class="td_status">
+                <span class="badge rounded-pill bg-danger">Late</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img
+                    src="https://mdbootstrap.com/img/new/avatars/7.jpg"
+                    class="rounded-circle"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">Kate Hunington</p>
+                  </div>
+                </div>
+              </td>
+              <td class="td_gig">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    I will convert your design layout into email template HTML
+                    coding
+                  </p>
+                </div>
+              </td>
+              <td class="td_dueon">Mar 14</td>
+              <td class="td_price">$20</td>
+              <td class="td_note">No</td>
+              <td class="td_status">
+                <span class="badge rounded-pill bg-info text-dark">New</span>
+              </td>
+            </tr>
           </tbody>
-
         </table>
-        <div v-if="orders.length==0" class="text-center"><h5>Order Not Found</h5></div>
 
         <div class="pagination">
-          <router-link
-            v-if="pagination.page - 1 == 0&&pagination.totalPage!=0"
-            class="page-number"
-            @click="selectedPage = pagination.page - 1"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                userID: user.userId,
-                status: status,
-              },
-            }"
-            ><i class="bi bi-arrow-left"></i
-          ></router-link>
-          <router-link
-            v-if="pagination.page - 1 > 0"
-            class="page-number"
-            @click="selectedPage = pagination.page - 1"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: pagination.page - 1,
-                search: searchOrder,
-                userID: user.userId,
-                status: status,
-              },
-            }"
-            ><i class="bi bi-arrow-left"></i
-          ></router-link>
-          <router-link
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: index,
-                search: searchOrder,
-                userID: user.userId,
-                status: status,
-              },
-            }"
-            class="page-number"
-            @click="selectedPage = index"
-            v-for="index in pagination.totalPage"
-            :key="index"
-            href="#"
-            :class="{ active: index == pagination.page }"
-            ><span>{{ index }}</span>
-          </router-link>
-
-          <router-link
-            v-if="pagination.page + 1 <= pagination.totalPage"
-            class="page-number"
-            @click="selectedPage = pagination.page + 1"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: pagination.page + 1,
-                search: searchOrder,
-                userID: user.userId,
-                status: status,
-              },
-            }"
-            ><i class="bi bi-arrow-right"></i
-          ></router-link>
+          <a class="page-link" href="#">Prev</a>
+          <a class="page-link" href="#">1</a>
+          <a  class="page-link active" href="#">2</a>
+          <a class="page-link" href="#">3</a>
+          <a class="page-link" href="#">4</a>
+          <a class="page-link" href="#">Next</a>
         </div>
       </div>
     </div>
@@ -273,77 +215,19 @@
   
   <script>
 import Header from "../components/Header.vue";
-import axios from "axios";
-var moment = require("moment");
-
 export default {
   name: "CreateOrderDetailPage",
   components: {
     Header,
   },
   data() {
-    return {
-      user: [],
-      orders: [],
-      pagination: [],
-      moment: moment,
-      searchOrder: "",
-      selectedPage: 1,
-      status: "Active",
-    };
-  },
-  async created() {
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
-    const responseUserInfor = await axios.get("/users/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const userInfor = responseUserInfor.data.user;
-    this.user = userInfor;
-    console.log(this.user.userId);
-    const responseData = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        userID: this.user.userId,
-        status: this.status,
-      },
-    });
-    const orders = responseData.data.order;
-    this.orders = orders;
-    const paging = responseData.data.pagination;
-    this.pagination = paging;
-    console.log(this.pagination);
-  },
-  async beforeRouteUpdate() {
-    console.log("Run Here");
-    const responseDateWithPage = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        userID: this.user.userId,
-        status: this.status,
-      },
-    });
-
-    const orders = responseDateWithPage.data.order;
-    this.orders = orders;
-
-    const searchQuery = responseDateWithPage.data.searchQuery;
-    this.searchOrder = searchQuery.search;
-    const paging = responseDateWithPage.data.pagination;
-    this.pagination = paging;
-    console.log("this.selectedPage " + (this.pagination.page + 1));
+    return {};
   },
 };
 </script>
   
   <style>
-.input-group-text {
-  background-color: white;
-}
-.pagination {
+  .pagination {
   display: inline-block;
   margin: 20px 0;
 }
@@ -351,15 +235,19 @@ export default {
 .pagination a {
   color: black;
   float: left;
-  padding: 8px 16px;
+  padding: 5px 12px;
   text-decoration: none;
+  background-color: #f8f9fa;
 }
 
-.pagination a.active span,
-.pagination a:hover span {
-  color: black;
-  border-bottom: 2px solid;
-  padding-bottom: 4px;
+.pagination a.active {
+  background-color: #212020;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+.input-group-text {
+  background-color: white;
 }
 .order_search {
   border: none;

@@ -16,7 +16,7 @@
           </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3"></textarea>
+          <textarea name="" id="" cols="60" rows="3" v-model="gig.Title"></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -29,15 +29,20 @@
         </div>
         <div class="right">
           <select
+            v-model="gig.CategoryID"
+            @change="displayCategory"
             class="form-select lefthalf"
             aria-label="Default select example"
           >
-            <option selected>Select a category</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option :value="-1">Select a category</option>
+            <option
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.CategoryID"
+            >
+              {{ category.Category_Name }}
+            </option>
           </select>
-          
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -51,20 +56,21 @@
               <select
                 class="form-select third"
                 aria-label="Default select example"
+                v-model="gig.Numberpage"
               >
-                <option selected>Select number of page</option>
-                <option value="1">less than 3</option>
-                <option value="2">3-5</option>
-                <option value="3">more than 5</option>
+                <option value="">Select number of page</option>
+                <option value="less than 3">less than 3</option>
+                <option value="3-5">3-5</option>
+                <option value="more than 5">more than 5</option>
               </select>
             </div>
             <div class="daydeli third">
               <label for="">Day Deliveries</label><br />
-              <input type="number" class="third" />
+              <input type="number" class="third" v-model="gig.Delivery_Day" />
             </div>
             <div class="price">
               <label for="">Price($)</label> <br />
-              <input type="number" class="third" /> $
+              <input type="number" class="third" v-model="gig.Price" /> $
             </div>
           </div>
         </div>
@@ -76,7 +82,13 @@
           <span> Briefly Describe Your Gig </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3"></textarea>
+          <textarea
+            name=""
+            id=""
+            cols="60"
+            rows="3"
+            v-model="gig.Description"
+          ></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -98,14 +110,23 @@
               text-align: center;
             "
           >
-            <span style="font-size: 12px">Drag & drop a Photo or <span style="color:blue">Browse</span></span>
+            <span style="font-size: 12px"
+              >Drag & drop a Photo or
+              <span style="color: blue">Browse</span></span
+            >
           </div>
         </div>
       </div>
       <div class="button">
-        <button id="btn-sub" type="submit"  class="btn btn-primary bg-danger" style="border:none;width:100px;margin-top:40px">
-            Update
-          </button>
+        <button
+          id="btn-sub"
+          type="submit"
+          class="btn btn-primary bg-danger"
+          style="border: none; width: 100px; margin-top: 40px"
+          @click="updateGig"
+        >
+          Update
+        </button>
       </div>
     </div>
   </div>
@@ -126,6 +147,74 @@ export default {
     Headers,
     Sidebar,
     Footer,
+  },
+  data() {
+    return {
+      categories: [],
+      // category: -1,
+      // description: "",
+      // numOfPage: "",
+      // dayDeliveries: 0,
+      // price: 0,
+      // image: "",
+      gig: {},
+      user: {}
+    };
+  },
+  methods: {
+    updateGig() {
+      axios
+        .put(`/gigs/${this.$route.params.GigID}/update`, {
+          Title: this.gig.Title,
+          Description: this.gig.Description,
+          Gig_IMG: this.gig.Gig_IMG,
+          Numberpage: this.gig.Numberpage,
+          CategoryID: this.gig.CategoryID,
+          Price: this.gig.Price,
+          Delivery_Day: this.gig.Delivery_Day,
+          FreelancerID: this.user.id,
+        })
+        .then(
+          (res) => {
+            // console.log(res.data);
+            this.$router.push("/managegigsel");
+          },
+          (err) => {
+            console.log("Update failed");
+          }
+        );
+    },
+    displayCategory() {
+      console.log(this.category);
+    },
+  },
+  mounted() {
+    
+    axios.get(`/gigs/details/${this.$route.params.GigID}`).then(
+      res => {
+        this.gig = res.data
+        console.log(this.gig)
+      },
+      err => {
+        console.log(err.response)
+      }
+    )
+    axios.get("/categories/get").then((res) => {
+      this.categories = res.data;
+      // console.log(res.data);
+    }),
+      axios
+        .get("/users/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.user = res.data.user;
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
   },
 };
 </script>
@@ -184,7 +273,7 @@ html {
   width: 30%;
   height: 130px;
 }
-.img-gig:hover{
-  border: 1px blue dashed ;
+.img-gig:hover {
+  border: 1px blue dashed;
 }
 </style>

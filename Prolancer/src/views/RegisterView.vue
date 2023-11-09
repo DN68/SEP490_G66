@@ -120,13 +120,26 @@ export default {
     };
   },
   computed: {
+    //  A valid username should start with an alphabet so, [A-Za-z].
+    //  All other characters can be alphabets, numbers or an underscore so, [A-Za-z0-9_].
+    isValidUsername(){
+      return /[A-Za-z][A-Za-z0-9_]{7,29}$/.test(this.username);
+    }, //Email format
     isValidEmail() {
       return /^[^@]+@\w+(\.\w+)+\w$/.test(this.email);
+    },
+    //Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+    isValidPassword(){
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.password)
     },
     checkInput() {
       //input validation here
       if (!this.username) {
         this.message = "you must enter username";
+        return false;
+      }
+      if (!this.isValidUsername) {
+        this.message = "Username must start with an alphabet and has at least 8 characters";
         return false;
       }
       if (!this.email) {
@@ -151,6 +164,10 @@ export default {
       // );
       if (!this.password) {
         this.message = "you must enter password";
+        return false;
+      }
+      if (!this.isValidPassword){
+        this.message = "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
         return false;
       }
       if (!this.repeatPassword) {

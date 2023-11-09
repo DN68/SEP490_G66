@@ -16,7 +16,7 @@
           </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3"></textarea>
+          <textarea name="" id="" cols="60" rows="3" v-model="title"></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -29,14 +29,29 @@
         </div>
         <div class="right">
           <select
+            v-model="category"
+            @change="displayCategory"
             class="form-select lefthalf"
+            aria-label="Default select example"
+          >
+            <option :value="-1">Select a category</option>
+            <option
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.CategoryID"
+            >
+              {{ category.Category_Name }}
+            </option>
+          </select>
+          <!-- <select
+            class="form-select righthalf"
             aria-label="Default select example"
           >
             <option selected>Select a category</option>
             <option value="1">One</option>
             <option value="2">Two</option>
             <option value="3">Three</option>
-          </select>
+          </select> -->
           
         </div>
       </div>
@@ -51,20 +66,21 @@
               <select
                 class="form-select third"
                 aria-label="Default select example"
+                v-model="numOfPage"
               >
-                <option selected>Select number of page</option>
-                <option value="1">less than 3</option>
-                <option value="2">3-5</option>
-                <option value="3">more than 5</option>
+                <option value="">Select number of page</option>
+                <option value="less than 3">less than 3</option>
+                <option value="3-5">3-5</option>
+                <option value="more than 5">more than 5</option>
               </select>
             </div>
             <div class="daydeli third">
               <label for="">Day Deliveries</label><br />
-              <input type="number" class="third" />
+              <input type="number" class="third" v-model="dayDeliveries" />
             </div>
             <div class="price">
               <label for="">Price($)</label> <br />
-              <input type="number" class="third" /> $
+              <input type="number" class="third" v-model="price" /> $
             </div>
           </div>
         </div>
@@ -76,7 +92,13 @@
           <span> Briefly Describe Your Gig </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3"></textarea>
+          <textarea
+            name=""
+            id=""
+            cols="60"
+            rows="3"
+            v-model="description"
+          ></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -98,14 +120,23 @@
               text-align: center;
             "
           >
-            <span style="font-size: 12px">Drag & drop a Photo or <span style="color:blue">Browse</span></span>
+            <span style="font-size: 12px"
+              >Drag & drop a Photo or
+              <span style="color: blue">Browse</span></span
+            >
           </div>
         </div>
       </div>
       <div class="button">
-        <button id="btn-sub" type="submit"  class="btn btn-primary bg-danger" style="border:none;width:100px;margin-top:40px">
-            Save
-          </button>
+        <button
+          id="btn-sub"
+          type="submit"
+          class="btn btn-primary bg-danger"
+          style="border: none; width: 100px; margin-top: 40px"
+          @click="createGig"
+        >
+          Save
+        </button>
       </div>
     </div>
   </div>
@@ -126,6 +157,63 @@ export default {
     Headers,
     Sidebar,
     Footer,
+  },
+  data() {
+    return {
+      categories: [],
+      category: -1,
+      description: "",
+      numOfPage: "",
+      dayDeliveries: 0,
+      price: 0,
+      image: "",
+      user: {},
+    };
+  },
+  methods: {
+    createGig() {
+      axios
+        .post("/gigs/create", {
+          Title: this.title,
+          Description: this.description,
+          Gig_IMG: this.image,
+          Numberpage: this.numOfPage,
+          CategoryID: this.category,
+          Price: this.price,
+          Delivery_Day: this.dayDeliveries,
+          FreelancerID: this.user.id,
+        })
+        .then(
+          (res) => {
+            // console.log(res.data);
+            this.$router.push("/giglist")
+          },
+          (err) => {
+            console.log("Added failed");
+          }
+        );
+    },
+    displayCategory() {
+      console.log(this.category);
+    },
+  },
+  mounted() {
+    axios.get("/categories/get").then((res) => {
+      this.categories = res.data;
+      // console.log(res.data);
+    }),
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
   },
 };
 </script>
@@ -184,7 +272,7 @@ html {
   width: 30%;
   height: 130px;
 }
-.img-gig:hover{
-  border: 1px blue dashed ;
+.img-gig:hover {
+  border: 1px blue dashed;
 }
 </style>
