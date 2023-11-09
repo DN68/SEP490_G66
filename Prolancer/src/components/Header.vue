@@ -85,7 +85,15 @@
                 <span class="small">Favourite</span></a
               >
             </li>
-
+            <li class="nav-item">
+              <a
+                class="nav-link d-flex flex-column text-center text-danger"
+                aria-current="page"
+                href="/becomesel"
+                >
+                <span class="small" style="margin-top: 5px;font-size:20px">Become a Seller</span></a
+              >
+            </li>
             <li class="nav-item dropdown" style="" v-if="user">
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
@@ -108,7 +116,7 @@
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <router-link class="dropdown-item" to="/updateprofile"
+                  <router-link class="dropdown-item" to="/uppro"
                     >My Profile</router-link
                   >
                 </li>
@@ -118,10 +126,11 @@
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="#"
+                  <router-link class="dropdown-item" to="/setting"
                     >Settings</router-link
                   >
                 </li>
+                
                 <li>
                   <router-link class="dropdown-item" to="/logout"
                     >Logout</router-link

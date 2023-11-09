@@ -145,7 +145,10 @@ html {
 
 .container-change {
   margin: 10px 20%;
-  width: 50%;
+  width: 60%;
+  border: 1px #ccc solid;
+  padding: 35px;
+  background-color: #fff;
 }
 #btn-sub {
   display: block;

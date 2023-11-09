@@ -126,9 +126,11 @@ export default {
 .info-user {
   text-align: center;
 }
+
 .email {
   opacity: 0.6;
 }
+
 
 .preview {
   border: 1px #ccc solid;

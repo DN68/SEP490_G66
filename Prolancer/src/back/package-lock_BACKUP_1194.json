@@ -831,6 +831,17 @@
         "node": ">=14.0.0"
       }
     },
+<<<<<<< HEAD
+    "node_modules/has-flag": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/has-flag/-/has-flag-3.0.0.tgz",
+      "integrity": "sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==",
+      "engines": {
+        "node": ">=4"
+      }
+    },
+=======
+>>>>>>> 6f62d1a48adca89919e8b96d466a886de75bf1a5
     "node_modules/has-property-descriptors": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/has-property-descriptors/-/has-property-descriptors-1.0.1.tgz",
