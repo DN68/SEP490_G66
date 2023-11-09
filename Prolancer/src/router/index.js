@@ -128,8 +128,7 @@ const routes = [
 
 
   },{
-
-    path: '/updategig',
+    path: '/updategig/:GigID',
     name: 'updategig',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -138,8 +137,14 @@ const routes = [
 
 
   },
-  
-  
+  {
+    path: '/changeStatus/:GigID/:Status',
+    name: 'changegigstatus',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChangeGigStatus.vue')
+  },
   {
     path: '/giglist',
     name: 'giglist',

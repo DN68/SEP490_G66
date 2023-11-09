@@ -7,6 +7,10 @@ router.get('/index',
     gigController.getGigWithFilterAndPagingAndSearching
 );
 
+router.get('/:FreelancerID',
+    gigController.getGigsByFreelancer
+);
+
 router.get('/details/:id',
     gigController.getGigById
 );
@@ -22,5 +26,6 @@ router.put('/:GigID/update',
 router.put('/:GigID/updateStatus', 
     gigController.updateGigStatus
 )
+
 
 module.exports = router;

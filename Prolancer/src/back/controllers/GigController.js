@@ -89,11 +89,13 @@ class GigController {
 
   getGigById = function (req, res) {
     var id = req.params.id;
-
     Gig.getGigById(id, function (err, gig) {
-      if (err)
+      if (err) {
         res.send(err);
-      res.send(gig);
+      } else {
+        res.send(gig[0]);
+      }
+      
     });
 
   };
@@ -130,14 +132,26 @@ class GigController {
     })
   }
 
-  updateGigStatus = function (req, res){
-    const status = req.body;
-    const id = req.body;
-    Gig.updateGigStatus(id, status, function(err, result){
+  updateGigStatus = function (req, res) {
+    const status = req.body.Status;
+    const GigID = req.params.GigID
+    Gig.updateGigStatus(status, GigID, function (err, result) {
       if (err) {
         res.send(err);
       } else {
         res.json(result);
+      }
+    })
+  }
+
+  getGigsByFreelancer = function (req, res) {
+    const id = req.params.FreelancerID;
+    // console.log(id)
+    Gig.getGigByFreelancerId(id, function (err, results) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(results);
       }
     })
   }

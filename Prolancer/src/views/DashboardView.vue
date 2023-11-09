@@ -50,12 +50,30 @@
 // @ is an alias to /src
 import Header from "../components/Header.vue";
 import Sidebar from "../components/Sidebar.vue";
+import axios from "axios"
 
 export default {
   name: "HomePage",
   components: {
     Header,
     Sidebar,
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.role = res.data.user.role;
+          if (this.role != "A") {
+            this.$router.push("/");
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
   },
 };
 </script>

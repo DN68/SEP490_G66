@@ -70,7 +70,6 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
 };
 
 Gig.getGigById = function (id, result) {
-
   connectDb.query("Select * from Gig Where GigID = ?", [id], function (err, res) {
     if (err) {
       result(null, err);
@@ -81,6 +80,16 @@ Gig.getGigById = function (id, result) {
   });
 };
 
+Gig.getGigByFreelancerId = function (id, results) {
+  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID Where g.FreelancerID = ?", [id], function (err, res) {
+    if (err) {
+      results(null, err);
+    }
+    else {
+      results(null, res);
+    }
+  });
+};
 
 Gig.createGig = function (Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, result) {
   connectDb.query("INSERT INTO Gig SET Title = ?, Description = ?, Gig_IMG = ?, Price = ?, Delivery_Day = ?, FreelancerID = ?, CategoryID = ?, Numberpage = ?, Creation_Date = CURDATE(), Status = 'Active'",
