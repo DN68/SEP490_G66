@@ -94,4 +94,28 @@ Gig.createGig = function (Title, Description, Gig_IMG, Price, Delivery_Day, Free
     })
 }
 
+
+Gig.updateGig = function(data, id, result){
+  connectDb.query("UPDATE Gig SET ? WHERE GigID = ?", [data, id], function(err, res){
+    if (err) {
+      result(null, err);
+    }
+    else {
+      result(null, res);
+    }
+  })  
+}
+
+
+Gig.updateGigStatus = function(status, id, result){
+  connectDb.query("UPDATE Gig SET Status = ? WHERE GigID = ?", [status, id], function(err, res){
+    if (err) {
+      result(null, err);
+    }
+    else {
+      result(null, res);
+    }
+  })  
+}
+
 module.exports = Gig;

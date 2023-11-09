@@ -13,17 +13,17 @@ class GigController {
     var filterByDeliveryDay = '';
     var filterByPrice = '';
 
-    if (pageQuery.filterBy1 != ''&&pageQuery.filterBy1 != null) {
+    if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null) {
       filterByCategory = pageQuery.filterBy1;
       console.log('filterBy1');
 
     }
-    if (pageQuery.filterBy2 != ''&&pageQuery.filterBy1 != null&&pageQuery.filterBy2 != 'Anytime') {
+    if (pageQuery.filterBy2 != '' && pageQuery.filterBy1 != null && pageQuery.filterBy2 != 'Anytime') {
       filterByDeliveryDay = pageQuery.filterBy2;
       console.log('filterBy2');
 
     }
-    if (pageQuery.filterBy3 != ''&&pageQuery.filterBy1 != null) {
+    if (pageQuery.filterBy3 != '' && pageQuery.filterBy1 != null) {
       filterByPrice = pageQuery.filterBy3;
       console.log('filterBy3');
 
@@ -99,7 +99,7 @@ class GigController {
   };
 
 
-  createGig = function (req, res){
+  createGig = function (req, res) {
     const Title = req.body.Title
     const Description = req.body.Description
     const Gig_IMG = req.body.Gig_IMG
@@ -108,12 +108,37 @@ class GigController {
     const FreelancerID = req.body.FreelancerID
     const CategoryID = req.body.CategoryID
     const Numberpage = req.body.Numberpage
-    Gig.createGig(Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, function(err, result){
+    Gig.createGig(Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, function (err, result) {
       if (err) {
         res.send(err);
-    } else {
+      } else {
         res.json(result);
-    }
+      }
+    })
+  }
+
+
+  updateGig = function (req, res) {
+    const data = req.body;
+    const GigID = req.params.GigID
+    Gig.updateGig(data, GigID, function (err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(result);
+      }
+    })
+  }
+
+  updateGigStatus = function (req, res){
+    const status = req.body;
+    const id = req.body;
+    Gig.updateGigStatus(id, status, function(err, result){
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(result);
+      }
     })
   }
 }
