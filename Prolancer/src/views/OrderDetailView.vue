@@ -41,7 +41,7 @@
           >
             <h6>Delivery</h6>
           </div>
-          <div
+          <div v-if="user.role!='A'"
             class="col-md-2 status_item"
             @click="
               (isdetail = false),
@@ -87,10 +87,14 @@
                         <span class="col-md-6 delivery_time_right text-end"
                           >{{
                             moment(order.Order_Date)
-                              .add(24 * order.Delivery_Day, "h")
+                              .add(24 * (order.Delivery_Day+order.Extend_Day), "h")
                               .format("MMMM Do, h:mm A")
                           }}
                         </span>
+                        <div v-if="order.Extend_Day!=0" class="mt-1">
+                        <span class="delivery_time_right ">Extend Day <span class="text-danger">{{order.Extend_Day}} day(s)</span> </span>
+                        
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -148,28 +152,28 @@
                       </tr>
                       <tr class="backgroud_gray">
                         <th scope="row">SUBTOTAL</th>
-                        <td colspan="2"></td>
-                        <td class="order_price">
+                        <th colspan="2"></th>
+                        <th class="order_price">
                           ${{ order.Price * order.Total_Amount }}
-                        </td>
+                        </th>
                       </tr>
                       <tr class="backgroud_gray">
                         <th scope="row">SERVICE FEE</th>
-                        <td colspan="2"></td>
-                        <td class="order_price">
+                        <th colspan="2"></th>
+                        <th class="order_price">
                           ${{ order.Price * order.Total_Amount * 0.1 }}
-                        </td>
+                        </th>
                       </tr>
 
                       <tr class="backgroud_gray">
                         <th scope="row">TOTAL</th>
-                        <td colspan="2"></td>
-                        <td class="order_price">
+                        <th colspan="2"></th>
+                        <th class="order_price">
                           ${{
                             order.Price * order.Total_Amount +
                             order.Price * order.Total_Amount * 0.1
                           }}
-                        </td>
+                        </th>
                       </tr>
                     </tbody>
                   </table>
@@ -274,7 +278,7 @@
                         shoul deliver this order on
                         {{
                           moment(order.Order_Date)
-                            .add(24 * order.Delivery_Day, "h")
+                            .add(24 * (order.Delivery_Day+order.Extend_Day), "h")
                             .format("MMMM Do, h:mm A")
                         }}</span
                       >
@@ -315,7 +319,7 @@
                       <option value="Cancel" data-custom-style="top: 30px;">
                         Cancel order request
                       </option>
-                      <option value="Extend">Extend deliver date</option>
+                      <option value="Extend" v-if="user.role!='C'">Extend deliver date</option>
                     </select>
                   </div>
                   <div class="custom-select" v-if="requestType == 'Extend'">
@@ -711,7 +715,7 @@ export default {
     this.order = order;
     if (
       this.user.userId != this.order.CustomerID &&
-      this.user.userId != this.order.FreelancerID
+      this.user.userId != this.order.FreelancerID && this.user.role != 'A'
     ) {
       this.$router.push("/");
     }

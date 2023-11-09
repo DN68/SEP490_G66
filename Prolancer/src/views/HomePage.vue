@@ -64,7 +64,7 @@
                     <div class="guildeBack">
                       <i class="bi bi-laptop" style="font-size: 20px"></i>
                     </div>
-                    <p class="textDefault">Website Developt</p>
+                    <p class="textDefault">Website Development</p>
                   </div>
                   <div class="col-sm-2 guildeIteam">
                     <div class="guildeBack">
@@ -188,10 +188,10 @@ export default {
     };
   }, 
   async created() {
-    // //user is not authorized
-    // if (localStorage.getItem("token") === null) {
-    //   this.$router.push("/login");
-    // }
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
     const responseCategory = await axios.get('/categories/get');
     const categories = responseCategory.data;
     this.categories = categories;
@@ -202,6 +202,7 @@ export default {
 
     this.gigs = gigs;
     
+  
     
   },
   mounted() {

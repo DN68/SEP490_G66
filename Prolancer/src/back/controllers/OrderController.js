@@ -174,13 +174,17 @@ class OrderController {
     var requestType = 'Cancel';
     var userId = '';
     var userRole = '';
+    var status='';
     console.log(pageQuery);
     if (pageQuery.page != null) {
       page = pageQuery.page;
     } else {
       page = 1;
     }
-    
+    if(pageQuery.status!=undefined){
+      status = pageQuery.status
+      console.log("🚀 ~ file: OrderController.js:186 ~ OrderController ~ status:", status)
+    }
     requestType = pageQuery.requestType;
     userId = pageQuery.user.userId;
     userRole = pageQuery.user.role;
@@ -189,7 +193,7 @@ class OrderController {
     const offset = (page - 1) * limit;
     let orderRequest, totalRows;
     const fetchData = new Promise((resolve, reject) => {
-      OrderRequest.getOrderRequestWithPagingAndFilter(userId,userRole,requestType, limit, offset, function (err, orderRequestData) {
+      OrderRequest.getOrderRequestWithPagingAndFilter(userId,userRole,requestType,status, limit, offset, function (err, orderRequestData) {
         if (err) {
 
           reject(err);

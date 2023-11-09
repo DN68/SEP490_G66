@@ -177,7 +177,8 @@ class UserController {
                         password: results[0].Password,
                         role: results[0].Role,
                         location: results[0].Location,
-                        fid: results[0].Status
+                        fid: results[0].Status,
+                        userId: results[0].UserID
                     }
                 })
             })

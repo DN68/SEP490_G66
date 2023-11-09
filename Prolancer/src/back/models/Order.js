@@ -1,6 +1,5 @@
 const connectDb = require('../common/connectdb.js');
 
-
 var Order = function (order) {
   this.OrderID = order.OrderID;
   this.CustomerID = order.CustomerID;
@@ -29,7 +28,7 @@ Order.createOrder = function (order, result) {
 };
 
 Order.getOrderById = function (id, result) {
-  connectDb.query("SELECT Order.OrderID,Order.CustomerID,Order.FreelancerID,Order.GigID,Order.Order_Date,Order.Total_Amount,Order.Description as OrderDescription, Order.Status as OrderStatus, Gig.Title, Gig.Gig_IMG,Gig.Delivery_Day, Gig.Price, User.First_Name as CustomerFirstName, User.Last_Name as CustomerLastName FROM `Order` INNER JOIN Gig ON Order.GigID = Gig.GigID INNER JOIN User ON Order.CustomerID = User.UserID WHERE OrderID = ?", [id], function (err, res) {
+  connectDb.query("SELECT Order.OrderID,Order.CustomerID,Order.FreelancerID,Order.GigID,Order.Order_Date,Order.Total_Amount,Order.Description as OrderDescription, Order.Status as OrderStatus,Order.Extend_Day, Gig.Title, Gig.Gig_IMG,Gig.Delivery_Day, Gig.Price, User.First_Name as CustomerFirstName, User.Last_Name as CustomerLastName FROM `Order` INNER JOIN Gig ON Order.GigID = Gig.GigID INNER JOIN User ON Order.CustomerID = User.UserID WHERE OrderID = ?", [id], function (err, res) {
     if (err) {
       result(err, null);
     }
@@ -100,7 +99,7 @@ Order.changeOrderStatus = function (status,orderID, result) {
 };
 
 Order.updateOrderExtendDay = function (extendDay,orderID, result) {
- const check= connectDb.query("UPDATE `Order` SET `Extend_Day` = ? WHERE `Order`.`OrderID` = ?", [extendDay,orderID], function (err, res) {
+ connectDb.query("UPDATE `Order` SET `Extend_Day` = `Extend_Day` + ? WHERE `Order`.`OrderID` = ?", [extendDay,orderID], function (err, res) {
     if (err) {
 
       result(err,null);
@@ -111,7 +110,5 @@ Order.updateOrderExtendDay = function (extendDay,orderID, result) {
     }
   });
 
-  console.log(check);
 };
 module.exports = Order;
-
