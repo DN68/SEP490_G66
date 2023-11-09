@@ -11,14 +11,6 @@ const routes = [
     component: HomePage
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/DashboardView.vue')
-  },
-  {
     path: '/change',
     name: 'change',
     // route level code-splitting
@@ -169,12 +161,67 @@ const routes = [
   }
   ,
   {
+    path: '/managegigad',
+    name: 'managegigad',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageGigAd.vue')
+
+  }
+  ,
+  {
     path: '/becomesel',
     name: 'becomesel',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/BecomeSeller.vue')
+
+  },
+  {
+    path: '/test',
+    name: 'test',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/test.vue')
+
+  },
+  {
+    path: '/ordermanaad',
+    name: 'ordermanaad',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/OrderManagementAd.vue')
+
+  },
+  {
+    path: '/skilltest',
+    name: 'skilltest',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/SkillTestManagement.vue')
+
+  },
+  {
+    path: '/interview',
+    name: 'interview',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/InterviewManagement.vue')
+
+  },
+  {
+    path: '/usermanage',
+    name: 'usermanage',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/UserManagement.vue')
 
   }
 
