@@ -6,16 +6,7 @@
         <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li v-for="category in listCategories" :key="category.id">
-            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
-          </li>       
-        </ul>
-      </div>
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
-        <!-- Links -->
-        <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li v-for="category in listCategories" :key="category.id">        
-            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+            <a class="dropdown-item dropdown-item1" href="#">{{category.Category_Name}}</a>
           </li>       
         </ul>
       </div>
@@ -24,7 +15,7 @@
         <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li v-for="category in listCategories" :key="category.id">
-            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+            <a class="dropdown-item dropdown-item1" href="#">{{category.Category_Name}}</a>
           </li>       
         </ul>
       </div>
@@ -33,7 +24,7 @@
         <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li v-for="category in listCategories" :key="category.id">
-            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+            <a class="dropdown-item dropdown-item1" href="#">{{category.Category_Name}}</a>
           </li>       
         </ul>
       </div>
@@ -42,7 +33,7 @@
         <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li v-for="category in listCategories" :key="category.id">
-            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+            <a class="dropdown-item dropdown-item1" href="#">{{category.Category_Name}}</a>
           </li>       
         </ul>
       </div>
@@ -51,7 +42,16 @@
         <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li v-for="category in listCategories" :key="category.id">
-            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+            <a class="dropdown-item dropdown-item1" href="#">{{category.Category_Name}}</a>
+          </li>       
+        </ul>
+      </div>
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <!-- Links -->
+        <h6 class="fw-bold my-1 navCategory">Programming & Tech</h6>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li v-for="category in listCategories" :key="category.id">
+            <a class="dropdown-item dropdown-item1" href="#">{{category.Category_Name}}</a>
           </li>       
         </ul>
       </div>

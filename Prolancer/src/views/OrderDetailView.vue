@@ -77,9 +77,11 @@
                     <div class="ordered_from row">
                       <div class="col-md-12 text-start">
                         <span class="ordered_from_left">Ordered from </span>
+
                         <span class="ordered_from_right">{{
                           order.CustomerFirstName + " " + order.CustomerLastName
                         }}</span>
+
                         <span class="" style="margin: 0 10px"> | </span>
                         <span class="delivery_time_left">Delivery Day </span>
                         <span class="col-md-6 delivery_time_right text-end"
@@ -423,9 +425,11 @@
                     <span class="col-md-6 ordered_from_left text-start"
                       >Ordered from</span
                     >
+
                     <span class="col-md-6 ordered_from_right text-end">{{
                       order.CustomerFirstName + " " + order.CustomerLastName
                     }}</span>
+
                   </div>
                   <div class="delivery_time row">
                     <span class="col-md-6 delivery_time_left"

@@ -10,10 +10,10 @@
               type="search"
               class="form-control order_search"
               placeholder="Search Order History ..."
-              v-model="searchOrder"
               aria-label="Search"
               aria-describedby="search-addon"
             />
+
             <router-link
               :to="{
                 path: '/manageorder',
@@ -36,6 +36,7 @@
         </div>
       </div>
       <div class="order_status row">
+
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Active' }"
@@ -187,6 +188,7 @@
             Order Request
           </h6>
         </div>
+
       </div>
       <div
         class="order_table"
@@ -214,28 +216,26 @@
 
               <th class="th_gig">GIG</th>
               <th>DUE ON</th>
-              <th>QTY</th>
               <th>TOTAL</th>
+              <th>NOTE</th>
               <th>STATUS</th>
               <th>ACTION</th>
             </tr>
           </thead>
+
           <tbody v-if="orders.length >= 1">
             <tr v-for="(order, index) in orders" :key="index">
               <!-- <td class="td_user">
+
                 <div class="d-flex align-items-center">
                   <img
-                    :src="order.Profile_Picture"
+                    src="https://mdbootstrap.com/img/new/avatars/8.jpg"
                     alt=""
                     style="width: 45px; height: 45px"
                     class="rounded-circle"
                   />
                   <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{
-                        order.CustomerFirstName + " " + order.CustomerLastName
-                      }}
-                    </p>
+                    <p class="fw-bold mb-1">John Doe</p>
                   </div>
                 </div>
               </td> -->
@@ -319,12 +319,12 @@
               <td class="td_gig">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ order.Title }}
+                    I will convert your design layout into email template HTML
+                    coding
                   </p>
                 </div>
               </td>
+
 
               <td class="td_dueon">
                 {{
@@ -368,6 +368,7 @@
                   v-if="order.Status == 'Cancelled'"
                   class="badge rounded-pill bg-secondary d-inline"
                   >Cancelled</span
+
                 >
               </td>
 
@@ -389,6 +390,7 @@
                 </router-link>
               </td>
             </tr>
+
           </tbody>
         </table>
         <div v-if="orders.length == 0" class="text-center">
@@ -728,6 +730,7 @@
             }"
             ><i class="bi bi-arrow-right"></i
           ></router-link>
+
         </div>
       </div>
     </div>
@@ -861,12 +864,14 @@ var moment = require("moment");
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+
 export default {
   name: "CreateOrderDetailPage",
   components: {
     Header,
   },
   data() {
+
     return {
       user: [],
       orders: [],
@@ -930,6 +935,7 @@ export default {
     const paging = responseDateWithPage.data.pagination;
     this.pagination = paging;
     console.log("this.selectedPage " + (this.pagination.page + 1));
+
   },
   methods: {
     async changeOrderStatus(status, orderID) {
@@ -1032,10 +1038,7 @@ export default {
 </script>
   
   <style>
-.input-group-text {
-  background-color: white;
-}
-.pagination {
+  .pagination {
   display: inline-block;
   margin: 20px 0;
 }
@@ -1043,15 +1046,19 @@ export default {
 .pagination a {
   color: black;
   float: left;
-  padding: 8px 16px;
+  padding: 5px 12px;
   text-decoration: none;
+  background-color: #f8f9fa;
 }
 
-.pagination a.active span,
-.pagination a:hover span {
-  color: black;
-  border-bottom: 2px solid;
-  padding-bottom: 4px;
+.pagination a.active {
+  background-color: #212020;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+.input-group-text {
+  background-color: white;
 }
 .order_search {
   border: none;

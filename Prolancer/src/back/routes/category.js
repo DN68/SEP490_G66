@@ -4,7 +4,7 @@ const categoryController = require('../controllers/CategoryController');
 
 
 router.get('/get', 
-    categoryController.getAllCategory
+    categoryController.getCategory
   
   
   );

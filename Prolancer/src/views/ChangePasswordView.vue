@@ -1,56 +1,57 @@
 <template>
   <div>
-  <div class="header">
-    <Headers></Headers>
-  </div>
-  <div class="sidebar">
-    <Sidebar></Sidebar>
-  </div>
-  <div id="content" class="">
-    <div class="container-change">
-      <div class="form-change">
-        <label class="form-label mt-5" style="float: left" for="form3Example3"
-          >Old Password</label
-        >
-        <input
-          type="password"
-          id="form3Example3"
-          class="form-control form-control-lg"
-          placeholder="Enter your old password"
-          v-model="inputOldPassword"
-        />
-        <label class="form-label mt-5" style="float: left" for="form3Example3"
-          >New Password</label
-        >
-        <input
-          type="password"
-          id="form3Example3"
-          class="form-control form-control-lg"
-          placeholder="Enter your new password"
-          v-model="newPassword"
-        />
-        <label class="form-label mt-5" style="float: left" for="form3Example3"
-          >Re-enter New Password</label
-        >
-        <input
-          type="password"
-          id="form3Example3"
-          class="form-control form-control-lg"
-          placeholder="Enter your new password again"
-          v-model="reNewPassword"
-        />
-        <button
-          id="btn-sub"
-          type="submit"
-          @click="changePassword"
-          class="btn btn-primary"
-        >
-          Submit
-        </button>
+    <div class="header">
+      <Headers></Headers>
+    </div>
+    <div class="sidebar">
+      <Sidebar></Sidebar>
+    </div>
+    <div id="content" class="">
+      <div class="container-change">
+        <div class="form-change">
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Old Password</label
+          >
+          <input
+            type="password"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            placeholder="Enter your old password"
+            v-model="inputOldPassword"
+          />
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >New Password</label
+          >
+          <input
+            type="password"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            placeholder="Enter your new password"
+            v-model="newPassword"
+          />
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Re-enter New Password</label
+          >
+          <input
+            type="password"
+            id="form3Example3"
+            class="form-control form-control-lg"
+            placeholder="Enter your new password again"
+            v-model="reNewPassword"
+          />
+          <button
+            id="btn-sub"
+            type="submit"
+            @click="changePassword"
+            class="btn btn-primary"
+          >
+            Submit
+          </button>
+          <span ref="message">{{ message }}</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -70,6 +71,7 @@ export default {
       inputOldPassword: "",
       newPassword: "",
       reNewPassword: "",
+      message: "",
     };
   },
   created() {
@@ -92,14 +94,47 @@ export default {
         }
       );
   },
+  computed: {
+    // minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+    isValidPassword() {
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        this.newPassword
+      );
+    },
+    checkInput() {
+      if (!this.inputOldPassword) {
+        this.message = "you must enter password";
+        this.$refs.message.style.color = "red";
+        return false;
+      }
+      if (!this.newPassword) {
+        this.message = "you must enter new password";
+        this.$refs.message.style.color = "red";
+        return false;
+      }
+      if (!this.isValidPassword) {
+        this.message =
+          "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
+          this.$refs.message.style.color = "red";
+          return false;
+      }
+      if (!this.reNewPassword) {
+        this.message = "you must re-enter new password";
+        this.$refs.message.style.color = "red";
+        return false;
+      }
+      if (this.newPassword != this.reNewPassword) {
+        this.message = "Wrong password confirmation";
+        this.$refs.message.style.color = "red";
+        return false;
+      }
+      return true;
+    },
+  },
   methods: {
     changePassword() {
-      if (this.newPassword != this.reNewPassword) {
-        console.log("Wrong password confirm");
-      } else {
-        // console.log(this.inputOldPassword);
-        // console.log(this.user.password);
-        // console.log(this.newPassword);
+      if (this.checkInput) {
+        // console.log("Wrong password confirm");
         axios
           .put(`/users/${this.user.email}/changepw`, {
             inputOldPassword: this.inputOldPassword,
@@ -108,11 +143,13 @@ export default {
           })
           .then(
             (res) => {
-              console.log("change pass success");
-              this.$router.push("/logout");
+              this.$refs.message.style.color = "green";
+              this.message = "change pass success";
+              // this.$router.push("/logout");
             },
             (err) => {
-              console.log("change pass failed");
+              this.$refs.message.style.color = "red";
+              this.message = "Change pass failed, wrong old password !!!"
             }
           );
       }
@@ -145,7 +182,10 @@ html {
 
 .container-change {
   margin: 10px 20%;
-  width: 50%;
+  width: 60%;
+  border: 1px #ccc solid;
+  padding: 35px;
+  background-color: #fff;
 }
 #btn-sub {
   display: block;

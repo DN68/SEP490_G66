@@ -1,5 +1,6 @@
 const connectDb = require('../common/connectdb.js');
 
+
 var Order = function (order) {
   this.OrderID = order.OrderID;
   this.CustomerID = order.CustomerID;
@@ -113,3 +114,4 @@ Order.updateOrderExtendDay = function (extendDay,orderID, result) {
   console.log(check);
 };
 module.exports = Order;
+

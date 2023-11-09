@@ -30,19 +30,6 @@
                 <i class="fab fa-facebook-f"></i>
               </button>
 
-              <button
-                type="button"
-                class="btn bg-danger bg-gradient text-light mx-1"
-              >
-                <i class="fab fa-twitter"></i>
-              </button>
-
-              <button
-                type="button"
-                class="btn bg-danger bg-gradient text-light mx-1"
-              >
-                <i class="fab fa-linkedin-in"></i>
-              </button>
             </div>
 
             <div class="divider d-flex align-items-center my-4">
@@ -107,6 +94,7 @@
               >
                 Login
               </button>
+              <span ref="message">&nbsp;{{ message }}</span>
               <p class="small fw-bold mt-2 pt-1 mb-0">
                 Don't have an account?
                 <router-link class="text-danger" to="/register"
@@ -129,12 +117,28 @@ export default {
     return {
       emailOrUsername: "",
       password: "",
-      error: "",
+      message: ""
     };
+  },
+  computed:{
+    checkInput(){
+      if (!this.emailOrUsername) {
+        this.message = "you must enter username or email";
+        this.$refs.message.style.color = "red";
+        return false;
+      }
+      if (!this.password) {
+        this.message = "you must enter password";
+        this.$refs.message.style.color = "red";
+        return false;
+      }
+      return true
+    }
   },
   methods: {
     async Login() {
-      let user = {
+      if(this.checkInput){
+        let user = {
         emailOrUsername: this.emailOrUsername,
         password: this.password
       }
@@ -147,7 +151,10 @@ export default {
           }
         }, err => {
           console.log(err.response);
+          this.message = "Wrong email or password"
+          this.$refs.message.style.color = "red";
         })
+      }
     },
   },
 };

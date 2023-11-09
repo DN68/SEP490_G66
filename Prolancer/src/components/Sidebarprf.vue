@@ -146,7 +146,7 @@ export default {
 }
 .info-user {
   text-align: center;
-
+ 
 }
 .email {
   opacity: 0.6;

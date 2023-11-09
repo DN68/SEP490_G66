@@ -16,7 +16,7 @@
           </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3" v-model="title"></textarea>
+          <textarea name="" id="" cols="60" rows="3" v-model="gig.Title"></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -29,7 +29,7 @@
         </div>
         <div class="right">
           <select
-            v-model="category"
+            v-model="gig.CategoryID"
             @change="displayCategory"
             class="form-select lefthalf"
             aria-label="Default select example"
@@ -43,16 +43,6 @@
               {{ category.Category_Name }}
             </option>
           </select>
-          <!-- <select
-            class="form-select righthalf"
-            aria-label="Default select example"
-          >
-            <option selected>Select a category</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select> -->
-          
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -66,7 +56,7 @@
               <select
                 class="form-select third"
                 aria-label="Default select example"
-                v-model="numOfPage"
+                v-model="gig.Numberpage"
               >
                 <option value="">Select number of page</option>
                 <option value="less than 3">less than 3</option>
@@ -76,11 +66,11 @@
             </div>
             <div class="daydeli third">
               <label for="">Day Deliveries</label><br />
-              <input type="number" class="third" v-model="dayDeliveries" />
+              <input type="number" class="third" v-model="gig.Delivery_Day" />
             </div>
             <div class="price">
               <label for="">Price($)</label> <br />
-              <input type="number" class="third" v-model="price" /> $
+              <input type="number" class="third" v-model="gig.Price" /> $
             </div>
           </div>
         </div>
@@ -97,7 +87,7 @@
             id=""
             cols="60"
             rows="3"
-            v-model="description"
+            v-model="gig.Description"
           ></textarea>
         </div>
       </div>
@@ -133,9 +123,9 @@
           type="submit"
           class="btn btn-primary bg-danger"
           style="border: none; width: 100px; margin-top: 40px"
-          @click="createGig"
+          @click="updateGig"
         >
-          Save
+          Update
         </button>
       </div>
     </div>
@@ -161,35 +151,36 @@ export default {
   data() {
     return {
       categories: [],
-      category: -1,
-      description: "",
-      numOfPage: "",
-      dayDeliveries: 0,
-      price: 0,
-      image: "",
-      user: {},
+      // category: -1,
+      // description: "",
+      // numOfPage: "",
+      // dayDeliveries: 0,
+      // price: 0,
+      // image: "",
+      gig: {},
+      user: {}
     };
   },
   methods: {
-    createGig() {
+    updateGig() {
       axios
-        .post("/gigs/create", {
-          Title: this.title,
-          Description: this.description,
-          Gig_IMG: this.image,
-          Numberpage: this.numOfPage,
-          CategoryID: this.category,
-          Price: this.price,
-          Delivery_Day: this.dayDeliveries,
+        .put(`/gigs/${this.$route.params.GigID}/update`, {
+          Title: this.gig.Title,
+          Description: this.gig.Description,
+          Gig_IMG: this.gig.Gig_IMG,
+          Numberpage: this.gig.Numberpage,
+          CategoryID: this.gig.CategoryID,
+          Price: this.gig.Price,
+          Delivery_Day: this.gig.Delivery_Day,
           FreelancerID: this.user.id,
         })
         .then(
           (res) => {
             // console.log(res.data);
-            this.$router.push("/giglist")
+            this.$router.push("/managegigsel");
           },
           (err) => {
-            console.log("Added failed");
+            console.log("Update failed");
           }
         );
     },
@@ -198,22 +189,32 @@ export default {
     },
   },
   mounted() {
+    
+    axios.get(`/gigs/details/${this.$route.params.GigID}`).then(
+      res => {
+        this.gig = res.data
+        console.log(this.gig)
+      },
+      err => {
+        console.log(err.response)
+      }
+    )
     axios.get("/categories/get").then((res) => {
       this.categories = res.data;
       // console.log(res.data);
     }),
-    axios
-      .get("/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.user = res.data.user;
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
+      axios
+        .get("/users/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.user = res.data.user;
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
   },
 };
 </script>

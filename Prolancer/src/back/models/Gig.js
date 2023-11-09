@@ -1,85 +1,130 @@
 const connectDb = require('../common/connectdb.js');
 
-var Gig = function(gig){
-    this.gigId     = gig.GigID;
-    this.title      = gig.Title;
-    this.description          = gig.Description;
-    this.gigImg          = gig.Gig_IMG;
-    this.categoryId   = gig.CategoryID;
-    this.price    = gig.Price;
-    this.deliveryDay = gig.Delivery_Day;
-    this.freelancerId     = gig.FreelancerID;
-    this.creationDate     = gig.Creation_Date;
-    this.status     = gig.Status;
-  };
-  
-  Gig.getAll = function (result) {
-    connectDb.query("Select * from Gig", function (err, res) {
-          if(err) {
-            console.log("error: ", err);
-            result(null, err);
-          }
-          else{
-            console.log('gig : ', res);
-            result(null, res);
-          }
-      });
-  };
+var Gig = function (gig) {
+  this.gigId = gig.GigID;
+  this.title = gig.Title;
+  this.description = gig.Description;
+  this.gigImg = gig.Gig_IMG;
+  this.categoryId = gig.CategoryID;
+  this.price = gig.Price;
+  this.deliveryDay = gig.Delivery_Day;
+  this.freelancerId = gig.FreelancerID;
+  this.creationDate = gig.Creation_Date;
+  this.status = gig.Status;
+};
 
-  Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory,filterByDeliveryDay,filterByPrice,search,limit,offset,gig,pagination) {
-    var sql = "Select * from Gig INNER JOIN User ON Gig.FreelancerID = User.UserID WHERE";
-    var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
-
-    if(filterByDeliveryDay!=''){
-      sql = sql + " Delivery_Day <= "+filterByDeliveryDay+" AND";
-      sqlCount = sqlCount + " Delivery_Day <= "+filterByDeliveryDay+" AND";
-
-      console.log("run Delivery_Day")
-      
+Gig.getAll = function (result) {
+  connectDb.query("Select * from Gig", function (err, res) {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
     }
-    if(filterByPrice!=''){
-      sql = sql + " Price <= "+filterByPrice+" AND";
-      sqlCount = sqlCount + " Price <= "+filterByPrice+" AND";
-      console.log("run Price")
-
-
+    else {
+      console.log('gig : ', res);
+      result(null, res);
     }
-    console.log("sql: ", sql);
-    console.log("sqlCount: ", sqlCount);
+  });
+};
+
+Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
+  var sql = "Select * from Gig WHERE";
+  var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
+
+  if (filterByDeliveryDay != '') {
+    sql = sql + " Delivery_Day <= " + filterByDeliveryDay + " AND";
+    sqlCount = sqlCount + " Delivery_Day <= " + filterByDeliveryDay + " AND";
+
+    console.log("run Delivery_Day")
+
+  }
+  if (filterByPrice != '') {
+    sql = sql + " Price <= " + filterByPrice + " AND";
+    sqlCount = sqlCount + " Price <= " + filterByPrice + " AND";
+    console.log("run Price")
 
 
-    var check =connectDb.query(sql+ " CategoryID LIKE ? AND Title LIKE ? LIMIT ? OFFSET ?", ['%'+filterByCategory+'%','%'+search+'%',limit, offset], function (err, res) {
-          if(err) {
-            console.log("error: ", err);
-            gig(err,null)
-          }
-          else{
+  }
+  console.log("sql: ", sql);
+  console.log("sqlCount: ", sqlCount);
 
-            gig(null,res);
-          }
-      });
 
-      connectDb.query(sqlCount+" CategoryID LIKE ? AND Title LIKE ?", ['%'+filterByCategory+'%','%'+search+'%'], function (err, res) {
-        if(err) {
-          
-          pagination(err,null);
-        }
-        else{
-          pagination(null,res);
-        }
-    });
-  };
+  var check = connectDb.query(sql + " CategoryID LIKE ? AND Title LIKE ? LIMIT ? OFFSET ?", ['%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
+    if (err) {
+      console.log("error: ", err);
+    }
+    else {
 
-  Gig.getGigById = function (id,result) {
-    
-    connectDb.query("Select * from Gig Where GigID = ?", [id], function (err, res) {
-          if(err) {
-            result(null, err);
-          }
-          else{
-            result(null, res);
-          }
-      });
-  };
+      gig(res);
+    }
+  });
 
-  module.exports= Gig;
+  connectDb.query(sqlCount + " CategoryID LIKE ? AND Title LIKE ?", ['%' + filterByCategory + '%', '%' + search + '%'], function (err, res) {
+    if (err) {
+
+      pagination(err);
+    }
+    else {
+      pagination(res);
+    }
+  });
+};
+
+Gig.getGigById = function (id, result) {
+  connectDb.query("Select * from Gig Where GigID = ?", [id], function (err, res) {
+    if (err) {
+      result(null, err);
+    }
+    else {
+      result(null, res);
+    }
+  });
+};
+
+Gig.getGigByFreelancerId = function (id,status,results) {
+  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID Where g.FreelancerID = ? AND g.Status = ?", [id, status], function (err, res) {
+    if (err) {
+      results(null, err);
+    }
+    else {
+      results(null, res);
+    }
+  });
+};
+
+Gig.createGig = function (Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, result) {
+  connectDb.query("INSERT INTO Gig SET Title = ?, Description = ?, Gig_IMG = ?, Price = ?, Delivery_Day = ?, FreelancerID = ?, CategoryID = ?, Numberpage = ?, Creation_Date = CURDATE(), Status = 'Active'",
+    [Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage], function (err, res) {
+      if (err) {
+        result(null, err);
+      }
+      else {
+        result(null, res);
+      }
+    })
+}
+
+
+Gig.updateGig = function(data, id, result){
+  connectDb.query("UPDATE Gig SET ? WHERE GigID = ?", [data, id], function(err, res){
+    if (err) {
+      result(null, err);
+    }
+    else {
+      result(null, res);
+    }
+  })  
+}
+
+
+Gig.updateGigStatus = function(status, id, result){
+  connectDb.query("UPDATE Gig SET Status = ? WHERE GigID = ?", [status, id], function(err, res){
+    if (err) {
+      result(null, err);
+    }
+    else {
+      result(null, res);
+    }
+  })  
+}
+
+module.exports = Gig;

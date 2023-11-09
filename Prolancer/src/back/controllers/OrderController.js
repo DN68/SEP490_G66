@@ -6,13 +6,12 @@ class OrderController {
   createOrder = function (req, res) {
     const data = req.body;
     var order = (data.order)
-    console.log('Here')
+
     Order.createOrder(order, function (result) {
 
-      if (result) {
+        if (result){
 
-        return res.send({ message: 'Create Order Success', insertId: result.insertId });
-      }
+        return res.send({message:'Create Order Success', insertId: result.insertId});}
       else {
         return res.send('Create Order Fail');
 
@@ -26,7 +25,7 @@ class OrderController {
   getOrderById = function (req, res) {
     var id = req.params.id;
 
-    console.log('Id ' + id)
+    console.log('Id '+id)
 
     Order.getOrderById(id, function (err, order) {
       if (err)
@@ -36,6 +35,7 @@ class OrderController {
     });
 
   };
+
 
   getOrderWithPagingAndSearching = function (req, res) {
     const limit = 6;
@@ -264,5 +264,6 @@ class OrderController {
 
     })
   }
+
 }
 module.exports = new OrderController;   
