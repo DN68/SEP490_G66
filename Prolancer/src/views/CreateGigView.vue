@@ -138,6 +138,7 @@
           Save
         </button>
       </div>
+      <span ref="message">{{ message }}</span>
     </div>
   </div>
   <div class="footer">
@@ -168,6 +169,7 @@ export default {
       price: 0,
       image: "",
       user: {},
+      message: ""
     };
   },
   methods: {
@@ -186,7 +188,11 @@ export default {
         .then(
           (res) => {
             // console.log(res.data);
-            this.$router.push("/giglist")
+            // this.$router.push("/giglist")
+            this.message = "Created successfully"
+            const countdown = setTimeout(() => {
+              this.$router.push("/managegigsel/Active")
+            }, 3000);
           },
           (err) => {
             console.log("Added failed");

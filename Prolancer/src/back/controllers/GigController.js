@@ -95,9 +95,7 @@ class GigController {
       } else {
         res.send(gig[0]);
       }
-      
     });
-
   };
 
 

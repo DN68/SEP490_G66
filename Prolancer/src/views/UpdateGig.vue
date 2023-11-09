@@ -189,7 +189,6 @@ export default {
     },
   },
   mounted() {
-    
     axios.get(`/gigs/details/${this.$route.params.GigID}`).then(
       res => {
         this.gig = res.data
