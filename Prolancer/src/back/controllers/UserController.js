@@ -114,7 +114,6 @@ class UserController {
             }
             //Send new random password to email
             const newPassword = generateRandomString(10)
-            console.log(newPassword)
             const encodedNewPassword = bcrypt.hashSync(newPassword, 10)
             User.updateUserPassword(encodedNewPassword, email, function (err, results) {
                 if (!results) {
