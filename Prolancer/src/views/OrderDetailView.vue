@@ -3,15 +3,56 @@
     <Header></Header>
     <div class="container">
       <div class="row">
-        <div class="order_status row">          
-          <div class="col-md-2 status_item"  @click="isdetail =true, isrequirement=false, isdelivery=false" :class="{ status_item_active: isdetail }">
+        <div class="order_status row">
+          <div
+            class="col-md-2 status_item"
+            @click="
+              (isdetail = true),
+                (isrequirement = false),
+                (isdelivery = false),
+                (isOrderRequest = false)
+            "
+            :class="{ status_item_active: isdetail }"
+          >
             <h6>Details</h6>
           </div>
 
-          <div class="col-md-2 status_item " @click="isdetail =false, isrequirement=true, isdelivery=false" :class="{ status_item_active: isrequirement }">
+          <div
+            class="col-md-2 status_item"
+            @click="
+              (isdetail = false),
+                (isrequirement = true),
+                (isdelivery = false),
+                (isOrderRequest = false)
+            "
+            :class="{ status_item_active: isrequirement }"
+          >
             <h6>Requirements</h6>
           </div>
-          <div class="col-md-2 status_item" @click="isdetail =false, isrequirement=false, isdelivery=true" :class="{ status_item_active: isdelivery }"><h6>Delivery</h6></div>
+          <div
+            class="col-md-2 status_item"
+            @click="
+              (isdetail = false),
+                (isrequirement = false),
+                (isdelivery = true),
+                (isOrderRequest = false)
+            "
+            :class="{ status_item_active: isdelivery }"
+          >
+            <h6>Delivery</h6>
+          </div>
+          <div
+            class="col-md-2 status_item"
+            @click="
+              (isdetail = false),
+                (isrequirement = false),
+                (isdelivery = false),
+                (isOrderRequest = true)
+            "
+            :class="{ status_item_active: isOrderRequest }"
+          >
+            <h6>Order Request</h6>
+          </div>
         </div>
 
         <div class="order_detail_page row">
@@ -23,7 +64,7 @@
               <div class="order_detail_overview">
                 <div class="order_detail_overview_head row">
                   <div class="col-md-8 order_detail_title">
-                    <h5 class="text-start">{{order.Title}}</h5>
+                    <h5 class="text-start">{{ order.Title }}</h5>
                   </div>
                   <div class="col-md-4 order_detail_title">
                     <h5 class="text-end" style="font-size: 20px">
@@ -36,20 +77,30 @@
                     <div class="ordered_from row">
                       <div class="col-md-12 text-start">
                         <span class="ordered_from_left">Ordered from </span>
-                        <span class="ordered_from_right">leorubiano </span>
+
+                        <span class="ordered_from_right">{{
+                          order.CustomerFirstName + " " + order.CustomerLastName
+                        }}</span>
+
                         <span class="" style="margin: 0 10px"> | </span>
                         <span class="delivery_time_left">Delivery Day </span>
                         <span class="col-md-6 delivery_time_right text-end"
-                          >{{moment(order.Order_Date).add((24*order.Delivery_Day), 'h').format("MMMM Do, h:mm A")}} </span
-                        >
+                          >{{
+                            moment(order.Order_Date)
+                              .add(24 * order.Delivery_Day, "h")
+                              .format("MMMM Do, h:mm A")
+                          }}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-3 order_detail_title">
-                    <h5 class="text-end" style="font-size: 20px">${{
-                          order.Price * order.Total_Amount +
-                          order.Price * order.Total_Amount * 0.1
-                        }}</h5>
+                    <h5 class="text-end" style="font-size: 20px">
+                      ${{
+                        order.Price * order.Total_Amount +
+                        order.Price * order.Total_Amount * 0.1
+                      }}
+                    </h5>
                   </div>
                 </div>
               </div>
@@ -59,7 +110,9 @@
                   <span class="col-md-6 order_number_right"
                     ><i class="bi bi-box-seam me-1"></i>YOUR ORDER
                   </span>
-                  <span class="delivery_time_left fst-italic">{{moment(order.Order_Date).format("MMMM Do, h:mm A")}} </span>
+                  <span class="delivery_time_left fst-italic"
+                    >{{ moment(order.Order_Date).format("MMMM Do, h:mm A") }}
+                  </span>
                 </div>
                 <div class="order_detail_table">
                   <table class="table table-borderless">
@@ -73,10 +126,10 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td scope="row">{{order.Title}}</td>
-                        <td>{{order.Total_Amount}}</td>
-                        <td>{{order.Delivery_Day}} days</td>
-                        <td>${{order.Price}}</td>
+                        <td scope="row">{{ order.Title }}</td>
+                        <td>{{ order.Total_Amount }}</td>
+                        <td>{{ order.Delivery_Day }} days</td>
+                        <td>${{ order.Price }}</td>
                       </tr>
                       <tr>
                         <td scope="row"></td>
@@ -96,25 +149,27 @@
                       <tr class="backgroud_gray">
                         <th scope="row">SUBTOTAL</th>
                         <td colspan="2"></td>
-                        <td class="order_price">${{
-                          order.Price * order.Total_Amount
-                        }}</td>
+                        <td class="order_price">
+                          ${{ order.Price * order.Total_Amount }}
+                        </td>
                       </tr>
                       <tr class="backgroud_gray">
                         <th scope="row">SERVICE FEE</th>
                         <td colspan="2"></td>
-                        <td class="order_price">${{                       
-                          order.Price * order.Total_Amount * 0.1
-                        }}</td>
+                        <td class="order_price">
+                          ${{ order.Price * order.Total_Amount * 0.1 }}
+                        </td>
                       </tr>
 
                       <tr class="backgroud_gray">
                         <th scope="row">TOTAL</th>
                         <td colspan="2"></td>
-                        <td class="order_price">${{
-                          order.Price * order.Total_Amount +
-                          order.Price * order.Total_Amount * 0.1
-                        }}</td>
+                        <td class="order_price">
+                          ${{
+                            order.Price * order.Total_Amount +
+                            order.Price * order.Total_Amount * 0.1
+                          }}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -122,7 +177,11 @@
               </div>
             </div>
           </div>
-          <div class="col-md-8 order_detail_information step2" style="display: none;" :style="{ display: isrequirement ? 'block' : 'none' }"  >
+          <div
+            class="col-md-8 order_detail_information step2"
+            style="display: none"
+            :style="{ display: isrequirement ? 'block' : 'none' }"
+          >
             <div class="container">
               <div class="order_detail_overview">
                 <div class="order_detail_overview_head row">
@@ -146,7 +205,7 @@
                     industry. Lorem Ipsum has been the industry's standard dummy
                     text ever since the 1500s, when an unknown printer took a
                     galley of type and scrambled it to make a type specimen
-                    book. {{order.OrderDescription}}
+                    book. {{ order.OrderDescription }}
                   </p>
                   <div class="text_thanks">
                     <span>Thanks!</span>
@@ -155,55 +214,176 @@
               </div>
               <hr class="featurette-divider" />
 
-              <div class="order_detail_overview">
-                
+              <div class="order_detail_overview" v-if="user.role == 'C'">
                 <div class="order_detail_overview_head row">
                   <div class="col-md-12 order_detail_title">
                     <h6 class="text-start">
-                      <i class="bi bi-2-circle-fill icon_number" ></i> You can send more requiremnet here. Do you have any new ideals of what you
-                      want ?
+                      <i class="bi bi-2-circle-fill icon_number"></i> You can
+                      send more requiremnet here. Do you have any new ideals of
+                      what you want ?
                     </h6>
                   </div>
                   <div class="form-outline more_requirment">
-                      <textarea
-                        class="form-control"
-                        id="textAreaExample6"
-                        rows="5"
-                        required
-                      ></textarea>
-                      <label class="form-label" for="textAreaExample6"></label>
-                    </div>
-                    <div class="start_order text-start">
-                      <button
-                        class="co-white bg-co-black start_btn"
-                        type="button"
-                        @click="startOrder()"
-                      >
-                        Save
-                      </button>
-                    </div>
+                    <textarea
+                      class="form-control"
+                      id="textAreaExample6"
+                      rows="5"
+                      v-model="addRequirement"
+                      required
+                    ></textarea>
+                    <label class="form-label" for="textAreaExample6"></label>
+                    <p class="text-danger" v-if="notInputRequirement">
+                      Please input requirement
+                    </p>
+                  </div>
+                  <div class="start_order text-start">
+                    <button
+                      class="co-white bg-co-black start_btn"
+                      type="submit"
+                      @click="
+                        addRequirement != ''
+                          ? (isshowConfirmAddRequirementModal =
+                              !isshowConfirmAddRequirementModal)
+                          : (notInputRequirement = !notInputRequirement)
+                      "
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-8 order_detail_information step3" :style="{ display: isdelivery ? 'block' : 'none' }" >
+          <div
+            class="col-md-8 order_detail_information step3"
+            :style="{ display: isdelivery ? 'block' : 'none' }"
+          >
             <div class="container">
               <div class="order_delivery">
                 <div class="order_detail_overview_head row">
                   <div class="col-md-12 order_detail_title">
                     <div>
-                      <i class="bi bi-box-seam box_icon_delivery" ></i>
+                      <i class="bi bi-box-seam box_icon_delivery"></i>
                     </div>
                     <h6 class="text-center text_sologan">
                       Packages Delivered at the Speed of Need. Please wait.
                     </h6>
                     <div class="delivery_infomation">
-                      <span class="ordered_from_right">leorubiano </span> <span class="delivery_infomation_date"> shoul deliver this order on {{moment(order.Order_Date).add((24*order.Delivery_Day), 'h').format("MMMM Do, h:mm A")}}</span>
+                      <span class="ordered_from_right">leorubiano </span>
+                      <span class="delivery_infomation_date">
+                        shoul deliver this order on
+                        {{
+                          moment(order.Order_Date)
+                            .add(24 * order.Delivery_Day, "h")
+                            .format("MMMM Do, h:mm A")
+                        }}</span
+                      >
                     </div>
                   </div>
                 </div>
               </div>
-              
+            </div>
+          </div>
+          <div
+            class="col-md-8 order_detail_information step3"
+            :style="{ display: isOrderRequest ? 'block' : 'none' }"
+          >
+            <div class="container text-start">
+              <h3
+                class="my-3 co-text-darkest text-start"
+                style="
+                  color: #222325;
+                  margin-bottom: 24px;
+                  font: 700 25px/24px 'Macan', 'Helvetica Neue', Helvetica,
+                    Arial, sans-serif;
+                "
+              >
+                <span>Create Order Request</span>
+              </h3>
+              <form>
+                <div class="formbold-input-group">
+                  <label class="formbold-form-label">
+                    Which type of request you want to create?
+                  </label>
+                  <div class="custom-select">
+                    <select
+                      class="formbold-form-select"
+                      name="occupation"
+                      id="occupation"
+                      v-model="requestType"
+                    >
+                      <option value="Cancel" data-custom-style="top: 30px;">
+                        Cancel order request
+                      </option>
+                      <option value="Extend">Extend deliver date</option>
+                    </select>
+                  </div>
+                  <div class="custom-select" v-if="requestType == 'Extend'">
+                    <label class="formbold-form-label">
+                      Select extend date
+                    </label>
+                    <select
+                      class="formbold-form-select"
+                      name="occupation"
+                      id="occupation"
+                      v-model="requestExtend"
+                    >
+                      <option value="1" data-custom-style="top: 30px;">
+                        1 day
+                      </option>
+                      <option value="3">3 days</option>
+                      <option value="5">5 days</option>
+                      <option value="7">7 days</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="formbold-input-group">
+                  <label for="email" class="formbold-form-label">
+                    Title Request</label
+                  >
+                  <input
+                    type="email"
+                    name="lastname"
+                    id="email"
+                    placeholder="Type here ..."
+                    class="formbold-form-input"
+                    v-model="requestTitle"
+                    required
+                  />
+                  <p class="text-danger" v-if="notInputRequestTitle">
+                    Please input request title
+                  </p>
+                </div>
+                <div>
+                  <label for="message" class="formbold-form-label">
+                    Description
+                  </label>
+                  <textarea
+                    rows="6"
+                    name="message"
+                    id="message"
+                    placeholder="By describing the most important facts, we can quickly resolve your request."
+                    class="formbold-form-input"
+                    v-model="requestDescription"
+                    required
+                  ></textarea>
+                  <p class="text-danger" v-if="notInputRequestDescription">
+                    Please input request description
+                  </p>
+                </div>
+                <div class="save_change text-start mt-2">
+                  <button
+                    class="co-white bg-co-black save_btn"
+                    type="button"
+                    @click="checkRequestForm
+                      
+                    "
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
           <div class="col-md-4 order_detail_tab">
@@ -226,7 +406,7 @@
                           <div class="information_gig_title col-md-4">
                             <a>
                               <h6 class="information_gig_title_h6">
-                                {{order.Title}}
+                                {{ order.Title }}
                               </h6></a
                             >
                           </div>
@@ -245,70 +425,92 @@
                     <span class="col-md-6 ordered_from_left text-start"
                       >Ordered from</span
                     >
-                    <span class="col-md-6 ordered_from_right text-end"
-                      >leorubiano</span
-                    >
+
+                    <span class="col-md-6 ordered_from_right text-end">{{
+                      order.CustomerFirstName + " " + order.CustomerLastName
+                    }}</span>
+
                   </div>
                   <div class="delivery_time row">
                     <span class="col-md-6 delivery_time_left"
                       >Delivery Time</span
                     >
                     <span class="col-md-6 delivery_time_right text-end"
-                      >{{order.Delivery_Day}} days</span
+                      >{{ order.Delivery_Day }} days</span
                     >
                   </div>
                   <div class="total_price row">
                     <span class="col-md-6 total_price_left">Total price</span>
                     <span class="col-md-6 total_price_right text-end"
                       >${{
-                          order.Price * order.Total_Amount +
-                          order.Price * order.Total_Amount * 0.1
-                        }}
+                        order.Price * order.Total_Amount +
+                        order.Price * order.Total_Amount * 0.1
+                      }}
                     </span>
                   </div>
                   <div class="order_number row">
                     <span class="col-md-6 order_number_left">Order number</span>
                     <span class="col-md-6 order_number_right text-end"
-                      >#FO200{{order.OrderID}}
+                      >#FO200{{ order.OrderID }}
                     </span>
                   </div>
                   <hr class="featurette-divider" />
                   <span class="order_detail_head">Track Order</span>
                   <div class="track_order row">
-                    <div class="col-md-12 track_order_requirement" v-if="order.OrderDescription!=''">
+                    <div
+                      class="col-md-12 track_order_requirement"
+                      v-if="order.OrderDescription != ''"
+                    >
                       <i class="bi bi-check-circle-fill checked_active"></i>
                       <span
                         class="col-md-6 track_order_requirment_text text-end"
                         >Requirement submitted</span
                       >
                     </div>
-                    <div class="col-md-12 track_order_progress" v-if="order.OrderStatus=='Active'">
+                    <div
+                      class="col-md-12 track_order_progress"
+                      v-if="order.OrderStatus == 'Active'"
+                    >
                       <i class="bi bi-play-circle-fill checked_active"></i>
                       <span class="col-md-6 track_order_progress_text text-end"
                         >Order in progress</span
                       >
                     </div>
-                    
-                    <div class="col-md-12 track_order_cancel " v-if="order.OrderStatus=='Cancel'">
+
+                    <div
+                      class="col-md-12 track_order_cancel"
+                      v-if="order.OrderStatus == 'Cancel'"
+                    >
                       <i class="bi bi-x-circle-fill checked_active"></i>
                       <span class="col-md-6 track_order_text text-end"
                         >Order cancelled</span
                       >
                     </div>
-                    <div class="col-md-12 track_order_late " v-if="order.OrderStatus=='Late'">
-                      <i class="bi bi-exclamation-circle-fill checked_active"></i>
+                    <div
+                      class="col-md-12 track_order_late"
+                      v-if="order.OrderStatus == 'Late'"
+                    >
+                      <i
+                        class="bi bi-exclamation-circle-fill checked_active"
+                      ></i>
                       <span class="col-md-6 track_order_text text-end"
                         >Order late</span
                       >
                     </div>
-                    <div class="col-md-12 track_order_delivered" v-if="order.OrderStatus=='Delivered'">
+                    <div
+                      class="col-md-12 track_order_delivered"
+                      v-if="order.OrderStatus == 'Delivered'"
+                    >
                       <i class="bi bi-play-circle-fill checked_active"></i>
                       <span class="col-md-6 track_order_text text-end"
                         >Order delivered</span
                       >
                     </div>
 
-                    <div class="col-md-12 track_order_completed_status" v-if="order.OrderStatus=='Completed'">
+                    <div
+                      class="col-md-12 track_order_completed_status"
+                      v-if="order.OrderStatus == 'Completed'"
+                    >
                       <i class="bi bi-check-circle-fill checked_active"></i>
 
                       <span class="col-md-6 track_order_text text-end"
@@ -323,13 +525,150 @@
         </div>
       </div>
     </div>
+    <div class="confirm_send_request">
+      <div
+        class="modal fade show"
+        style="display: block; background-color: #000000ad; padding-top: 10%"
+        v-if="isshowConfirmAddRequirementModal"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div
+              class="modal-header text-end"
+              style="background-color: #33b5e5; color: white"
+            >
+              <h5 class="modal-title" style="text-align: center">
+                Are you sure?
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                @click="
+                  isshowConfirmAddRequirementModal =
+                    !isshowConfirmAddRequirementModal
+                "
+                aria-label="Close"
+                style="color: white"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div>
+                  <p class="modal-title">
+                    Do you really want to change these records?
+                  </p>
+                  <p class="modal-title">This process cannot be undone.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="
+                  addOrderRequirement(
+                    order.OrderDescription,
+                    addRequirement,
+                    order.OrderID
+                  ),
+                    (isshowConfirmAddRequirementModal =
+                      !isshowConfirmAddRequirementModal)
+                "
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="
+                  isshowConfirmAddRequirementModal =
+                    !isshowConfirmAddRequirementModal
+                "
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="confirm_add_requirment">
+      <div
+        class="modal fade show"
+        style="display: block; background-color: #000000ad; padding-top: 10%"
+        v-if="isshowConfirmSendRequestModal"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div
+              class="modal-header text-end"
+              style="background-color: #33b5e5; color: white"
+            >
+              <h5 class="modal-title" style="text-align: center">
+                Are you sure?
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                @click="
+                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
+                "
+                aria-label="Close"
+                style="color: white"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div>
+                  <p class="modal-title">
+                    Do you really want to send these request?
+                  </p>
+                  <p class="modal-title">This process cannot be undone.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="
+                  sendOrderOrderRequest(
+                    requestType,
+                    requestTitle,
+                    requestDescription,
+                    order.OrderID,
+                    user.userId,
+                    requestExtend
+                  ),
+                    (isshowConfirmSendRequestModal =
+                      !isshowConfirmSendRequestModal)
+                "
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="
+                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
+                "
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
 import axios from "axios";
-var moment = require('moment');
+var moment = require("moment");
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   name: "OrderDetailView",
   components: {
@@ -337,18 +676,109 @@ export default {
   },
   data() {
     return {
-      isdetail:true,
-      isrequirement:false,
-      isdelivery:false,
+      isdetail: true,
+      isrequirement: false,
+      isdelivery: false,
       order: {},
-      moment: moment
+      moment: moment,
+      isOrderRequest: false,
+      addRequirement: "",
+      requestType: "Cancel",
+      requestTitle: "",
+      requestDescription: "",
+      user: [],
+      isshowConfirmAddRequirementModal: false,
+      notInputRequirement: false,
+      isshowConfirmSendRequestModal: false,
+      requestExtend: 1,
+      notInputRequestTitle: false,
+      notInputRequestDescription: false,
     };
   },
   async created() {
-    const responseOrder = await axios.get('/orders/details/'+  this.$route.params.id);
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+    const responseUserInfor = await axios.get("/users/info", {
+      headers: { token: localStorage.getItem("token") },
+    });
+    const userInfor = responseUserInfor.data.user;
+    this.user = userInfor;
+    const responseOrder = await axios.get(
+      "/orders/details/" + this.$route.params.id
+    );
     const order = responseOrder.data[0];
     this.order = order;
-  }
+    if (
+      this.user.userId != this.order.CustomerID &&
+      this.user.userId != this.order.FreelancerID
+    ) {
+      this.$router.push("/");
+    }
+  },
+  methods: {
+    async addOrderRequirement(OrderDescription, addRequirement, orderID) {
+      alert(OrderDescription + " " + addRequirement + " " + orderID);
+      var newRequirement = OrderDescription + " " + addRequirement;
+      const data = await axios.put("/orders/updateRequirement", {
+        newRequirement: newRequirement,
+        orderID: orderID,
+      });
+      console.log(data);
+      if (data.data.message == "Add Requirement Success") {
+        toast.success("Add Requirement Successfully!", {
+          theme: "colored",
+          autoClose: 2000,
+          onClose: () => location.reload(),
+        });
+      } else {
+        toast.warn("Add Requirement Faild!", { autoClose: 2000 });
+      }
+    },checkRequestForm(){
+    
+        if(this.requestTitle != ''&& this.requestDescription == ''){
+          this.notInputRequestDescription = true;
+
+        }else if(this.requestTitle == '' && this.requestDescription != ''){
+          this.notInputRequestTitle = true;
+        }else if(this.requestDescription == ''&&this.requestTitle == ''){
+          this.notInputRequestTitle = true;
+          this.notInputRequestDescription = true;
+        }else{
+          this.isshowConfirmSendRequestModal =
+                            !this.isshowConfirmSendRequestModal
+        }
+    
+    }
+    
+    ,
+    async sendOrderOrderRequest(
+      requestType,
+      requestTitle,
+      requestDescription,
+      OrderID,
+      userId,
+      extendDay
+    ) {
+      alert(requestType + requestTitle + requestDescription + OrderID + userId);
+
+      const data = await axios.post("/orders/createOrderRequest", {
+          orderRequest: {CreateByID: userId,Request_Title: requestTitle,Request_Description: requestDescription, requestType: requestType, OrderID: OrderID, ExtendDay: parseInt(extendDay), Request_Action: ''},
+        }); 
+        
+        console.log(data);
+
+        if (data.data.message == "Send Request Success") {
+        toast.success("Send Request Successfully!", {
+          theme: "colored",
+          autoClose: 2000,
+          onClose: () => location.reload(),
+        });
+      } else {
+        toast.warn("Send Request Faild!", { autoClose: 2000 });
+      }
+    },
+  },
 };
 </script>
 
@@ -463,7 +893,10 @@ export default {
   margin-left: 15px;
   font-weight: 550;
 }
-.order_detail_tab .track_order_progress, .track_order_cancel, .track_order_late, .track_order_delivered, 
+.order_detail_tab .track_order_progress,
+.track_order_cancel,
+.track_order_late,
+.track_order_delivered,
 .track_order_completed_status {
   margin: 5px 0;
 }
@@ -496,7 +929,7 @@ export default {
   padding: 10px;
 }
 .order_detail_table .table th,
-td {
+.order_detail_table .table td {
   text-align: left;
 }
 .order_detail_table .table td {
@@ -542,7 +975,8 @@ td {
 .order_detail_page .order_detail_overview_body_requirement {
   padding: 0 20px;
 }
-.order_detail_overview .start_order .start_btn {
+.order_detail_overview .start_order .start_btn,
+.order_detail_information .save_change .save_btn {
   border: 1px solid transparent;
   border-radius: 4px;
   box-sizing: border-box;
@@ -560,7 +994,7 @@ td {
   width: 15%;
   margin-bottom: 20px;
 }
-.order_detail_overview .more_requirment{
+.order_detail_overview .more_requirment {
   margin: 0;
 }
 .order_delivery .box_icon_delivery {
@@ -569,10 +1003,48 @@ td {
 .delivery_infomation .delivery_infomation_date {
   color: #9f9fa0;
 }
-.order_delivery .text_sologan{
-  font-size: 22px;  
+.order_delivery .text_sologan {
+  font-size: 22px;
 }
 .view_order_detail .step2 {
   margin-bottom: 30px;
+}
+
+.order_detail_information .formbold-form-select {
+  width: 100%;
+  padding: 12px 22px;
+  border-radius: 5px;
+  border: 1px solid #dde3ec;
+  background: #ffffff;
+  font-size: 16px;
+  color: #536387;
+  outline: none;
+  resize: none;
+}
+.order_detail_information .formbold-form-input {
+  width: 100%;
+  padding: 13px 22px;
+  border-radius: 5px;
+  border: 1px solid #dde3ec;
+  background: #ffffff;
+  font-weight: 500;
+  font-size: 16px;
+  color: #07074d;
+  outline: none;
+  resize: none;
+}
+
+.order_detail_information .formbold-form-label {
+  color: #07074d;
+  font-size: 16px;
+  line-height: 24px;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.order_detail_information .formbold-form-input:focus {
+  border-color: #05041a;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
 }
 </style>

@@ -138,6 +138,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/ChangeGigStatus.vue')
   },
   {
+
     path: '/giglist',
     name: 'giglist',
     // route level code-splitting

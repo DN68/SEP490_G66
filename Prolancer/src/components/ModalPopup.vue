@@ -1,7 +1,7 @@
 <template>
   <div>
     <button @click="isshowModal = !isshowModal">Toggle</button>
-    <div class="modal fade show" style="display: block" v-if="isshowModal">
+    <div class="modal fade show" style="display: block; background-color: #000000ad;" v-if="isshowModal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -27,7 +27,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      isshowModal: false,
+    };
+  }
+  
+};
 </script>
 
 <style>
