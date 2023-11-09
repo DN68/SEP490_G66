@@ -80,11 +80,10 @@ export default {
             this.message = "New password has been sent to your email";
             this.$refs.message.style.color = "green";
             this.isButtonDisabled = true;
-            this.$refs.resetButton.setAttribute("class", "btn bg-secondary bg-gradient text-light btn-lg")
-            setTimeout(() => {
-              this.isButtonDisabled = false;
-              this.$refs.resetButton.setAttribute("class", "btn bg-danger bg-gradient text-light btn-lg")
-            }, 10000);
+            this.message = "An email has been sent to your email. Return to login in 4 seconds";
+            const countdown = setTimeout(() => {
+              this.$router.push("/login")
+            }, 4000);
           },
           (err) => {
             this.message = "No user with this email";

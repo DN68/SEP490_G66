@@ -107,7 +107,7 @@
               >
                 Login
               </button>
-              <span>{{ message }}</span>
+              <span ref="message">&nbsp;{{ message }}</span>
               <p class="small fw-bold mt-2 pt-1 mb-0">
                 Don't have an account?
                 <router-link class="text-danger" to="/register"
@@ -137,10 +137,12 @@ export default {
     checkInput(){
       if (!this.emailOrUsername) {
         this.message = "you must enter username or email";
+        this.$refs.message.style.color = "red";
         return false;
       }
       if (!this.password) {
         this.message = "you must enter password";
+        this.$refs.message.style.color = "red";
         return false;
       }
       return true
@@ -163,6 +165,7 @@ export default {
         }, err => {
           console.log(err.response);
           this.message = "Wrong email or password"
+          this.$refs.message.style.color = "red";
         })
       }
     },

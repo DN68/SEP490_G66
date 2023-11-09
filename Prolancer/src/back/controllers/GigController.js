@@ -144,10 +144,11 @@ class GigController {
     })
   }
 
-  getGigsByFreelancer = function (req, res) {
+  getGigByFreelancerIdAndStatus = function (req, res) {
     const id = req.params.FreelancerID;
+    const status = req.params.Status
     // console.log(id)
-    Gig.getGigByFreelancerId(id, function (err, results) {
+    Gig.getGigByFreelancerId(id, status, function (err, results) {
       if (err) {
         res.send(err);
       } else {

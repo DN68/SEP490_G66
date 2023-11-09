@@ -40,7 +40,8 @@
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Active' }"
         >
-          <router-link
+        <a href="/managegigsel/Active" class="text-decoration-none" style="color: gray">Active</a>
+          <!-- <router-link
             @click="(this.status = 'Active'), (selectedPage = '1')"
             :to="{
               path: '/managegigsel',
@@ -58,14 +59,15 @@
                 pagination.totalRow
               }}</span>
             </h6></router-link
-          >
+          > -->
         </div>
 
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Paused' }"
         >
-          <router-link
+        <a href="/managegigsel/Paused" class="text-decoration-none" style="color: gray">Paused</a>
+          <!-- <router-link
             @click="(this.status = 'Paused'), (selectedPage = '1')"
             :to="{
               path: '/managegigsel',
@@ -85,13 +87,14 @@
                 >{{ pagination.totalRow }}</span
               >
             </h6>
-          </router-link>
+          </router-link> -->
         </div>
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Deleted' }"
         >
-          <router-link
+        <a href="/managegigsel/Deleted" class="text-decoration-none" style="color: gray">Deleted</a>
+          <!-- <router-link
             @click="(this.status = 'Deleted'), (selectedPage = '1')"
             :to="{
               path: '/managegigsel',
@@ -111,7 +114,7 @@
                 >{{ pagination.totalRow }}</span
               >
             </h6>
-          </router-link>
+          </router-link> -->
         </div>
         <div class="col-md-2" style="margin-left: 60%">
           <router-link to="/creategig" style="text-decoration: none">
@@ -247,10 +250,32 @@
                     ...
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" :href="'/changeStatus/'+ gig.GigID +'/Active'">Active</a></li>
-                    <li><a class="dropdown-item" :href="'/changeStatus/'+ gig.GigID +'/Paused'">Paused</a></li>
-                    <li><a class="dropdown-item" :href="'/changeStatus/'+ gig.GigID + '/Deleted'">Delete</a></li>
-                    <li><a class="dropdown-item" :href="'/updategig/'+ gig.GigID">Update</a></li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        :href="'/changeStatus/' + gig.GigID + '/Active'"
+                        >Active</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        :href="'/changeStatus/' + gig.GigID + '/Paused'"
+                        >Paused</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        :href="'/changeStatus/' + gig.GigID + '/Deleted'"
+                        >Delete</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" :href="'/updategig/' + gig.GigID"
+                        >Update</a
+                      >
+                    </li>
                   </ul>
                 </div>
               </td>
@@ -261,7 +286,7 @@
           <h5>Gig Not Found</h5>
         </div>
 
-        <!-- <div class="pagination">
+        <div class="pagination">
           <router-link
             v-if="pagination.page - 1 == 0 && pagination.totalPage != 0"
             class="page-number"
@@ -326,7 +351,7 @@
             }"
             ><i class="bi bi-arrow-right"></i
           ></router-link>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -354,6 +379,7 @@ export default {
     };
   },
   async created() {
+    console.log(`${this.$route.status}`)
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     } else {
@@ -363,7 +389,7 @@ export default {
       this.user = responseUserInfo.data.user;
       console.log(this.user);
     }
-    await axios.get(`/gigs/${this.user.id}`).then(
+    await axios.get(`/gigs/${this.user.id}/${this.$route.params.Status}`).then(
       (res) => {
         this.gigs = res.data;
         console.log(this.gigs);
@@ -378,6 +404,23 @@ export default {
     getFormattedDate(date) {
       return moment(date).format("YYYY-MM-DD");
     },
+  },
+  mounted() {
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.role = res.data.user.role;
+          if (this.role != "F") {
+            this.$router.push("/");
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
   },
   // async created() {
   // if (localStorage.getItem("token") === null) {

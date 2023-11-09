@@ -80,8 +80,8 @@ Gig.getGigById = function (id, result) {
   });
 };
 
-Gig.getGigByFreelancerId = function (id, results) {
-  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID Where g.FreelancerID = ?", [id], function (err, res) {
+Gig.getGigByFreelancerId = function (id,status,results) {
+  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID Where g.FreelancerID = ? AND g.Status = ?", [id, status], function (err, res) {
     if (err) {
       results(null, err);
     }

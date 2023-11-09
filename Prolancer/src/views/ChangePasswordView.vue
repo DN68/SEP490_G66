@@ -47,7 +47,7 @@
           >
             Submit
           </button>
-          <span>{{ message }}</span>
+          <span ref="message">{{ message }}</span>
         </div>
       </div>
     </div>
@@ -104,23 +104,28 @@ export default {
     checkInput() {
       if (!this.inputOldPassword) {
         this.message = "you must enter password";
+        this.$refs.message.style.color = "red";
         return false;
       }
       if (!this.newPassword) {
         this.message = "you must enter new password";
+        this.$refs.message.style.color = "red";
         return false;
       }
       if (!this.isValidPassword) {
         this.message =
           "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
-        return false;
+          this.$refs.message.style.color = "red";
+          return false;
       }
       if (!this.reNewPassword) {
         this.message = "you must re-enter new password";
+        this.$refs.message.style.color = "red";
         return false;
       }
       if (this.newPassword != this.reNewPassword) {
         this.message = "Wrong password confirmation";
+        this.$refs.message.style.color = "red";
         return false;
       }
       return true;
@@ -138,10 +143,12 @@ export default {
           })
           .then(
             (res) => {
+              this.$refs.message.style.color = "green";
               this.message = "change pass success";
               // this.$router.push("/logout");
             },
             (err) => {
+              this.$refs.message.style.color = "red";
               this.message = "Change pass failed, wrong old password !!!"
             }
           );

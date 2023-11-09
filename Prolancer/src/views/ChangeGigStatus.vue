@@ -12,7 +12,7 @@ export default {
             Status: this.$route.params.Status
         }).then(
             res => {
-                this.$router.push("/managegigsel")
+                this.$router.push("/managegigsel/Active")
             },
             err => {
                 console.log(err.response)

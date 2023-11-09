@@ -7,8 +7,8 @@ router.get('/index',
     gigController.getGigWithFilterAndPagingAndSearching
 );
 
-router.get('/:FreelancerID',
-    gigController.getGigsByFreelancer
+router.get('/:FreelancerID/:Status',
+    gigController.getGigByFreelancerIdAndStatus
 );
 
 router.get('/details/:id',
