@@ -4,41 +4,38 @@
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
       <div class="position-sticky">
         <div class="list-group list-group-flush mx-3 mt-4">
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-2 ripple active"
-            aria-current="true"
-          >
-            <i class="bi bi-house-door-fill me-3"></i
-            ><span>Main dashboard</span>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-2 ripple   "
-          >
-            <i class="bi bi-stack me-3"></i>
+          
+          
+          <router-link to="/managegigad" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Gig Management</span>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="bi bi-box-seam-fill me-3"></i>
-            <span>Orders Management</span></a
-          >
-
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="bi bi-mortarboard-fill me-3"></i
-            ><span>Skill Test Management</span></a
-          >
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="fas fa-calendar fa-fw me-3"></i
-            ><span>Interview Management</span></a
-          >
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="fas fa-users fa-fw me-3"></i
-            ><span>Users Management</span></a
-          >
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="bi bi-box-arrow-left me-3"></i>
-<span>Logout</span></a
+          </router-link>
+          <router-link to="/ordermanaad" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Order Management</span>
+          </router-link>
+          <router-link to="/skilltest" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Skill Test Management</span>
+          </router-link>
+          <router-link to="/interview" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Interview Management</span>
+          </router-link>
+          <router-link to="/usermanage" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Users Management</span>
+          </router-link>
+          
+          <a
+            href="/logout"
+            class="list-group-item list-group-item-action py-2 ripple"
+            ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
           >
         </div>
       </div>
@@ -68,11 +65,12 @@
   <!--Main Navigation-->
 
   <!--Main layout-->
- 
 </template>
 
 <script>
-export default {};
+export default {
+  
+};
 </script>
 
 <style>
@@ -119,8 +117,7 @@ export default {};
   text-align: left;
 }
 .list-group-item.active {
-  background-color: #e37e7f
-;
+  background-color: #fe5c5d;
   border: none;
 }
 </style>

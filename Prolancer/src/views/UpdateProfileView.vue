@@ -152,14 +152,7 @@
             v-model="user.image"
           />
         
-          <div class="mt-5" style="display:flex;flex-direction:row;justify-content:space-between">
-            <div class="left" style="width:40%">
-              <span class="form-label mt-5">Upload CV</span>
-            </div>
-            <div class="right" style="width:15%">
-              <input type="button" value="Upload">
-            </div>
-          </div>
+         
           <button id="btn-sub" type="submit" @click="updateProfile" class="btn btn-primary">
             Update
           </button>
