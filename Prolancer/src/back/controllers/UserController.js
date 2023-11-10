@@ -178,7 +178,7 @@ class UserController {
                         role: results[0].Role,
                         location: results[0].Location,
                         fid: results[0].Status,
-                        id: results[0].UserID
+                        userId: results[0].UserID
                     }
                 })
             })

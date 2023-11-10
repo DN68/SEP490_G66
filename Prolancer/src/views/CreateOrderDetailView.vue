@@ -432,7 +432,7 @@ export default {
     const responseGig = await axios.get(
       "/gigs/details/" + this.$route.query.gigID
     );
-    const gig = responseGig.data[0];
+    const gig = responseGig.data;
     this.gig = gig;
     console.log("Run here 1");
   },
