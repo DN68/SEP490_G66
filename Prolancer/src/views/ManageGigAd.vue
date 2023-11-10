@@ -140,7 +140,6 @@
             </h6>
           </router-link>
         </div>
-        
       </div>
       <div class="order_table">
         <table class="table align-middle mb-0 bg-white">
@@ -266,6 +265,8 @@
 import Header from "../components/Header.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
+import VueJwtDecode from "vue-jwt-decode";
+
 var moment = require("moment");
 
 export default {
@@ -285,58 +286,65 @@ export default {
       status: "Active",
     };
   },
-  async created() {
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
+  created() {
+    const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
+    // console.log(decoded);
+    if (decoded.role != "A") {
+      this.$router.push("/");
     }
-    const responseUserInfor = await axios.get("/users/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const userInfor = responseUserInfor.data.user;
-    this.user = userInfor;
-    console.log(this.user.userId);
-    const responseData = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        userID: this.user.userId,
-        status: this.status,
-      },
-    });
-    const orders = responseData.data.order;
-    this.orders = orders;
-    const paging = responseData.data.pagination;
-    this.pagination = paging;
-    console.log(this.pagination);
   },
-  async beforeRouteUpdate() {
-    console.log("Run Here");
-    const responseDateWithPage = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        userID: this.user.userId,
-        status: this.status,
-      },
-    });
+  // async created() {
+  //   if (localStorage.getItem("token") === null) {
+  //     this.$router.push("/login");
+  //   }
+  //   const responseUserInfor = await axios.get("/users/info", {
+  //     headers: { token: localStorage.getItem("token") },
+  //   });
+  //   const userInfor = responseUserInfor.data.user;
+  //   this.user = userInfor;
+  //   console.log(this.user.userId);
+  //   const responseData = await axios.get("/orders/index", {
+  //     params: {
+  //       page: this.selectedPage,
+  //       search: this.searchOrder,
+  //       userID: this.user.userId,
+  //       status: this.status,
+  //     },
+  //   });
+  //   const orders = responseData.data.order;
+  //   this.orders = orders;
+  //   const paging = responseData.data.pagination;
+  //   this.pagination = paging;
+  //   console.log(this.pagination);
+  // },
+  // async beforeRouteUpdate() {
+  //   console.log("Run Here");
+  //   const responseDateWithPage = await axios.get("/orders/index", {
+  //     params: {
+  //       page: this.selectedPage,
+  //       search: this.searchOrder,
+  //       userID: this.user.userId,
+  //       status: this.status,
+  //     },
+  //   });
 
-    const orders = responseDateWithPage.data.order;
-    this.orders = orders;
+  //   const orders = responseDateWithPage.data.order;
+  //   this.orders = orders;
 
-    const searchQuery = responseDateWithPage.data.searchQuery;
-    this.searchOrder = searchQuery.search;
-    const paging = responseDateWithPage.data.pagination;
-    this.pagination = paging;
-    console.log("this.selectedPage " + (this.pagination.page + 1));
-  },
+  //   const searchQuery = responseDateWithPage.data.searchQuery;
+  //   this.searchOrder = searchQuery.search;
+  //   const paging = responseDateWithPage.data.pagination;
+  //   this.pagination = paging;
+  //   console.log("this.selectedPage " + (this.pagination.page + 1));
+  // },
 };
 </script>
   
   <style>
-  .container-managigad{
-    margin-left: 17%;
-    margin-right: 5%;
-  }
+.container-managigad {
+  margin-left: 17%;
+  margin-right: 5%;
+}
 .input-group-text {
   background-color: white;
 }
