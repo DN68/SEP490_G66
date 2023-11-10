@@ -28,7 +28,7 @@ Order.createOrder = function (order, result) {
 };
 
 Order.getOrderById = function (id, result) {
-  connectDb.query("SELECT Order.OrderID,Order.CustomerID,Order.FreelancerID,Order.GigID,Order.Order_Date,Order.Total_Amount,Order.Description as OrderDescription, Order.Status as OrderStatus,Order.Extend_Day, Gig.Title, Gig.Gig_IMG,Gig.Delivery_Day, Gig.Price, User.First_Name as CustomerFirstName, User.Last_Name as CustomerLastName FROM `Order` INNER JOIN Gig ON Order.GigID = Gig.GigID INNER JOIN User ON Order.CustomerID = User.UserID WHERE OrderID = ?", [id], function (err, res) {
+  connectDb.query("SELECT o.*, g.Title, g.Gig_IMG,g.Delivery_Day, g.Price, user1.First_Name as CustomerFirstName, user1.Last_Name as CustomerLastName, user1.Profile_Picture as CustomerProfilePicture, user2.First_Name as FreelancerFirstName, user2.Last_Name as FreelancerLastName, user2.Profile_Picture as FreelancerProfilePicture FROM `Order` o INNER JOIN Gig g ON o.GigID = g.GigID  INNER JOIN User user1 on o.CustomerID = user1.UserID INNER JOIN User user2 on o.FreelancerID = user2.UserID WHERE OrderID = ?", [id], function (err, res) {
     if (err) {
       result(err, null);
     }
@@ -111,4 +111,18 @@ Order.updateOrderExtendDay = function (extendDay,orderID, result) {
   });
 
 };
+
+Order.deliverOrder = function (deliverFile,orderID, result) {
+   connectDb.query("UPDATE `Order` SET `Delivery` = ? WHERE `Order`.`OrderID` = ?", [deliverFile,orderID], function (err, res) {
+    if (err) {
+ 
+       result(err,null);
+     }
+     else {
+ 
+       result(null,res);
+     }
+   });
+ 
+ };
 module.exports = Order;
