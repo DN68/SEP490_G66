@@ -95,6 +95,7 @@ import Headerseller from "../components/HeaderSeller.vue";
 import Footer from "../components/Footer.vue";
 import SideBar from "../components/Sidebarprf.vue";
 import axios from "axios"
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "App",
