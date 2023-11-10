@@ -15,6 +15,10 @@ router.get('/:FreelancerID/:Status',
 
 
 
+router.get('/:FreelancerID/:Status',
+    gigController.getGigByFreelancerIdAndStatus
+);
+
 router.post('/create', 
     gigController.createGig
 )

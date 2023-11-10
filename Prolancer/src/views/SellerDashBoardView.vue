@@ -95,6 +95,7 @@ import Headerseller from "../components/HeaderSeller.vue";
 import Footer from "../components/Footer.vue";
 import SideBar from "../components/Sidebarprf.vue";
 import axios from "axios"
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "App",
@@ -107,6 +108,13 @@ export default {
     return {
       role: "",
     };
+  },
+  created() {
+    const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
+    // console.log(decoded);
+    if (decoded.role != "F") {
+      this.$router.push("/");
+    }
   },
   mounted() {
     axios

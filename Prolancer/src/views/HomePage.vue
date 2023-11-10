@@ -21,7 +21,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, {{user.username}}
+                Hello, {{ user.username }}
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -46,7 +46,10 @@
                     </div> -->
                   </div>
                 </div>
-                <div class="row" style="justify-content: space-between; margin: 0 auto;">
+                <div
+                  class="row"
+                  style="justify-content: space-between; margin: 0 auto"
+                >
                   <div class="col-sm-2 guildeIteam">
                     <div class="guildeBack">
                       <i class="bi bi-database" style="font-size: 20px"></i>
@@ -57,7 +60,7 @@
                     <div class="guildeBack">
                       <i class="bi bi-easel" style="font-size: 20px"></i>
                     </div>
-                    
+
                     <p class="textDefault">Website Design</p>
                   </div>
                   <div class="col-sm-2 guildeIteam">
@@ -169,41 +172,48 @@ import GigCarousel from "../components/GigCarousel.vue";
 import GigList from "../components/GigList.vue";
 // import ProductCarouselSuggest from "../components/ProductCarouselSuggest.vue";
 import NavCategory from "../components/NavCategory.vue";
-import axios from 'axios';
+import axios from "axios";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "HomePage",
   components: {
     Header,
     Footer,
-    GigCarousel ,
-    GigList, NavCategory
+    GigCarousel,
+    GigList,
+    NavCategory,
     // ProductCarouselSuggest,
   },
   data() {
     return {
       categories: [],
-      gigs:[],
-      user:{}
+      gigs: [],
+      user: {},
     };
-  }, 
+  },
   async created() {
-    //user is not authorized
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
+    //user is authorized
+    if (localStorage.getItem("token") != null) {
+      const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
+      // console.log(decoded);
+      if (decoded.role == "F") {
+        this.$router.push("/seldash");
+      }
+      if (decoded.role == "A") {
+        this.$router.push("/managegigad");
+      }
     }
-    const responseCategory = await axios.get('/categories/get');
+
+    const responseCategory = await axios.get("/categories/get");
     const categories = responseCategory.data;
     this.categories = categories;
 
-    const responseGig = await axios.get('/gigs/index');
+    const responseGig = await axios.get("/gigs/index");
     const gigs = responseGig.data.gig;
-    console.log(gigs[0].Title+'1')
+    console.log(gigs[0].Title + "1");
 
     this.gigs = gigs;
-    
-  
-    
   },
   mounted() {
     axios
@@ -214,7 +224,7 @@ export default {
         (res) => {
           this.user = res.data.user;
         },
-        err => {
+        (err) => {
           console.log(err.response);
         }
       );
@@ -271,7 +281,6 @@ export default {
   cursor: pointer;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
   width: 300px;
-
 }
 .textDefault {
   margin: 0;
