@@ -16,7 +16,7 @@
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
-              href="#"
+              href="/seldash"
               ><span class="small" style="font-size: 20px;margin-left: 25px;">Dashboard</span></a
             >
           </li>
@@ -32,7 +32,7 @@
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
-              href="#"
+              href="/managegigsel/Active"
               >
               <span class="small" style="font-size: 20px;margin-left: 25px;">Gigs</span></a
             >
@@ -64,10 +64,10 @@
               />
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="width: 200px">
-              <li><router-link class="dropdown-item" to="/updateprofile">My Profile</router-link></li>
+              <li><router-link class="dropdown-item" to="/uppro">My Profile</router-link></li>
               <li><router-link class="dropdown-item" to="/change">Change password</router-link></li>
               <li><router-link class="dropdown-item" to="#">Settings</router-link></li>
-              <li><router-link class="dropdown-item" to="#">Logout</router-link></li>
+              <li><router-link class="dropdown-item" to="/logout">Logout</router-link></li>
               
             </ul>
           </li>
