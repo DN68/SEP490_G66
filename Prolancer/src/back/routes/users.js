@@ -32,8 +32,4 @@ router.put('/:email/info/update',
 router.put('/roleChange',
     UserController.changeFreelancerMode
 );
-
-router.post('/refresh',
-    UserController.refreshUserToken
-)
 module.exports = router;

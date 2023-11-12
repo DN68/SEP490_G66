@@ -127,7 +127,7 @@
                       href=""
                       class="carousel-link text-display-4"
                       ><span>Software Development</span></a
-                    >&nbsp;
+                    >&nbsp;eller
                   </h4>
                 </div>
                 <GigList :listGigs="gigs"></GigList>
@@ -193,17 +193,24 @@ export default {
     };
   },
   async created() {
-    //user is authorized
-    if (localStorage.getItem("token") != null) {
-      const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
-      // console.log(decoded);
-      if (decoded.role == "F") {
-        this.$router.push("/seldash");
-      }
-      if (decoded.role == "A") {
-        this.$router.push("/managegigad");
-      }
-    }
+    await axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+          if (this.user.role == "F") {
+            this.$router.push("/seldash");
+          }
+          if (this.user.role == "A") {
+            this.$router.push("/managegigad");
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
 
     const responseCategory = await axios.get("/categories/get");
     const categories = responseCategory.data;

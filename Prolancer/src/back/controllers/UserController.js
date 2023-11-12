@@ -70,15 +70,7 @@ class UserController {
                 })
             }
             //IF ALL IS GOOD create a token and send to frontend
-            //Access token
             let token = jwt.sign({ email: results[0].Email, role: results[0].Role }, 'secretkey', { expiresIn: 43200 });
-            //Refresh token
-            let refreshToken = jwt.sign({ email: results[0].Email }, 'refreshsecretkey', { expiresIn: "1d" });
-            res.cookie('jwt', refreshToken, {
-                httpOnly: true,
-                sameSite: 'None', secure: true,
-                maxAge: 24 * 60 * 60 * 1000
-            });
             // console.log(token)
             return res.status(200).json({
                 title: 'login sucess',
@@ -87,49 +79,6 @@ class UserController {
         })
     }
 
-    refreshUserToken = function (req, res) {
-        const emailOrUsername = req.body.emailOrUsername
-        User.getUserByEmailOrUsername(emailOrUsername, function (err, results) {
-            console.log(results)
-            if (err) {
-                return res.status(500).json({
-                    title: 'server error',
-                    error: err
-                })
-            }
-            if (!results[0]) {
-                return res.status(401).json({
-                    title: 'user not found',
-                    error: 'invalid credentials'
-                })
-            }
-            if (req.cookies?.jwt) {
-
-                // Destructuring refreshToken from cookie 
-                const refreshToken = req.cookies.jwt;
-
-                // Verifying refresh token 
-                jwt.verify(refreshToken, 'refreshsecretkey',
-                    (err, decoded) => {
-                        if (err) {
-                            // Wrong Refesh Token 
-                            return res.status(406).json({ message: 'Unauthorized' });
-                        }
-                        else {
-                            // Correct token we send a new access token 
-                            let token = jwt.sign({ email: results[0].Email, role: results[0].Role }, 'secretkey', { expiresIn: 43200 });
-                            return res.status(200).json({
-                                title: 'login sucess',
-                                token: token
-                            })
-                        }
-                    })
-            } else {
-                return res.status(406).json({ message: 'Unauthorized' });
-            }
-        })
-
-    }
 
     changePassword = function (req, res) {
         const email = req.params.email;

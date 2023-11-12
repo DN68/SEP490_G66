@@ -85,7 +85,7 @@
                 <span class="small">Favourite</span></a
               >
             </li>
-            <li class="nav-item" v-if="user.isFreelancer != 1">
+            <li class="nav-item" v-if="user && user.isFreelancer != 1">
               <a
                 class="nav-link d-flex flex-column text-center text-danger"
                 aria-current="page"
