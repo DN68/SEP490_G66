@@ -16,9 +16,9 @@ var User = function (user) {
     this.Description = user.Description
 };
 
-User.createUser = function (email, username, password, result) {
-    connectDb.query("INSERT INTO User SET Email = ?, Username = ?, Password = ?, Role = 'C', Profile_Picture = 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'", 
-    [email, username, password], function (err, res) {
+User.createUser = function (email, username, firstName, lastName, phoneNo, password, result) {
+    connectDb.query("INSERT INTO User SET Email = ?, Username = ?, First_Name = ?, Last_Name = ?, Password = ?, Role = 'C', Profile_Picture = 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'", 
+    [email, username, firstName, lastName, phoneNo, password], function (err, res) {
         if (err) {
             result(null, err);
         }

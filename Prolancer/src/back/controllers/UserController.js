@@ -33,8 +33,11 @@ class UserController {
     register = function (req, res) {
         const email = req.body.email;
         const username = req.body.username;
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const phoneNo = req.body.phoneNo;
         const password = bcrypt.hashSync(req.body.password, 10);
-        User.createUser(email, username, password, function (err, result) {
+        User.createUser(email, username, firstName, lastName, phoneNo, password, function (err, result) {
             if (err) {
                 res.send(err);
             } else {

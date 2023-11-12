@@ -77,7 +77,7 @@
                           id="form3Example3c"
                           class="form-control"
                           placeholder="Phone Number"
-                          v-model="phoneno"
+                          v-model="phoneNo"
                         />
                       </div>
                     </div>
@@ -149,6 +149,9 @@ export default {
     return {
       username: "",
       email: "",
+      firstName: "",
+      lastName: "",
+      phoneNo: "",
       password: "",
       repeatPassword: "",
       message: "",
@@ -182,6 +185,18 @@ export default {
       }
       if (!this.email) {
         this.message = "you must enter Email";
+        return false;
+      }
+      if (!this.firstName) {
+        this.message = "you must enter your first name";
+        return false;
+      }
+      if (!this.lastName) {
+        this.message = "you must enter your last name";
+        return false;
+      }
+      if (!this.phoneNo) {
+        this.message = "you must enter your phone number";
         return false;
       }
       if (!this.isValidEmail) {
@@ -229,7 +244,11 @@ export default {
           .post("/users/create", {
             email: this.email,
             username: this.username,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            phoneNo: this.phoneNo,
             password: this.password,
+
           })
           .then(
             (res) => {
