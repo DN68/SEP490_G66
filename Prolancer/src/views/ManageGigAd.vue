@@ -176,7 +176,7 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">Active</a></li>
-                    <li><a class="dropdown-item" href="#">Paused</a></li>
+                    <li><a class="dropdown-item" href="#">Pause</a></li>
                     <li><a class="dropdown-item" href="#">Delete</a></li>
                     <li><a class="dropdown-item" href="#">Block</a></li>
                     <li><a class="dropdown-item" href="#">Unblock</a></li>
@@ -262,7 +262,7 @@
 </template>
   
   <script>
-import Header from "../components/Header.vue";
+import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";

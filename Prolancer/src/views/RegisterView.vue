@@ -28,8 +28,31 @@
                           type="text"
                           id="form3Example1c"
                           class="form-control"
-                          placeholder="Your Name"
+                          placeholder="User Name"
                           v-model="username"
+                        />
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="text"
+                          id="form3Example1c"
+                          class="form-control"
+                          placeholder="First Name"
+                          v-model="firstName"
+                          style="float: left; width: 80%"
+                        />
+                      </div>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="text"
+                          id="form3Example1c"
+                          class="form-control"
+                          placeholder="Last Name"
+                          v-model="lastName"
+                          style="float: right; width: 80%"
                         />
                       </div>
                     </div>
@@ -41,8 +64,20 @@
                           type="email"
                           id="form3Example3c"
                           class="form-control"
-                          placeholder="Your Email"
+                          placeholder="Email"
                           v-model="email"
+                        />
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="email"
+                          id="form3Example3c"
+                          class="form-control"
+                          placeholder="Phone Number"
+                          v-model="phoneno"
                         />
                       </div>
                     </div>
@@ -122,15 +157,17 @@ export default {
   computed: {
     //  A valid username should start with an alphabet so, [A-Za-z].
     //  All other characters can be alphabets, numbers or an underscore so, [A-Za-z0-9_].
-    isValidUsername(){
+    isValidUsername() {
       return /[A-Za-z][A-Za-z0-9_]{7,29}$/.test(this.username);
     }, //Email format
     isValidEmail() {
       return /^[^@]+@\w+(\.\w+)+\w$/.test(this.email);
     },
     //Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
-    isValidPassword(){
-      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.password)
+    isValidPassword() {
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        this.password
+      );
     },
     checkInput() {
       //input validation here
@@ -139,7 +176,8 @@ export default {
         return false;
       }
       if (!this.isValidUsername) {
-        this.message = "Username must start with an alphabet and has at least 8 characters";
+        this.message =
+          "Username must start with an alphabet and has at least 8 characters";
         return false;
       }
       if (!this.email) {
@@ -166,8 +204,9 @@ export default {
         this.message = "you must enter password";
         return false;
       }
-      if (!this.isValidPassword){
-        this.message = "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
+      if (!this.isValidPassword) {
+        this.message =
+          "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
         return false;
       }
       if (!this.repeatPassword) {

@@ -358,7 +358,7 @@
 </template>
   
   <script>
-import Header from "../components/Header.vue";
+import Header from "../components/HeaderSeller.vue";
 import axios from "axios";
 var moment = require("moment");
 
