@@ -16,7 +16,13 @@
           </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3" v-model="gig.Title"></textarea>
+          <textarea
+            name=""
+            id=""
+            cols="60"
+            rows="3"
+            v-model="gig.Title"
+          ></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -158,15 +164,25 @@ export default {
       // price: 0,
       // image: "",
       gig: {},
-      user: {}
+      user: {},
     };
   },
   created() {
-    const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
-    // console.log(decoded);
-    if (decoded.role != "F") {
-      this.$router.push("/");
-    }
+    axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.role = res.data.user.role;
+          if (this.role != "F") {
+            this.$router.push("/");
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
   },
   methods: {
     updateGig() {
@@ -191,20 +207,17 @@ export default {
           }
         );
     },
-    displayCategory() {
-      console.log(this.category);
-    },
   },
   mounted() {
     axios.get(`/gigs/details/${this.$route.params.GigID}`).then(
-      res => {
-        this.gig = res.data
-        console.log(this.gig)
+      (res) => {
+        this.gig = res.data;
+        console.log(this.gig);
       },
-      err => {
-        console.log(err.response)
+      (err) => {
+        console.log(err.response);
       }
-    )
+    );
     axios.get("/categories/get").then((res) => {
       this.categories = res.data;
       // console.log(res.data);
