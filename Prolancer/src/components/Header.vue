@@ -85,13 +85,15 @@
                 <span class="small">Favourite</span></a
               >
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="user.isFreelancer != 1">
               <a
                 class="nav-link d-flex flex-column text-center text-danger"
                 aria-current="page"
                 href="/becomesel"
-                >
-                <span class="small" style="margin-top: 5px;font-size:20px">Become a Seller</span></a
+              >
+                <span class="small" style="margin-top: 5px; font-size: 20px"
+                  >Become a Seller</span
+                ></a
               >
             </li>
             <li class="nav-item dropdown" style="" v-if="user">
@@ -120,6 +122,13 @@
                     >My Profile</router-link
                   >
                 </li>
+                <li v-if="user.isFreelancer == 1">
+                  <router-link
+                    class="dropdown-item"
+                    to="/changeRole/F"
+                    >Selling</router-link
+                  >
+                </li>
                 <li>
                   <router-link class="dropdown-item" to="/change"
                     >Change password</router-link
@@ -130,7 +139,7 @@
                     >Settings</router-link
                   >
                 </li>
-                
+
                 <li>
                   <router-link class="dropdown-item" to="/logout"
                     >Logout</router-link
