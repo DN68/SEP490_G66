@@ -39,6 +39,17 @@ User.getUserByEmail = function (email, results) {
             }
         })
 }
+User.getUserByUsername = function (username, results) {
+    connectDb.query("SELECT * FROM User WHERE Username = ?",
+        [username], function (err, res) {
+            if (err) {
+                results(null, err);
+            }
+            else {
+                results(null, res);
+            }
+        })
+}
 
 
 User.getUserByEmailOrUsername = function (emailOrUsername, results) {

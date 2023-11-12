@@ -17,9 +17,12 @@ router.post('/forgotPassword',
 router.get('/info',
     UserController.getUserInfo
 );
-// router.get('/:email/check',
-//     UserController.checkMailExist
-// );
+router.get('/:email/checkEmail',
+    UserController.checkMailExist
+);
+router.get('/:username/checkUsername',
+    UserController.checkUsernameExist
+);
 router.put('/:email/info/update',
     UserController.updateProfile
 );
