@@ -87,7 +87,7 @@
           <span>Upload CV </span>
         </div>
         <div class="right">
-          <input type="button" value="Upload" />
+          <input type="file" value="Upload" />
         </div>
       </div>
       <div class="button">

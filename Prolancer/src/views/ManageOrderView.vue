@@ -12,6 +12,7 @@
               placeholder="Search Order History ..."
               aria-label="Search"
               aria-describedby="search-addon"
+              v-model="searchOrder"  
             />
 
             <router-link
@@ -792,7 +793,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                @click="changeOrderStatus(selectedStatus, slectedOrderID)"
+                @click="changeOrderStatus(selectedStatus, slectedOrderID),isshowModal = !isshowModal"
               >
                 Save
               </button>
@@ -949,7 +950,6 @@ export default {
   },
   methods: {
     async changeOrderStatus(status, orderID) {
-      alert("Order " + orderID + "Change Status " + status);
       const data = await axios.put("/orders/updateStatus", {
         status: status,
         orderID: orderID,
@@ -962,7 +962,7 @@ export default {
           onClose: () => location.reload(),
         });
       } else {
-        toast.warn("Change Order Status Faild!", { autoClose: 2000 });
+        toast.warn("Change Order Status Failed!", { autoClose: 2000 });
       }
     },
 
