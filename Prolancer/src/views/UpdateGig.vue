@@ -161,6 +161,13 @@ export default {
       user: {}
     };
   },
+  created() {
+    const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
+    // console.log(decoded);
+    if (decoded.role != "F") {
+      this.$router.push("/");
+    }
+  },
   methods: {
     updateGig() {
       axios
