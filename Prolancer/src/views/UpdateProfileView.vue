@@ -3,7 +3,8 @@
 
 
   <div class="header">
-    <Headers></Headers>
+    <HeaderAdmin v-if="user.role == 'A'"></HeaderAdmin>
+    <Headers v-else></Headers>
   </div>
   <div class="Sidebarudpf">
     <Sidebarpf></Sidebarpf>
@@ -170,7 +171,7 @@
 <script>
 import Headers from "../components/Header.vue";
 import Sidebarpf from "../components/Sidebarprf.vue";
-
+import HeaderAdmin from "../components/HeaderAdmin.vue";
 import Footer from "../components/Footer.vue";
 
 import axios from "axios"
@@ -182,7 +183,8 @@ export default {
     Headers,
     Sidebarpf,
     Footer,
-  },
+    HeaderAdmin
+},
   data(){
     return{
       user: {},
