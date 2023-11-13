@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Header></Header>
+    <Header v-if="user.role != 'A'"></Header>
+    <header-admin v-else></header-admin>
     <div class="container">
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Orders</h3></div>
@@ -863,6 +864,7 @@
   
   <script>
 import Header from "../components/Header.vue";
+import HeaderAdmin from "../components/HeaderAdmin.vue"
 import axios from "axios";
 var moment = require("moment");
 import { toast } from "vue3-toastify";
@@ -872,6 +874,7 @@ export default {
   name: "CreateOrderDetailPage",
   components: {
     Header,
+    HeaderAdmin,
   },
   data() {
     return {
