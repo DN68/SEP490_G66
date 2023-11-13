@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <!-- Container wrapper -->
@@ -11,21 +13,24 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left links -->
         <ul class="navbar-nav mb-2 mb-lg-0">
-        
           <li class="nav-item">
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="/seldash"
-              ><span class="small" style="font-size: 20px;margin-left: 25px;">Dashboard</span></a
+              ><span class="small" style="font-size: 20px; margin-left: 25px"
+                >Dashboard</span
+              ></a
             >
           </li>
           <li class="nav-item">
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
+
               href="/manageorder"
               ><span class="small" style="font-size: 20px;margin-left: 25px;">Orders</span></a
+
             >
           </li>
           <li class="nav-item">
@@ -33,8 +38,10 @@
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="/managegigsel/Active"
-              >
-              <span class="small" style="font-size: 20px;margin-left: 25px;">Gigs</span></a
+            >
+              <span class="small" style="font-size: 20px; margin-left: 25px"
+                >Gigs</span
+              ></a
             >
           </li>
           <li class="nav-item">
@@ -42,11 +49,13 @@
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="#"
-              >
-              <span class="small" style="font-size: 20px;margin-left: 25px;">Earnings</span></a
+            >
+              <span class="small" style="font-size: 20px; margin-left: 25px"
+                >Earnings</span
+              ></a
             >
           </li>
-          <li class="nav-item dropdown" style="margin-left:130%">
+          <li class="nav-item dropdown" style="margin-left: 130%">
             <a
               class="nav-link dropdown-toggle d-flex align-items-center"
               href="#"
@@ -56,24 +65,43 @@
               aria-expanded="false"
             >
               <img
-                src="https://static.thenounproject.com/png/363640-200.png"
+                :src="user.image"
                 class="rounded-circle"
                 height="30"
                 alt=""
                 loading="lazy"
               />
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="width: 200px">
-              <li><router-link class="dropdown-item" to="/uppro">My Profile</router-link></li>
-              <li><router-link class="dropdown-item" to="/change">Change password</router-link></li>
-              <li><router-link class="dropdown-item" to="#">Settings</router-link></li>
-              <li><router-link class="dropdown-item" to="/logout">Logout</router-link></li>
-              
+            <ul
+              class="dropdown-menu"
+              aria-labelledby="navbarDropdownMenuLink"
+              style="width: 200px"
+            >
+              <li>
+                <router-link class="dropdown-item" to="/uppro"
+                  >My Profile</router-link
+                >
+              </li>
+              <router-link
+                class="dropdown-item"
+                to="/changeRole/C"
+                >Buying</router-link
+              >
+              <li>
+                <router-link class="dropdown-item" to="/change"
+                  >Change password</router-link
+                >
+              </li>
+              <li>
+                <router-link class="dropdown-item" to="#">Settings</router-link>
+              </li>
+              <li>
+                <router-link class="dropdown-item" to="/logout"
+                  >Logout</router-link
+                >
+              </li>
             </ul>
           </li>
-
-         
-          
         </ul>
         <!-- Left links -->
       </div>
@@ -82,7 +110,7 @@
     <!-- Container wrapper -->
   </nav>
   <div class="header">
- <!-- Sidebar -->
+    <!-- Sidebar -->
     <nav
       style="display: none; padding-top: 140px"
       id="sidebarMenuNomarl"
@@ -126,19 +154,42 @@
       </div>
     </nav>
   </div>
+</div>
 
   <!-- Navbar -->
 </template>
 
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios"
+
 export default {
   data() {
     return {
+      user:{},
       isShow: false,
     };
   },
-};
+  mounted() {
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.user = null;
+    } else {
+      axios
+        .get("/users/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.user = res.data.user;
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    }
+  }
+}
 </script>
 
 <style>
@@ -198,8 +249,7 @@ export default {
     display: block;
   } */
 }
-span{
-    
-    font-weight: 500;
+span {
+  font-weight: 500;
 }
 </style>

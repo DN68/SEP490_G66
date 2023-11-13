@@ -277,7 +277,7 @@ export default {
   },
   data() {
     return {
-      user: [],
+      user: {},
       orders: [],
       pagination: [],
       moment: moment,
@@ -286,12 +286,22 @@ export default {
       status: "Active",
     };
   },
-  created() {
-    const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
-    // console.log(decoded);
-    if (decoded.role != "A") {
-      this.$router.push("/");
-    }
+  async created() {
+    await axios
+      .get("/users/info", {
+        headers: { token: localStorage.getItem("token") },
+      })
+      .then(
+        (res) => {
+          this.user = res.data.user;
+          if (this.user.role != "A") {
+            this.$router.push("/");
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
   },
   // async created() {
   //   if (localStorage.getItem("token") === null) {

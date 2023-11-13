@@ -59,6 +59,11 @@
                     >Change password</router-link
                   >
                 </li>
+                <li>
+                  <router-link class="dropdown-item" to="/logout"
+                    >Logout</router-link
+                  >
+                </li>
                 
               </ul>
             </li>
