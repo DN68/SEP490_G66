@@ -93,8 +93,9 @@ Gig.getGigByFreelancerId = function (id,status,results) {
 };
 
 Gig.createGig = function (Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, result) {
-  connectDb.query("INSERT INTO Gig SET Title = ?, Description = ?, Gig_IMG = ?, Price = ?, Delivery_Day = ?, FreelancerID = ?, CategoryID = ?, Numberpage = ?, Creation_Date = CURDATE(), Status = 'Active'",
+  var a = connectDb.query("INSERT INTO Gig SET Title = ?, Description = ?, Gig_IMG = ?, Price = ?, Delivery_Day = ?, FreelancerID = ?, CategoryID = ?, Numberpage = ?, Creation_Date = CURDATE(), Status = 'Active'",
     [Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage], function (err, res) {
+      console.log(a);
       if (err) {
         result(null, err);
       }
