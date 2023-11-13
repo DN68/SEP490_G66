@@ -212,7 +212,7 @@
                     <span>Hello!</span>
                   </div>
                   <p class="lh-lg">
-                    Here is order requirement:  {{ order.OrderDescription }}
+                    Here is order requirement:  {{ order.Description }}
                   </p>
                   <div class="text_thanks">
                     <span>Thanks!</span>
@@ -271,7 +271,7 @@
                 <div class="order_detail_overview_head row">
                   <div
                     class="col-md-12 order_detail_title"
-                    v-if="user.role == 'C'"
+                    v-if="user.role == 'F'"
                   >
                      <!-- if freelancer has been delivered before -->
                     <div v-if="order.Delivery" class="Free_Delivered">
@@ -439,6 +439,14 @@
                           Please check delivery product on this order. If you
                           are satisfied please click on the completed button.
                         </span>
+                      </div>
+                      <div class="common_btn_class mt-4">
+                        <button
+                          class="co-white bg-co-black common_btn w.20"
+                          type="btn"                        
+                        >
+                         <span>Completed</span> 
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -620,7 +628,7 @@
                   <div class="track_order row">
                     <div
                       class="col-md-12 track_order_requirement"
-                      v-if="order.OrderDescription != ''"
+                      v-if="order.Description != ''"
                     >
                       <i class="bi bi-check-circle-fill checked_active"></i>
                       <span
@@ -630,7 +638,7 @@
                     </div>
                     <div
                       class="col-md-12 track_order_progress"
-                      v-if="order.OrderStatus == 'Active'"
+                      v-if="order.Status == 'Active'"
                     >
                       <i class="bi bi-play-circle-fill checked_active"></i>
                       <span class="col-md-6 track_order_progress_text text-end"
@@ -640,7 +648,7 @@
 
                     <div
                       class="col-md-12 track_order_cancel"
-                      v-if="order.OrderStatus == 'Cancel'"
+                      v-if="order.Status == 'Cancel'"
                     >
                       <i class="bi bi-x-circle-fill checked_active"></i>
                       <span class="col-md-6 track_order_text text-end"
@@ -649,7 +657,7 @@
                     </div>
                     <div
                       class="col-md-12 track_order_late"
-                      v-if="order.OrderStatus == 'Late'"
+                      v-if="order.Status == 'Late'"
                     >
                       <i
                         class="bi bi-exclamation-circle-fill checked_active"
@@ -660,7 +668,7 @@
                     </div>
                     <div
                       class="col-md-12 track_order_delivered"
-                      v-if="order.OrderStatus == 'Delivered'"
+                      v-if="order.Status == 'Delivered'"
                     >
                       <i class="bi bi-play-circle-fill checked_active"></i>
                       <span class="col-md-6 track_order_text text-end"
@@ -670,7 +678,7 @@
 
                     <div
                       class="col-md-12 track_order_completed_status"
-                      v-if="order.OrderStatus == 'Completed'"
+                      v-if="order.Status == 'Completed'"
                     >
                       <i class="bi bi-check-circle-fill checked_active"></i>
 
@@ -818,7 +826,7 @@
                 type="button"
                 class="btn btn-info waves-effect waves-light text-white"
                 @click="
-                  sendOrderOrderRequest(
+                  sendOrderRequest(
                     requestType,
                     requestTitle,
                     requestDescription,
@@ -909,7 +917,6 @@ export default {
   },
   methods: {
     async addOrderRequirement(OrderDescription, addRequirement, orderID) {
-      alert(OrderDescription + " " + addRequirement + " " + orderID);
       var newRequirement = OrderDescription + " " + addRequirement;
       const data = await axios.put("/orders/updateRequirement", {
         newRequirement: newRequirement,
@@ -941,7 +948,7 @@ export default {
       }
     },
 
-    async sendOrderOrderRequest(
+    async sendOrderRequest(
       requestType,
       requestTitle,
       requestDescription,
@@ -949,7 +956,6 @@ export default {
       userId,
       extendDay
     ) {
-      alert(requestType + requestTitle + requestDescription + OrderID + userId);
 
       const data = await axios.post("/orders/createOrderRequest", {
         orderRequest: {
@@ -1206,7 +1212,8 @@ export default {
 }
 .order_detail_overview .start_order .start_btn,
 .order_detail_information .save_change .save_btn,
-.deliver_order .deliver_btn {
+.deliver_order .deliver_btn,
+.common_btn_class .common_btn{
   border: 1px solid transparent;
   border-radius: 4px;
   box-sizing: border-box;
