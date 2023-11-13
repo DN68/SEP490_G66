@@ -15,24 +15,26 @@ class GigController {
 
     if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null&&pageQuery.filterBy1 != undefined) {
       filterByCategory = pageQuery.filterBy1;
-      console.log('filterBy1');
+      console.log('filterByCategory');
 
     }
     if (pageQuery.filterBy2 != '' && pageQuery.filterBy2 != null && pageQuery.filterBy2 != 'Anytime'&&pageQuery.filterBy2 != undefined) {
       filterByDeliveryDay = pageQuery.filterBy2;
-      console.log('filterBy2');
+      console.log('filterByDeliveryDay');
 
     }
     if (pageQuery.filterBy3 != '' && pageQuery.filterBy3 != null&&pageQuery.filterBy3 != undefined) {
       filterByPrice = pageQuery.filterBy3;
-      console.log('filterBy3');
+      console.log('filterByPrice');
 
     }
 
     if (pageQuery.search != null) {
-      console.log('search here');
 
       search = pageQuery.search;
+
+      console.log('Search here '+ search);
+      
     } else {
       search = '';
     }
@@ -68,7 +70,6 @@ class GigController {
         } else {
         totalRows = totalRowsData;
         if (gig !== undefined) {
-          console.log(totalRows[0].count)
 
           resolve();
         }
@@ -80,7 +81,7 @@ class GigController {
       // Both callbacks have been called, so you can send the response now.
       res.send({
         gig, pagination: {
-          totalPage: Math.ceil(totalRows[0].count / 16),
+          totalPage: Math.ceil(totalRows[0].count / limit),
           page: parseInt(page)
         }, searchQuery: {
           search: search,
@@ -107,7 +108,8 @@ class GigController {
       if (err) {
         res.send(err);
       } else {
-        res.send(gig[0]);
+        
+        res.send(gig[0]?gig[0]:'Gig not exist');
       }
     });
   };

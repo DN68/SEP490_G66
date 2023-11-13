@@ -17,7 +17,7 @@ class OrderController {
         return res.send({ message: 'Create Order Success', insertId: result.insertId });
       }
       else {
-        return res.send('Create Order Fail');
+        return res.send('Create Order Failed');
 
       }
 
@@ -33,7 +33,10 @@ class OrderController {
     Order.getOrderById(id, function (err, order) {
       if (err)
         res.send(err);
-      res.send(order);
+      else {
+        res.send(order.length > 0 ? order : 'Order not exist');
+
+      }
     });
 
   };
@@ -61,7 +64,7 @@ class OrderController {
     status = pageQuery.status;
     userId = pageQuery.user.userId;
     userRole = pageQuery.user.role;
-    console.log(status, page, userId, userRole);
+    console.log('67', status, page, userId, userRole, search);
 
     const offset = (page - 1) * limit;
     let order, totalRows;
@@ -92,7 +95,7 @@ class OrderController {
       // Both callbacks have been called, so you can send the response now.
       res.send({
         order, pagination: {
-          totalPage: Math.ceil(totalRows[0].count / 6),
+          totalPage: Math.ceil(totalRows[0].count / limit),
           page: parseInt(page),
           totalRow: totalRows[0].count
         }, searchQuery: {
@@ -121,6 +124,10 @@ class OrderController {
         return res.send(err);
       else {
         console.log('res', result);
+        if (result.affectedRows == 0) {
+          res.send({ message: 'Change Status Failed' });
+
+        }
         res.send({ message: 'Change Status Success' });
       }
 
@@ -139,7 +146,10 @@ class OrderController {
         res.send(err);
       else {
         console.log('res', result);
+        if (result.affectedRows == 0) {
+          res.send({ message: 'Add Requirement Failed' });
 
+        }
         res.send({ message: 'Add Requirement Success' });
       }
 
@@ -221,7 +231,7 @@ class OrderController {
       // Both callbacks have been called, so you can send the response now.
       res.send({
         orderRequest, pagination: {
-          totalPage: Math.ceil(totalRows[0].count / 6),
+          totalPage: Math.ceil(totalRows[0].count / limit),
           page: parseInt(page),
           totalRow: totalRows[0].count
         }
@@ -246,7 +256,10 @@ class OrderController {
       if (err)
         return res.send(err);
       else {
-        console.log('res', result);
+        if (result.affectedRows == 0) {
+          res.send({ message: 'Change Order Request Status Failed' });
+
+        }
         res.send({ message: 'Change Order Request Status Success' });
       }
 
@@ -264,7 +277,10 @@ class OrderController {
       if (err)
         res.send(err);
       else {
+        if (result.affectedRows == 0) {
+          res.send({ message: 'Update Extend Day Failed' });
 
+        }
         res.send({ message: 'Update Extend Day Success' });
       }
 
@@ -291,7 +307,7 @@ class OrderController {
     console.log("🚀 ~ file: OrderController.js:284 ~ OrderController ~ uploadPath:", commonPath)
     const uploadPath = path.join(__dirname, '..', '..', '..', commonPath);
     console.log("🚀 ~ file: OrderController.js:289 ~ OrderController ~ uploadPath:", uploadPath)
-
+    
     if (fs.existsSync(uploadPath)) {
       // Delete the existing file
       console.log("Run Here")
@@ -322,7 +338,11 @@ class OrderController {
             return res.status(500).send(err);
           else {
             console.log("File uploaded successfully Run Here")
-            res.json({ message: 'File uploaded successfully.' });
+            if (result.affectedRows == 0) {
+              res.send({ message: 'File uploaded Failed' });
+    
+            }
+            res.json({ message: 'File uploaded successfully' });
 
           }
 
