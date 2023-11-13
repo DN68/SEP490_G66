@@ -65,7 +65,7 @@
               aria-expanded="false"
             >
               <img
-                src="https://static.thenounproject.com/png/363640-200.png"
+                :src="user.image"
                 class="rounded-circle"
                 height="30"
                 alt=""
@@ -161,13 +161,35 @@
 
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios"
+
 export default {
   data() {
     return {
+      user:{},
       isShow: false,
     };
   },
-};
+  mounted() {
+    //user is not authorized
+    if (localStorage.getItem("token") === null) {
+      this.user = null;
+    } else {
+      axios
+        .get("/users/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.user = res.data.user;
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    }
+  }
+}
 </script>
 
 <style>
