@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import Headers from "../components/Header.vue";
+import Headers from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
@@ -177,7 +177,7 @@ export default {
         .then(
           (res) => {
             // console.log(res.data);
-            this.$router.push("/managegigsel");
+            this.$router.push("/managegigsel/Active");
           },
           (err) => {
             console.log("Update failed");

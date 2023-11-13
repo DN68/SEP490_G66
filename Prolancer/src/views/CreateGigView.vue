@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import Headers from "../components/Header.vue";
+import Headers from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
