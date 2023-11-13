@@ -13,26 +13,28 @@ class GigController {
     var filterByDeliveryDay = '';
     var filterByPrice = '';
 
-    if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null) {
+    if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null&&pageQuery.filterBy1 != undefined) {
       filterByCategory = pageQuery.filterBy1;
-      console.log('filterBy1');
+      console.log('filterByCategory');
 
     }
-    if (pageQuery.filterBy2 != '' && pageQuery.filterBy1 != null && pageQuery.filterBy2 != 'Anytime') {
+    if (pageQuery.filterBy2 != '' && pageQuery.filterBy2 != null && pageQuery.filterBy2 != 'Anytime'&&pageQuery.filterBy2 != undefined) {
       filterByDeliveryDay = pageQuery.filterBy2;
-      console.log('filterBy2');
+      console.log('filterByDeliveryDay');
 
     }
-    if (pageQuery.filterBy3 != '' && pageQuery.filterBy1 != null) {
+    if (pageQuery.filterBy3 != '' && pageQuery.filterBy3 != null&&pageQuery.filterBy3 != undefined) {
       filterByPrice = pageQuery.filterBy3;
-      console.log('filterBy3');
+      console.log('filterByPrice');
 
     }
 
     if (pageQuery.search != null) {
-      console.log('search here');
 
       search = pageQuery.search;
+
+      console.log('Search here '+ search);
+      
     } else {
       search = '';
     }
@@ -47,22 +49,31 @@ class GigController {
 
     const offset = (page - 1) * limit;
     console.log(offset);
-    let gig, totalPage;
+    let gig, totalRows;
 
     // Create a Promise to handle the asynchronous operation
     const fetchData = new Promise((resolve, reject) => {
-      Gig.getGigWithFilterAndPagingAndSearching(filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (gigData) {
-        gig = gigData;
-        if (totalPage !== undefined) {
-          resolve();
+      Gig.getGigWithFilterAndPagingAndSearching(filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
+        if (err) {
+
+          reject(err);
+        } else {
+          gig = gigData;
+          if (totalRows !== undefined) {
+            resolve();
+          }
+
         }
-      }, function (totalPageData) {
-        totalPage = totalPageData;
+      }, function (err,totalRowsData) {
+        if (err) {
+          reject(err);
+        } else {
+        totalRows = totalRowsData;
         if (gig !== undefined) {
-          console.log(totalPage[0].count)
 
           resolve();
         }
+      }
       });
     });
 
@@ -70,8 +81,8 @@ class GigController {
       // Both callbacks have been called, so you can send the response now.
       res.send({
         gig, pagination: {
-          totalPage: Math.ceil(totalPage[0].count / 16),
-          page: page
+          totalPage: Math.ceil(totalRows[0].count / limit),
+          page: parseInt(page)
         }, searchQuery: {
           search: search,
           filterBy1: filterByCategory,
@@ -79,7 +90,10 @@ class GigController {
           filterBy3: filterByPrice
         }
       });
-    }).catch(error => {
+    }, (err) => {
+      res.send(err);
+    }
+    ).catch(error => {
       console.error(error);
       res.status(500).send("An error occurred");
     });
@@ -89,11 +103,13 @@ class GigController {
 
   getGigById = function (req, res) {
     var id = req.params.id;
+    console.log(id);
     Gig.getGigById(id, function (err, gig) {
       if (err) {
         res.send(err);
       } else {
-        res.send(gig[0]);
+        
+        res.send(gig[0]?gig[0]:'Gig not exist');
       }
     });
   };
