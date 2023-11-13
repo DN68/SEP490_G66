@@ -16,7 +16,7 @@
           </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3" v-model="title"></textarea>
+          <textarea name="" id="" cols="60" rows="3" v-model="title" required></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -67,6 +67,7 @@
                 class="form-select third"
                 aria-label="Default select example"
                 v-model="numOfPage"
+                required
               >
                 <option value="">Select number of page</option>
                 <option value="less than 3">less than 3</option>
@@ -76,11 +77,11 @@
             </div>
             <div class="daydeli third">
               <label for="">Day Deliveries</label><br />
-              <input type="number" class="third" v-model="dayDeliveries" />
+              <input type="number" class="third" v-model="dayDeliveries" min="0" />
             </div>
             <div class="price">
               <label for="">Price($)</label> <br />
-              <input type="number" class="third" v-model="price" /> $
+              <input type="number" class="third" v-model="price" min="0" step="5" /> $
             </div>
           </div>
         </div>
@@ -98,6 +99,7 @@
             cols="60"
             rows="3"
             v-model="description"
+            required
           ></textarea>
         </div>
       </div>

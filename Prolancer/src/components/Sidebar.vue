@@ -11,7 +11,7 @@
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Gig Management</span>
           </router-link>
-          <router-link to="/ordermanaad" v-on:click="ChangeActive"
+          <router-link to="/manageorder" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Order Management</span>
