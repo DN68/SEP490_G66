@@ -466,9 +466,9 @@ export default {
       params: {
         page: '1',
         search: '',
-            filterBy1: this.$route.query.filterBy1,
-            filterBy2: this.$route.query.filterBy2,
-            filterBy3: this.$route.query.filterBy3,
+            filterBy1: this.filterBy1,
+            filterBy2: this.filterBy2,
+            filterBy3: this.filterBy3,
       },
     });
     const gigs = responseGig.data.gig;

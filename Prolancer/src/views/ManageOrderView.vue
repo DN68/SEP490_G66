@@ -4,7 +4,7 @@
     <div class="container">
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Orders</h3></div>
-        <div class="col-md-3 search_bar" v-if="isOrderList">
+        <div class="col-md-3 search_bar">
           <div class="input-group rounded">
             <input
               type="search"
@@ -36,14 +36,11 @@
         </div>
       </div>
       <div class="order_status row">
+
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Active' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+          @click="(isOrderRequest = false), (isOrderList = true)"
         >
           <router-link
             @click="(this.status = 'Active'), (selectedPage = '1')"
@@ -65,16 +62,12 @@
             </h6></router-link
           >
         </div>
-        <!-- <div class="col-md-2 status_item"><h6>New</h6></div> -->
+        <div class="col-md-2 status_item"><h6>New</h6></div>
 
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Late' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+          @click="(isOrderRequest = false), (isOrderList = true)"
         >
           <router-link
             @click="(this.status = 'Late'), (selectedPage = '1')"
@@ -101,11 +94,7 @@
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Delivered' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+          @click="(isOrderRequest = false), (isOrderList = true)"
         >
           <router-link
             @click="(this.status = 'Delivered'), (selectedPage = '1')"
@@ -132,11 +121,7 @@
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Completed' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+          @click="(isOrderRequest = false), (isOrderList = true)"
         >
           <router-link
             @click="(this.status = 'Completed'), (selectedPage = '1')"
@@ -163,11 +148,7 @@
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Cancelled' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+          @click="(isOrderRequest = false), (isOrderList = true)"
         >
           <router-link
             @click="(this.status = 'Cancelled'), (selectedPage = '1')"
@@ -199,21 +180,15 @@
             (isOrderRequest = true),
               (isOrderList = false),
               (this.status = 'OrderRequest'),
-              (requestTypeStatus = 'Cancel'),
-              getOrderRequest(user, requestTypeStatus, 1)
+              getOrderRequest(user, 'Cancel')
           "
         >
-          <h6 class="position-relative">
-            <span
-              class="position-absolute top-0 translate-middle badge rounded-pill bg-danger"
-              style="left: 120%"
-            >
-              {{ totalOrderRequest }}+
-              <span class="visually-hidden">unread messages</span>
-            </span>
+          <h6>
+            <span class="badge bg-secondary me-1">3</span>
             Order Request
           </h6>
         </div>
+
       </div>
       <div
         class="order_table"
@@ -250,6 +225,24 @@
 
           <tbody v-if="orders.length >= 1">
             <tr v-for="(order, index) in orders" :key="index">
+              <!-- <td class="td_user">
+
+                <div class="d-flex align-items-center">
+                  <img
+                    src="https://mdbootstrap.com/img/new/avatars/8.jpg"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">John Doe</p>
+                  </div>
+                </div>
+              </td> -->
+              <!-- <td> 
+                {{ order.OrderID }}
+
+              </td> -->
               <td class="td_user" v-if="user.role == 'C'">
                 <div class="d-flex align-items-center">
                   <img
@@ -326,15 +319,17 @@
               <td class="td_gig">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
-                    {{ order.Title }}
+                    I will convert your design layout into email template HTML
+                    coding
                   </p>
                 </div>
               </td>
 
+
               <td class="td_dueon">
                 {{
                   moment(order.Order_Date)
-                    .add(24 * (order.Delivery_Day + order.Extend_Day), "h")
+                    .add(24 * order.Delivery_Day, "h")
                     .format("MMMM Do")
                 }}
               </td>
@@ -373,6 +368,7 @@
                   v-if="order.Status == 'Cancelled'"
                   class="badge rounded-pill bg-secondary d-inline"
                   >Cancelled</span
+
                 >
               </td>
 
@@ -394,6 +390,7 @@
                 </router-link>
               </td>
             </tr>
+
           </tbody>
         </table>
         <div v-if="orders.length == 0" class="text-center">
@@ -481,7 +478,7 @@
             :class="{ status_item_active: this.requestTypeStatus == 'Extend' }"
             @click="
               (requestTypeStatus = 'Extend'),
-                getOrderRequest(user, requestTypeStatus, 1)
+                getOrderRequest(user, requestTypeStatus)
             "
           >
             <h6>Extend Date</h6>
@@ -491,7 +488,7 @@
             :class="{ status_item_active: this.requestTypeStatus == 'Cancel' }"
             @click="
               (requestTypeStatus = 'Cancel'),
-                getOrderRequest(user, requestTypeStatus, 1)
+                getOrderRequest(user, requestTypeStatus)
             "
           >
             <h6>Cancel Order</h6>
@@ -613,10 +610,9 @@
               <td
                 v-if="user.role == 'C' && orderRequest.Request_Type == 'Extend'"
               >
-                <div v-if="orderRequest.Status == 'Pending'">
+                <div v-if="orderRequest.Status== 'Pending'">
                   <span
                     class="badge rounded-pill bg-info text-light me-1"
-                    style="cursor: pointer"
                     @click="
                       (messageModal = 'accept'),
                         (isshowConfirmRequestModal =
@@ -628,7 +624,6 @@
 
                   <span
                     class="badge rounded-pill text-info decline_button"
-                    style="cursor: pointer"
                     @click="
                       (messageModal = 'decline'),
                         (isshowConfirmRequestModal = !isshowConfirmRequestModal)
@@ -636,19 +631,12 @@
                     >Decline</span
                   >
                 </div>
-                <div v-else>
-                  <span
-                    class="badge rounded-pill bg-secondary"
-                    style="cursor: pointer"
-                    >None</span
-                  >
-                </div>
               </td>
 
               <td
                 v-if="user.role == 'A' && orderRequest.Request_Type == 'Cancel'"
               >
-                <div v-if="orderRequest.Status == 'Pending'">
+                <div v-if="orderRequest.Status== 'Pending'">
                   <span
                     class="badge rounded-pill bg-info text-light me-1"
                     @click="
@@ -679,34 +667,50 @@
 
         <div class="pagination">
           <router-link
-            v-if="pagination.page - 1 == 0"
+            v-if="pagination.page - 1 == 0 && pagination.totalPage != 0"
             class="page-number"
-            :disabled="true"
+            @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '#'
+              path: '/manageorder',
+              query: {
+                page: 1,
+                search: searchOrder,
+                user: user,
+                status: status,
+              },
             }"
-            ><i class="bi bi-arrow-left text-black-50"></i
+            ><i class="bi bi-arrow-left"></i
           ></router-link>
           <router-link
             v-if="pagination.page - 1 > 0"
             class="page-number"
-            :disabled="true"
-            @click="getOrderRequest(user, requestTypeStatus, (pagination.page - 1))"
+            @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '#'
+              path: '/manageorder',
+              query: {
+                page: pagination.page - 1,
+                search: searchOrder,
+                user: user,
+                status: status,
+              },
             }"
             ><i class="bi bi-arrow-left"></i
           ></router-link>
           <router-link
             :to="{
-              path: '#'
-              
+              path: '/manageorder',
+              query: {
+                page: index,
+                search: searchOrder,
+                user: user,
+                status: status,
+              },
             }"
             class="page-number"
-            @click="getOrderRequest(user, requestTypeStatus, index)"
+            @click="selectedPage = index"
             v-for="index in pagination.totalPage"
             :key="index"
-            :disabled="true"
+            href="#"
             :class="{ active: index == pagination.page }"
             ><span>{{ index }}</span>
           </router-link>
@@ -714,26 +718,19 @@
           <router-link
             v-if="pagination.page + 1 <= pagination.totalPage"
             class="page-number"
-            :disabled="true"
-            @click="getOrderRequest(user, requestTypeStatus, (pagination.page + 1))"
+            @click="selectedPage = pagination.page + 1"
             :to="{
-              path: '#'
-              
+              path: '/manageorder',
+              query: {
+                page: pagination.page + 1,
+                search: searchOrder,
+                user: user,
+                status: status,
+              },
             }"
             ><i class="bi bi-arrow-right"></i
           ></router-link>
-          <router-link
-            v-if="pagination.page == pagination.totalPage"
-            class="page-number"
-            :disabled="true"
-            :to="{
-              path: '#',
-              
-            }"
-            ><i
-              class="bi bi-arrow-right text-black-50"
-            ></i
-          ></router-link>
+
         </div>
       </div>
     </div>
@@ -867,12 +864,14 @@ var moment = require("moment");
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+
 export default {
   name: "CreateOrderDetailPage",
   components: {
     Header,
   },
   data() {
+
     return {
       user: [],
       orders: [],
@@ -891,7 +890,6 @@ export default {
       isshowConfirmRequestModal: false,
       messageModal: "",
       selectedRequest: {},
-      totalOrderRequest: 0,
     };
   },
   async created() {
@@ -917,15 +915,6 @@ export default {
     const paging = responseData.data.pagination;
     this.pagination = paging;
     console.log(this.pagination);
-    const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
-      params: {
-        user: this.user,
-        requestType: this.user.role == "C" ? "Extend" : "Cancel",
-        status: "Pending",
-      },
-    });
-    const totalNewRequest = responseOrderReqData.data.pagination;
-    this.totalOrderRequest = totalNewRequest.totalRow;
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
@@ -946,6 +935,7 @@ export default {
     const paging = responseDateWithPage.data.pagination;
     this.pagination = paging;
     console.log("this.selectedPage " + (this.pagination.page + 1));
+
   },
   methods: {
     async changeOrderStatus(status, orderID) {
@@ -966,18 +956,15 @@ export default {
       }
     },
 
-    async getOrderRequest(user, requestType, currentPage) {
+    async getOrderRequest(user, requestType) {
       const responseData = await axios.get("/orders/getOrderRequest", {
         params: {
-          page: currentPage,
           user: this.user,
           requestType: requestType,
         },
       });
       const orderRequests = responseData.data.orderRequest;
       this.orderRequests = orderRequests;
-      const paging = responseData.data.pagination;
-      this.pagination = paging;
     },
 
     async acceptRequest(selectedRequest) {
@@ -1020,9 +1007,7 @@ export default {
             orderID: selectedRequest.OrderID,
           }
         );
-        if (
-          updateOrderExtendDayRes.data.message == "Update Extend Day Success"
-        ) {
+        if (updateOrderExtendDayRes.data.message == "Update Extend Day Success") {
           const changeOrderRequestStatusRes = await axios.put(
             "/orders/updateOrderRequestStatus",
             {
@@ -1053,7 +1038,7 @@ export default {
 </script>
   
   <style>
-.pagination {
+  .pagination {
   display: inline-block;
   margin: 20px 0;
 }
@@ -1061,16 +1046,17 @@ export default {
 .pagination a {
   color: black;
   float: left;
-  padding: 8px 16px;
+  padding: 5px 12px;
   text-decoration: none;
+  background-color: #f8f9fa;
 }
 
-.pagination a.active span,
-.pagination a:hover span {
-  color: black;
-  border-bottom: 2px solid;
-  padding-bottom: 4px;
+.pagination a.active {
+  background-color: #212020;
+  color: white;
 }
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
 .input-group-text {
   background-color: white;
 }
@@ -1146,7 +1132,6 @@ export default {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
-  background-color: #f9f9f9;
 }
 
 .order_request_table .decline_button {

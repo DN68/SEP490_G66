@@ -66,7 +66,7 @@
               <div class="seller_overview row">
                 <div class="user_image col-md-3">
                   <img
-                    :src="gig.Profile_Picture"
+                    src="https://fiverr-res.cloudinary.com/t_profile_original,q_auto,f_auto/attachments/profile/photo/795d7cb1444717c90dd23c3333fed16b-1604937118910/71a4c9ab-9941-441d-a03f-aa7e320f05ec.jpg"
                     class="profile-pict-img jumkns0"
                     alt="riketa"
                   />
@@ -74,14 +74,14 @@
                 <div class="user_information col-md-8">
                   <div class="row">
                     <div class="user_name col-md-4">
-                      <a> <h1>{{ gig.First_Name+' '+gig.Last_Name}}</h1></a>
+                      <a> <h1>Rickey</h1></a>
                     </div>
                     <div class="user_contact col-md-8">
                       <button class="btn_contract">Contact me</button>
                     </div>
                   </div>
                   <div class="user_other_information">
-                    <span>I am from {{gig.Location}}</span>
+                    <span>I speake English, from Viet Nam</span>
                   </div>
                 </div>
               </div>
@@ -92,7 +92,11 @@
                 <div class="something_about_me_text">
                   <span
                     >
-                    {{gig.UserDescription}}
+                    Hi, I am expert for email development. I can help you for
+                    build emails for various ESP platforms such as Mailchimp,
+                    Campaign Monitor, Salseforce Marketing Cloud, Pardot,
+                    Marketo, Sendgrid, Hubspot, Constant Contact, Active
+                    Campaign, iContact, Klaviyo
                   </span>
                 </div>
               </div>
@@ -248,10 +252,9 @@ export default {
     this.categories = categories;
 
     const responseGig = await axios.get('/gigs/details/'+ this.$route.params.id);
-    const gig = responseGig.data;
+    const gig = responseGig.data[0];
     this.gig = gig;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log(gig)
+    
   }
 };
 </script>

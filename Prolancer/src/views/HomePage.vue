@@ -67,7 +67,7 @@
                     <div class="guildeBack">
                       <i class="bi bi-laptop" style="font-size: 20px"></i>
                     </div>
-                    <p class="textDefault">Website Development</p>
+                    <p class="textDefault">Website Developt</p>
                   </div>
                   <div class="col-sm-2 guildeIteam">
                     <div class="guildeBack">

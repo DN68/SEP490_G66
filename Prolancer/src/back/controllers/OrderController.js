@@ -1,9 +1,6 @@
 const Order = require('../models/Order');
 const OrderRequest = require('../models/OrderRequest');
 
-const path = require('path');
-const fs = require('fs');
-const fsp = require('fs/promises');
 class OrderController {
 
   createOrder = function (req, res) {
@@ -12,10 +9,9 @@ class OrderController {
 
     Order.createOrder(order, function (result) {
 
-      if (result) {
+        if (result){
 
-        return res.send({ message: 'Create Order Success', insertId: result.insertId });
-      }
+        return res.send({message:'Create Order Success', insertId: result.insertId});}
       else {
         return res.send('Create Order Fail');
 
@@ -29,10 +25,12 @@ class OrderController {
   getOrderById = function (req, res) {
     var id = req.params.id;
 
+    console.log('Id '+id)
 
     Order.getOrderById(id, function (err, order) {
       if (err)
         res.send(err);
+      console.log('res', order);
       res.send(order);
     });
 
@@ -159,9 +157,9 @@ class OrderController {
     console.log(orderRequest);
     OrderRequest.createOrderRequest(orderRequest, function (err, result) {
       if (err)
-        res.send(err);
+         res.send(err);
       else {
-        res.send({ message: 'Send Request Success' });
+         res.send({ message: 'Send Request Success' });
       }
 
     })
@@ -169,24 +167,20 @@ class OrderController {
   }
 
 
-  getOrderRequestWithPagingAndFilter = function (req, res) {
+  getOrderRequestWithPagingAndFilter = function (req, res) { 
     const limit = 6;
     var pageQuery = req.query;
     var page;
     var requestType = 'Cancel';
     var userId = '';
     var userRole = '';
-    var status = '';
     console.log(pageQuery);
     if (pageQuery.page != null) {
       page = pageQuery.page;
     } else {
       page = 1;
     }
-    if (pageQuery.status != undefined) {
-      status = pageQuery.status
-      console.log("🚀 ~ file: OrderController.js:186 ~ OrderController ~ status:", status)
-    }
+    
     requestType = pageQuery.requestType;
     userId = pageQuery.user.userId;
     userRole = pageQuery.user.role;
@@ -195,7 +189,7 @@ class OrderController {
     const offset = (page - 1) * limit;
     let orderRequest, totalRows;
     const fetchData = new Promise((resolve, reject) => {
-      OrderRequest.getOrderRequestWithPagingAndFilter(userId, userRole, requestType, status, limit, offset, function (err, orderRequestData) {
+      OrderRequest.getOrderRequestWithPagingAndFilter(userId,userRole,requestType, limit, offset, function (err, orderRequestData) {
         if (err) {
 
           reject(err);
@@ -271,64 +265,5 @@ class OrderController {
     })
   }
 
-  deliverOrder = function (req, res) {
-    let deliverFile;
-    var orderID = req.body.orderID;
-
-
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).json({ error: 'No files were uploaded.' });
-    }
-
-    deliverFile = req.files.file;
-    console.log("🚀 ~ file: OrderController.js:280 ~ OrderController ~ sampleFile:", deliverFile)
-
-
-    // const uploadPath = '../Prolancer/public/delivery' + deliverFile.name;
-    const newFileName = `${orderID}_${deliverFile.name}`;
-    const commonPath = path.join('public', 'delivery', newFileName);
-
-    console.log("🚀 ~ file: OrderController.js:284 ~ OrderController ~ uploadPath:", commonPath)
-    const uploadPath = path.join(__dirname, '..', '..', '..', commonPath);
-    console.log("🚀 ~ file: OrderController.js:289 ~ OrderController ~ uploadPath:", uploadPath)
-
-    if (fs.existsSync(uploadPath)) {
-      // Delete the existing file
-      console.log("Run Here")
-      fsp.unlink(uploadPath)
-        .then(() => {
-          console.log('Existing file deleted successfully');
-          continueWithFileUpload();
-        })
-        .catch((unlinkError) => {
-          console.error('Error deleting existing file:', unlinkError);
-          return res.status(500).json({ error: 'Error deleting existing file.' });
-        });
-    } else {
-      continueWithFileUpload();
-
-    }
-
-    function continueWithFileUpload() {
-      deliverFile.mv(uploadPath, (err) => {
-        if (err) {
-          return res.status(500).json({ error: 'Error uploading file.' });
-        }
-        const filePath = commonPath.replace(/\\/g, '/');
-        console.log("🚀 ~ file: OrderController.js:318 ~ OrderController ~ deliverFile.mv ~ filePath:", filePath);
-
-        Order.deliverOrder(filePath, orderID, function (err, result) {
-          if (err)
-            return res.status(500).send(err);
-          else {
-            console.log("File uploaded successfully Run Here")
-            res.json({ message: 'File uploaded successfully.' });
-
-          }
-
-        })
-      });
-    }
-  }
 }
 module.exports = new OrderController;   

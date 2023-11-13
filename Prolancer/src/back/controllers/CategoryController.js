@@ -1,14 +1,22 @@
 const connectDb = require('../common/connectdb.js');
-const Category = require('../models/Category.js');
 class CategoryController {
 
 
-    getAllCategory = function (req, res) {
-        Category.getAllCategory( function(err,categories){
-            if(err) { res.send(err);}
-            else{ res.json(categories);
-
-            } });
+    getCategory(req, res) {
+        let query = 'SELECT * FROM Category';
+        connectDb.query(query,function(err,rows){
+        
+        if(err) {console.log(err);}
+        else{
+        res.json(rows);
+        
         }
+
+
+        });
+   
+    }
+
+
 }
 module.exports = new CategoryController;
