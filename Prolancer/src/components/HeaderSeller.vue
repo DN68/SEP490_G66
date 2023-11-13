@@ -25,10 +25,10 @@
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
-              href="#"
-              ><span class="small" style="font-size: 20px; margin-left: 25px"
-                >Orders</span
-              ></a
+
+              href="/manageorder"
+              ><span class="small" style="font-size: 20px;margin-left: 25px;">Orders</span></a
+
             >
           </li>
           <li class="nav-item">
