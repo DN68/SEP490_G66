@@ -91,7 +91,7 @@
                 aria-current="page"
                 href="/becomesel"
               >
-                <span class="small" style="margin-top: 5px; font-size: 20px"
+                <span class="small" style="margin-top: 5px; font-size: 17px"
                   >Become a Seller</span
                 ></a
               >
