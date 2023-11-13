@@ -435,6 +435,14 @@ export default {
     const gig = responseGig.data;
     this.gig = gig;
     console.log("Run here 1");
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+    const responseUserInfor = await axios.get("/users/info", {
+      headers: { token: localStorage.getItem("token") },
+    });
+    const userInfor = responseUserInfor.data.user;
+    this.user = userInfor;
   },
   data() {
     return {
@@ -456,6 +464,7 @@ export default {
         orderStatus: "Active",
         orderDescription: "",
       },
+      user:[]
     };
   },
   methods: {
@@ -489,6 +498,7 @@ export default {
         console.log("Please Submit Requirt", this.order.orderDescription);
         alert("Please Submit Requirment And Click On Confirm!");
       } else {
+        this.order.orderCustomerID = this.user.userId;
         this.order.orderFreelancerID = this.gig.FreelancerID;
         this.order.orderGigID = this.gig.GigID;
         const data = await axios.post("/orders/index", {
@@ -508,7 +518,7 @@ export default {
         }
       }
     },
-  },
+  }
 };
 </script>
 

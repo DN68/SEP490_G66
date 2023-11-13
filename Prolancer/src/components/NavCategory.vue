@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style>
-.navbar .dropdown-menu {
+.nav_header .navbar .dropdown-menu {
   width: 300px;
   position: fixed;
   margin-top: 8px;

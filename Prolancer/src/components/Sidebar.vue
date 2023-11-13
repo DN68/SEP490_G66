@@ -40,27 +40,7 @@
         </div>
       </div>
     </nav>
-    <!-- Sidebar -->
-
-    <!-- Navbar -->
-    <!-- <nav
-      id="main-navbar"
-      class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
-    >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-mdb-toggle="collapse"
-          data-mdb-target="#sidebarMenu"
-          aria-controls="sidebarMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-            
-    </nav> -->
-    <!-- Navbar -->
+    
   </header>
   <!--Main Navigation-->
 

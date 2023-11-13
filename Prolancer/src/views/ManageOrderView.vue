@@ -1,20 +1,25 @@
 <template>
-  <div>
-    <Header v-if="user.role != 'A'"></Header>
+  <div >
+    <Header v-if="user.role == 'C'"></Header>
+    <HeaderSell v-else-if="user.role == 'F'"></HeaderSell>
     <header-admin v-else></header-admin>
-    <div class="container">
+    <div :class="{'row' : user.role == 'A'}">
+      <div v-if="user.role == 'A'" :class="{'col-md-2' : user.role == 'A'}" >
+      <Sidebar ></Sidebar>
+      </div>
+      <div class="container " :class="{'col-md-9' : user.role == 'A'}">
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Orders</h3></div>
-        <div class="col-md-3 search_bar" v-if="isOrderList">
-          <div class="input-group rounded">
-            <input
+          <div class="col-md-3 search_bar" v-if="isOrderList">
+            <div class="input-group rounded">
+              <input
               type="search"
               class="form-control order_search"
               placeholder="Search Order History ..."
               aria-label="Search"
               aria-describedby="search-addon"
               v-model="searchOrder"  
-            />
+              />
 
             <router-link
               :to="{
@@ -738,6 +743,7 @@
           ></router-link>
         </div>
       </div>
+      </div>
     </div>
     <div>
       <div
@@ -869,12 +875,16 @@ import axios from "axios";
 var moment = require("moment");
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import HeaderSell from "../components/HeaderSeller.vue"
+import Sidebar from "../components/Sidebar.vue";
 
 export default {
   name: "CreateOrderDetailPage",
   components: {
     Header,
     HeaderAdmin,
+    HeaderSell,
+    Sidebar
   },
   data() {
     return {
@@ -987,7 +997,7 @@ export default {
       if (selectedRequest.Request_Type == "Cancel") {
         alert("Cancel :" + selectedRequest.Request_Action);
         const changeOrderStatusRes = await axios.put("/orders/updateStatus", {
-          status: selectedRequest.Request_Action,
+          status: "Cancelled",
           orderID: selectedRequest.OrderID,
         });
         if (changeOrderStatusRes.data.message == "Change Status Success") {
