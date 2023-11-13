@@ -19,9 +19,9 @@
                   </div>
                   <div class="thumb-content">
                     <div class="row userRow">
-                      <div class="col-md-6">
+                      <div class="col-md-7">
                         <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                          :src="gig.Profile_Picture"
                           class="rounded-circle"
                           height="25"
                           alt=""
@@ -31,11 +31,11 @@
                         <span
                           class="userInfor"
                           style="text-align: left; color: #222325"
-                          >anhlt1901</span
+                          >{{gig.First_Name+' '+gig.Last_Name}}</span
                         >
                       </div>
-                      <div class="col-md-4">
-                        <h3 class="userLevel">Level 3</h3>
+                      <div class="col-md-5">
+                        <h3 class="userLevel">{{ gig.Delivery_Day}} day(s)</h3>
                       </div>
                     </div>
 

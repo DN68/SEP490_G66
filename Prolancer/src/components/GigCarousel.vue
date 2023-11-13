@@ -57,7 +57,7 @@
                             <div class="row userRow">
                               <div class="col-md-12">
                                 <img
-                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  :src="gig.Profile_Picture"
                                   class="rounded-circle"
                                   height="25"
                                   alt=""
@@ -67,7 +67,7 @@
                                 <span
                                   class="userInfor"
                                   style="text-align: left; color: #222325"
-                                  >anhlt1901</span
+                                  >{{gig.First_Name+' '+gig.Last_Name}}</span
                                 >
                               </div>
                               <!-- <div class="col-md-4">
@@ -139,7 +139,7 @@
                             <div class="row userRow">
                               <div class="col-md-12">
                                 <img
-                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  :src="gig.Profile_Picture"
                                   class="rounded-circle"
                                   height="25"
                                   alt=""
@@ -149,7 +149,7 @@
                                 <span
                                   class="userInfor"
                                   style="text-align: left; color: #222325"
-                                  >anhlt1901</span
+                                  >{{gig.First_Name+' '+gig.Last_Name}}</span
                                 >
                               </div>
                               <!-- <div class="col-md-4">
@@ -219,7 +219,7 @@
                             <div class="row userRow">
                               <div class="col-md-12">
                                 <img
-                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4RGwl1mqaD9sd_JO7m0KPAlgZmnClgtkEqQ&usqp=CAU"
+                                  :src="gig.Profile_Picture"
                                   class="rounded-circle"
                                   height="25"
                                   alt=""
@@ -229,7 +229,7 @@
                                 <span
                                   class="userInfor"
                                   style="text-align: left; color: #222325"
-                                  >anhlt1901</span
+                                  >{{gig.First_Name+' '+gig.Last_Name}}</span
                                 >
                               </div>
                               <!-- <div class="col-md-4">
