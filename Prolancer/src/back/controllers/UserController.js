@@ -33,11 +33,8 @@ class UserController {
     register = function (req, res) {
         const email = req.body.email;
         const username = req.body.username;
-        const firstName = req.body.firstName;
-        const lastName = req.body.lastName;
-        const phoneNo = req.body.phoneNo;
         const password = bcrypt.hashSync(req.body.password, 10);
-        User.createUser(email, username, firstName, lastName, phoneNo, password, function (err, result) {
+        User.createUser(email, username, password, function (err, result) {
             if (err) {
                 res.send(err);
             } else {
@@ -181,8 +178,7 @@ class UserController {
                         role: results[0].Role,
                         location: results[0].Location,
                         fid: results[0].Status,
-                        isFreelancer: results[0].isFreelancer,
-                        id: results[0].UserID
+                        userId: results[0].UserID
                     }
                 })
             })
@@ -191,51 +187,25 @@ class UserController {
     }
 
 
-    checkMailExist = function (req, res) {
-        const email = req.params.email;
-        User.getUserByEmail(email, function (err, results) {
-            if (err) {
-                return console.log(err)
-            }
-            if(!results[0]){
-                return res.status(200).send(false)
-            }
-            return res.status(200).send(true)
-
-        })
-    }
-
-    checkUsernameExist = function (req, res) {
-        const username = req.params.username;
-        User.getUserByUsername(username, function (err, results) {
-            if (err) {
-                return console.log(err)
-            }
-            if(!results[0]){
-                return res.status(200).send(false)
-            }
-            return res.status(200).send(true)
-
-        })
-    }
+    // checkMailExist = function (req, res) {
+    //     const email = req.params.email;
+    //     User.getUserByEmail(email, function (err, results) {
+    //         if (err) {
+    //             return console.log(err)
+    //         }
+    //         if(!results[0]){
+    //             return res.status(200).send(false)
+    //         }
+    //         return res.status(200).send(true)
+            
+    //     })
+    // }
 
     updateProfile = function (req, res) {
         const email = req.params.email;
         const data = req.body;
         console.log(data)
         User.updateUserInfo(data, email, function (err, results) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.json(results);
-            }
-        })
-    }
-
-    changeFreelancerMode = function (req, res) {
-        const email = req.body.email
-        const role = req.body.role
-        User.changeFreelancerRole(role, email, function (err, results) {
             if (err) {
                 res.send(err);
             } else {

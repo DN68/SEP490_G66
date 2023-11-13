@@ -29,12 +29,12 @@ OrderRequest.createOrderRequest = function (orderRequest, result) {
 
 
 
-OrderRequest.getOrderRequestWithPagingAndFilter = function (userId,userRole,requestType,limit, offset, orderRequest, pagination) {
-  var sqlForCustomerAndFreelancer ="SELECT request.*, u.First_Name as CreateByFirstName, u.Last_Name as CreateByLastName, u.Profile_Picture as CreateByProfilePicture, o.FreelancerID, o.CustomerID FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.CreateByID =  "+userId+"  AND request.Request_Type = ? ORDER BY request.OrderRequestID ASC LIMIT ? OFFSET ?";
-  var sqlForAdmin = "SELECT request.*, u.First_Name as CreateByFirstName, u.Last_Name as CreateByLastName, u.Profile_Picture as CreateByProfilePicture, o.FreelancerID, o.CustomerID FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.Request_Type = ? ORDER BY request.OrderRequestID ASC LIMIT ? OFFSET ?";
+OrderRequest.getOrderRequestWithPagingAndFilter = function (userId,userRole,requestType,status,limit, offset, orderRequest, pagination) {
+  var sqlForCustomerAndFreelancer ="SELECT request.*, u.First_Name as CreateByFirstName, u.Last_Name as CreateByLastName, u.Profile_Picture as CreateByProfilePicture, o.FreelancerID, o.CustomerID FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE (request.CreateByID = "+userId+" OR o.CustomerID = "+userId+" OR o.FreelancerID = "+userId+") AND request.Request_Type = ? AND request.Status LIKE '%"+status+"%' ORDER BY request.OrderRequestID ASC LIMIT ? OFFSET ?";
+  var sqlForAdmin = "SELECT request.*, u.First_Name as CreateByFirstName, u.Last_Name as CreateByLastName, u.Profile_Picture as CreateByProfilePicture, o.FreelancerID, o.CustomerID FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.Request_Type = ? AND request.Status LIKE '%"+status+"%' ORDER BY request.OrderRequestID ASC LIMIT ? OFFSET ?";
   var sql;
-  var sqlCountForCustomerAndFreelancer="Select COUNT(*) AS count FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.CreateByID =  "+userId+"  AND request.Request_Type = ?";
-  var sqlCountForAdmin="Select COUNT(*) AS count FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.Request_Type = ?";
+  var sqlCountForCustomerAndFreelancer="Select COUNT(*) AS count FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE (request.CreateByID = "+userId+" OR o.CustomerID = "+userId+" OR o.FreelancerID = "+userId+") AND request.Request_Type = ? AND request.Status LIKE '%"+status+"%'";
+  var sqlCountForAdmin="Select COUNT(*) AS count FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.Request_Type = ? AND request.Status LIKE '%"+status+"%'";
   var sqlCount;
   if(userRole=='C'||userRole=='F'){
     console.log("🚀 ~ file: Order.js ~ userRole: Customer Freelancer",);

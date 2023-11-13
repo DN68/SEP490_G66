@@ -42,6 +42,7 @@
             <h6>Delivery</h6>
           </div>
           <div
+            v-if="user.role != 'A'"
             class="col-md-2 status_item"
             @click="
               (isdetail = false),
@@ -87,10 +88,21 @@
                         <span class="col-md-6 delivery_time_right text-end"
                           >{{
                             moment(order.Order_Date)
-                              .add(24 * order.Delivery_Day, "h")
+                              .add(
+                                24 * (order.Delivery_Day + order.Extend_Day),
+                                "h"
+                              )
                               .format("MMMM Do, h:mm A")
                           }}
                         </span>
+                        <div v-if="order.Extend_Day != 0" class="mt-1">
+                          <span class="delivery_time_right"
+                            >Extend Day
+                            <span class="text-danger"
+                              >{{ order.Extend_Day }} day(s)</span
+                            >
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -148,28 +160,28 @@
                       </tr>
                       <tr class="backgroud_gray">
                         <th scope="row">SUBTOTAL</th>
-                        <td colspan="2"></td>
-                        <td class="order_price">
+                        <th colspan="2"></th>
+                        <th class="order_price">
                           ${{ order.Price * order.Total_Amount }}
-                        </td>
+                        </th>
                       </tr>
                       <tr class="backgroud_gray">
                         <th scope="row">SERVICE FEE</th>
-                        <td colspan="2"></td>
-                        <td class="order_price">
+                        <th colspan="2"></th>
+                        <th class="order_price">
                           ${{ order.Price * order.Total_Amount * 0.1 }}
-                        </td>
+                        </th>
                       </tr>
 
                       <tr class="backgroud_gray">
                         <th scope="row">TOTAL</th>
-                        <td colspan="2"></td>
-                        <td class="order_price">
+                        <th colspan="2"></th>
+                        <th class="order_price">
                           ${{
                             order.Price * order.Total_Amount +
                             order.Price * order.Total_Amount * 0.1
                           }}
-                        </td>
+                        </th>
                       </tr>
                     </tbody>
                   </table>
@@ -200,12 +212,7 @@
                     <span>Hello!</span>
                   </div>
                   <p class="lh-lg">
-                    Title: Rev Caption Tutorial: Finished Captions Example Lorem
-                    Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy
-                    text ever since the 1500s, when an unknown printer took a
-                    galley of type and scrambled it to make a type specimen
-                    book. {{ order.OrderDescription }}
+                    Here is order requirement:  {{ order.OrderDescription }}
                   </p>
                   <div class="text_thanks">
                     <span>Thanks!</span>
@@ -242,8 +249,9 @@
                       type="submit"
                       @click="
                         addRequirement != ''
-                          ? (isshowConfirmAddRequirementModal =
-                              !isshowConfirmAddRequirementModal)
+                          ? ((isshowConfirmAddRequirementModal =
+                              !isshowConfirmAddRequirementModal),
+                            (this.isUploadFile = false))
                           : (notInputRequirement = !notInputRequirement)
                       "
                     >
@@ -261,23 +269,177 @@
             <div class="container">
               <div class="order_delivery">
                 <div class="order_detail_overview_head row">
-                  <div class="col-md-12 order_detail_title">
-                    <div>
-                      <i class="bi bi-box-seam box_icon_delivery"></i>
+                  <div
+                    class="col-md-12 order_detail_title"
+                    v-if="user.role == 'C'"
+                  >
+                     <!-- if freelancer has been delivered before -->
+                    <div v-if="order.Delivery" class="Free_Delivered">
+                      <div>
+                        <label for="uploadProduct">
+                          <i
+                            class="bi bi-box-seam-fill box_icon_delivery text-black"
+                          ></i>
+                          <div>
+                            <span class="d-inline">Click Here</span>
+                          </div>
+                        </label>
+                        <input
+                          id="uploadProduct"
+                          type="file"
+                          class="d-none"
+                          name="sampleFile"
+                          ref="fileInput"
+                          accept="image/*,.pdf,.txt"
+                          @change="checkInputFile=true"
+                        />
+                      </div>
+                       <!-- if freelancer not upload new file -->
+                      <p class="text-danger" v-if="!checkInputFile">
+                        {{ messageDanger }}
+                      </p>
+
+                      <h6 class="text-center text_sologan">
+                        Packages Delivered at the Speed of Need.
+                      </h6>
+                      <div class="delivery_infomation">
+                        <span class="ordered_from_right">You </span>
+                        <span class="delivery_infomation_date">
+                          has delivered this order. You can upload your product again</span
+                        >
+                      </div>
+
+                      <div class="deliver_order mt-4">
+                        <button
+                          class="co-white bg-co-black deliver_btn"
+                          type="btn"
+                          @click="
+                            this.$refs.fileInput.files.length > 0
+                              ? ((this.isshowConfirmSendRequestModal =
+                                  !this.isshowConfirmSendRequestModal),
+                                (this.modalMessage = 'deliver your product'),
+                                (this.isUploadFile = true))
+                              : (messageDanger = 'Please upload new file!')
+                          "
+                        >
+                          Deliver
+                        </button>
+                      </div>
                     </div>
-                    <h6 class="text-center text_sologan">
-                      Packages Delivered at the Speed of Need. Please wait.
-                    </h6>
-                    <div class="delivery_infomation">
-                      <span class="ordered_from_right">leorubiano </span>
-                      <span class="delivery_infomation_date">
-                        shoul deliver this order on
-                        {{
-                          moment(order.Order_Date)
-                            .add(24 * order.Delivery_Day, "h")
-                            .format("MMMM Do, h:mm A")
-                        }}</span
-                      >
+                    <div v-else class="Free_NotDelivered">
+                      <div>
+                        <input
+                          id="uploadProduct"
+                          type="file"
+                          class="d-none"
+                          name="sampleFile"
+                          ref="fileInput"
+                          accept="image/*,.pdf,.txt"
+                          @change="checkInputFile=true"
+                        />
+                        <label for="uploadProduct">
+                          <i
+                            class="bi bi-box-seam-fill box_icon_delivery text-black"
+                            v-if="checkInputFile"
+                          ></i>
+                          <i class="bi bi-box-seam box_icon_delivery" v-else></i>
+                          <div>
+                            <span class="d-inline">Click Here</span>
+                          </div>
+                        </label>
+                        
+                      </div>
+                      <!-- if freelancer not upload file -->
+                      <p class="text-danger" v-if="!checkInputFile">
+                        {{ messageDanger }}
+                      </p>
+
+                      <h6 class="text-center text_sologan">
+                        Packages Delivered at the Speed of Need.
+                      </h6>
+                      <div class="delivery_infomation">
+                        <span class="ordered_from_right">You </span>
+                        <span class="delivery_infomation_date">
+                          should deliver this order on
+                          {{
+                            moment(order.Order_Date)
+                              .add(
+                                24 * (order.Delivery_Day + order.Extend_Day),
+                                "h"
+                              )
+                              .format("MMMM Do, h:mm A")
+                          }}</span
+                        >
+                      </div>
+
+                      <div class="deliver_order mt-4">
+                        <button
+                          class="co-white bg-co-black deliver_btn"
+                          type="btn"
+                          @click="
+                            this.$refs.fileInput.files.length > 0
+                              ? ((this.isshowConfirmSendRequestModal =
+                                  !this.isshowConfirmSendRequestModal),
+                                (this.modalMessage = 'deliver your product'),
+                                (this.isUploadFile = true))
+                              : (messageDanger = 'Please upload file!')
+                          "
+                        >
+                          Deliver
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                   <!-- if user are Customer, Admin -->
+                  <div class="col-md-12 order_detail_title" v-else>
+                     <!-- if freelancer has not delivered before -->
+                    <div v-if="!order.Delivery">
+                      <div>
+                        <i class="bi bi-box-seam box_icon_delivery"></i>
+                      </div>
+
+                      <h6 class="text-center text_sologan">
+                        Packages Delivered at the Speed of Need. Please wait.
+                      </h6>
+                      <div class="delivery_infomation">
+                        <span class="ordered_from_right"
+                          >{{
+                            order.FreelancerFirstName +
+                            " " +
+                            order.FreelancerLastName
+                          }}
+                        </span>
+                        <span class="delivery_infomation_date">
+                          should deliver this order on
+                          {{
+                            moment(order.Order_Date)
+                              .add(
+                                24 * (order.Delivery_Day + order.Extend_Day),
+                                "h"
+                              )
+                              .format("MMMM Do, h:mm A")
+                          }}</span
+                        >
+                      </div>
+                    </div>
+                     <!-- if freelancer has been delivered before -->
+                    <div v-else>
+                      <div>
+                        <i
+                          class="bi bi-box-seam-fill box_icon_delivery text-black"
+                        ></i>
+                      </div>
+
+                      <h6 class="text-center text_sologan">
+                        Your order has been delivered!
+                      </h6>
+                      <div class="delivery_infomation">
+                        <span class="ordered_from_right"> </span>
+                        <span class="delivery_infomation_date">
+                          Please check delivery product on this order. If you
+                          are satisfied please click on the completed button.
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -315,7 +477,9 @@
                       <option value="Cancel" data-custom-style="top: 30px;">
                         Cancel order request
                       </option>
-                      <option value="Extend">Extend deliver date</option>
+                      <option value="Extend" v-if="user.role != 'C'">
+                        Extend deliver date
+                      </option>
                     </select>
                   </div>
                   <div class="custom-select" v-if="requestType == 'Extend'">
@@ -376,9 +540,7 @@
                   <button
                     class="co-white bg-co-black save_btn"
                     type="button"
-                    @click="checkRequestForm
-                      
-                    "
+                    @click="checkRequestForm"
                   >
                     Save
                   </button>
@@ -429,7 +591,6 @@
                     <span class="col-md-6 ordered_from_right text-end">{{
                       order.CustomerFirstName + " " + order.CustomerLastName
                     }}</span>
-
                   </div>
                   <div class="delivery_time row">
                     <span class="col-md-6 delivery_time_left"
@@ -621,14 +782,38 @@
               <div class="row">
                 <div>
                   <p class="modal-title">
-                    Do you really want to send these request?
+                    Do you really want to {{ modalMessage }}?
                   </p>
                   <p class="modal-title">This process cannot be undone.</p>
                 </div>
               </div>
             </div>
+            <div
+              class="modal-footer justify-content-center"
+              v-if="isUploadFile"
+            >
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="
+                  uploadFiles(),
+                    (isshowConfirmSendRequestModal =
+                      !isshowConfirmSendRequestModal)
+                "
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="
+                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
+                "
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
 
-            <div class="modal-footer justify-content-center">
+            <div class="modal-footer justify-content-center" v-else>
               <a
                 type="button"
                 class="btn btn-info waves-effect waves-light text-white"
@@ -644,7 +829,7 @@
                     (isshowConfirmSendRequestModal =
                       !isshowConfirmSendRequestModal)
                 "
-                >Save</a
+                >Send</a
               >
               <a
                 type="button"
@@ -693,6 +878,11 @@ export default {
       requestExtend: 1,
       notInputRequestTitle: false,
       notInputRequestDescription: false,
+      fileInput: [],
+      modalMessage: "",
+      isUploadFile: false,
+      messageDanger: "",
+      checkInputFile: false,
     };
   },
   async created() {
@@ -711,7 +901,8 @@ export default {
     this.order = order;
     if (
       this.user.userId != this.order.CustomerID &&
-      this.user.userId != this.order.FreelancerID
+      this.user.userId != this.order.FreelancerID &&
+      this.user.role != "A"
     ) {
       this.$router.push("/");
     }
@@ -734,24 +925,22 @@ export default {
       } else {
         toast.warn("Add Requirement Faild!", { autoClose: 2000 });
       }
-    },checkRequestForm(){
-    
-        if(this.requestTitle != ''&& this.requestDescription == ''){
-          this.notInputRequestDescription = true;
+    },
+    checkRequestForm() {
+      if (this.requestTitle != "" && this.requestDescription == "") {
+        this.notInputRequestDescription = true;
+      } else if (this.requestTitle == "" && this.requestDescription != "") {
+        this.notInputRequestTitle = true;
+      } else if (this.requestDescription == "" && this.requestTitle == "") {
+        this.notInputRequestTitle = true;
+        this.notInputRequestDescription = true;
+      } else {
+        this.isshowConfirmSendRequestModal =
+          !this.isshowConfirmSendRequestModal;
+        this.modalMessage = "send these request";
+      }
+    },
 
-        }else if(this.requestTitle == '' && this.requestDescription != ''){
-          this.notInputRequestTitle = true;
-        }else if(this.requestDescription == ''&&this.requestTitle == ''){
-          this.notInputRequestTitle = true;
-          this.notInputRequestDescription = true;
-        }else{
-          this.isshowConfirmSendRequestModal =
-                            !this.isshowConfirmSendRequestModal
-        }
-    
-    }
-    
-    ,
     async sendOrderOrderRequest(
       requestType,
       requestTitle,
@@ -763,12 +952,20 @@ export default {
       alert(requestType + requestTitle + requestDescription + OrderID + userId);
 
       const data = await axios.post("/orders/createOrderRequest", {
-          orderRequest: {CreateByID: userId,Request_Title: requestTitle,Request_Description: requestDescription, requestType: requestType, OrderID: OrderID, ExtendDay: parseInt(extendDay), Request_Action: ''},
-        }); 
-        
-        console.log(data);
+        orderRequest: {
+          CreateByID: userId,
+          Request_Title: requestTitle,
+          Request_Description: requestDescription,
+          requestType: requestType,
+          OrderID: OrderID,
+          ExtendDay: parseInt(extendDay),
+          Request_Action: "",
+        },
+      });
 
-        if (data.data.message == "Send Request Success") {
+      console.log(data);
+
+      if (data.data.message == "Send Request Success") {
         toast.success("Send Request Successfully!", {
           theme: "colored",
           autoClose: 2000,
@@ -776,6 +973,38 @@ export default {
         });
       } else {
         toast.warn("Send Request Faild!", { autoClose: 2000 });
+      }
+    },
+    async uploadFiles() {
+      // this.files = this.$refs.myFiles.files
+
+      const fileInput = this.$refs.fileInput;
+      if (fileInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+        formData.append("orderID", this.order.OrderID);
+        console.log(formData);
+        axios
+          .post("/orders/deliverOrder", formData)
+          .then((response) => {
+            // Handle the successful upload response
+            console.log("File uploaded successfully", response);
+            console.log(response);
+            console.log(response.data);
+            toast.success("Deliver Order Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error uploading file", error);
+            toast.warn("Deliver Order Faild!", { autoClose: 2000 });
+          });
+      } else {
+        // Handle case when no file is selected
+        console.warn("Please select a file to upload");
       }
     },
   },
@@ -976,7 +1205,8 @@ export default {
   padding: 0 20px;
 }
 .order_detail_overview .start_order .start_btn,
-.order_detail_information .save_change .save_btn {
+.order_detail_information .save_change .save_btn,
+.deliver_order .deliver_btn {
   border: 1px solid transparent;
   border-radius: 4px;
   box-sizing: border-box;
