@@ -106,18 +106,11 @@ export default {
   },
   data() {
     return {
-      role: "",
+      user: {}
     };
   },
-  created() {
-    const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
-    // console.log(decoded);
-    if (decoded.role != "F") {
-      this.$router.push("/");
-    }
-  },
-  mounted() {
-    axios
+  async mounted() {
+    await axios
       .get("/users/info", {
         headers: { token: localStorage.getItem("token") },
       })

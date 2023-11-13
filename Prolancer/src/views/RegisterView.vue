@@ -30,6 +30,7 @@
                           class="form-control"
                           placeholder="User Name"
                           v-model="username"
+                          @change="isUsernameExist"
                         />
                       </div>
                     </div>
@@ -66,6 +67,7 @@
                           class="form-control"
                           placeholder="Email"
                           v-model="email"
+                          @change="isEmailExist"
                         />
                       </div>
                     </div>
@@ -77,7 +79,7 @@
                           id="form3Example3c"
                           class="form-control"
                           placeholder="Phone Number"
-                          v-model="phoneno"
+                          v-model="phoneNo"
                         />
                       </div>
                     </div>
@@ -149,9 +151,14 @@ export default {
     return {
       username: "",
       email: "",
+      firstName: "",
+      lastName: "",
+      phoneNo: "",
       password: "",
       repeatPassword: "",
       message: "",
+      emailExist: false,
+      usernameExist: false
     };
   },
   computed: {
@@ -175,9 +182,21 @@ export default {
         this.message = "you must enter username";
         return false;
       }
+      if (this.usernameExist) {
+        this.message = "Username exist";
+        return false;
+      }
       if (!this.isValidUsername) {
         this.message =
           "Username must start with an alphabet and has at least 8 characters";
+        return false;
+      }
+      if (!this.firstName) {
+        this.message = "you must enter your first name";
+        return false;
+      }
+      if (!this.lastName) {
+        this.message = "you must enter your last name";
         return false;
       }
       if (!this.email) {
@@ -188,18 +207,14 @@ export default {
         this.message = "Wrong email format";
         return false;
       }
-      // axios.get(`/users/${this.email}/check`).then(
-      //   (res) => {
-      //     console.log(res.data);
-      //     if (res.data) {
-      //       this.message = "Email already exists";
-      //       return false;
-      //     }
-      //   },
-      //   (err) => {
-      //     console.log(err.response);
-      //   }
-      // );
+      if (this.emailExist) {
+        this.message = "Email exist";
+        return false;
+      }
+      if (!this.phoneNo) {
+        this.message = "you must enter your phone number";
+        return false;
+      }
       if (!this.password) {
         this.message = "you must enter password";
         return false;
@@ -229,7 +244,11 @@ export default {
           .post("/users/create", {
             email: this.email,
             username: this.username,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            phoneNo: this.phoneNo,
             password: this.password,
+
           })
           .then(
             (res) => {
@@ -241,6 +260,36 @@ export default {
             }
           );
       }
+    },
+    isEmailExist(){
+      axios.get(`/users/${this.email}/checkEmail`).then(
+        (res) => {
+          console.log(res.data)
+          if (res.data) {
+            this.emailExist = true
+          }else{
+            this.emailExist = false
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+    },
+    isUsernameExist(){
+      axios.get(`/users/${this.username}/checkUsername`).then(
+        (res) => {
+          console.log(res.data)
+          if (res.data) {
+            this.usernameExist = true
+          }else{
+            this.usernameExist = false
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
     },
   },
 };
