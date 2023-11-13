@@ -102,6 +102,7 @@
             id="form3Example3"
             class="form-control form-control-lg"
             v-model="user.username"
+            readonly
           />
           <div style="display: flex; flex-direction: row; justify-content: space-between">
             <div class="left" style="width:40%">
@@ -143,14 +144,14 @@
             class="form-control form-control-lg"
             v-model="user.description"
           />
-          <label class="form-label mt-5" style="float: left" for="form3Example3"
+          <!-- <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Image</label>
             <input
             type="text"
             id="form3Example3"
             class="form-control form-control-lg"
             v-model="user.image"
-          />
+          /> -->
         
          
           <button id="btn-sub" type="submit" @click="updateProfile" class="btn btn-primary">

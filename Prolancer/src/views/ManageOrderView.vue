@@ -984,7 +984,7 @@ export default {
       if (selectedRequest.Request_Type == "Cancel") {
         alert("Cancel :" + selectedRequest.Request_Action);
         const changeOrderStatusRes = await axios.put("/orders/updateStatus", {
-          status: selectedRequest.Request_Action,
+          status: "Cancelled",
           orderID: selectedRequest.OrderID,
         });
         if (changeOrderStatusRes.data.message == "Change Status Success") {
