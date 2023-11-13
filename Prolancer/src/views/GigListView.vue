@@ -465,7 +465,7 @@ export default {
     const responseGig = await axios.get("/gigs/index", {
       params: {
         page: '1',
-        search: '',
+        search: searchFilterQuery.search,
             filterBy1: this.$route.query.filterBy1,
             filterBy2: this.$route.query.filterBy2,
             filterBy3: this.$route.query.filterBy3,
@@ -482,6 +482,8 @@ export default {
   async beforeRouteUpdate   () {
   
      var searchFilterQuery = this.$route.query;
+     console.log('Q Here '+searchFilterQuery)
+     console.log('Run before update '+searchFilterQuery)
 
         console.log('Category Here '+this.filterBy1)
         console.log('Delivery Here '+this.filterBy2)

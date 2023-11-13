@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="header">
-      <Headers></Headers>
+      <HeaderAdmin v-if="user.role == 'A'"></HeaderAdmin>
+      <Headers v-else></Headers>
     </div>
     <div class="sidebar">
       <Sidebar></Sidebar>
@@ -56,6 +57,7 @@
 
 <script>
 import Headers from "../components/Header.vue";
+import HeaderAdmin from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import axios from "axios";
 
@@ -64,7 +66,8 @@ export default {
   components: {
     Headers,
     Sidebar,
-  },
+    HeaderAdmin
+},
   data() {
     return {
       user: {},
