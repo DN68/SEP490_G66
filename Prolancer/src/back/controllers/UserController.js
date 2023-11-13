@@ -169,7 +169,7 @@ class UserController {
                     title: 'user grabbed',
                     //can add more fields
                     user: {
-                        UserId: results[0].UserID,
+                        userId: results[0].UserID,
                         email: results[0].Email,
                         username: results[0].Username,
                         firstName: results[0].First_Name,
