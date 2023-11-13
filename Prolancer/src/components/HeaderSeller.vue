@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <!-- Container wrapper -->
@@ -126,6 +128,7 @@
       </div>
     </nav>
   </div>
+</div>
 
   <!-- Navbar -->
 </template>
