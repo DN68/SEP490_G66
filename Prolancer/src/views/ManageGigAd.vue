@@ -17,7 +17,7 @@
             />
             <router-link
               :to="{
-                path: '/managegigsel',
+                path: '/managegigad',
                 query: {
                   search: searchGig,
                   userID: user.userId,
@@ -145,26 +145,128 @@
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
-              <th class="th_gig">GIG</th>
-              <th>ORDERS</th>
-              <th>CANCELLATIONS</th>
-              <th>ACTIONS</th>
+              <th class="th_no">NO.</th>
+              <th class="th_Freelancer">FREELANCER</th>
+              <th class="th_Title">TITLE</th>
+              <th class="th_description">DESCRIPTION</th>
+              <th class="th_img">GIG IMAGE</th>
+              <th class="th_category">CATEGORY NAME</th>
+              <th class="th_creationDate">CREATION DATE</th>
+              <th class="th_deliveryDays">DELEVERY DAY</th>
+              <th class="th_status">STATUS</th>
+              <th class="th_numberPage">NUMBER OF PAGE</th>
+              <th class="th_price">PRICE</th>
+              <th class="th_actions">ACTIONS</th>
             </tr>
           </thead>
-          <tbody v-if="orders.length >= 1">
-            <tr v-for="(order, index) in orders" :key="index">
+          <tbody v-if="gigs.length >= 1">
+            <tr v-for="(gig, index) in gigs" :key="index">
               <td class="td_gigs">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                     coding -->
-                    {{ order.Title }}
+                    {{ index + 1 }}
                   </p>
                 </div>
               </td>
-              <td class="td_orders"></td>
+              <td class="td_user">
+                <div class="d-flex align-items-center">
+                  <img
+                    :src="gig.Profile_Picture"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">
+                      {{
+                        gig.First_Name +
+                        " " +
+                        gig.Last_Name
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Title }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Description }}
+                  </p>
+                </div>
+              </td>
 
-              <td class="td_cancels"></td>
+              <td class="td_image">
+                <img :src="gig.Gig_IMG" width="200" height="100"/>
+              </td>
+
+
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Category_Name }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ getFormattedDate(gig.Creation_Date) }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Delivery_Day }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Status }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Numberpage }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_gigs">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                    coding -->
+                    {{ gig.Price }}
+                  </p>
+                </div>
+              </td>
               <td class="td_actions">
                 <div class="dropdown">
                   <button
@@ -186,7 +288,7 @@
             </tr>
           </tbody>
         </table>
-        <div v-if="orders.length == 0" class="text-center">
+        <div v-if="gigs.length == 0" class="text-center">
           <h5>Order Not Found</h5>
         </div>
 
@@ -196,7 +298,7 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/managegigsel',
+              path: '/managegigad',
               query: {
                 page: 1,
                 search: searchGig,
@@ -211,7 +313,7 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/managegigsel',
+              path: '/managegigad',
               query: {
                 page: pagination.page - 1,
                 search: searchGig,
@@ -223,7 +325,7 @@
           ></router-link>
           <router-link
             :to="{
-              path: '/managegigsel',
+              path: '/managegigad',
               query: {
                 page: index,
                 search: searchGig,
@@ -245,7 +347,7 @@
             class="page-number"
             @click="selectedPage = pagination.page + 1"
             :to="{
-              path: '/managegigsel',
+              path: '/managegigad',
               query: {
                 page: pagination.page + 1,
                 search: searchGig,
@@ -278,13 +380,19 @@ export default {
   data() {
     return {
       user: {},
-      orders: [],
+      gigs: [],
       pagination: [],
       moment: moment,
-      searchOrder: "",
+      searchGig: "",
       selectedPage: 1,
       status: "Active",
     };
+  },
+  methods: {
+    //format date
+    getFormattedDate(date) {
+      return moment(date).format("YYYY-MM-DD");
+    },
   },
   async created() {
     await axios
@@ -303,50 +411,41 @@ export default {
         }
       );
   },
-  // async created() {
-  //   if (localStorage.getItem("token") === null) {
-  //     this.$router.push("/login");
-  //   }
-  //   const responseUserInfor = await axios.get("/users/info", {
-  //     headers: { token: localStorage.getItem("token") },
-  //   });
-  //   const userInfor = responseUserInfor.data.user;
-  //   this.user = userInfor;
-  //   console.log(this.user.userId);
-  //   const responseData = await axios.get("/orders/index", {
-  //     params: {
-  //       page: this.selectedPage,
-  //       search: this.searchOrder,
-  //       userID: this.user.userId,
-  //       status: this.status,
-  //     },
-  //   });
-  //   const orders = responseData.data.order;
-  //   this.orders = orders;
-  //   const paging = responseData.data.pagination;
-  //   this.pagination = paging;
-  //   console.log(this.pagination);
-  // },
-  // async beforeRouteUpdate() {
-  //   console.log("Run Here");
-  //   const responseDateWithPage = await axios.get("/orders/index", {
-  //     params: {
-  //       page: this.selectedPage,
-  //       search: this.searchOrder,
-  //       userID: this.user.userId,
-  //       status: this.status,
-  //     },
-  //   });
-
-  //   const orders = responseDateWithPage.data.order;
-  //   this.orders = orders;
-
-  //   const searchQuery = responseDateWithPage.data.searchQuery;
-  //   this.searchOrder = searchQuery.search;
-  //   const paging = responseDateWithPage.data.pagination;
-  //   this.pagination = paging;
-  //   console.log("this.selectedPage " + (this.pagination.page + 1));
-  // },
+  async created() {
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/login");
+    }
+    const responseUserInfor = await axios.get("/users/info", {
+      headers: { token: localStorage.getItem("token") },
+    });
+    const userInfor = responseUserInfor.data.user;
+    this.user = userInfor;
+    console.log(this.user.userId);
+    const responseData = await axios.get("/gigs/index", {
+      params: {
+        page: this.selectedPage,
+        search: this.searchOrder,
+        filterBy1: "",
+        filterBy2: "",
+        filterBy3: ""
+      },
+    });
+    const gigs = responseData.data.gig;
+    console.log(gigs)
+    this.gigs = gigs;
+    const paging = responseData.data.pagination;
+    this.pagination = paging;
+    console.log(this.pagination);
+    // const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
+    //   params: {
+    //     user: this.user,
+    //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
+    //     status: "Pending",
+    //   },
+    // });
+    // const totalNewRequest = responseOrderReqData.data.pagination;
+    // this.totalOrderRequest = totalNewRequest.totalRow;
+  },
 };
 </script>
   

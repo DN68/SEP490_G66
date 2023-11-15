@@ -27,7 +27,7 @@ Gig.getAll = function (result) {
 };
 
 Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
-  var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID WHERE";
+  var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription, c.Category_Name from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   if (filterByDeliveryDay != '') {
@@ -48,7 +48,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
   console.log("sqlCount: ", sqlCount);
 
 
-  var check = connectDb.query(sql + " CategoryID LIKE ? AND Title LIKE ? LIMIT ? OFFSET ?", ['%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
+  var check = connectDb.query(sql + " g.CategoryID LIKE ? AND g.Title LIKE ? LIMIT ? OFFSET ?", ['%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
     if (err) {
       console.log("error: ", err);
       gig(err,null)
