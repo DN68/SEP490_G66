@@ -83,7 +83,8 @@ class GigController {
       res.send({
         gig, pagination: {
           totalPage: Math.ceil(totalRows[0].count / limit),
-          page: parseInt(page)
+          page: parseInt(page),
+          totalRow: totalRows[0].count
         }, searchQuery: {
           search: search,
           status: status,

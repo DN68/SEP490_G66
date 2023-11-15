@@ -421,12 +421,12 @@ export default {
       },
     });
     const gigs = responseData.data.gig;
-    console.log(gigs)
+    // console.log(gigs)
     this.gigs = gigs;
     const paging = responseData.data.pagination;
     this.pagination = paging;
-    console.log(this.pagination);
-    console.log(this.status)
+    console.log(this.pagination.totalRow);
+    // console.log(this.status)
     // const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
     //   params: {
     //     user: this.user,
