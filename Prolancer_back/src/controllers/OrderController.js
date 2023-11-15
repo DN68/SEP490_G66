@@ -302,12 +302,11 @@ class OrderController {
 
     // const uploadPath = '../Prolancer/public/delivery' + deliverFile.name;
     const newFileName = `${orderID}_${deliverFile.name}`;
-    const commonPath = path.join('public', 'delivery', newFileName);
+    const commonPath = path.join('uploads', 'delivery', newFileName);
 
     console.log("🚀 ~ file: OrderController.js:284 ~ OrderController ~ uploadPath:", commonPath)
-    const uploadPath = path.join(__dirname, '..', '..', '..', commonPath);
+    const uploadPath = path.join(__dirname, '..', '..', commonPath);
     console.log("🚀 ~ file: OrderController.js:289 ~ OrderController ~ uploadPath:", uploadPath)
-    
     if (fs.existsSync(uploadPath)) {
       // Delete the existing file
       console.log("Run Here")
@@ -339,7 +338,7 @@ class OrderController {
           else {
             console.log("File uploaded successfully Run Here")
             if (result.affectedRows == 0) {
-              res.send({ message: 'File uploaded Failed' });
+              return res.send({ message: 'File uploaded Failed' });
     
             }
             res.json({ message: 'File uploaded successfully' });

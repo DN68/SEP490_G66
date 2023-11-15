@@ -290,7 +290,7 @@
                           class="d-none"
                           name="sampleFile"
                           ref="fileInput"
-                          accept="image/*,.pdf,.txt"
+                          accept="image/*,.pdf,.txt,.zip,.rar"
                           @change="checkInputFile=true"
                         />
                       </div>
@@ -334,7 +334,7 @@
                           class="d-none"
                           name="sampleFile"
                           ref="fileInput"
-                          accept="image/*,.pdf,.txt"
+                          accept="image/*,.pdf,.txt,.zip,.rar"
                           @change="checkInputFile=true"
                         />
                         <label for="uploadProduct">
