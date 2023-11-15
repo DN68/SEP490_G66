@@ -4,10 +4,11 @@ const connectDb = require('../common/connectdb.js');
 class GigController {
 
   getGigWithFilterAndPagingAndSearching = function (req, res) {
-    const limit = 16;
+    const limit = 5;
     var pageQuery = req.query;
     console.log("🚀 ~ file: GigController.js:9 ~ GigController ~ pageQuery:", pageQuery)
     var page;
+    var status = pageQuery.status;
     var search;
     var filterByCategory = '';
     var filterByDeliveryDay = '';
@@ -53,7 +54,7 @@ class GigController {
 
     // Create a Promise to handle the asynchronous operation
     const fetchData = new Promise((resolve, reject) => {
-      Gig.getGigWithFilterAndPagingAndSearching(filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
+      Gig.getGigWithFilterAndPagingAndSearching(status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
         if (err) {
 
           reject(err);
@@ -85,6 +86,7 @@ class GigController {
           page: parseInt(page)
         }, searchQuery: {
           search: search,
+          status: status,
           filterBy1: filterByCategory,
           filterBy2: filterByDeliveryDay,
           filterBy3: filterByPrice

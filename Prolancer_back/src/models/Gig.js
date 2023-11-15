@@ -26,7 +26,7 @@ Gig.getAll = function (result) {
   });
 };
 
-Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
+Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
   var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription, c.Category_Name from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
@@ -35,7 +35,6 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
     sqlCount = sqlCount + " Delivery_Day <= " + filterByDeliveryDay + " AND";
 
     console.log("run Delivery_Day")
-
   }
   if (filterByPrice != '') {
     sql = sql + " Price <= " + filterByPrice + " AND";
@@ -48,7 +47,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
   console.log("sqlCount: ", sqlCount);
 
 
-  var check = connectDb.query(sql + " g.CategoryID LIKE ? AND g.Title LIKE ? LIMIT ? OFFSET ?", ['%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
+  var check = connectDb.query(sql + " g.Status = ? AND g.CategoryID LIKE ? AND g.Title LIKE ? LIMIT ? OFFSET ?", [status,'%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
     if (err) {
       console.log("error: ", err);
       gig(err,null)
@@ -59,7 +58,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
     }
   });
 
-  connectDb.query(sqlCount + " CategoryID LIKE ? AND Title LIKE ?", ['%' + filterByCategory + '%', '%' + search + '%'], function (err, res) {
+  connectDb.query(sqlCount + " Status = ? AND CategoryID LIKE ? AND Title LIKE ?", [status, '%' + filterByCategory + '%', '%' + search + '%'], function (err, res) {
     if (err) {
 
       pagination(err,null);

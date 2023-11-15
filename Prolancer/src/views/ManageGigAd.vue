@@ -20,7 +20,6 @@
                 path: '/managegigad',
                 query: {
                   search: searchGig,
-                  userID: user.userId,
                   status: status,
                 },
               }"
@@ -47,7 +46,6 @@
               path: '/managegigad',
               query: {
                 search: searchGig,
-                userID: user.userId,
                 status: 'Active',
               },
             }"
@@ -73,7 +71,6 @@
               query: {
                 page: 1,
                 search: searchGig,
-                userID: user.userId,
                 status: 'Paused',
               },
             }"
@@ -99,7 +96,6 @@
               query: {
                 page: 1,
                 search: searchGig,
-                userID: user.userId,
                 status: 'Deleted',
               },
             }"
@@ -125,7 +121,6 @@
               query: {
                 page: 1,
                 search: searchGig,
-                userID: user.userId,
                 status: 'Block',
               },
             }"
@@ -302,7 +297,6 @@
               query: {
                 page: 1,
                 search: searchGig,
-                userID: user.userId,
                 status: status,
               },
             }"
@@ -317,7 +311,6 @@
               query: {
                 page: pagination.page - 1,
                 search: searchGig,
-                userID: user.userId,
                 status: status,
               },
             }"
@@ -329,7 +322,6 @@
               query: {
                 page: index,
                 search: searchGig,
-                userID: user.userId,
                 status: status,
               },
             }"
@@ -351,7 +343,6 @@
               query: {
                 page: pagination.page + 1,
                 search: searchGig,
-                userID: user.userId,
                 status: status,
               },
             }"
@@ -385,7 +376,8 @@ export default {
       moment: moment,
       searchGig: "",
       selectedPage: 1,
-      status: "Active",
+      // status: this.$route.query.status,
+      status: 'Active'
     };
   },
   methods: {
@@ -425,9 +417,7 @@ export default {
       params: {
         page: this.selectedPage,
         search: this.searchOrder,
-        filterBy1: "",
-        filterBy2: "",
-        filterBy3: ""
+        status: this.status,
       },
     });
     const gigs = responseData.data.gig;
@@ -436,6 +426,7 @@ export default {
     const paging = responseData.data.pagination;
     this.pagination = paging;
     console.log(this.pagination);
+    console.log(this.status)
     // const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
     //   params: {
     //     user: this.user,
@@ -445,6 +436,25 @@ export default {
     // });
     // const totalNewRequest = responseOrderReqData.data.pagination;
     // this.totalOrderRequest = totalNewRequest.totalRow;
+  },
+  async beforeRouteUpdate() {
+    console.log("Run Here");
+    const responseDateWithPage = await axios.get("/gigs/index", {
+      params: {
+        page: this.selectedPage,
+        search: this.searchOrder,
+        status: this.status,
+      },
+    });
+
+    const gigs = responseDateWithPage.data.gig;
+    this.gigs = gigs;
+
+    const searchQuery = responseDateWithPage.data.searchQuery;
+    this.searchGig = searchQuery.search;
+    const paging = responseDateWithPage.data.pagination;
+    this.pagination = paging;
+    console.log("this.selectedPage " + (this.pagination.page + 1));
   },
 };
 </script>
