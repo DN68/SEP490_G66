@@ -304,7 +304,7 @@
           </tbody>
         </table>
         <div v-if="gigs.length == 0" class="text-center">
-          <h5>Order Not Found</h5>
+          <h5>Gig Not Found</h5>
         </div>
 
         <div>
@@ -591,7 +591,7 @@ export default {
   border-bottom: 2px solid;
   padding-bottom: 4px;
 }
-.order_search {
+.gig_search {
   border: none;
 }
 .icon_search {

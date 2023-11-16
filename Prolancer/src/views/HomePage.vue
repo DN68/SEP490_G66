@@ -21,7 +21,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, {{ user.username }}
+                <p v-if="user != null">Hello, {{ user.username }}</p>
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -189,7 +189,7 @@ export default {
     return {
       categories: [],
       gigs: [],
-      user: {},
+      user: null,
     };
   },
   async created() {
@@ -222,23 +222,9 @@ export default {
       },
     });
     const gigs = responseGig.data.gig;
-    console.log(gigs[0].Title + "1");
+    // console.log(gigs[0].Title + "1");
 
     this.gigs = gigs;
-  },
-  mounted() {
-    axios
-      .get("/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.user = res.data.user;
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
   },
 };
 </script>
