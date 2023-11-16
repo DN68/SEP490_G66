@@ -448,8 +448,7 @@ import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
-import VueJwtDecode from "vue-jwt-decode";
-
+import "vue3-toastify/dist/index.css";
 
 var moment = require("moment");
 
