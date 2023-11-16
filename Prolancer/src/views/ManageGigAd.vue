@@ -10,7 +10,7 @@
           <div class="input-group rounded">
             <input
               type="search"
-              class="form-control order_search"
+              class="form-control gig_search"
               placeholder="Search Gig ..."
               v-model="searchGig"
               aria-label="Search"
