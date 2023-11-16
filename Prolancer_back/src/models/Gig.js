@@ -119,7 +119,7 @@ Gig.updateGig = function(data, id, result){
 Gig.updateGigStatus = function(status, id, result){
   connectDb.query("UPDATE Gig SET Status = ? WHERE GigID = ?", [status, id], function(err, res){
     if (err) {
-      result(null, err);
+      result(err, null);
     }
     else {
       result(null, res);

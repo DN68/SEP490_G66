@@ -3,7 +3,7 @@
     <Header></Header>
     <Sidebar></Sidebar>
     <div class="container-managigad">
-      <div class="manage_title row">   
+      <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Gigs</h3></div>
         <div class="col-md-3"><h3></h3></div>
         <div class="col-md-3 search_bar">
@@ -113,23 +113,23 @@
         </div>
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Block' }"
+          :class="{ status_item_active: this.status == 'Blocked' }"
         >
           <router-link
-            @click="(this.status = 'Block'), (selectedPage = '1')"
+            @click="(this.status = 'Blocked'), (selectedPage = '1')"
             :to="{
               path: '/managegigad',
               query: {
                 page: 1,
                 search: searchGig,
-                status: 'Block',
+                status: 'Blocked',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Block<span
-                v-if="this.status == 'Block'"
+              Blocked<span
+                v-if="this.status == 'Blocked'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -176,11 +176,7 @@
                   />
                   <div class="ms-3">
                     <p class="fw-bold mb-1">
-                      {{
-                        gig.First_Name +
-                        " " +
-                        gig.Last_Name
-                      }}
+                      {{ gig.First_Name + " " + gig.Last_Name }}
                     </p>
                   </div>
                 </div>
@@ -205,9 +201,8 @@
               </td>
 
               <td class="td_image">
-                <img :src="gig.Gig_IMG" width="200" height="100"/>
+                <img :src="gig.Gig_IMG" width="200" height="100" />
               </td>
-
 
               <td class="td_gigs">
                 <div class="d-flex align-items-center">
@@ -238,11 +233,28 @@
               </td>
               <td class="td_gigs">
                 <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Status }}
-                  </p>
+                  <span
+                    v-if="gig.Status == 'Active'"
+                    class="badge bg-primary rounded-pill d-inline"
+                  >
+                    Active</span
+                  >
+                  <span
+                    v-if="gig.Status == 'Paused'"
+                    class="badge rounded-pill bg-info d-inline"
+                  >
+                    Paused</span
+                  >
+                  <span
+                    v-if="gig.Status == 'Deleted'"
+                    class="badge rounded-pill bg-danger"
+                    >Deleted</span
+                  >
+                  <span
+                    v-if="gig.Status == 'Blocked'"
+                    class="badge rounded-pill bg-secondary"
+                    >Blocked</span
+                  >
                 </div>
               </td>
               <td class="td_gigs">
@@ -264,7 +276,15 @@
                 </div>
               </td>
               <td class="td_actions">
-                <div class="dropdown">
+                <i
+                  @click="
+                    (isshowModal = !isshowModal), (slectedGigID = gig.GigID)
+                  "
+                  class="bi bi-gear-fill"
+                ></i>
+              </td>
+
+              <!-- <div class="dropdown">
                   <button
                     type="button"
                     data-bs-toggle="dropdown"
@@ -279,8 +299,7 @@
                     <li><a class="dropdown-item" href="#">Block</a></li>
                     <li><a class="dropdown-item" href="#">Unblock</a></li>
                   </ul>
-                </div>
-              </td>
+                </div> -->
             </tr>
           </tbody>
         </table>
@@ -288,6 +307,75 @@
           <h5>Order Not Found</h5>
         </div>
 
+        <div>
+          <div
+            class="modal fade show"
+            style="
+              display: block;
+              background-color: #000000ad;
+              padding-top: 10%;
+            "
+            v-if="isshowModal"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Change Order Status</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    @click="isshowModal = !isshowModal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div>
+                      <p class="modal-title">Select status here</p>
+                    </div>
+                    <select
+                      v-model="selectedStatus"
+                      style="margin-bottom: 15px"
+                      class="text-center py-2"
+                    >
+                      <option class="" value="Active">
+                        <span>Active</span>
+                      </option>
+                      <option class="" value="Paused">
+                        <span>Paused</span>
+                      </option>
+                      <option class="" value="Deleted">
+                        <span>Deleted</span>
+                      </option>
+                      <option class="" value="Blocked">
+                        <span>Blocked</span>
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="isshowModal = !isshowModal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    @click="
+                      changeGigStatus(selectedStatus, slectedGigID),
+                        (isshowModal = !isshowModal)
+                    "
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="pagination">
           <router-link
             v-if="pagination.page - 1 == 0 && pagination.totalPage != 0"
@@ -359,7 +447,9 @@
 import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
+import { toast } from "vue3-toastify";
 import VueJwtDecode from "vue-jwt-decode";
+
 
 var moment = require("moment");
 
@@ -378,13 +468,31 @@ export default {
       searchGig: "",
       selectedPage: 1,
       // status: this.$route.query.status,
-      status: 'Active'
+      status: "Active",
+      isshowModal: false,
+      selectedStatus: "Active",
     };
   },
   methods: {
     //format date
     getFormattedDate(date) {
       return moment(date).format("YYYY-MM-DD");
+    },
+    async changeGigStatus(status, gigID) {
+      const data = await axios.put("/gigs/updateStatus", {
+        status: status,
+        gigID: gigID,
+      });
+      // console.log(data);
+      if (data.data.message == "Change Status Success") {
+        toast.success("Change Gig Status Successfully!", {
+          theme: "colored",
+          autoClose: 2000,
+          onClose: () => location.reload(),
+        });
+      } else {
+        toast.warn("Change Gig Status Failed!", { autoClose: 2000 });
+      }
     },
   },
   async created() {
@@ -403,8 +511,6 @@ export default {
           console.log(err.response);
         }
       );
-  },
-  async created() {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     }
@@ -450,7 +556,7 @@ export default {
 
     const gigs = responseDateWithPage.data.gig;
     this.gigs = gigs;
-    
+
     const searchQuery = responseDateWithPage.data.searchQuery;
     this.searchGig = searchQuery.search;
     const paging = responseDateWithPage.data.pagination;

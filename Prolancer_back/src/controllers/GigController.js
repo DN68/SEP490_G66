@@ -4,7 +4,7 @@ const connectDb = require('../common/connectdb.js');
 class GigController {
 
   getGigWithFilterAndPagingAndSearching = function (req, res) {
-    const limit = 5;
+    const limit = 16;
     var pageQuery = req.query;
     console.log("🚀 ~ file: GigController.js:9 ~ GigController ~ pageQuery:", pageQuery)
     var page;
@@ -159,6 +159,28 @@ class GigController {
         res.json(result);
       }
     })
+  }
+
+  changeGigStatus = function (req, res) {
+    const data = req.body;
+    var status = data.status;
+    var gigID = data.gigID;
+
+    console.log(status + gigID);
+
+    Gig.updateGigStatus(status, gigID, function (err, result) {
+      if (err)
+        return res.send(err);
+      else {
+        console.log('res', result);
+        if (result.affectedRows == 0) {
+          res.send({ message: 'Change Status Failed' });
+
+        }
+        res.send({ message: 'Change Status Success' });
+      }
+
+    });
   }
 
   getGigByFreelancerIdAndStatus = function (req, res) {
