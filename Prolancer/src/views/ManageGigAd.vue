@@ -3,7 +3,8 @@
     <Header></Header>
     <Sidebar></Sidebar>
     <div class="container-managigad">
-      <div class="manage_title row">
+      <div class="manage_title row">   
+        <div class="col-md-3"><h3>Manage Gigs</h3></div>
         <div class="col-md-3"><h3></h3></div>
         <div class="col-md-3 search_bar">
           <div class="input-group rounded">
@@ -416,7 +417,7 @@ export default {
     const responseData = await axios.get("/gigs/index", {
       params: {
         page: this.selectedPage,
-        search: this.searchOrder,
+        search: this.searchGig,
         status: this.status,
       },
     });
@@ -442,14 +443,14 @@ export default {
     const responseDateWithPage = await axios.get("/gigs/index", {
       params: {
         page: this.selectedPage,
-        search: this.searchOrder,
+        search: this.searchGig,
         status: this.status,
       },
     });
 
     const gigs = responseDateWithPage.data.gig;
     this.gigs = gigs;
-
+    
     const searchQuery = responseDateWithPage.data.searchQuery;
     this.searchGig = searchQuery.search;
     const paging = responseDateWithPage.data.pagination;
