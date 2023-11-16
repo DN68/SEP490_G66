@@ -31,13 +31,13 @@ Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, 
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   if (filterByDeliveryDay != '') {
-    sql = sql + " Delivery_Day <= " + filterByDeliveryDay + " AND";
+    sql = sql + " g.Delivery_Day <= " + filterByDeliveryDay + " AND";
     sqlCount = sqlCount + " Delivery_Day <= " + filterByDeliveryDay + " AND";
 
     console.log("run Delivery_Day")
   }
   if (filterByPrice != '') {
-    sql = sql + " Price <= " + filterByPrice + " AND";
+    sql = sql + " g.Price <= " + filterByPrice + " AND";
     sqlCount = sqlCount + " Price <= " + filterByPrice + " AND";
     console.log("run Price")
 
