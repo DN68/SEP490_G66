@@ -218,7 +218,7 @@
               {{ totalOrderRequest }}+
               <span class="visually-hidden">unread messages</span>
             </span>
-            Order Request
+            Change Request
           </h6>
         </div>
       </div>
@@ -680,8 +680,8 @@
             </tr>
           </tbody>
         </table>
-        <div v-if="orders.length == 0" class="text-center">
-          <h5>Order Not Found</h5>
+        <div v-if="orderRequests.length == 0" class="text-center">
+          <h5>Order Request Not Found</h5>
         </div>
 
         <div class="pagination">

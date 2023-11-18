@@ -3,6 +3,7 @@ const gigRoute = require('./gigs');
 const orderRoute = require('./orders');
 const userRoute = require('./users')
 const  cvRoute = require('./cv')
+const  skillRoute = require('./skills')
 function route(app) {
     // app.get("/", function(req,res){
     //     res.send('home');
@@ -18,6 +19,7 @@ function route(app) {
     app.use("/orders", orderRoute);  
     app.use("/users", userRoute);  
     app.use("/cv", cvRoute);  
+    app.use("/skills", skillRoute);  
 }
 
 module.exports = route;

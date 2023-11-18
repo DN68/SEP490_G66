@@ -6,7 +6,7 @@
     <header class="row">
       <Header :searchText="search"></Header>
     </header>
-    <NavCategory :listCategories="categories"></NavCategory>
+    <NavCategory></NavCategory>
     <div class="container">
       <div class="row">
         <!-- <aside class="col-sm-3">
@@ -75,7 +75,7 @@
                 class="dropdown-menu program_dropdown"
                 :style="{ display: isshowListProgram ? 'block' : 'none' }"
               >
-                <li v-for="category in categories" :key="category.id">
+                <li v-for="category in categories" :key="category.CategoryID">
                   <router-link
                     class="dropdown-item"
                     @click="filterBy1 = category.CategoryID,selectedPage='1'"
@@ -476,6 +476,9 @@ export default {
     
     const paging = responseGig.data.pagination;
     this.pagination = paging;
+    this.filterBy1 =this.$route.query.filterBy1
+    this.filterBy2 =this.$route.query.filterBy2
+    this.filterBy3 =this.$route.query.filterBy3
 
   },
   
