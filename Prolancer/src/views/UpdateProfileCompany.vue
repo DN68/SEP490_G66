@@ -96,7 +96,7 @@
       <form  class="form-profile">
         <div class="field">
           <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >Username</label
+            >Company Name</label
           >
           <input
             type="text"
@@ -105,31 +105,14 @@
             v-model="user.username"
             readonly
           />
-          <div style="display: flex; flex-direction: row; justify-content: space-between">
-            <div class="left" style="width:40%">
-               <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >First Name</label
-          >
+          <label class="form-label mt-5" style="float: left" for="form3Example3"
+            >Email</label>
           <input
             type="text"
             id="form3Example3"
             class="form-control form-control-lg"
-            v-model="user.firstName"
+            v-model="user.email"
           />
-            </div>
-            <div class="right" style="width:40%">
-              <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >Last Name</label
-          >
-          <input
-            type="text"
-            id="form3Example3"
-            class="form-control form-control-lg"
-            v-model="user.lastName"
-          />
-            </div>
-             
-          </div>
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Phone Number</label>
           <input
@@ -138,44 +121,29 @@
             class="form-control form-control-lg"
             v-model="user.phone"
           />
+          
           <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >Company</label>
+            >Tax Code</label>
           <input
             type="text"
             id="form3Example3"
             class="form-control form-control-lg"
-            v-model="user.company"
+            v-model="user.taxcode"
           />
           <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >Company Email</label>
+            >Legal Representative</label>
           <input
             type="text"
             id="form3Example3"
             class="form-control form-control-lg"
-            v-model="user.companyemail"
+            v-model="user.legelrepresentative"
           />
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Address</label>
-          <input
-            type="text"
-            id="form3Example3"
-            class="form-control form-control-lg"
-            v-model="user.address"
-          />
-          <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >Company Address</label>
-          <input
-            type="text"
-            id="form3Example3"
-            class="form-control form-control-lg"
-            v-model="user.companyaddress"
-          />
-          <label class="form-label mt-5" style="float: left" for="form3Example3"
-            >Description</label>
             <textarea
             id="form3Example3"
             class="form-control form-control-lg"
-            v-model="user.description"
+            v-model="user.address"
           />
           <!-- <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Image</label>
