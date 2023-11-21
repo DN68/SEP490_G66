@@ -112,7 +112,7 @@ class AccountController {
             if (!results[0]) {
                 return res.status(401).json({
                     title: 'error',
-                    error: 'no Account with this email'
+                    error: 'no user with this email'
                 })
             }
             //Send new random password to email
@@ -128,7 +128,7 @@ class AccountController {
                 service: 'gmail',
                 auth: {
                     type: 'OAuth2',
-                    Account: 'anpqhe160968@fpt.edu.vn',
+                    user: 'anpqhe160968@fpt.edu.vn',
                     clientId: CLIENT_ID,
                     clientSecret: CLIENT_SECRET,
                     refreshToken: REFRESH_TOKEN,
