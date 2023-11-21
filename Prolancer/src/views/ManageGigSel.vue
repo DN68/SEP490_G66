@@ -35,6 +35,20 @@
             </router-link>
           </div>
         </div>
+        <div class="col-md-2">
+          <router-link to="/creategig" style="text-decoration: none">
+            <h6
+              style="
+                color: #fff;
+                border: 1px #ccc solid;
+                background-color: red;
+                line-height: 35px;
+              "
+            >
+              Create Gig
+            </h6>
+          </router-link>
+        </div>
       </div>
       <div class="order_status row">
         <div
