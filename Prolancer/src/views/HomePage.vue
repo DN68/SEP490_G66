@@ -21,7 +21,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, {{ user.username }}
+                <p v-if="account != null">Hello, {{ account.username }}</p>
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -189,21 +189,21 @@ export default {
     return {
       categories: [],
       gigs: [],
-      user: {},
+      account: null,
     };
   },
   async created() {
     await axios
-      .get("/users/info", {
+      .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
-          this.user = res.data.user;
-          if (this.user.role == "F") {
+          this.account = res.data.account;
+          if (this.account.role == "F") {
             this.$router.push("/seldash");
           }
-          if (this.user.role == "A") {
+          if (this.account.role == "A") {
             this.$router.push("/managegigad");
           }
         },
@@ -215,26 +215,17 @@ export default {
     const responseCategory = await axios.get("/categories/get");
     const categories = responseCategory.data;
     this.categories = categories;
+    console.log(this.categories)
 
-    const responseGig = await axios.get("/gigs/index");
+    const responseGig = await axios.get("/gigs/index", {
+      params: {
+        status: "Active",
+      },
+    });
     const gigs = responseGig.data.gig;
-    console.log(gigs[0].Title + "1");
+    // console.log(gigs[0].Title + "1");
 
     this.gigs = gigs;
-  },
-  mounted() {
-    axios
-      .get("/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.user = res.data.user;
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
   },
 };
 </script>

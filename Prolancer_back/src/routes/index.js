@@ -2,6 +2,9 @@ const categoryRoute = require('./category');
 const gigRoute = require('./gigs');
 const orderRoute = require('./orders');
 const userRoute = require('./users')
+const accountRoute = require('./accounts')
+const freelancerRoute = require('./freelancers')
+const customerRoute = require('./customers')
 
 function route(app) {
     // app.get("/", function(req,res){
@@ -17,6 +20,9 @@ function route(app) {
     app.use("/gigs", gigRoute);  
     app.use("/orders", orderRoute);  
     app.use("/users", userRoute);  
+    app.use("/accounts", accountRoute);  
+    app.use("/freelancers", freelancerRoute);  
+    app.use("/customers", customerRoute);  
 
 }
 

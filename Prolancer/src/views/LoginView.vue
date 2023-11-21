@@ -97,7 +97,7 @@
               <span ref="message">&nbsp;{{ message }}</span>
               <p class="small fw-bold mt-2 pt-1 mb-0">
                 Don't have an account?
-                <router-link class="text-danger" to="/register"
+                <router-link class="text-danger" to="/redirect"
                   >Register</router-link
                 >
               </p>
@@ -138,11 +138,11 @@ export default {
   methods: {
     async Login() {
       if(this.checkInput){
-        let user = {
+        let account = {
         emailOrUsername: this.emailOrUsername,
         password: this.password
       }
-      axios.post('/users/login', user)
+      axios.post('/accounts/login', account)
         .then(res => {
           //if successfull
           if (res.status === 200) {
