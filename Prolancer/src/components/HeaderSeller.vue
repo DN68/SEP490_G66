@@ -37,7 +37,7 @@
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
-              href="/managegigsel/Active"
+              href="/managegigsel"
             >
               <span class="small" style="font-size: 20px; margin-left: 25px"
                 >Gigs</span

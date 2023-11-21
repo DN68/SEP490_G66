@@ -10,9 +10,15 @@ class GigController {
     var page;
     var status = pageQuery.status;
     var search;
+    var freelancerId = '';
     var filterByCategory = '';
     var filterByDeliveryDay = '';
     var filterByPrice = '';
+
+    if (pageQuery.freelancerId != '' && pageQuery.freelancerId != null&&pageQuery.freelancerId != undefined) {
+      freelancerId = pageQuery.freelancerId;
+      console.log(freelancerId)
+    }
 
     if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null&&pageQuery.filterBy1 != undefined) {
       filterByCategory = pageQuery.filterBy1;
@@ -54,7 +60,7 @@ class GigController {
 
     // Create a Promise to handle the asynchronous operation
     const fetchData = new Promise((resolve, reject) => {
-      Gig.getGigWithFilterAndPagingAndSearching(status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
+      Gig.getGigWithFilterAndPagingAndSearching(status, freelancerId, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
         if (err) {
 
           reject(err);

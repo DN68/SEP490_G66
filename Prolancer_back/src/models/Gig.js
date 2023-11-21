@@ -26,9 +26,14 @@ Gig.getAll = function (result) {
   });
 };
 
-Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
+Gig.getGigWithFilterAndPagingAndSearching = function (status, freelancerId, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
   var sql = "Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as FreelancerDescription, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
+
+  if(freelancerId != ''){
+    sql = sql + " g.FreelancerID = " + freelancerId + " AND";
+    sqlCount = sqlCount + " FreelancerID = " + freelancerId + " AND";
+  }
 
   if (filterByDeliveryDay != '') {
     sql = sql + " g.Delivery_Day <= " + filterByDeliveryDay + " AND";
@@ -70,7 +75,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, 
 };
 
 Gig.getGigById = function (id, result) {
-  connectDb.query("Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN User u ON u.UserID = f.UserID Where g.GigID = ?", [id], function (err, res) {
+  connectDb.query("Select g.* from Gig g Where g.GigID = ?", [id], function (err, res) {
     if (err) {
       result(null, err);
     }

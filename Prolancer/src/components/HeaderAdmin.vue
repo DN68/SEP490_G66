@@ -222,7 +222,7 @@ export default {
         })
         .then(
           (res) => {
-            this.user = res.data.account;
+            this.account = res.data.account;
           },
           (err) => {
             console.log(err.response);
