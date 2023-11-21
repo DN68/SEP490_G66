@@ -27,7 +27,7 @@ Gig.getAll = function (result) {
 };
 
 Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
-  var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN User u ON u.UserID = f.UserID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
+  var sql = "Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as FreelancerDescription, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   if (filterByDeliveryDay != '') {

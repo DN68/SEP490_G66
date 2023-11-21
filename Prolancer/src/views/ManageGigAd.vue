@@ -460,7 +460,7 @@ export default {
   },
   data() {
     return {
-      user: {},
+      account: {},
       gigs: [],
       pagination: [],
       moment: moment,
@@ -496,13 +496,13 @@ export default {
   },
   async created() {
     await axios
-      .get("/users/info", {
+      .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
-          this.user = res.data.user;
-          if (this.user.role != "A") {
+          this.account = res.data.account;
+          if (this.account.role != "A") {
             this.$router.push("/");
           }
         },
@@ -513,12 +513,12 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     }
-    const responseUserInfor = await axios.get("/users/info", {
+    const responseAccountInfor = await axios.get("/accounts/info", {
       headers: { token: localStorage.getItem("token") },
     });
-    const userInfor = responseUserInfor.data.user;
-    this.user = userInfor;
-    console.log(this.user.userId);
+    const accountInfor = responseAccountInfor.data.account;
+    this.account = accountInfor;
+    console.log(this.account.accountID);
     const responseData = await axios.get("/gigs/index", {
       params: {
         page: this.selectedPage,
