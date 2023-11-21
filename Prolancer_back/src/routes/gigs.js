@@ -13,8 +13,6 @@ router.get('/:FreelancerID/:Status',
     gigController.getGigByFreelancerIdAndStatus
 );
 
-
-
 router.get('/:FreelancerID/:Status',
     gigController.getGigByFreelancerIdAndStatus
 );

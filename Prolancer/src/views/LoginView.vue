@@ -138,11 +138,11 @@ export default {
   methods: {
     async Login() {
       if(this.checkInput){
-        let user = {
+        let account = {
         emailOrUsername: this.emailOrUsername,
         password: this.password
       }
-      axios.post('/users/login', user)
+      axios.post('/accounts/login', account)
         .then(res => {
           //if successfull
           if (res.status === 200) {

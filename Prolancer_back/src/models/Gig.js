@@ -27,7 +27,7 @@ Gig.getAll = function (result) {
 };
 
 Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
-  var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription, c.Category_Name from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
+  var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN User u ON u.UserID = f.UserID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   if (filterByDeliveryDay != '') {
@@ -70,7 +70,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, 
 };
 
 Gig.getGigById = function (id, result) {
-  connectDb.query("Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID Where GigID = ?", [id], function (err, res) {
+  connectDb.query("Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN User u ON u.UserID = f.UserID Where g.GigID = ?", [id], function (err, res) {
     if (err) {
       result(null, err);
     }
@@ -81,7 +81,7 @@ Gig.getGigById = function (id, result) {
 };
 
 Gig.getGigByFreelancerId = function (id,status,results) {
-  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID Where g.FreelancerID = ? AND g.Status = ?", [id, status], function (err, res) {
+  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN User u ON u.UserID = f.UserID Where f.UserID = ? AND g.Status = ?", [id, status], function (err, res) {
     if (err) {
       results(null, err);
     }
