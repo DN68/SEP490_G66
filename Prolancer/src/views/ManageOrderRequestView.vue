@@ -45,11 +45,10 @@
           <div
             class="col-md-2 major_head_item"
             :class="{
-              major_head_item_active: this.majorSkillID == 1,
+              major_head_item_active: this.majorItem == 1,
             }"
             @click="
-              (majorSkillID = 1),
-                getFreelancerWithScore(majorSkillID)
+              ((majorItem = 1), (status = 'Pending')), getOrderRequest(user, 1)
             "
           >
             <router-link
@@ -59,18 +58,24 @@
               class="text-decoration-none"
               disabled
             >
-              <h6>Pending</h6>
+              <h6>
+                Pending
+                <span
+                  v-if="this.status == 'Pending'"
+                  class="badge bg-secondary"
+                  >{{ pagination.totalRow }}</span
+                >
+              </h6>
             </router-link>
           </div>
 
           <div
             class="col-md-2 major_head_item"
             :class="{
-              major_head_item_active: this.majorSkillID == 2,
+              major_head_item_active: this.majorItem == 2,
             }"
             @click="
-              (majorSkillID = 1),
-                getFreelancerWithScore(majorSkillID)
+              ((majorItem = 2), (status = 'Accept')), getOrderRequest(user, 1)
             "
           >
             <router-link
@@ -80,18 +85,21 @@
               class="text-decoration-none"
               disabled
             >
-              <h6>Accept</h6>
+              <h6>Accept<span
+                  v-if="this.status == 'Accept'"
+                  class="badge bg-secondary"
+                  >{{ pagination.totalRow }}</span
+                ></h6>
             </router-link>
           </div>
 
           <div
             class="col-md-2 major_head_item"
             :class="{
-              major_head_item_active: this.majorSkillID == 2,
+              major_head_item_active: this.majorItem == 3,
             }"
             @click="
-              (majorSkillID = 1),
-                getFreelancerWithScore(majorSkillID)
+              ((majorItem = 3), (status = 'Reject')), getOrderRequest(user, 1)
             "
           >
             <router-link
@@ -101,7 +109,11 @@
               class="text-decoration-none"
               disabled
             >
-              <h6>Cancelled</h6>
+              <h6>Reject<span
+                  v-if="this.status == 'Reject'"
+                  class="badge bg-secondary"
+                  >{{ pagination.totalRow }}</span
+                ></h6>
             </router-link>
           </div>
           <!-- <div class="col-md-2 status_item"><h6>New</h6></div> -->
@@ -111,15 +123,15 @@
             <thead class="bg-light">
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th class="w-10">ID</th>
-                <th class="w-25">CUSTOMER</th>
+                <th style="width: 20%">CUSTOMER</th>
                 <!-- <th v-for="childSkill in childSkills" :key="childSkill.SkillID">
                     {{ childSkill.Skill_Name }}
                   </th> -->
-                <th>Job Description</th>
+                <th class="w-25">Job Description</th>
                 <th>Estimation</th>
 
                 <th>Start On</th>
-                <th>Duo On</th>
+                <th>End At</th>
                 <th>Status</th>
 
                 <th>Action</th>
@@ -129,61 +141,168 @@
             </thead>
 
             <tbody>
-              <!-- <tr v-for="(skillScore, index) in skillscores" :key="index">
-                  <td>F5-000{{ skillScore.FreelancerID }}</td>
-                  <td>
-                    <img
-                      :src="skillScore.Profile_Picture"
-                      alt=""
-                      style="width: 40px; height: 40px"
-                      class="rounded-circle"
-                    />
-                    {{ skillScore.First_Name + " " + skillScore.Last_Name }}
-                  </td>
-                  <td></td>
-                  <td
-                    v-for="(childSkill, propertyIndex) in childSkills"
-                    :key="propertyIndex"
-                  >
-                    <input
-                      type="number"
-                      class="ms-3"
-                      style="width: 40px; border: none; text-align: center"
-                      v-model="skillScore[childSkill.Skill_Name]"
-                      min="1"
-                      max="10"
-                      @input="
-                        updateScore(
-                          skillScore[childSkill.Skill_Name],
-                          childSkill.SkillID,
-                          skillScore.FreelancerID
-                        )
+              <tr v-for="(orderRequest, index) in orderRequests" :key="index">
+                <td>
+                  {{ orderRequest.OrderRequestID }}
+                </td>
+                <td>
+                  <img
+                    :src="orderRequest.Profile_Picture"
+                    alt=""
+                    style="width: 35px; height: 35px"
+                    class="rounded-circle"
+                  />
+                  {{ orderRequest.First_Name + " " + orderRequest.Last_Name }}
+                </td>
+                <td>
+                  <div class="JobDescription">
+                    {{ orderRequest.JobDescription }}
+                  </div>
+                </td>
+                <td>
+                  {{ orderRequest.TotalEstimation }}
+                </td>
+                <td>
+                  {{
+                    moment(orderRequest.StartFrom).format("yyyy-MM-DD hh:mm A")
+                  }}
+                </td>
+                <td>
+                  {{ moment(orderRequest.EndAt).format("yyyy-MM-DD hh:mm A") }}
+                </td>
+                <td>
+                  <div v-if="orderRequest.Status == 'Pending'">
+                    <span
+                      class="status text-warning"
+                      style="
+                        font-size: 40px;
+                        margin: 2px 2px 0 0;
+                        display: inline-block;
+                        vertical-align: middle;
+                        line-height: 10px;
                       "
-                    />
-                  </td>
-  
-                </tr> -->
-              <tr></tr>
+                      >•</span
+                    ><span>Pending</span>
+                  </div>
+                  <div v-if="orderRequest.Status == 'Accept'">
+                    <span
+                      class="status text-success"
+                      style="
+                        font-size: 40px;
+                        margin: 2px 2px 0 0;
+                        display: inline-block;
+                        vertical-align: middle;
+                        line-height: 10px;
+                      "
+                      >•</span
+                    ><span>Accept</span>
+                  </div>
+
+                  <div v-if="orderRequest.Status == 'Reject'">
+                    <span
+                      class="status text-secondary"
+                      style="
+                        font-size: 40px;
+                        margin: 2px 2px 0 0;
+                        display: inline-block;
+                        vertical-align: middle;
+                        line-height: 10px;
+                      "
+                      >•</span
+                    ><span>Reject</span>
+                  </div>
+                </td>
+                <td>
+                  <!-- v-if="user.role == 'C'" -->
+                  <div>
+                    <span
+                      class="badge rounded-pill bg-info text-light me-1"
+                      style="cursor: pointer"
+                      @click="
+                        (messageModal = 'accept this order request'),
+                          (isshowConfirmRequestModal =
+                            !isshowConfirmRequestModal),
+                          (action = 'Accept'),
+                          (selectedOrderRequestID = orderRequest.OrderRequestID)
+                      "
+                      >Accept</span
+                    >
+
+                    <span
+                      class="badge rounded-pill text-info decline_button"
+                      style="cursor: pointer"
+                      @click="
+                        (messageModal = 'decline'),
+                          (isshowConfirmRequestModal =
+                            !isshowConfirmRequestModal),
+                          (action = 'Reject'),
+                          (selectedOrderRequestID = orderRequest.OrderRequestID)
+                      "
+                      >Decline</span
+                    >
+                  </div>
+                  <!-- <div v-else>
+                        None
+                  </div> -->
+                </td>
+              </tr>
             </tbody>
           </table>
-          <!-- <div v-if="orders.length == 0" class="text-center">
-              <h5>Order Not Found</h5>
-            </div> -->
-          <div class="button text-start">
-            <button
-              id="btn-sub"
-              type="submit"
-              class="btn btn-primary bg-danger"
-              style="border: none; width: 80px; margin-top: 40px"
-              @click="
-                listUpdate.length >= 1
-                  ? ((isshowConfirmRequestModal = !isshowConfirmRequestModal),
-                    (messageModal = 'save these change?'))
-                  : alertMessage()
-              "
-            >
-              Save
-            </button>
+          <div v-if="orderRequests.length == 0" class="text-center">
+            <h5>Not Found</h5>
+          </div>
+          <div class="pagination" v-if="orderRequests.length > 0">
+            <router-link
+              v-if="pagination.page - 1 == 0"
+              class="page-number"
+              :disabled="true"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-left text-black-50"></i
+            ></router-link>
+            <router-link
+              v-if="pagination.page - 1 > 0"
+              class="page-number"
+              :disabled="true"
+              @click="getOrderRequest(user, pagination.page - 1)"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-left"></i
+            ></router-link>
+            <router-link
+              :to="{
+                path: '#',
+              }"
+              class="page-number"
+              @click="getOrderRequest(user, index)"
+              v-for="index in pagination.totalPage"
+              :key="index"
+              :disabled="true"
+              :class="{ active: index == pagination.page }"
+              ><span>{{ index }}</span>
+            </router-link>
+
+            <router-link
+              v-if="pagination.page + 1 <= pagination.totalPage"
+              class="page-number"
+              :disabled="true"
+              @click="getOrderRequest(user, pagination.page + 1)"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-right"></i
+            ></router-link>
+            <router-link
+              v-if="pagination.page == pagination.totalPage"
+              class="page-number"
+              :disabled="true"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-right text-black-50"></i
+            ></router-link>
           </div>
           <div class="confirm_request">
             <div
@@ -214,7 +333,7 @@
                       style="color: white"
                     ></button>
                   </div>
-                  <div class="modal-body">
+                  <div class="modal-body" v-if="action == 'Accept'">
                     <div class="row">
                       <div>
                         <p class="modal-title">
@@ -227,12 +346,76 @@
                     </div>
                   </div>
 
+                  <div class="modal-body" v-else>
+                    <div class="row">
+                      <div>
+                        <p class="modal-title">
+                          Do you really want to {{ messageModal }}
+                        </p>
+                      </div>
+                      <div>
+                        <p class="modal-title">Want to say something</p>
+                        <select
+                          v-model="selectedReason"
+                          style="margin-bottom: 15px"
+                          class="text-center py-2 w-100"
+                        >
+                          <option
+                            class=""
+                            value="Due to prior commitments and deadlines, I won't be able to allocate the necessary time to meet your project requirements."
+                          >
+                            <span
+                              >Due to prior commitments and deadlines, I won't
+                              be able to allocate the necessary time to meet
+                              your project requirements.</span
+                            >
+                          </option>
+                          <option
+                            class=""
+                            value="I currently have a full workload and am unable to take on additional projects at this time."
+                          >
+                            <span
+                              >I currently have a full workload and am unable to
+                              take on additional projects at this time.</span
+                            >
+                          </option>
+                          <option
+                            class=""
+                            value="Due to unforeseen personal or health-related circumstances, I am currently unable to take on projects."
+                          >
+                            <span
+                              >Due to unforeseen personal or health-related
+                              circumstances, I am currently unable to take on
+                              projects.</span
+                            >
+                          </option>
+                          <option
+                            class=""
+                            value="After reviewing the project details, I believe that the project is not suitable and I cannot work effectively on this project."
+                          >
+                            <span
+                              >After reviewing the project details, I believe
+                              that the project is not suitable and I cannot work
+                              effectively on this project.</span
+                            >
+                          </option>
+                        </select>
+                        <p class="modal-title">
+                          This process cannot be undone.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <div class="modal-footer justify-content-center">
                     <a
                       type="button"
                       class="btn btn-info waves-effect waves-light text-white"
                       @click="
-                        updateChange(),
+                        updateOrderRequestStatus(
+                          action,
+                          selectedOrderRequestID,
+                          selectedReason
+                        ),
                           (isshowConfirmRequestModal =
                             !isshowConfirmRequestModal)
                       "
@@ -279,19 +462,19 @@ export default {
   data() {
     return {
       user: [],
-      majorSkills: [],
       pagination: [],
+      orderRequests: [],
       moment: moment,
-      searchOrder: "",
       selectedPage: 1,
-      majorSkillID: 1,
+      majorItem: 1,
       isshowModal: false,
       selectedStatus: "Active",
-      skillscores: [],
-      isshowConfirmRequestModal: false,
-      childSkills: [],
-      listUpdate: [],
       messageModal: "",
+      status: "Pending",
+      isshowConfirmRequestModal: false,
+      action: "",
+      selectedOrderRequestID: "",
+      selectedReason: "I currently have a full workload and am unable to take on additional projects at this time.",
     };
   },
   async created() {
@@ -304,95 +487,81 @@ export default {
     // const userInfor = responseUserInfor.data.user;
     // this.user = userInfor;
 
-    const responseMajorSkill = await axios.get("/skills/getMajorSkill");
-    const majorSkill = responseMajorSkill.data;
-    this.majorSkills = majorSkill;
-
-    const responseChildSkill = await axios.get("/skills/getSkillChild/1");
-    const childSkill = responseChildSkill.data;
-    this.childSkills = childSkill;
-    const responseSkillScore = await axios.get("/skills/getSkillScore", {
-      params: {
-        childSkills: this.childSkills,
-      },
-    });
-    const skillScore = responseSkillScore.data;
-    this.skillscores = skillScore;
+    this.getOrderRequest("user", 1);
   },
   methods: {
-    updateScore(changeValue, skillID, FreelancerID) {
-      // alert("Value input : " + changeValue+ "Value skillID : " + skillID+"Value FreelancerID : " + FreelancerID);
-      // var objectUpdate = {FreelancerID: FreelancerID,SkillID: skillID,Score: changeValue};
-      // this.listUpdate.push(objectUpdate);
-      // console.log(this.listUpdate)
-
-      const inputValue = parseFloat(changeValue, 10);
-
-      if (isNaN(inputValue) || inputValue < 1 || inputValue > 10) {
-        // Display an error message or handle the invalid input as needed
-        alert("Please enter a value between 1 and 10.");
-        // Optionally reset the input to a valid value
-
-        return;
-      }
-
-      // Check if the entry already exists in listUpdate
-      const existingEntryIndex = this.listUpdate.findIndex(
-        (entry) =>
-          entry.FreelancerID === FreelancerID && entry.SkillID === skillID
-      );
-
-      if (existingEntryIndex !== -1) {
-        // Update the existing entry
-        this.listUpdate[existingEntryIndex].Score = inputValue;
-      } else {
-        // Add a new entry if it doesn't exist
-        var objectUpdate = {
-          FreelancerID: FreelancerID,
-          SkillID: skillID,
-          Score: inputValue,
-        };
-        this.listUpdate.push(objectUpdate);
-      }
-      console.log(this.listUpdate);
-    },
-
-    async getFreelancerWithScore(majorSkillID) {
-      const responseChildSkill = await axios.get(
-        "/skills/getSkillChild/" + majorSkillID
-      );
-      const childSkill = responseChildSkill.data;
-      this.childSkills = childSkill;
-      const responseSkillScore = await axios.get("/skills/getSkillScore", {
-        params: {
-          childSkills: this.childSkills,
-        },
-      });
-      const skillScore = responseSkillScore.data;
-      this.skillscores = skillScore;
-    },
-
-    alertMessage() {
-      alert("Nothing change!");
-    },
-    async updateChange() {
-      await axios
-        .put("/skills/updateSkillScore", {
-          listUpdate: this.listUpdate,
+    async getOrderRequest(user, currentPage) {
+      const responseData = await axios
+        .get("/orderrequest/getOrderRequest", {
+          params: {
+            page: currentPage,
+            user: { userId: 4, role: "C" },
+            status: this.status,
+          },
         })
         .then((response) => {
           console.log(response.data);
-          toast.success("Save successfully!", {
-            theme: "colored",
-            autoClose: 2000,
-            onClose: () => location.reload(),
-          });
+          const orderRequests = response.data.orderRequest;
+          this.orderRequests = orderRequests;
+          const paging = response.data.pagination;
+          this.pagination = paging;
         })
         .catch((error) => {
           // Handle the error
-          console.error("Error ", error);
-          toast.warn("Faild!", { autoClose: 2000 });
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
         });
+    },
+    async updateOrderRequestStatus(status, orderRequestID, selectedReason) {
+      if (status == "Accept") {
+        try {
+          const responseStep1 = await axios.put(
+            "/orderrequest/changeOrderRequestStatus",
+            {
+              status: status,
+              orderRequestID: orderRequestID,
+            }
+          );
+          if (responseStep1) {
+            const responseStep2 = await axios.post("/orders/createOrder", {
+              order: { OrderRequestID: orderRequestID },
+            });
+            if (responseStep2) {
+              toast.success("Successfully!", {
+                theme: "colored",
+                autoClose: 2000,
+                onClose: () => location.reload(),
+              });
+            }
+          }
+        } catch (error) {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        }
+      } else {
+        const responseStep1 = await axios.put(
+            "/orderrequest/changeOrderRequestStatus",
+            {
+              status: status,
+              orderRequestID: orderRequestID,
+            }
+          );
+          if (responseStep1) {
+            const responseStep2 = await axios.put("/orderrequest/updateOrderRequestNote", {
+               OrderRequestID: orderRequestID ,
+               Note: selectedReason
+            });
+            if (responseStep2) {
+              toast.success("Successfully!", {
+                theme: "colored",
+                autoClose: 2000,
+                onClose: () => location.reload(),
+              });
+            }
+          }
+
+      }
     },
   },
 };
@@ -495,7 +664,16 @@ export default {
   background-color: #f9f9f9;
 }
 
-.order_request_table .decline_button {
+.decline_button {
   border: 1px solid #0dcaf0;
+}
+
+.JobDescription {
+  text-align: start;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
 }
 </style>

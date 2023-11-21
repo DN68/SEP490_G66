@@ -126,8 +126,8 @@
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/setting"
-                    >Settings</router-link
+                  <router-link class="dropdown-item" to="/manageOrderRequest"
+                    >Order request</router-link
                   >
                 </li>
 

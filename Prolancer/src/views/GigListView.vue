@@ -101,7 +101,7 @@
               @click="isshowListFreelancer = !isshowListFreelancer"
               v-click-outside="() => onClickOutside(2)"
             >
-              <p class="textDefault">Delivery Time</p>
+              <p class="textDefault">Estimation Time</p>
               <i class="bi bi-chevron-down"></i>
               <ul
                 class="dropdown-menu freelancer_dropdown"
