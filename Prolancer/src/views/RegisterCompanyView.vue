@@ -156,6 +156,13 @@
                       >
                         Submit
                       </button>
+                      <button
+                        type="button"
+                        class="btn bg-danger bg-gradient text-light btn-lg mt-3"
+                        @click="logout"
+                      >
+                        Logout
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -298,6 +305,9 @@ export default {
             }
           );
       }
+    },
+    logout(){
+      this.$router.push('/logout')
     },
     isEmailExist() {
       axios.get(`/users/${this.email}/checkEmail`).then(
