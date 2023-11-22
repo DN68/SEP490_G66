@@ -545,7 +545,7 @@ export default {
     const freelancerInfor = responseAccountInfor.data.freelancer;
     this.freelancer = freelancerInfor;
     console.log(this.freelancer.FreelancerID);
-    const responseData = await axios.get("/gigs/index", {
+    const responseData = await axios.get("/gigs/index/freelancer", {
       params: {
         page: this.selectedPage,
         search: this.searchGig,
@@ -554,7 +554,7 @@ export default {
       },
     });
     const gigs = responseData.data.gig;
-    // console.log(gigs)
+    console.log(gigs)
     this.gigs = gigs;
     const paging = responseData.data.pagination;
     this.pagination = paging;
@@ -572,7 +572,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/gigs/index", {
+    const responseDateWithPage = await axios.get("/gigs/index/freelancer", {
       params: {
         page: this.selectedPage,
         search: this.searchGig,

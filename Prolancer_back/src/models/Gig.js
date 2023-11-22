@@ -26,14 +26,9 @@ Gig.getAll = function (result) {
   });
 };
 
-Gig.getGigWithFilterAndPagingAndSearching = function (status, freelancerId, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
+Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
   var sql = "Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as FreelancerDescription, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
-
-  if(freelancerId != ''){
-    sql = sql + " g.FreelancerID = " + freelancerId + " AND";
-    sqlCount = sqlCount + " FreelancerID = " + freelancerId + " AND";
-  }
 
   if (filterByDeliveryDay != '') {
     sql = sql + " g.Delivery_Day <= " + filterByDeliveryDay + " AND";
@@ -72,6 +67,42 @@ Gig.getGigWithFilterAndPagingAndSearching = function (status, freelancerId, filt
       pagination(null,res);
     }
   });
+};
+
+Gig.getFreelancerGigWithPagingAndSearching = function (status, freelancerId, search, limit, offset, gig, pagination) {
+  var sql = "Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as FreelancerDescription, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
+  var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
+
+  if(freelancerId != ''){
+    sql = sql + " g.FreelancerID = " + freelancerId + " AND";
+    sqlCount = sqlCount + " FreelancerID = " + freelancerId + " AND";
+  }
+  
+  console.log("sql: ", sql);
+  console.log("sqlCount: ", sqlCount);
+
+  var check = connectDb.query(sql + " g.Status = ? AND g.Title LIKE ? LIMIT ? OFFSET ?", [status, '%' + search + '%', limit, offset], function (err, res) {
+    if (err) {
+      console.log("error: ", err);
+      gig(err,null)
+    }
+    else {
+
+      gig(null,res);
+    }
+  });
+
+  connectDb.query(sqlCount + " Status = ? AND Title LIKE ?", [status, '%' + search + '%'], function (err, res) {
+    if (err) {
+
+      pagination(err,null);
+    }
+    else {
+      pagination(null,res);
+    }
+  });
+
+  
 };
 
 Gig.getGigById = function (id, result) {

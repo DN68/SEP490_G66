@@ -70,7 +70,7 @@
                         />
                       </div>
                     </div>
-                     <div class="d-flex flex-row align-items-center mb-4">
+                    <!-- <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fa-solid fa-gavel fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
                         <input
@@ -81,6 +81,18 @@
                           v-model="legelrepresentative"
                         />
                       </div>
+                    </div> -->
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fa-solid fa-location-dot fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="email"
+                          id="form3Example3c"
+                          class="form-control"
+                          placeholder="Company Name"
+                          v-model="companyName"
+                        />
+                      </div>
                     </div>
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fa-solid fa-location-dot fa-lg me-3 fa-fw"></i>
@@ -89,8 +101,8 @@
                           type="email"
                           id="form3Example3c"
                           class="form-control"
-                          placeholder="Address"
-                          v-model="address"
+                          placeholder="Company Address"
+                          v-model="companyAddress"
                         />
                       </div>
                     </div>
@@ -156,7 +168,157 @@
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      username: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      phoneNo: "",
+      password: "",
+      repeatPassword: "",
+      message: "",
+      emailExist: false,
+      usernameExist: false,
+      companyName: "",
+      taxcode: "",
+
+    };
+  },
+  computed: {
+    //  A valid username should start with an alphabet so, [A-Za-z].
+    //  All other characters can be alphabets, numbers or an underscore so, [A-Za-z0-9_].
+    isValidUsername() {
+      return /[A-Za-z][A-Za-z0-9_]{7,29}$/.test(this.username);
+    }, //Email format
+    isValidEmail() {
+      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.email);
+    },
+    //Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+    isValidPassword() {
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        this.password
+      );
+    },
+    checkInput() {
+      //input validation here
+      if (!this.username) {
+        this.message = "You must enter username";
+        return false;
+      }
+      if (this.usernameExist) {
+        this.message = "Username exist";
+        return false;
+      }
+      if (!this.isValidUsername) {
+        this.message =
+          "Username must start with an alphabet and has at least 8 characters";
+        return false;
+      }
+      if (!this.firstName) {
+        this.message = "You must enter your first name";
+        return false;
+      }
+      if (!this.lastName) {
+        this.message = "You must enter your last name";
+        return false;
+      }
+      if (!this.email) {
+        this.message = "You must enter Email";
+        return false;
+      }
+      if (!this.isValidEmail) {
+        this.message = "Wrong email format";
+        return false;
+      }
+      if (this.emailExist) {
+        this.message = "Email exist";
+        return false;
+      }
+      if (!this.phoneNo) {
+        this.message = "You must enter your phone number";
+        return false;
+      }
+      if (!this.password) {
+        this.message = "You must enter password";
+        return false;
+      }
+      if (!this.isValidPassword) {
+        this.message =
+          "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
+        return false;
+      }
+      if (!this.repeatPassword) {
+        this.message = "You must enter repeat password";
+        return false;
+      }
+      if (this.password != this.repeatPassword) {
+        this.message = "Wrong password confirmation";
+        return false;
+      }
+
+      return true;
+    },
+  },
+
+  methods: {
+    async Register() {
+      if (this.checkInput) {
+        axios
+          .post("/accounts/create", {
+            email: this.email,
+            username: this.username,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            phoneNo: this.phoneNo,
+            password: this.password,
+          })
+          .then(
+            (res) => {
+              this.$router.push("/sendmessage");
+              // console.log("Added successfully");
+            },
+            (err) => {
+              console.log(err.response);
+            }
+          );
+      }
+    },
+    isEmailExist() {
+      axios.get(`/users/${this.email}/checkEmail`).then(
+        (res) => {
+          console.log(res.data);
+          if (res.data) {
+            this.emailExist = true;
+          } else {
+            this.emailExist = false;
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+    },
+    isUsernameExist() {
+      axios.get(`/users/${this.username}/checkUsername`).then(
+        (res) => {
+          console.log(res.data);
+          if (res.data) {
+            this.usernameExist = true;
+          } else {
+            this.usernameExist = false;
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+    },
+  },
+};
 </script>
 
 <style>
