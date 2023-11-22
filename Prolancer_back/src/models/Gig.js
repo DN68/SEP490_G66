@@ -26,19 +26,18 @@ Gig.getAll = function (result) {
   });
 };
 
-Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
-  var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID WHERE";
+Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
+  var sql = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription, c.Category_Name from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   if (filterByDeliveryDay != '') {
-    sql = sql + " Delivery_Day <= " + filterByDeliveryDay + " AND";
+    sql = sql + " g.Delivery_Day <= " + filterByDeliveryDay + " AND";
     sqlCount = sqlCount + " Delivery_Day <= " + filterByDeliveryDay + " AND";
 
     console.log("run Delivery_Day")
-
   }
   if (filterByPrice != '') {
-    sql = sql + " Price <= " + filterByPrice + " AND";
+    sql = sql + " g.Price <= " + filterByPrice + " AND";
     sqlCount = sqlCount + " Price <= " + filterByPrice + " AND";
     console.log("run Price")
 
@@ -48,7 +47,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
   console.log("sqlCount: ", sqlCount);
 
 
-  var check = connectDb.query(sql + " CategoryID LIKE ? AND Title LIKE ? LIMIT ? OFFSET ?", ['%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
+  var check = connectDb.query(sql + " g.Status = ? AND g.CategoryID LIKE ? AND g.Title LIKE ? LIMIT ? OFFSET ?", [status,'%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
     if (err) {
       console.log("error: ", err);
       gig(err,null)
@@ -59,7 +58,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
     }
   });
 
-  connectDb.query(sqlCount + " CategoryID LIKE ? AND Title LIKE ?", ['%' + filterByCategory + '%', '%' + search + '%'], function (err, res) {
+  connectDb.query(sqlCount + " Status = ? AND CategoryID LIKE ? AND Title LIKE ?", [status, '%' + filterByCategory + '%', '%' + search + '%'], function (err, res) {
     if (err) {
 
       pagination(err,null);
@@ -120,7 +119,7 @@ Gig.updateGig = function(data, id, result){
 Gig.updateGigStatus = function(status, id, result){
   connectDb.query("UPDATE Gig SET Status = ? WHERE GigID = ?", [status, id], function(err, res){
     if (err) {
-      result(null, err);
+      result(err, null);
     }
     else {
       result(null, res);

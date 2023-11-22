@@ -58,7 +58,7 @@
             <!-- <li class="nav-item">
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-user-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
-            <li class="nav-item">
+            <li class="nav-item" v-if="user">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -67,7 +67,7 @@
                 ><span class="small">Orders</span></a
               >
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="user">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -76,7 +76,7 @@
                 ><span class="small">Messaging</span></a
               >
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="user">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"

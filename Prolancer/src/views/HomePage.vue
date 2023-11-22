@@ -216,7 +216,11 @@ export default {
     const categories = responseCategory.data;
     this.categories = categories;
 
-    const responseGig = await axios.get("/gigs/index");
+    const responseGig = await axios.get("/gigs/index", {
+      params: {
+        status: "Active",
+      },
+    });
     const gigs = responseGig.data.gig;
     console.log(gigs[0].Title + "1");
 

@@ -88,6 +88,7 @@
                         filterBy1: category.CategoryID,
                         filterBy2: this.filterBy2,
                         filterBy3: this.filterBy3,
+                        status: status
                       },
                     }"
                   >
@@ -120,6 +121,7 @@
                         filterBy1: filterBy1,
                         filterBy2: '1',
                         filterBy3: filterBy3,
+                        status: status
                       },
                     }"
                   >
@@ -140,6 +142,7 @@
                         filterBy1: filterBy1,
                         filterBy2: '3',
                         filterBy3: filterBy3,
+                        status: status
                       },
                     }"
                   >
@@ -159,6 +162,7 @@
                         filterBy1: filterBy1,
                         filterBy2: '7',
                         filterBy3: filterBy3,
+                        status: status
                       },
                     }"
                   >
@@ -178,6 +182,7 @@
                         filterBy1: filterBy1,
                         filterBy2: 'Anytime',
                         filterBy3: filterBy3,
+                        status: status
                       },
                     }"
                   >
@@ -210,6 +215,7 @@
                         filterBy1: filterBy1,
                         filterBy2: filterBy2,
                         filterBy3: '10',
+                        status: status
                       },
                     }"
                   >
@@ -229,6 +235,7 @@
                         filterBy1: filterBy1,
                         filterBy2: filterBy2,
                         filterBy3: '50',
+                        status: status
                       },
                     }"
                   >
@@ -248,6 +255,7 @@
                         filterBy1: filterBy1,
                         filterBy2: filterBy2,
                         filterBy3: '100',
+                        status: status
                       },
                     }"
                   >
@@ -267,6 +275,7 @@
                         filterBy1: filterBy1,
                         filterBy2: filterBy2,
                         filterBy3: '1000',
+                        status: status
                       },
                     }"
                   >
@@ -309,6 +318,7 @@
                       filterBy1: filterBy1,
                       filterBy2: filterBy2,
                       filterBy3: filterBy3,
+                      status: status
                     },
                   }"
                 >
@@ -330,6 +340,7 @@
                       filterBy1: filterBy1,
                       filterBy2: filterBy2,
                       filterBy3: filterBy3,
+                      status: status
                     },
                   }"
                 >
@@ -359,6 +370,7 @@
                       filterBy1: filterBy1,
                       filterBy2: filterBy2,
                       filterBy3: filterBy3,
+                      status: status
                     }}"
           ><i class="bi bi-arrow-left"></i
         ></router-link>
@@ -370,6 +382,7 @@
                       filterBy1: filterBy1,
                       filterBy2: filterBy2,
                       filterBy3: filterBy3,
+                      status: status
                     }}"
           class="page-number" @click="selectedPage = index" v-for="index in pagination.totalPage" :key="index" href="#"  :class="{active: index==pagination.page}"><span>{{ index }}</span> </router-link>
 
@@ -385,6 +398,7 @@
                       filterBy1: filterBy1,
                       filterBy2: filterBy2,
                       filterBy3: filterBy3,
+                      status: status
                     }}"
           ><i class="bi bi-arrow-right"></i
         ></router-link>
@@ -433,7 +447,8 @@ export default {
       filterBy2: "",
       filterBy3: "",
       searchQuery: [],
-      selectedPage: "1"
+      selectedPage: "1",
+      status: "Active"
     };
   },
   methods: {
@@ -469,6 +484,7 @@ export default {
             filterBy1: this.$route.query.filterBy1,
             filterBy2: this.$route.query.filterBy2,
             filterBy3: this.$route.query.filterBy3,
+            status: this.status
       },
     });
     const gigs = responseGig.data.gig;
@@ -496,6 +512,7 @@ export default {
             filterBy1: this.filterBy1,
             filterBy2: this.filterBy2,
             filterBy3: this.filterBy3,
+            status: this.status
           },
         });
         

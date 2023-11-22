@@ -8,6 +8,7 @@ class GigController {
     var pageQuery = req.query;
     console.log("🚀 ~ file: GigController.js:9 ~ GigController ~ pageQuery:", pageQuery)
     var page;
+    var status = pageQuery.status;
     var search;
     var filterByCategory = '';
     var filterByDeliveryDay = '';
@@ -53,7 +54,7 @@ class GigController {
 
     // Create a Promise to handle the asynchronous operation
     const fetchData = new Promise((resolve, reject) => {
-      Gig.getGigWithFilterAndPagingAndSearching(filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
+      Gig.getGigWithFilterAndPagingAndSearching(status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
         if (err) {
 
           reject(err);
@@ -82,9 +83,11 @@ class GigController {
       res.send({
         gig, pagination: {
           totalPage: Math.ceil(totalRows[0].count / limit),
-          page: parseInt(page)
+          page: parseInt(page),
+          totalRow: totalRows[0].count
         }, searchQuery: {
           search: search,
+          status: status,
           filterBy1: filterByCategory,
           filterBy2: filterByDeliveryDay,
           filterBy3: filterByPrice
@@ -156,6 +159,28 @@ class GigController {
         res.json(result);
       }
     })
+  }
+
+  changeGigStatus = function (req, res) {
+    const data = req.body;
+    var status = data.status;
+    var gigID = data.gigID;
+
+    console.log(status + gigID);
+
+    Gig.updateGigStatus(status, gigID, function (err, result) {
+      if (err)
+        return res.send(err);
+      else {
+        console.log('res', result);
+        if (result.affectedRows == 0) {
+          res.send({ message: 'Change Status Failed' });
+
+        }
+        res.send({ message: 'Change Status Success' });
+      }
+
+    });
   }
 
   getGigByFreelancerIdAndStatus = function (req, res) {

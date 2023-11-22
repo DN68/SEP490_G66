@@ -19,17 +19,19 @@ router.get('/:FreelancerID/:Status',
     gigController.getGigByFreelancerIdAndStatus
 );
 
-router.post('/create', 
+router.post('/create',
     gigController.createGig
 )
 
-router.put('/:GigID/update', 
+router.put('/:GigID/update',
     gigController.updateGig
 )
 
-router.put('/:GigID/updateStatus', 
+router.put('/:GigID/updateStatus',
     gigController.updateGigStatus
 )
 
-
+router.put('/updateStatus',
+    gigController.changeGigStatus
+)
 module.exports = router;
