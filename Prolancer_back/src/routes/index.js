@@ -5,6 +5,10 @@ const userRoute = require('./users')
 const  cvRoute = require('./cv')
 const  skillRoute = require('./skills')
 const  orderRequestRoute = require('./orderrequest')
+const accountRoute = require('./accounts')
+const freelancerRoute = require('./freelancers')
+const customerRoute = require('./customers')
+
 function route(app) {
     // app.get("/", function(req,res){
     //     res.send('home');
@@ -22,6 +26,10 @@ function route(app) {
     app.use("/cv", cvRoute);  
     app.use("/skills", skillRoute); 
     app.use("/orderrequest", orderRequestRoute);  
+    app.use("/accounts", accountRoute);  
+    app.use("/freelancers", freelancerRoute);  
+    app.use("/customers", customerRoute);  
+
 }
 
 module.exports = route;

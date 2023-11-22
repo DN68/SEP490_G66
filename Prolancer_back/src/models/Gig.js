@@ -31,15 +31,19 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
   var sql ="Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription , AVG(Rating_Score) as Rating from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
+  if(freelancerId != ''){
+    sql = sql + " g.FreelancerID = " + freelancerId + " AND";
+    sqlCount = sqlCount + " FreelancerID = " + freelancerId + " AND";
+  }
+
   if (filterByDeliveryDay != '') {
-    sql = sql + " Delivery_Day <= " + filterByDeliveryDay + " AND";
+    sql = sql + " g.Delivery_Day <= " + filterByDeliveryDay + " AND";
     sqlCount = sqlCount + " Delivery_Day <= " + filterByDeliveryDay + " AND";
 
     console.log("run Delivery_Day")
-
   }
   if (filterByPrice != '') {
-    sql = sql + " Price <= " + filterByPrice + " AND";
+    sql = sql + " g.Price <= " + filterByPrice + " AND";
     sqlCount = sqlCount + " Price <= " + filterByPrice + " AND";
     console.log("run Price")
 
@@ -60,7 +64,7 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
     }
   });
 
-  connectDb.query(sqlCount + " CategoryID LIKE ? AND Title LIKE ?", ['%' + filterByCategory + '%', '%' + search + '%'], function (err, res) {
+  connectDb.query(sqlCount + " Status = ? AND CategoryID LIKE ? AND Title LIKE ?", [status, '%' + filterByCategory + '%', '%' + search + '%'], function (err, res) {
     if (err) {
 
       pagination(err,null);
@@ -83,7 +87,7 @@ Gig.getGigById = function (id, result) {
 };
 
 Gig.getGigByFreelancerId = function (id,status,results) {
-  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID Where g.FreelancerID = ? AND g.Status = ?", [id, status], function (err, res) {
+  connectDb.query("Select g.*, c.Category_Name from Gig g INNER JOIN Category c ON g.CategoryID = c.CategoryID INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN User u ON u.UserID = f.UserID Where f.UserID = ? AND g.Status = ?", [id, status], function (err, res) {
     if (err) {
       results(null, err);
     }
@@ -121,7 +125,7 @@ Gig.updateGig = function(data, id, result){
 Gig.updateGigStatus = function(status, id, result){
   connectDb.query("UPDATE Gig SET Status = ? WHERE GigID = ?", [status, id], function(err, res){
     if (err) {
-      result(null, err);
+      result(err, null);
     }
     else {
       result(null, res);

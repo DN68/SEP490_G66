@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <HeaderAdmin v-if="user.role == 'A'"></HeaderAdmin>
+      <HeaderAdmin v-if="account.Role == 'A'"></HeaderAdmin>
       <Headers v-else></Headers>
     </div>
     <div class="sidebar">
@@ -70,7 +70,7 @@ export default {
 },
   data() {
     return {
-      user: {},
+      account: {},
       inputOldPassword: "",
       newPassword: "",
       reNewPassword: "",
@@ -85,12 +85,12 @@ export default {
   },
   mounted() {
     axios
-      .get("/users/info", {
+      .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
-          this.user = res.data.user;
+          this.account = res.data.account;
         },
         (err) => {
           console.log(err.response);
@@ -136,12 +136,13 @@ export default {
   },
   methods: {
     changePassword() {
+      console.log(this.account)
       if (this.checkInput) {
         // console.log("Wrong password confirm");
         axios
-          .put(`/users/${this.user.email}/changepw`, {
+          .put(`/accounts/${this.account.email}/changepw`, {
             inputOldPassword: this.inputOldPassword,
-            oldPassword: this.user.password,
+            oldPassword: this.account.password,
             newPassword: this.newPassword,
           })
           .then(
