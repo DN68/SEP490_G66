@@ -109,11 +109,38 @@
 
 <script>
 import Footer from "../components/Footer.vue";
+import axios from "axios"
 
 export default {
   name: "",
   components: {
     Footer,
+  },
+  data(){
+    return{
+      account: {}
+    }
+  },
+  mounted() {
+    if(this.$route.query.data){
+      this.account = JSON.parse(decodeURIComponent(this.$route.query.data))
+      axios
+      .post("/accounts/create", {
+        email: this.account.email,
+        username: this.account.username,
+        password: this.account.password,
+        role: this.account.role
+      })
+      .then(
+        (res) => {
+          console.log(res.data);
+          // console.log("Added successfully");
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+    }
   },
 };
 </script>

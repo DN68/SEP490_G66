@@ -11,7 +11,7 @@ var Account = function (account) {
 };
 
 Account.createAccount = function (email, username, password, role, result) {
-    connectDb.query("INSERT INTO Account SET Email = ?, Username = ?, Password = ?, Role = ?, Status = 'Active",
+    connectDb.query("INSERT INTO Account SET Email = ?, Username = ?, Password = ?, Role = ?, Status = 'Active'",
         [email, username, password, role], function (err, res) {
             if (err) {
                 result(null, err);

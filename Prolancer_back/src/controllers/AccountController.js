@@ -33,8 +33,9 @@ class AccountController {
     accountRegister = function (req, res) {
         const email = req.body.email;
         const username = req.body.username;
+        const role = req.body.role;
         const password = bcrypt.hashSync(req.body.password, 10);
-        Account.createAccount(email, username, password, function (err, result) {
+        Account.createAccount(email, username, password, role, function (err, result) {
             if (err) {
                 res.send(err);
             } else {
@@ -194,12 +195,23 @@ class AccountController {
                 accessToken: accessToken
             }
         })
-        const redirectLink = "facebook.com"
+
+        const account = req.body
+        console.log(account)
+        const encodedAccountData = encodeURIComponent(JSON.stringify(account));
+        let redirectLink;
+        if(account.role == 'C'){
+            redirectLink = `http://localhost:8080/register-company?data=${encodedAccountData}`
+        }else if (account.role == 'F'){
+            redirectLink = `http://localhost:8080/becomesel?data=${encodedAccountData}`
+        }
+        
         const info = transport.sendMail({
             from: '"Prolancer" <anpqhe160968@fpt.edu.vn>', // sender address
             to: "" + email + "", // list of receivers
             subject: "Verify your email:", // Subject line
             text: "Hello world?", // plain text body
+            // html: "<b>Please verify your email: <a href='" + redirectLink + "'>Verify email</a></b>", // html body
             html: "<b>Please verify your email: <a href='" + redirectLink + "'>Verify email</a></b>", // html body
         });
         return res.status(200).json({
