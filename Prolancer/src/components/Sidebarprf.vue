@@ -11,11 +11,15 @@
   <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
       <div class="position-sticky">
         <div class="list-group list-group-flush mx-3 mt-4">
-          <img class="imgsidebar" :src="user.image" alt="" />
+          <img class="imgsidebar" :src="currentAccountInfo.Profile_Picture" alt="" />
     <br />
     <div class="info-user">
-      <h5 class="username">{{user.username}}</h5>
-      <p class="email">{{user.email}}</p>
+      <h5 class="username">{{ currentAccountInfo.Username }}</h5>
+      <h7 class="role">
+        <span v-if="currentAccountInfo.Role === 'F'">Freelancer</span>
+        <span v-if="currentAccountInfo.Role === 'C'">Customer</span>
+      </h7>
+      <p class="email">{{ currentAccountInfo.Email }}</p>
     </div>
         </div>
       </div>
@@ -53,32 +57,64 @@
 
 <script>
 import axios from "axios"
+import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
   data() {
     return {
-      user: {},
+      currentAccountInfo: {},
     };
   },
-  created() {
-    //user is not authorized
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
-  },
   mounted() {
-    axios
-      .get("/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.user = res.data.user;
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
+    let token = localStorage.getItem("token")
+    //account is not authorized
+    if (!token) {
+      this.$router.push('/login')
+    } else {
+      let decoded = VueJwtDecode.decode(token)
+      console.log(decoded.role)
+      if(decoded.role === "F"){
+        axios
+        .get("/freelancers/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.currentAccountInfo = res.data.freelancer;
+            console.log(this.currentAccountInfo.Username)
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+      }else if(decoded.role === "C"){
+        axios
+        .get("/customers/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.currentAccountInfo = res.data.customer;
+            console.log(this.currentAccountInfo.Username)
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+      }
+      // axios
+      //   .get("/accounts/info", {
+      //     headers: { token: localStorage.getItem("token") },
+      //   })
+      //   .then(
+      //     (res) => {
+      //       this.account = res.data.account;
+      //     },
+      //     (err) => {
+      //       console.log(err.response);
+      //     }
+      //   );
+    }
   },
 };
 </script>

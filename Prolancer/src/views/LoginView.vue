@@ -29,7 +29,6 @@
               >
                 <i class="fab fa-facebook-f"></i>
               </button>
-
             </div>
 
             <div class="divider d-flex align-items-center my-4">
@@ -46,7 +45,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 placeholder="Enter a valid email address"
-                v-model="emailOrUsername"
+                v-model="account.emailOrUsername"
               />
             </div>
 
@@ -60,7 +59,7 @@
                 id="form3Example4"
                 class="form-control form-control-lg"
                 placeholder="Enter password"
-                v-model="password"
+                v-model="account.password"
               />
             </div>
 
@@ -70,8 +69,8 @@
                 <input
                   class="form-check-input me-2"
                   type="checkbox"
-                  value=""
                   id="form2Example3"
+                  v-model="rememberMe"
                 />
                 <label class="form-check-label" for="form2Example3">
                   Remember me
@@ -111,51 +110,64 @@
 
 <script>
 import axios from "axios";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   data() {
     return {
-      emailOrUsername: "",
-      password: "",
-      message: ""
+      account: {
+        emailOrUsername: "",
+        password: "",
+      },
+      message: "",
+      rememberMe: "",
     };
   },
-  computed:{
-    checkInput(){
-      if (!this.emailOrUsername) {
+  computed: {
+    checkInput() {
+      if (!this.account.emailOrUsername) {
         this.message = "you must enter username or email";
         this.$refs.message.style.color = "red";
         return false;
       }
-      if (!this.password) {
+      if (!this.account.password) {
         this.message = "you must enter password";
         this.$refs.message.style.color = "red";
         return false;
       }
-      return true
-    }
+      return true;
+    },
   },
   methods: {
     async Login() {
-      if(this.checkInput){
-        let user = {
-        emailOrUsername: this.emailOrUsername,
-        password: this.password
-      }
-      axios.post('/users/login', user)
-        .then(res => {
-          //if successfull
-          if (res.status === 200) {
-            localStorage.setItem('token', res.data.token);
-            this.$router.push('/');
+      if (this.checkInput) {
+        axios.post("/accounts/login", this.account).then(
+          (res) => {
+            //if successfull
+            if (res.status === 200) {
+              localStorage.setItem("token", res.data.token);
+              if (this.rememberMe) {
+                localStorage.setItem("rememberedCredentials", JSON.stringify(this.account));
+              }
+              this.$router.push("/");
+            }
+          },
+          (err) => {
+            console.log(err.response);
+            this.message = "Wrong email or password";
+            this.$refs.message.style.color = "red";
           }
-        }, err => {
-          console.log(err.response);
-          this.message = "Wrong email or password"
-          this.$refs.message.style.color = "red";
-        })
+        );
       }
     },
+  },
+  mounted() {
+    const rememberedAccountToken = localStorage.getItem("rememberedCredentials")
+    if (rememberedAccountToken) {
+      const remememberedAccount = JSON.parse(rememberedAccountToken);
+      console.log(remememberedAccount);
+      this.account = remememberedAccount;
+    }
   },
 };
 </script>

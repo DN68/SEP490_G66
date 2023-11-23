@@ -21,7 +21,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                Hello, {{ user.username }}
+                <p v-if="account != null">Hello, {{ account.username }}</p>
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -189,21 +189,63 @@ export default {
     return {
       categories: [],
       gigs: [],
-      user: {},
+      account: null,
     };
   },
   async created() {
     await axios
-      .get("/users/info", {
+      .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
-          this.user = res.data.user;
-          if (this.user.role == "F") {
-            this.$router.push("/seldash");
+          this.account = res.data.account;
+          //Freelancer route
+          if (this.account.role == "F") {
+            axios
+              .get("/freelancers/info", {
+                headers: { token: localStorage.getItem("token") },
+              })
+              .then(
+                (res) => {
+                  //if account has freelancer info, go to dashboard
+                  if(res.data.freelancer){
+                    this.$router.push("/seldash");
+                  //if not, go to add freelancer info page
+                  }else{
+                    let encodedAccountData = encodeURIComponent(JSON.stringify(this.account));
+                    this.$router.push(`/becomesel?data=${encodedAccountData}`);
+                  }
+                  
+                  // if (this.account.role == "A") {
+                  //   this.$router.push("/managegigad");
+                  // }
+                },
+                (err) => {
+                  console.log(err.response);
+                }
+              );
           }
-          if (this.user.role == "A") {
+          //Customer route
+          else if (this.account.role == "C") {
+            axios
+              .get("/customers/info", {
+                headers: { token: localStorage.getItem("token") },
+              })
+              .then(
+                (res) => {
+                  //if account doesnt have customer info, go to customer info screen
+                  if(!res.data.customer){
+                    let encodedAccountData = encodeURIComponent(JSON.stringify(this.account));
+                    this.$router.push(`/register-company?data=${encodedAccountData}`);
+                  }
+                },
+                (err) => {
+                  console.log(err.response);
+                }
+              );
+          }
+          else if (this.account.role == "A") {
             this.$router.push("/managegigad");
           }
         },
@@ -215,6 +257,7 @@ export default {
     const responseCategory = await axios.get("/categories/get");
     const categories = responseCategory.data;
     this.categories = categories;
+    console.log(this.categories);
 
     const responseGig = await axios.get("/gigs/index", {
       params: {
@@ -222,23 +265,9 @@ export default {
       },
     });
     const gigs = responseGig.data.gig;
-    console.log(gigs[0].Title + "1");
+    // console.log(gigs[0].Title + "1");
 
     this.gigs = gigs;
-  },
-  mounted() {
-    axios
-      .get("/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.user = res.data.user;
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
   },
 };
 </script>

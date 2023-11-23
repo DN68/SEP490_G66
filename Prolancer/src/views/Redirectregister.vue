@@ -22,7 +22,7 @@
                       style="margin-top: 20%"
                     >
                       <router-link
-                        to="/becomesel"
+                        to="/register/freelancer"
                         class="bg-danger bg-gradient text-light"
                         style="
                           text-decoration: none;
@@ -38,7 +38,7 @@
                       
                     <div class="d-flex flex-row align-items-center mb-4"  >
                       <router-link
-                        to="/register-company"
+                        to="/register/customer"
                         class="bg-danger bg-gradient text-light"
                         style="
                           text-decoration: none;

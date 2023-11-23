@@ -8,12 +8,13 @@ router.get('/details/:id',
 router.get('/index',
     gigController.getGigWithFilterAndPagingAndSearching
 );
+router.get('/index/freelancer',
+    gigController.getGigByFreelancer
+);
 
 router.get('/:FreelancerID/:Status',
     gigController.getGigByFreelancerIdAndStatus
 );
-
-
 
 router.get('/:FreelancerID/:Status',
     gigController.getGigByFreelancerIdAndStatus

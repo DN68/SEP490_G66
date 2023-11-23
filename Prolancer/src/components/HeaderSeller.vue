@@ -37,7 +37,7 @@
             <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
-              href="/managegigsel/Active"
+              href="/managegigsel"
             >
               <span class="small" style="font-size: 20px; margin-left: 25px"
                 >Gigs</span
@@ -65,7 +65,7 @@
               aria-expanded="false"
             >
               <img
-                :src="user.image"
+                :src="freelancer.Profile_Picture"
                 class="rounded-circle"
                 height="30"
                 alt=""
@@ -82,11 +82,11 @@
                   >My Profile</router-link
                 >
               </li>
-              <router-link
+              <!-- <router-link
                 class="dropdown-item"
                 to="/changeRole/C"
                 >Buying</router-link
-              >
+              > -->
               <li>
                 <router-link class="dropdown-item" to="/change"
                   >Change password</router-link
@@ -166,22 +166,22 @@ import axios from "axios"
 export default {
   data() {
     return {
-      user:{},
+      freelancer: {},
       isShow: false,
     };
   },
   mounted() {
     //user is not authorized
     if (localStorage.getItem("token") === null) {
-      this.user = null;
+      this.freelancer = null;
     } else {
       axios
-        .get("/users/info", {
+        .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
         .then(
           (res) => {
-            this.user = res.data.user;
+            this.freelancer = res.data.freelancer;
           },
           (err) => {
             console.log(err.response);
