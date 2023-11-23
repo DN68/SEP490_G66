@@ -518,7 +518,7 @@ export default {
     });
     const accountInfor = responseAccountInfor.data.account;
     this.account = accountInfor;
-    console.log(this.account.accountID);
+    // console.log(this.account.accountId);
     const responseData = await axios.get("/gigs/index", {
       params: {
         page: this.selectedPage,

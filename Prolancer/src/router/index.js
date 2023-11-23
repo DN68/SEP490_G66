@@ -47,6 +47,16 @@ const routes = [
   },
   {
 
+    path: '/register/:role',
+    name: 'register',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/RegisterAccount.vue')
+
+  }, 
+  {
+
     path: '/register-person',
     name: 'register-person',
     // route level code-splitting
@@ -183,6 +193,16 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/ManageGigAd.vue')
+
+  }
+  ,
+  {
+    path: '/manageinterview',
+    name: 'manageinterview',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageInterview.vue')
 
   }
   ,

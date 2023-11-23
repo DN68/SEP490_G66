@@ -33,4 +33,19 @@ Customer.updateCustomerInfo = function (data, accountID, results) {
             }
         })
 }
+
+
+Customer.createCustomer = function (accountID, firstName, lastName, profilePicture, location, phone, companyName, companyAddress, taxCode, result) {
+    connectDb.query("INSERT INTO Customer SET AccountID = ?,  First_Name = ?, Last_Name = ?, Profile_Picture = ?,  Location = ?, Phoneno = ?, CompanyName = ?, CompanyAddress = ?, TaxCode = ?",
+        [accountID, firstName, lastName, profilePicture, location, phone, companyName, companyAddress, taxCode], function (err, res) {
+            if (err) {
+                result(null, err);
+            }
+            else {
+                result(null, res);
+            }
+        })
+}
+
+
 module.exports = Customer;

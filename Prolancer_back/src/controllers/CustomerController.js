@@ -1,6 +1,7 @@
 const connectDb = require('../common/connectdb.js');
 const jwt = require('jsonwebtoken');
 const Customer = require('../models/Customer.js');
+const { firebase } = require('googleapis/build/src/apis/firebase/index.js');
 class CustomerController {
 
 
@@ -55,6 +56,27 @@ class CustomerController {
             return res.status(200).json({
                 title: 'changed Successfully'
             })
+        })
+    }
+
+    customerRegister = function (req, res) {
+        const accountID = req.body.accountID;
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const profilePicture = req.body.profilePicture;
+        const location = req.body.location;
+        const phoneNo = req.body.phoneNo;
+        const companyName = req.body.companyName;
+        const companyAddress = req.body.companyAddress;
+        const taxCode = req.body.taxCode
+
+        console.log(accountID)
+        Customer.createCustomer(accountID, firstName, lastName, profilePicture, location, phoneNo, companyName, companyAddress, taxCode, function (err, result) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(result);
+            }
         })
     }
 }

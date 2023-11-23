@@ -3,7 +3,10 @@ const router = express.Router();
 const AccountController = require('../controllers/AccountController');
 
 router.post('/create',
-    AccountController.register
+    AccountController.accountRegister
+);
+router.post('/create/confirm',
+    AccountController.confirmCreateACcount
 );
 router.post('/login',
     AccountController.login

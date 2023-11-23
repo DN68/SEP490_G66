@@ -21,7 +21,7 @@
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Skill Test Management</span>
           </router-link>
-          <router-link to="/interview" v-on:click="ChangeActive"
+          <router-link to="/manageinterview" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Interview Management</span>
