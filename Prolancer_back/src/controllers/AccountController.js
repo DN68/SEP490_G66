@@ -282,6 +282,82 @@ class AccountController {
 
         })
     }
+
+
+    getAccountsByStatusAndPaging = function (req, res) {
+        const limit = 16;
+        var pageQuery = req.query;
+        var page;
+        var status = pageQuery.status;
+
+        // if (pageQuery.search != null) {
+
+        //   search = pageQuery.search;
+
+        //   console.log('Search here ' + search);
+
+        // } else {
+        //   search = '';
+        // }
+        // console.log(search);
+
+        if (pageQuery.page != null) {
+            page = pageQuery.page;
+        } else {
+            page = 1;
+        }
+        console.log(page);
+
+        const offset = (page - 1) * limit;
+        console.log(offset);
+        let account, totalRows;
+
+        // Create a Promise to handle the asynchronous operation
+        const fetchData = new Promise((resolve, reject) => {
+            Account.getAllAccountsWithPaging(status, limit, offset, function (err, accountData) {
+                console.log(accountData)
+                if (err) {
+                    reject(err);
+                } else {
+                    account = accountData;
+                    if (totalRows !== undefined) {
+                        resolve();
+                    }
+
+                }
+            }, function (err, totalRowsData) {
+                if (err) {
+                    reject(err);
+                } else {
+                    totalRows = totalRowsData;
+                    if (account !== undefined) {
+
+                        resolve();
+                    }
+                }
+            });
+        });
+
+        fetchData.then(() => {
+            // Both callbacks have been called, so you can send the response now.
+            res.send({
+                account, pagination: {
+                    totalPage: Math.ceil(totalRows[0].count / limit),
+                    page: parseInt(page),
+                    totalRow: totalRows[0].count
+                }, searchQuery: {
+                    //   search: search,
+                    status: status,
+                }
+            });
+        }, (err) => {
+            res.send(err);
+        }
+        ).catch(error => {
+            console.error(error);
+            res.status(500).send("An error occurred");
+        });
+    };
 }
 
 
