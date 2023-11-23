@@ -5,6 +5,7 @@ const userRoute = require('./users')
 const accountRoute = require('./accounts')
 const freelancerRoute = require('./freelancers')
 const customerRoute = require('./customers')
+const interviewRoute = require('./interviews')
 
 function route(app) {
     // app.get("/", function(req,res){
@@ -23,6 +24,7 @@ function route(app) {
     app.use("/accounts", accountRoute);  
     app.use("/freelancers", freelancerRoute);  
     app.use("/customers", customerRoute);  
+    app.use("/interviews", interviewRoute);  
 
 }
 

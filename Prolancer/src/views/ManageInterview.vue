@@ -2,84 +2,109 @@
   <div>
     <Header></Header>
     <Sidebar></Sidebar>
-    <div class="container-managigad">
+    <div class="container-manaInterviewad">
       <div class="manage_title row">
-        <div class="col-md-3"><h3>Manage Gigs</h3></div>
+        <div class="col-md-3"><h3>Manage Interviews</h3></div>
         <div class="col-md-3"><h3></h3></div>
-        <div class="col-md-3 search_bar">
-          <div class="input-group rounded">
-            <input
-              type="search"
-              class="form-control gig_search"
-              placeholder="Search Gig ..."
-              v-model="searchGig"
-              aria-label="Search"
-              aria-describedby="search-addon"
-            />
-            <router-link
-              :to="{
-                path: '/managegigad',
-                query: {
-                  search: searchGig,
-                  status: status,
-                },
-              }"
-              class="text-decoration-none"
-            >
-              <span
-                class="input-group-text border-0 icon_search"
-                id="search-addon"
+        <!-- <div class="col-md-3 search_bar">
+            <div class="input-group rounded">
+              <input
+                type="search"
+                class="form-control Interview_search"
+                placeholder="Search interview ..."
+                v-model="searchInterview"
+                aria-label="Search"
+                aria-describedby="search-addon"
+              />
+              <router-link
+                :to="{
+                  path: '/manageInterviewad',
+                  query: {
+                    search: searchInterview,
+                    status: status,
+                  },
+                }"
+                class="text-decoration-none"
               >
-                <i class="fas fa-search"></i>
-              </span>
-            </router-link>
-          </div>
-        </div>
+                <span
+                  class="input-group-text border-0 icon_search"
+                  id="search-addon"
+                >
+                  <i class="fas fa-search"></i>
+                </span>
+              </router-link>
+            </div>
+          </div> -->
       </div>
-      <div class="order_status row">
+      <div class="interview_status row">
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Active' }"
+          :class="{ status_item_active: this.status == 'Pending' }"
         >
           <router-link
-            @click="(this.status = 'Active'), (selectedPage = '1')"
+            @click="(this.status = 'Pending'), (selectedPage = '1')"
             :to="{
-              path: '/managegigad',
+              path: '/manageinterview',
               query: {
-                search: searchGig,
-                status: 'Active',
+                status: 'Pending',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Active
-              <span v-if="this.status == 'Active'" class="badge bg-secondary">{{
-                pagination.totalRow
-              }}</span>
+              Pending
+              <span
+                v-if="this.status == 'Pending'"
+                class="badge bg-secondary"
+                >{{ pagination.totalRow }}</span
+              >
             </h6></router-link
           >
         </div>
 
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Paused' }"
+          :class="{ status_item_active: this.status == 'Ongoing' }"
         >
           <router-link
-            @click="(this.status = 'Paused'), (selectedPage = '1')"
+            @click="(this.status = 'Ongoing'), (selectedPage = '1')"
             :to="{
-              path: '/managegigad',
+              path: '/manageinterview',
               query: {
                 page: 1,
-                search: searchGig,
-                status: 'Paused',
+                status: 'Ongoing',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Paused<span
-                v-if="this.status == 'Paused'"
+              Ongoing<span
+                v-if="this.status == 'Ongoing'"
+                class="badge bg-secondary"
+                >{{ pagination.totalRow }}</span
+              >
+            </h6>
+          </router-link>
+        </div>
+
+        <div
+          class="col-md-2 status_item"
+          :class="{ status_item_active: this.status == 'Finished' }"
+        >
+          <router-link
+            @click="(this.status = 'Finished'), (selectedPage = '1')"
+            :to="{
+              path: '/manageinterview',
+              query: {
+                page: 1,
+                status: 'Finished',
+              },
+            }"
+            class="text-decoration-none"
+          >
+            <h6>
+              Finished<span
+                v-if="this.status == 'Finished'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -93,10 +118,9 @@
           <router-link
             @click="(this.status = 'Deleted'), (selectedPage = '1')"
             :to="{
-              path: '/managegigad',
+              path: '/manageinterview',
               query: {
                 page: 1,
-                search: searchGig,
                 status: 'Deleted',
               },
             }"
@@ -111,200 +135,131 @@
             </h6>
           </router-link>
         </div>
-        <div
-          class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Blocked' }"
-        >
-          <router-link
-            @click="(this.status = 'Blocked'), (selectedPage = '1')"
-            :to="{
-              path: '/managegigad',
-              query: {
-                page: 1,
-                search: searchGig,
-                status: 'Blocked',
-              },
-            }"
-            class="text-decoration-none"
-          >
-            <h6>
-              Blocked<span
-                v-if="this.status == 'Blocked'"
-                class="badge bg-secondary"
-                >{{ pagination.totalRow }}</span
-              >
-            </h6>
-          </router-link>
-        </div>
       </div>
-      <div class="order_table">
+      <div class="interview_table">
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
               <th class="th_no">NO.</th>
-              <th class="th_Freelancer">FREELANCER</th>
-              <th class="th_Title">TITLE</th>
+              <th class="th_Freelancer">CANDIDATE</th>
+              <th class="th_ScheduledDate">DATE</th>
+              <th class="th_Location">VENUE</th>
               <th class="th_description">DESCRIPTION</th>
-              <th class="th_img">GIG IMAGE</th>
-              <th class="th_category">CATEGORY NAME</th>
-              <th class="th_creationDate">CREATION DATE</th>
-              <th class="th_deliveryDays">DELEVERY DAY</th>
               <th class="th_status">STATUS</th>
-              <th class="th_numberPage">NUMBER OF PAGE</th>
-              <th class="th_price">PRICE</th>
               <th class="th_actions">ACTIONS</th>
             </tr>
           </thead>
-          <tbody v-if="gigs.length >= 1">
-            <tr v-for="(gig, index) in gigs" :key="index">
-              <td class="td_gigs">
+          <tbody v-if="interviews.length >= 1">
+            <tr v-for="(interview, index) in interviews" :key="index">
+              <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
-                    coding -->
+                      coding -->
                     {{ index + 1 }}
                   </p>
                 </div>
               </td>
-              <td class="td_user">
+              <td class="td_freelancer">
                 <div class="d-flex align-items-center">
                   <img
-                    :src="gig.Profile_Picture"
+                    :src="interview.Profile_Picture"
                     alt=""
                     style="width: 45px; height: 45px"
                     class="rounded-circle"
                   />
                   <div class="ms-3">
                     <p class="fw-bold mb-1">
-                      {{ gig.First_Name + " " + gig.Last_Name }}
+                      {{ interview.First_Name + " " + interview.Last_Name }}
                     </p>
                   </div>
                 </div>
               </td>
-              <td class="td_gigs">
+              <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Title }}
+                      coding -->
+                    {{ getFormattedDate(interview.ScheduledDate) }}
                   </p>
                 </div>
               </td>
-              <td class="td_gigs">
+              <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Description }}
+                      coding -->
+                    {{ interview.Location }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_Interviews">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                      coding -->
+                    {{ interview.Description }}
                   </p>
                 </div>
               </td>
 
-              <td class="td_image">
-                <img :src="gig.Gig_IMG" width="200" height="100" />
-              </td>
-
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Category_Name }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ getFormattedDate(gig.Creation_Date) }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Delivery_Day }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_gigs">
+              <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <span
-                    v-if="gig.Status == 'Active'"
+                    v-if="interview.Status == 'Pending'"
                     class="badge bg-primary rounded-pill d-inline"
                   >
-                    Active</span
+                    Pending</span
                   >
                   <span
-                    v-if="gig.Status == 'Paused'"
+                    v-if="interview.Status == 'Ongoing'"
                     class="badge rounded-pill bg-info d-inline"
                   >
-                    Paused</span
+                    Ongoing</span
                   >
                   <span
-                    v-if="gig.Status == 'Deleted'"
-                    class="badge rounded-pill bg-danger"
+                    v-if="interview.Status == 'Deleted'"
+                    class="badge rounded-pill bg-secondary"
                     >Deleted</span
                   >
                   <span
-                    v-if="gig.Status == 'Blocked'"
-                    class="badge rounded-pill bg-secondary"
-                    >Blocked</span
+                    v-if="interview.Status == 'Finished'"
+                    class="badge rounded-pill bg-success"
+                    >Finished</span
                   >
-                </div>
-              </td>
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Numberpage }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Price }}
-                  </p>
                 </div>
               </td>
               <td class="td_actions">
                 <i
                   @click="
-                    (isshowModal = !isshowModal), (slectedGigID = gig.GigID)
+                    (isshowModal = !isshowModal),
+                      (slectedInterviewID = interview.InterviewID)
                   "
                   class="bi bi-gear-fill"
                 ></i>
               </td>
 
               <!-- <div class="dropdown">
-                  <button
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    style="border: none; width: 35px"
-                  >
-                    ...
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Active</a></li>
-                    <li><a class="dropdown-item" href="#">Pause</a></li>
-                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                    <li><a class="dropdown-item" href="#">Block</a></li>
-                    <li><a class="dropdown-item" href="#">Unblock</a></li>
-                  </ul>
-                </div> -->
+                    <button
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      style="border: none; width: 35px"
+                    >
+                      ...
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">Pending</a></li>
+                      <li><a class="dropdown-item" href="#">Pause</a></li>
+                      <li><a class="dropdown-item" href="#">Delete</a></li>
+                      <li><a class="dropdown-item" href="#">Block</a></li>
+                      <li><a class="dropdown-item" href="#">Unblock</a></li>
+                    </ul>
+                  </div> -->
             </tr>
           </tbody>
         </table>
-        <div v-if="gigs.length == 0" class="text-center">
-          <h5>Gig Not Found</h5>
+        <div v-if="interviews.length == 0" class="text-center">
+          <h5>interview Not Found</h5>
         </div>
 
         <div>
@@ -320,7 +275,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Change Order Status</h5>
+                  <h5 class="modal-title">Change Interview Status</h5>
                   <button
                     type="button"
                     class="btn-close"
@@ -338,17 +293,17 @@
                       style="margin-bottom: 15px"
                       class="text-center py-2"
                     >
-                      <option class="" value="Active">
-                        <span>Active</span>
+                      <option class="" value="Pending">
+                        <span>Pending</span>
                       </option>
-                      <option class="" value="Paused">
-                        <span>Paused</span>
+                      <option class="" value="Ongoing">
+                        <span>Ongoing</span>
                       </option>
                       <option class="" value="Deleted">
                         <span>Deleted</span>
                       </option>
-                      <option class="" value="Blocked">
-                        <span>Blocked</span>
+                      <option class="" value="Finished">
+                        <span>Finished</span>
                       </option>
                     </select>
                   </div>
@@ -365,7 +320,7 @@
                     type="button"
                     class="btn btn-primary"
                     @click="
-                      changeGigStatus(selectedStatus, slectedGigID),
+                      changeInterviewStatus(selectedStatus, slectedInterviewID),
                         (isshowModal = !isshowModal)
                     "
                   >
@@ -382,10 +337,10 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/managegigad',
+              path: '/manageinterview',
               query: {
                 page: 1,
-                search: searchGig,
+                search: searchInterview,
                 status: status,
               },
             }"
@@ -396,10 +351,9 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/managegigad',
+              path: '/manageinterview',
               query: {
                 page: pagination.page - 1,
-                search: searchGig,
                 status: status,
               },
             }"
@@ -407,10 +361,9 @@
           ></router-link>
           <router-link
             :to="{
-              path: '/managegigad',
+              path: '/manageinterview',
               query: {
                 page: index,
-                search: searchGig,
                 status: status,
               },
             }"
@@ -428,10 +381,10 @@
             class="page-number"
             @click="selectedPage = pagination.page + 1"
             :to="{
-              path: '/managegigad',
+              path: '/manageInterviewad',
               query: {
                 page: pagination.page + 1,
-                search: searchGig,
+                search: searchInterview,
                 status: status,
               },
             }"
@@ -442,8 +395,8 @@
     </div>
   </div>
 </template>
-  
-  <script>
+    
+    <script>
 import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
@@ -453,7 +406,7 @@ import "vue3-toastify/dist/index.css";
 var moment = require("moment");
 
 export default {
-  name: "CreateOrderDetailPage",
+  name: "CreateInterviewDetailPage",
   components: {
     Header,
     Sidebar,
@@ -461,15 +414,15 @@ export default {
   data() {
     return {
       account: {},
-      gigs: [],
+      interviews: [],
       pagination: [],
       moment: moment,
-      searchGig: "",
+      // searchInterview: "",
       selectedPage: 1,
       // status: this.$route.query.status,
-      status: "Active",
+      status: "Pending",
       isshowModal: false,
-      selectedStatus: "Active",
+      selectedStatus: "Pending",
     };
   },
   methods: {
@@ -477,20 +430,20 @@ export default {
     getFormattedDate(date) {
       return moment(date).format("YYYY-MM-DD");
     },
-    async changeGigStatus(status, gigID) {
-      const data = await axios.put("/gigs/updateStatus", {
+    async changeInterviewStatus(status, interviewID) {
+      const data = await axios.put("/interviews/updateStatus", {
         status: status,
-        gigID: gigID,
+        interviewID: interviewID,
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        toast.success("Change Gig Status Successfully!", {
+        toast.success("Change interview Status Successfully!", {
           theme: "colored",
           autoClose: 2000,
           onClose: () => location.reload(),
         });
       } else {
-        toast.warn("Change Gig Status Failed!", { autoClose: 2000 });
+        toast.warn("Change interview Status Failed!", { autoClose: 2000 });
       }
     },
   },
@@ -513,60 +466,59 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     }
-    const responseAccountInfor = await axios.get("/accounts/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const accountInfor = responseAccountInfor.data.account;
-    this.account = accountInfor;
-    // console.log(this.account.accountId);
-    const responseData = await axios.get("/gigs/index", {
+    // const responseAccountInfor = await axios.get("/accounts/info", {
+    //   headers: { token: localStorage.getItem("token") },
+    // });
+    // const accountInfor = responseAccountInfor.data.account;
+    // this.account = accountInfor;
+    // console.log(this.account.accountID);
+    const responseData = await axios.get("/interviews/index", {
       params: {
         page: this.selectedPage,
-        search: this.searchGig,
         status: this.status,
       },
     });
-    const gigs = responseData.data.gig;
-    // console.log(gigs)
-    this.gigs = gigs;
+    const interviews = responseData.data.interview;
+    // console.log(interviews)
+    this.interviews = interviews;
     const paging = responseData.data.pagination;
     this.pagination = paging;
     console.log(this.pagination.totalRow);
     // console.log(this.status)
-    // const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
+    // const responseInterviewReqData = await axios.get("/orders/getInterviewRequest", {
     //   params: {
     //     user: this.user,
     //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
     //     status: "Pending",
     //   },
     // });
-    // const totalNewRequest = responseOrderReqData.data.pagination;
-    // this.totalOrderRequest = totalNewRequest.totalRow;
+    // const totalNewRequest = responseInterviewReqData.data.pagination;
+    // this.totalInterviewRequest = totalNewRequest.totalRow;
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/gigs/index", {
+    const responseDateWithPage = await axios.get("/interviews/index", {
       params: {
         page: this.selectedPage,
-        search: this.searchGig,
+        // search: this.searchInterview,
         status: this.status,
       },
     });
 
-    const gigs = responseDateWithPage.data.gig;
-    this.gigs = gigs;
-
-    const searchQuery = responseDateWithPage.data.searchQuery;
-    this.searchGig = searchQuery.search;
+    const interviews = responseDateWithPage.data.interview;
+    this.interviews = interviews;
+    console.log(interviews);
+    // const searchQuery = responseDateWithPage.data.searchQuery;
+    // this.searchInterview = searchQuery.search;
     const paging = responseDateWithPage.data.pagination;
     this.pagination = paging;
     console.log("this.selectedPage " + (this.pagination.page + 1));
   },
 };
 </script>
-  
-  <style>
-.container-managigad {
+    
+    <style>
+.container-manaInterviewad {
   margin-left: 17%;
   margin-right: 5%;
 }
@@ -591,7 +543,7 @@ export default {
   border-bottom: 2px solid;
   padding-bottom: 4px;
 }
-.gig_search {
+.Interview_search {
   border: none;
 }
 .icon_search {
@@ -605,46 +557,46 @@ export default {
 .search_bar {
   border-bottom: 1px solid #dcd8d8;
 }
-.order_status {
+.interview_status {
   padding-bottom: 10px;
   border-bottom: 1px solid #dcd8d8;
 }
-.order_status {
+.interview_status {
   margin: 20px 0;
 }
 
-.order_status .status_item {
+.interview_status .status_item {
   text-align: left;
   width: fit-content;
   text-transform: uppercase;
 }
-.order_status .status_item h6 {
+.interview_status .status_item h6 {
   font-weight: 500;
   color: #9f9fa0;
 
   font-size: 15px;
 }
 
-.order_status .status_item_active h6 {
+.interview_status .status_item_active h6 {
   color: #303032;
 }
 .manage_title h3 {
   text-align: left;
   font-weight: 600;
 }
-.order_table .table th {
+.interview_table .table th {
   padding: 10px;
 }
 .table .th_user,
-.th_gig {
+.th_Interview {
   text-align: left;
 }
 
-.table .th_gig {
+.table .th_Interview {
   width: 30%;
 }
 
-.table .td_gig p {
+.table .td_Interview p {
   color: #757575 !important;
 }
 .table .th_user {
@@ -654,10 +606,10 @@ export default {
 .table .th_user span {
   margin-left: 20px;
 }
-.td_gig {
+.td_Interview {
   text-align: left;
 }
-.order_table .table th {
+.interview_table .table th {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
