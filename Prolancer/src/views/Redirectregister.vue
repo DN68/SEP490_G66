@@ -29,6 +29,7 @@
                           color: #000;
                           padding: 15px 63px;
                           border: 1px #ccc solid;
+                          width:90%
                         "
                       >
                         Become a Seller
@@ -44,6 +45,7 @@
                           color: #000;
                           padding: 15px 55px;
                           border: 1px #ccc solid;
+                          width:90%
                         "
                       >
                         Register as company
