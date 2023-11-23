@@ -27,7 +27,7 @@
                 type="button"
                 class="btn bg-danger bg-gradient text-light mx-1"
               >
-                <i class="fab fa-facebook-f"></i>
+                <i class="fa-brands fa-google"></i>
               </button>
             </div>
 
