@@ -2,20 +2,21 @@ const connectDb = require('../common/connectdb.js');
 
 var OrderRequest = function (orderRequest) {
   this.OrderRequestID = orderRequest.OrderRequestID;
-  this.CreateByID = orderRequest.CreateByID;
-  this.Request_Title = orderRequest.Request_Title;
-  this.Request_Description = orderRequest.Request_Description;
-  this.Create_At = orderRequest.Create_At;
-  this.Status = orderRequest.Status;
-  this.Request_Action = orderRequest.Request_Action;
-  this.OrderID = orderRequest.OrderID;
-  this.Request_Type = orderRequest.Request_Type;
+  this.CustomerID = orderRequest.CreateByID;
+  this.GigID = orderRequest.Request_Title;
+  this.JobDescription = orderRequest.Request_Description;
+  this.TotalEstimation = orderRequest.Create_At;
+  this.StartFrom = orderRequest.Status;
+  this.EndAt = orderRequest.Request_Action;
+  this.Status = orderRequest.Request_Type;
+  this.Note = orderRequest.Note;
+
 };
 
 OrderRequest.createOrderRequest = function (orderRequest, result) {
-  const date = require('moment')().format('YYYY-MM-DD HH:mm:ss');
-  
-  connectDb.query("INSERT INTO `OrderRequest` (`OrderRequestID`, `CreateByID`, `Request_Title`, `Request_Description`, `Create_At`, `Status`, `Request_Action`, `OrderID`, `Request_Type`) VALUES (NULL, ?, ?, ?, ?, 'Pending', ?, ?, ?)", [orderRequest.CreateByID, orderRequest.Request_Title, orderRequest.Request_Description, date, orderRequest.Request_Action, orderRequest.OrderID, orderRequest.requestType], function (err, res) {
+  const dateStart = require('moment')(orderRequest.StartFrom).format('YYYY-MM-DD HH:mm:ss');
+  const dateEnd = require('moment')(orderRequest.EndAt).format('YYYY-MM-DD HH:mm:ss');
+  connectDb.query("INSERT INTO `OrderRequest` (`OrderRequestID`, `CustomerID`, `GigID`, `JobDescription`, `TotalEstimation`, `StartFrom`, `EndAt`, `Status`) VALUES (NULL, ?, ?, ?, ?, ?, ?, 'Pending')", [orderRequest.CustomerID, orderRequest.GigID, orderRequest.JobDescription, orderRequest.TotalEstimation, dateStart, dateEnd], function (err, res) {
     if (err) {
 
       result(err,null);
@@ -29,27 +30,28 @@ OrderRequest.createOrderRequest = function (orderRequest, result) {
 
 
 
-OrderRequest.getOrderRequestWithPagingAndFilter = function (userId,userRole,requestType,status,limit, offset, orderRequest, pagination) {
-  var sqlForCustomerAndFreelancer ="SELECT request.*, u.First_Name as CreateByFirstName, u.Last_Name as CreateByLastName, u.Profile_Picture as CreateByProfilePicture, o.FreelancerID, o.CustomerID FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE (request.CreateByID = "+userId+" OR o.CustomerID = "+userId+" OR o.FreelancerID = "+userId+") AND request.Request_Type = ? AND request.Status LIKE '%"+status+"%' ORDER BY request.OrderRequestID ASC LIMIT ? OFFSET ?";
-  var sqlForAdmin = "SELECT request.*, u.First_Name as CreateByFirstName, u.Last_Name as CreateByLastName, u.Profile_Picture as CreateByProfilePicture, o.FreelancerID, o.CustomerID FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.Request_Type = ? AND request.Status LIKE '%"+status+"%' ORDER BY request.OrderRequestID ASC LIMIT ? OFFSET ?";
+OrderRequest.getOrderRequestWithPagingAndFilter = function (userId,userRole,status,limit, offset, orderRequest, pagination) {
+ 
+  var sqlForCustomer ="SELECT r.*, c.First_Name, c.Last_Name, c.Profile_Picture FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID WHERE r.CustomerID = "+userId+" AND r.Status LIKE ? ORDER BY r.OrderRequestID ASC LIMIT ? OFFSET ?";
+  var sqlForFreelancer = "SELECT r.*, c.First_Name, c.Last_Name, c.Profile_Picture FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID INNER JOIN Gig g ON g.GigID = r.GigID WHERE g.FreelancerID = "+userId+" AND r.Status LIKE ? ORDER BY r.OrderRequestID ASC LIMIT ? OFFSET ?";
   var sql;
-  var sqlCountForCustomerAndFreelancer="Select COUNT(*) AS count FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE (request.CreateByID = "+userId+" OR o.CustomerID = "+userId+" OR o.FreelancerID = "+userId+") AND request.Request_Type = ? AND request.Status LIKE '%"+status+"%'";
-  var sqlCountForAdmin="Select COUNT(*) AS count FROM `OrderRequest` request INNER JOIN `User` u ON request.CreateByID = u.UserID INNER JOIN `Order` o ON request.OrderID = o.OrderID WHERE request.Request_Type = ? AND request.Status LIKE '%"+status+"%'";
+  var sqlCountForCustomer="SELECT COUNT(*) AS count FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID WHERE r.CustomerID = "+userId+" AND r.Status LIKE ?";
+  var sqlCountForFreelancer="SELECT COUNT(*) AS count FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID INNER JOIN Gig g ON g.GigID = r.GigID WHERE g.FreelancerID = "+userId+" AND r.Status LIKE ?";
   var sqlCount;
-  if(userRole=='C'||userRole=='F'){
-    console.log("🚀 ~ file: Order.js ~ userRole: Customer Freelancer",);
+  if(userRole=='C'){
+    console.log("🚀 ~ file: Order.js ~ userRole: Customer",);
     
-    sql = sqlForCustomerAndFreelancer;
-    sqlCount = sqlCountForCustomerAndFreelancer;
+    sql = sqlForCustomer;
+    sqlCount = sqlCountForCustomer;
   }else{
-    console.log("🚀 ~ file: Order.js ~ userRole: Admin",);
+    console.log("🚀 ~ file: Order.js ~ userRole: Freelancer",);
 
-    sql = sqlForAdmin;
-    sqlCount = sqlCountForAdmin;
+    sql = sqlForFreelancer;
+    sqlCount = sqlCountForFreelancer;
 
   }
   console.log(sql);
- var data = connectDb.query(sql, [requestType, limit, offset], function (err, res) {
+ var data = connectDb.query(sql, ['%'+status+'%', limit, offset], function (err, res) {
     if (err) {
       orderRequest(err, null);
     }
@@ -57,7 +59,7 @@ OrderRequest.getOrderRequestWithPagingAndFilter = function (userId,userRole,requ
       orderRequest(null, res);
     }
   });
-  connectDb.query(sqlCount, [requestType], function (err, res) {
+  connectDb.query(sqlCount, ['%'+status+'%'], function (err, res) {
     if (err) {
 
       pagination(err,null);
@@ -68,8 +70,8 @@ OrderRequest.getOrderRequestWithPagingAndFilter = function (userId,userRole,requ
   });
 };
 
-OrderRequest.changeOrderRequestStatus = function (status,orderID, result) {
-  connectDb.query("UPDATE `OrderRequest` SET `Status` = ? WHERE `OrderRequest`.`OrderRequestID` = ?", [status,orderID], function (err, res) {
+OrderRequest.changeOrderRequestStatus = function (status,OrderRequestID, result) {
+  connectDb.query("UPDATE `OrderRequest` SET `Status` = ? WHERE `OrderRequest`.`OrderRequestID` = ?", [status,OrderRequestID], function (err, res) {
     if (err) {
 
       result(err,null);
@@ -80,6 +82,33 @@ OrderRequest.changeOrderRequestStatus = function (status,orderID, result) {
     }
   });
 };
+
+OrderRequest.updateOrderRequestNote = function (Note,OrderRequestID, result) {
+    connectDb.query("UPDATE `OrderRequest` SET `Note` = ? WHERE `OrderRequest`.`OrderRequestID` = ?", [Note,OrderRequestID], function (err, res) {
+      if (err) {
+  
+        result(err,null);
+      }
+      else {
+  
+        result(null,res);
+      }
+    });
+  };
+
+  OrderRequest.updateOrderRequestJobDescription = function (JobDescription,OrderRequestID, result) {
+    connectDb.query("UPDATE `OrderRequest` SET `JobDescription` = ? WHERE `OrderRequest`.`OrderRequestID` = ?", [JobDescription,OrderRequestID], function (err, res) {
+      if (err) {
+  
+        result(err,null);
+      }
+      else {
+  
+        result(null,res);
+      }
+    });
+  };
+
 
 
 module.exports = OrderRequest;

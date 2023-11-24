@@ -68,6 +68,7 @@
                 :src="freelancer.Profile_Picture"
                 class="rounded-circle"
                 height="30"
+                width="30"
                 alt=""
                 loading="lazy"
               />
@@ -93,7 +94,10 @@
                 >
               </li>
               <li>
-                <router-link class="dropdown-item" to="#">Settings</router-link>
+                <router-link class="dropdown-item" to="/manageOrderRequest">Order Request</router-link>
+              </li>
+              <li>
+                <router-link class="dropdown-item" to="/manageChangeRequest">Change Request</router-link>
               </li>
               <li>
                 <router-link class="dropdown-item" to="/logout"

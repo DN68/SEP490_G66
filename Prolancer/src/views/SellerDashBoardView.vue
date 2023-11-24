@@ -1,8 +1,10 @@
 <template>
+  <div class="sel"> 
   <Headerseller></Headerseller>
+  <div class="body" > 
   <div
-    class="content"
-    style="float: left; width: 25%; margin-top: 2%; margin-bottom: 50px"
+    class="content" 
+    style="float: left; width: 25%; margin-top: 2%; margin-bottom: 50px;"
   >
     <div class="inbox-side">
       <nav id="sidebarMenu" class="">
@@ -85,9 +87,11 @@
       </router-link>
     </div>
   </div>
+  </div>
   <div class="footer">
     <Footer></Footer>
   </div>
+</div>
 </template>
 
 <script>
@@ -131,7 +135,7 @@ export default {
 <style>
 html {
   position: relative;
-  background-color: #f1f1f1;
+
 }
 .footer {
   position: absolute;
