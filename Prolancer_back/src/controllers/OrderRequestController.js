@@ -39,8 +39,13 @@ class OrderRequestController {
           status = pageQuery.status
           console.log("🚀 ~ file: OrderController.js:186 ~ OrderController ~ status:", status)
         }
-        userId = pageQuery.user.userId;
-        userRole = pageQuery.user.role;
+        userRole = pageQuery.user.Role;
+        if (userRole == 'C') {
+            userId = pageQuery.user.CustomerID;
+
+        }else{
+            userId = pageQuery.user.FreelancerID;
+        }
         console.log( page, userId, userRole);
     
         const offset = (page - 1) * limit;
@@ -123,6 +128,28 @@ class OrderRequestController {
     
             }
             res.send({ message: 'Add Note Success' });
+          }
+    
+        })
+      }
+
+
+      updateOrderRequestJobDescription = function (req, res) {
+        const data = req.body;
+        var OrderRequestID = data.OrderRequestID;
+    
+        var newJobDescription = data.newJobDescription;
+    
+        OrderRequest.updateOrderRequestJobDescription(newJobDescription, OrderRequestID, function (err, result) {
+          if (err)
+            res.send(err);
+          else {
+            console.log('res', result);
+            if (result.affectedRows == 0) {
+              res.send({ message: 'Add New JobDescription Failed' });
+    
+            }
+            res.send({ message: 'Add New JobDescription Success' });
           }
     
         })

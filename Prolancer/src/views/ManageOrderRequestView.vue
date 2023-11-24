@@ -1,15 +1,16 @@
 <template>
   <div>
-    <Header v-if="user.role == 'C'"></Header>
+    <Header
+      v-if="currentAccountInfo.Role == 'C'"
+     
+    ></Header>
     <HeaderSell v-else></HeaderSell>
-    <div :class="{ row: user.role == 'A' }">
-      <div v-if="user.role == 'A'" :class="{ 'col-md-2': user.role == 'A' }">
-        <Sidebar></Sidebar>
-      </div>
-      <div class="container" :class="{ 'col-md-9': user.role == 'A' }">
+    <div >
+      
+      <div class="container" >
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Order Request</h3></div>
-          <div class="col-md-3 search_bar" v-if="isOrderList">
+          <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
               <input
                 type="search"
@@ -39,7 +40,7 @@
                 </span>
               </router-link>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="major_head row">
           <div
@@ -48,7 +49,7 @@
               major_head_item_active: this.majorItem == 1,
             }"
             @click="
-              ((majorItem = 1), (status = 'Pending')), getOrderRequest(user, 1)
+              ((majorItem = 1), (status = 'Pending')), getOrderRequest(currentAccountInfo, 1)
             "
           >
             <router-link
@@ -75,7 +76,7 @@
               major_head_item_active: this.majorItem == 2,
             }"
             @click="
-              ((majorItem = 2), (status = 'Accept')), getOrderRequest(user, 1)
+              ((majorItem = 2), (status = 'Accept')), getOrderRequest(currentAccountInfo, 1)
             "
           >
             <router-link
@@ -85,11 +86,13 @@
               class="text-decoration-none"
               disabled
             >
-              <h6>Accept<span
+              <h6>
+                Accept<span
                   v-if="this.status == 'Accept'"
                   class="badge bg-secondary"
                   >{{ pagination.totalRow }}</span
-                ></h6>
+                >
+              </h6>
             </router-link>
           </div>
 
@@ -99,7 +102,7 @@
               major_head_item_active: this.majorItem == 3,
             }"
             @click="
-              ((majorItem = 3), (status = 'Reject')), getOrderRequest(user, 1)
+              ((majorItem = 3), (status = 'Reject')), getOrderRequest(currentAccountInfo, 1)
             "
           >
             <router-link
@@ -109,14 +112,16 @@
               class="text-decoration-none"
               disabled
             >
-              <h6>Reject<span
+              <h6>
+                Reject<span
                   v-if="this.status == 'Reject'"
                   class="badge bg-secondary"
                   >{{ pagination.totalRow }}</span
-                ></h6>
+                >
+              </h6>
             </router-link>
           </div>
-          <!-- <div class="col-md-2 status_item"><h6>New</h6></div> -->
+
         </div>
         <div class="base_table">
           <table class="table align-middle mb-0 bg-white">
@@ -124,9 +129,6 @@
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th class="w-10">ID</th>
                 <th style="width: 20%">CUSTOMER</th>
-                <!-- <th v-for="childSkill in childSkills" :key="childSkill.SkillID">
-                    {{ childSkill.Skill_Name }}
-                  </th> -->
                 <th class="w-25">Job Description</th>
                 <th>Estimation</th>
 
@@ -214,7 +216,7 @@
                 </td>
                 <td>
                   <!-- v-if="user.role == 'C'" -->
-                  <div>
+                  <div v-if="currentAccountInfo.Role=='F'&& orderRequest.Status == 'Pending'">
                     <span
                       class="badge rounded-pill bg-info text-light me-1"
                       style="cursor: pointer"
@@ -450,6 +452,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "CreateOrderDetailPage",
@@ -461,7 +464,7 @@ export default {
   },
   data() {
     return {
-      user: [],
+      currentAccountInfo: [],
       pagination: [],
       orderRequests: [],
       moment: moment,
@@ -474,28 +477,27 @@ export default {
       isshowConfirmRequestModal: false,
       action: "",
       selectedOrderRequestID: "",
-      selectedReason: "I currently have a full workload and am unable to take on additional projects at this time.",
+      selectedReason:
+        "I currently have a full workload and am unable to take on additional projects at this time.",
+      account: {},
     };
   },
   async created() {
-    // if (localStorage.getItem("token") === null) {
-    //   this.$router.push("/login");
-    // }
-    // const responseUserInfor = await axios.get("/users/info", {
-    //   headers: { token: localStorage.getItem("token") },
-    // });
-    // const userInfor = responseUserInfor.data.user;
-    // this.user = userInfor;
-
-    this.getOrderRequest("user", 1);
+     await this.onUpdateAccountInfo();
+     console.log(
+      "🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:",
+      JSON.stringify(this.currentAccountInfo)
+    );
+    await this.getOrderRequest(this.currentAccountInfo, 1);
   },
   methods: {
     async getOrderRequest(user, currentPage) {
+      console.log('Here : '+JSON.stringify(user))
       const responseData = await axios
         .get("/orderrequest/getOrderRequest", {
           params: {
             page: currentPage,
-            user: { userId: 4, role: "C" },
+            user: user,
             status: this.status,
           },
         })
@@ -541,28 +543,70 @@ export default {
         }
       } else {
         const responseStep1 = await axios.put(
-            "/orderrequest/changeOrderRequestStatus",
+          "/orderrequest/changeOrderRequestStatus",
+          {
+            status: status,
+            orderRequestID: orderRequestID,
+          }
+        );
+        if (responseStep1) {
+          const responseStep2 = await axios.put(
+            "/orderrequest/updateOrderRequestNote",
             {
-              status: status,
-              orderRequestID: orderRequestID,
+              OrderRequestID: orderRequestID,
+              Note: selectedReason,
             }
           );
-          if (responseStep1) {
-            const responseStep2 = await axios.put("/orderrequest/updateOrderRequestNote", {
-               OrderRequestID: orderRequestID ,
-               Note: selectedReason
+          if (responseStep2) {
+            toast.success("Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
             });
-            if (responseStep2) {
-              toast.success("Successfully!", {
-                theme: "colored",
-                autoClose: 2000,
-                onClose: () => location.reload(),
-              });
-            }
           }
-
+        }
       }
     },
+   async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/login");
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded.role);
+        if (decoded.role === "F") {
+        await  axios
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.freelancer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else if (decoded.role === "C") {
+          await  axios
+            .get("/customers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.customer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        }
+      }
+    },
+  
   },
 };
 </script>

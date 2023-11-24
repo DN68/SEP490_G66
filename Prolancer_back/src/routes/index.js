@@ -8,7 +8,7 @@ const  orderRequestRoute = require('./orderrequest')
 const accountRoute = require('./accounts')
 const freelancerRoute = require('./freelancers')
 const customerRoute = require('./customers')
-
+const  changeRequestRoute = require('./changerequest')
 function route(app) {
     // app.get("/", function(req,res){
     //     res.send('home');
@@ -29,7 +29,7 @@ function route(app) {
     app.use("/accounts", accountRoute);  
     app.use("/freelancers", freelancerRoute);  
     app.use("/customers", customerRoute);  
-
+    app.use("/changerequest", changeRequestRoute);  
 }
 
 module.exports = route;

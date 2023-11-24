@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const OrderRequestController = require('../controllers/OrderRequestController');
 
+router.put('/updateOrderRequestJobDescription', 
+OrderRequestController.updateOrderRequestJobDescription
+
+);
 router.put('/updateOrderRequestNote', 
 OrderRequestController.updateOrderRequestNote
 

@@ -1,15 +1,20 @@
 <template>
   <div>
-    <Header v-if="user.role == 'C'"></Header>
-    <HeaderSell v-else></HeaderSell>
-    <div :class="{ row: user.role == 'A' }">
-      <div v-if="user.role == 'A'" :class="{ 'col-md-2': user.role == 'A' }">
+    <Header v-if="currentAccountInfo.Role == 'C'"></Header>
+    <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
+    <header-admin v-else></header-admin>
+    <div :class="{ row: currentAccountInfo.Role == 'A' }">
+      <div v-if="currentAccountInfo.Role == 'A'" class="col-md-2">
         <Sidebar></Sidebar>
       </div>
-      <div class="container" :class="{ 'col-md-9': user.role == 'A' }">
+      <div
+        class="container"
+        :class="{ 'col-md-9': currentAccountInfo.Role == 'A' }"
+        :style="{ 'margin-left: 0;': currentAccountInfo.Role == 'A'}"
+      >
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Change Request</h3></div>
-          <div class="col-md-3 search_bar" v-if="isOrderList">
+          <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
               <input
                 type="search"
@@ -39,7 +44,7 @@
                 </span>
               </router-link>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="major_head row">
           <div
@@ -48,7 +53,7 @@
               major_head_item_active: this.majorItem == 1,
             }"
             @click="
-              ((majorItem = 1), (status = 'Pending')), getOrderRequest(user, 1)
+              ((majorItem = 1), (requestType = 'Cancel')), getChangeRequest(1)
             "
           >
             <router-link
@@ -59,9 +64,9 @@
               disabled
             >
               <h6>
-                Pending
+                Cancel
                 <span
-                  v-if="this.status == 'Pending'"
+                  v-if="this.requestType == 'Cancel'"
                   class="badge bg-secondary"
                   >{{ pagination.totalRow }}</span
                 >
@@ -70,12 +75,13 @@
           </div>
 
           <div
+            v-if="currentAccountInfo.Role != 'A'"
             class="col-md-2 major_head_item"
             :class="{
               major_head_item_active: this.majorItem == 2,
             }"
             @click="
-              ((majorItem = 2), (status = 'Accept')), getOrderRequest(user, 1)
+              ((majorItem = 2), (requestType = 'Extend')), getChangeRequest(1)
             "
           >
             <router-link
@@ -85,36 +91,24 @@
               class="text-decoration-none"
               disabled
             >
-              <h6>Accept</h6>
+              <h6>
+                Extend
+                <span
+                  v-if="this.requestType == 'Extend'"
+                  class="badge bg-secondary"
+                  >{{ pagination.totalRow }}</span
+                >
+              </h6>
             </router-link>
           </div>
 
-          <div
-            class="col-md-2 major_head_item"
-            :class="{
-              major_head_item_active: this.majorItem == 3,
-            }"
-            @click="
-              ((majorItem = 3), (status = 'Reject')), getOrderRequest(user, 1)
-            "
-          >
-            <router-link
-              :to="{
-                path: '#',
-              }"
-              class="text-decoration-none"
-              disabled
-            >
-              <h6>Reject</h6>
-            </router-link>
-          </div>
           <!-- <div class="col-md-2 status_item"><h6>New</h6></div> -->
         </div>
         <div class="base_table">
           <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
               <tr style="border-bottom: 2px solid #dcd8d8">
-                <th class="w-10">ID</th>
+                <th class="w-10">ON ORDER ID</th>
                 <th style="width: 20%">CREATE BY</th>
                 <!-- <th v-for="childSkill in childSkills" :key="childSkill.SkillID">
                       {{ childSkill.Skill_Name }}
@@ -123,47 +117,48 @@
                 <th>NOTE</th>
 
                 <th>CREATE ON</th>
-                <th>End At</th>
-                <th>Status</th>
+                <th v-if="requestType == 'Extend'">EXTEND</th>
+                <th>STATUS</th>
 
-                <th>Action</th>
+                <th>ACTION</th>
 
                 <!-- <th>Action</th> -->
               </tr>
             </thead>
 
             <tbody>
-              <tr v-for="(orderRequest, index) in orderRequests" :key="index">
+              <tr v-for="(changeRequest, index) in changeRequests" :key="index">
                 <td>
-                  {{ orderRequest.OrderRequestID }}
+                  {{ changeRequest.OrderID }}
                 </td>
                 <td>
-                  <img
+                  {{ changeRequest.Username }}
+                  <!-- <img
                     :src="orderRequest.Profile_Picture"
                     alt=""
                     style="width: 35px; height: 35px"
                     class="rounded-circle"
                   />
-                  {{ orderRequest.First_Name + " " + orderRequest.Last_Name }}
+                  {{ orderRequest.First_Name + " " + orderRequest.Last_Name }} -->
                 </td>
                 <td>
                   <div class="JobDescription">
-                    {{ orderRequest.JobDescription }}
+                    {{ changeRequest.Request_Title }}
                   </div>
                 </td>
                 <td>
-                  {{ orderRequest.TotalEstimation }}
+                  {{ changeRequest.Request_Description }}
                 </td>
                 <td>
                   {{
-                    moment(orderRequest.StartFrom).format("yyyy-MM-DD hh:mm A")
+                    moment(changeRequest.Create_At).format("yyyy-MM-DD hh:mm A")
                   }}
                 </td>
-                <td>
-                  {{ moment(orderRequest.EndAt).format("yyyy-MM-DD hh:mm A") }}
+                <td v-if="requestType == 'Extend'">
+                  {{ changeRequest.Request_Extend_Day }} day(s)
                 </td>
                 <td>
-                  <div v-if="orderRequest.Status == 'Pending'">
+                  <div v-if="changeRequest.Status == 'Pending'">
                     <span
                       class="status text-warning"
                       style="
@@ -176,7 +171,7 @@
                       >•</span
                     ><span>Pending</span>
                   </div>
-                  <div v-if="orderRequest.Status == 'Accept'">
+                  <div v-if="changeRequest.Status == 'Accept'">
                     <span
                       class="status text-success"
                       style="
@@ -190,7 +185,7 @@
                     ><span>Accept</span>
                   </div>
 
-                  <div v-if="orderRequest.Status == 'Reject'">
+                  <div v-if="changeRequest.Status == 'Reject'">
                     <span
                       class="status text-secondary"
                       style="
@@ -206,44 +201,82 @@
                 </td>
                 <td>
                   <!-- v-if="user.role == 'C'" -->
-                  <div>
-                    <span
-                      class="badge rounded-pill bg-info text-light me-1"
-                      style="cursor: pointer"
-                      @click="
-                        (messageModal = 'accept this order request'),
-                          (isshowConfirmRequestModal =
-                            !isshowConfirmRequestModal),
-                          (action = 'Accept'),
-                          (selectedOrderRequestID = orderRequest.OrderRequestID)
+                  <div v-if="currentAccountInfo.Role == 'C'">
+                    <div
+                      v-if="
+                        changeRequest.Status == 'Pending' &&
+                        requestType == 'Extend'
                       "
-                      >Accept</span
                     >
+                      <span
+                        class="badge rounded-pill bg-info text-light me-1"
+                        style="cursor: pointer"
+                        @click="
+                          (messageModal = 'accept'),
+                            (isshowConfirmRequestModal =
+                              !isshowConfirmRequestModal),
+                            (action = 'Accept'),
+                            (changeRequestObj =
+                              changeRequest)
+                        "
+                        >Accept</span
+                      >
 
-                    <span
-                      class="badge rounded-pill text-info decline_button"
-                      style="cursor: pointer"
-                      @click="
-                        (messageModal = 'decline'),
-                          (isshowConfirmRequestModal =
-                            !isshowConfirmRequestModal),
-                          (action = 'Reject'),
-                          (selectedOrderRequestID = orderRequest.OrderRequestID)
-                      "
-                      >Decline</span
-                    >
+                      <span
+                        class="badge rounded-pill text-info decline_button"
+                        style="cursor: pointer"
+                        @click="
+                          (messageModal = 'decline'),
+                            (isshowConfirmRequestModal =
+                              !isshowConfirmRequestModal),
+                            (action = 'Reject'),
+                            (changeRequestObj =
+                              changeRequest)
+                        "
+                        >Decline</span
+                      >
+                    </div>
                   </div>
-                  <!-- <div v-else>
-                          None
-                    </div> -->
+
+                  <div v-else-if="currentAccountInfo.Role == 'A'">
+                    <div v-if="changeRequest.Status == 'Pending'">
+                      <span
+                        class="badge rounded-pill bg-info text-light me-1"
+                        style="cursor: pointer"
+                        @click="
+                          (messageModal = 'accept'),
+                            (isshowConfirmRequestModal =
+                              !isshowConfirmRequestModal),
+                            (action = 'Accept'),
+                            (changeRequestObj = changeRequest)
+                        "
+                        >Accept</span
+                      >
+
+                      <span
+                        class="badge rounded-pill text-info decline_button"
+                        style="cursor: pointer"
+                        @click="
+                          (messageModal = 'decline'),
+                            (isshowConfirmRequestModal =
+                              !isshowConfirmRequestModal),
+                            (action = 'Reject'),
+                            (changeRequestObj = changeRequest)
+                        "
+                        >Decline</span
+                      >
+                    </div>
+                  </div>
+                  <div v-else></div>
+
                 </td>
               </tr>
             </tbody>
           </table>
-          <div v-if="orderRequests.length == 0" class="text-center">
+          <div v-if="changeRequests.length == 0" class="text-center">
             <h5>Not Found</h5>
           </div>
-          <div class="pagination" v-if="orderRequests.length > 0">
+          <div class="pagination" v-if="changeRequests.length > 0">
             <router-link
               v-if="pagination.page - 1 == 0"
               class="page-number"
@@ -257,7 +290,7 @@
               v-if="pagination.page - 1 > 0"
               class="page-number"
               :disabled="true"
-              @click="getOrderRequest(user, pagination.page - 1)"
+              @click="getChangeRequest(pagination.page - 1)"
               :to="{
                 path: '#',
               }"
@@ -268,7 +301,7 @@
                 path: '#',
               }"
               class="page-number"
-              @click="getOrderRequest(user, index)"
+              @click="getChangeRequest(index)"
               v-for="index in pagination.totalPage"
               :key="index"
               :disabled="true"
@@ -280,7 +313,7 @@
               v-if="pagination.page + 1 <= pagination.totalPage"
               class="page-number"
               :disabled="true"
-              @click="getOrderRequest(user, pagination.page + 1)"
+              @click="getChangeRequest(pagination.page + 1)"
               :to="{
                 path: '#',
               }"
@@ -296,141 +329,69 @@
               ><i class="bi bi-arrow-right text-black-50"></i
             ></router-link>
           </div>
-          <div class="confirm_request">
-            <div
-              class="modal fade show"
-              style="
-                display: block;
-                background-color: #000000ad;
-                padding-top: 10%;
-              "
-              v-if="isshowConfirmRequestModal"
-            >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div
-                    class="modal-header text-end"
-                    style="background-color: #33b5e5; color: white"
-                  >
-                    <h5 class="modal-title" style="text-align: center">
-                      Are you sure?
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      @click="
-                        isshowConfirmRequestModal = !isshowConfirmRequestModal
-                      "
-                      aria-label="Close"
-                      style="color: white"
-                    ></button>
-                  </div>
-                  <div class="modal-body" v-if="action == 'Accept'">
-                    <div class="row">
-                      <div>
-                        <p class="modal-title">
-                          Do you really want to {{ messageModal }}
-                        </p>
-                        <p class="modal-title">
-                          This process cannot be undone.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+        </div>
+      </div>
 
-                  <div class="modal-body" v-else>
-                    <div class="row">
-                      <div>
-                        <p class="modal-title">
-                          Do you really want to {{ messageModal }}
-                        </p>
-                      </div>
-                      <div>
-                        <p class="modal-title">Want to say something</p>
-                        <select
-                          v-model="selectedReason"
-                          style="margin-bottom: 15px"
-                          class="text-center py-2 w-100"
-                        >
-                          <option
-                            class=""
-                            value="Due to prior commitments and deadlines, I won't be able to allocate the necessary time to meet your project requirements."
-                          >
-                            <span
-                              >Due to prior commitments and deadlines, I won't
-                              be able to allocate the necessary time to meet
-                              your project requirements.</span
-                            >
-                          </option>
-                          <option
-                            class=""
-                            value="I currently have a full workload and am unable to take on additional projects at this time."
-                          >
-                            <span
-                              >I currently have a full workload and am unable to
-                              take on additional projects at this time.</span
-                            >
-                          </option>
-                          <option
-                            class=""
-                            value="Due to unforeseen personal or health-related circumstances, I am currently unable to take on projects."
-                          >
-                            <span
-                              >Due to unforeseen personal or health-related
-                              circumstances, I am currently unable to take on
-                              projects.</span
-                            >
-                          </option>
-                          <option
-                            class=""
-                            value="After reviewing the project details, I believe that the project is not suitable and I cannot work effectively on this project."
-                          >
-                            <span
-                              >After reviewing the project details, I believe
-                              that the project is not suitable and I cannot work
-                              effectively on this project.</span
-                            >
-                          </option>
-                        </select>
-                        <p class="modal-title">
-                          This process cannot be undone.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer justify-content-center">
-                    <a
-                      type="button"
-                      class="btn btn-info waves-effect waves-light text-white"
-                      @click="
-                        updateOrderRequestStatus(
-                          action,
-                          selectedOrderRequestID,
-                          selectedReason
-                        ),
-                          (isshowConfirmRequestModal =
-                            !isshowConfirmRequestModal)
-                      "
-                      >Save</a
-                    >
-                    <a
-                      type="button"
-                      class="btn btn-outline-info waves-effect"
-                      @click="
-                        isshowConfirmRequestModal = !isshowConfirmRequestModal
-                      "
-                      data-dismiss="modal"
-                      >Cancel</a
-                    >
+      <div class="confirm_request">
+        <div
+          class="modal fade show"
+          style="display: block; background-color: #000000ad; padding-top: 10%"
+          v-if="isshowConfirmRequestModal"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div
+                class="modal-header text-end"
+                style="background-color: #33b5e5; color: white"
+              >
+                <h5 class="modal-title" style="text-align: center">
+                  Are you sure?
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  @click="
+                    isshowConfirmRequestModal = !isshowConfirmRequestModal
+                  "
+                  aria-label="Close"
+                  style="color: white"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div>
+                    <p class="modal-title">
+                      Do you really want to {{ messageModal }} these request?
+                    </p>
+                    <p class="modal-title">This process cannot be undone.</p>
                   </div>
                 </div>
+              </div>
+
+              <div class="modal-footer justify-content-center">
+                <a
+                  type="button"
+                  class="btn btn-info waves-effect waves-light text-white"
+                  @click="
+                    updateChangeRequestStatus(action, changeRequestObj),
+                      (isshowConfirmRequestModal = !isshowConfirmRequestModal)
+                  "
+                  >Save</a
+                >
+                <a
+                  type="button"
+                  class="btn btn-outline-info waves-effect"
+                  @click="
+                    isshowConfirmRequestModal = !isshowConfirmRequestModal
+                  "
+                  data-dismiss="modal"
+                  >Cancel</a
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      
     </div>
   </div>
 </template>
@@ -444,6 +405,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "CreateOrderDetailPage",
@@ -455,48 +417,40 @@ export default {
   },
   data() {
     return {
-      user: [],
+      currentAccountInfo: [],
       pagination: [],
-      orderRequests: [],
+      changeRequests: [],
       moment: moment,
       selectedPage: 1,
       majorItem: 1,
-      isshowModal: false,
-      selectedStatus: "Active",
       messageModal: "",
-      status: "Pending",
+      status: "",
       isshowConfirmRequestModal: false,
       action: "",
-      selectedOrderRequestID: "",
-      selectedReason: "",
+      requestType: "Cancel",
+      changeRequestObj: {},
     };
   },
   async created() {
-    // if (localStorage.getItem("token") === null) {
-    //   this.$router.push("/login");
-    // }
-    // const responseUserInfor = await axios.get("/users/info", {
-    //   headers: { token: localStorage.getItem("token") },
-    // });
-    // const userInfor = responseUserInfor.data.user;
-    // this.user = userInfor;
+    await this.onUpdateAccountInfo();
 
-    this.getOrderRequest("user", 1);
+    await this.getChangeRequest(1);
   },
   methods: {
-    async getOrderRequest(user, currentPage) {
+    async getChangeRequest(currentPage) {
       const responseData = await axios
-        .get("/orderrequest/getOrderRequest", {
+        .get("/changerequest/getChangeRequest", {
           params: {
             page: currentPage,
-            user: { userId: 4, role: "C" },
+            user: this.currentAccountInfo,
             status: this.status,
+            requestType: this.requestType,
           },
         })
         .then((response) => {
           console.log(response.data);
-          const orderRequests = response.data.orderRequest;
-          this.orderRequests = orderRequests;
+          const changeRequest = response.data.changeRequest;
+          this.changeRequests = changeRequest;
           const paging = response.data.pagination;
           this.pagination = paging;
         })
@@ -506,34 +460,185 @@ export default {
           toast.warn("Failed!", { autoClose: 2000 });
         });
     },
-    async updateOrderRequestStatus(status, orderRequestID, selectedReason) {
-      if (status == "Accept") {
+    async updateChangeRequestStatus(action, changeRequestObj) {
+      if (action == "Accept") {
         try {
           const responseStep1 = await axios.put(
-            "/orderrequest/changeOrderRequestStatus",
+            "/changerequest/changeChangeRequestStatus",
             {
-              status: status,
-              orderRequestID: orderRequestID,
+              status: "Accept",
+              changeRequestID: changeRequestObj.ChangeRequestID,
             }
           );
-          if (responseStep1) {
-            const responseStep2 = await axios.post("/orders/createOrder", {
-              order: { OrderRequestID: orderRequestID },
-            });
-            if (responseStep2) {
-              toast.success("Successfully!", {
+          toast.success("Successfully!", {
                 theme: "colored",
                 autoClose: 2000,
                 onClose: () => location.reload(),
               });
-            }
-          }
+          // if (responseStep1) {
+          //   const responseStep2 = await axios.post("/orders/createOrder", {
+          //     order: { OrderRequestID: orderRequestID },
+          //   });
+          //   if (responseStep2) {
+          //     toast.success("Successfully!", {
+          //       theme: "colored",
+          //       autoClose: 2000,
+          //       onClose: () => location.reload(),
+          //     });
+          //   }
+          // }
         } catch (error) {
           // Handle the error
           console.error("Error here:", error);
           toast.warn("Failed!", { autoClose: 2000 });
         }
       } else {
+        try {
+          const responseStep1 = await axios.put(
+            "/changerequest/changeChangeRequestStatus",
+            {
+              status: "Reject",
+              changeRequestID: changeRequestObj.ChangeRequestID,
+            }
+          );
+          toast.success("Successfully!", {
+                theme: "colored",
+                autoClose: 2000,
+                onClose: () => location.reload(),
+              });
+          // if (responseStep1) {
+          //   const responseStep2 = await axios.put(
+          //     "/orderrequest/updateOrderRequestNote",
+          //     {
+          //       OrderRequestID: orderRequestID,
+          //       Note: selectedReason,
+          //     }
+          //   );
+          //   if (responseStep2) {
+          //     toast.success("Successfully!", {
+          //       theme: "colored",
+          //       autoClose: 2000,
+          //       onClose: () => location.reload(),
+          //     });
+          //   }
+          // }
+        } catch (error) {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        }
+      }
+    },
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/login");
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+          await axios
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.freelancer;
+                console.log("Freelancer " + this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else if (decoded.role === "C") {
+          await axios
+            .get("/customers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.customer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else {
+          this.currentAccountInfo = {
+            Email: decoded.email,
+            Role: decoded.role,
+          };
+        }
+      }
+    },
+
+    async acceptRequest(selectedRequest) {
+      if (selectedRequest.Request_Type == "Cancel") {
+        const changeOrderStatusRes = await axios.put("/orders/updateStatus", {
+          status: "Cancelled",
+          orderID: selectedRequest.OrderID,
+        });
+        if (changeOrderStatusRes.data.message == "Change Status Success") {
+          const changeOrderRequestStatusRes = await axios.put(
+            "/orders/updateOrderRequestStatus",
+            {
+              status: "Accept",
+              orderRequestID: selectedRequest.OrderRequestID,
+            }
+          );
+
+          if (
+            changeOrderRequestStatusRes.data.message ==
+            "Change Order Request Status Success"
+          ) {
+            toast.success("Accept Request Status Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          } else {
+            toast.warn("Accept Request Status Faild!", { autoClose: 2000 });
+          }
+        } else {
+          toast.warn("Request Faild!", { autoClose: 2000 });
+        }
+      } else {
+        alert("Extend :" + selectedRequest.Request_Action);
+        const updateOrderExtendDayRes = await axios.put(
+          "/orders/updateOrderExtendDay",
+          {
+            extendDay: selectedRequest.Request_Action,
+            orderID: selectedRequest.OrderID,
+          }
+        );
+        if (
+          updateOrderExtendDayRes.data.message == "Update Extend Day Success"
+        ) {
+          const changeOrderRequestStatusRes = await axios.put(
+            "/orders/updateOrderRequestStatus",
+            {
+              status: "Accept",
+              orderRequestID: selectedRequest.OrderRequestID,
+            }
+          );
+
+          if (
+            changeOrderRequestStatusRes.data.message ==
+            "Change Order Request Status Success"
+          ) {
+            toast.success("Accept Request Status Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          } else {
+            toast.warn("Accept Request Status Faild!", { autoClose: 2000 });
+          }
+        } else {
+          toast.warn("Request Faild!", { autoClose: 2000 });
+        }
       }
     },
   },
