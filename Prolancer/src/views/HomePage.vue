@@ -6,7 +6,7 @@
     <header class="row">
       <Header></Header>
     </header>
-    <NavCategory :listCategories="categories"></NavCategory>
+    <NavCategory></NavCategory>
     <div class="container">
       <div class="row">
         <!-- <aside class="col-sm-3">
@@ -253,7 +253,6 @@ export default {
           console.log(err.response);
         }
       );
-
     const responseCategory = await axios.get("/categories/get");
     const categories = responseCategory.data;
     this.categories = categories;
@@ -265,7 +264,6 @@ export default {
       },
     });
     const gigs = responseGig.data.gig;
-    // console.log(gigs[0].Title + "1");
 
     this.gigs = gigs;
   },

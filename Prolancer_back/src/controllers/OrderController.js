@@ -1,5 +1,5 @@
 const Order = require('../models/Order');
-const OrderRequest = require('../models/OrderRequest');
+const OrderRequest = require('../models/ChangeRequest');
 
 const path = require('path');
 const fs = require('fs');
@@ -10,14 +10,14 @@ class OrderController {
     const data = req.body;
     var order = (data.order)
 
-    Order.createOrder(order, function (result) {
+    Order.createOrder(order, function (err,result) {
 
       if (result) {
 
         return res.send({ message: 'Create Order Success', insertId: result.insertId });
       }
       else {
-        return res.send('Create Order Failed');
+        return res.status(500).send('Create Order Failed'+err);
 
       }
 
@@ -245,27 +245,7 @@ class OrderController {
       });
   }
 
-  changeOrderRequestStatus = function (req, res) {
-    const data = req.body;
-    var status = data.status;
-    var orderRequestID = data.orderRequestID;
-
-    console.log(status + orderRequestID);
-
-    OrderRequest.changeOrderRequestStatus(status, orderRequestID, function (err, result) {
-      if (err)
-        return res.send(err);
-      else {
-        if (result.affectedRows == 0) {
-          res.send({ message: 'Change Order Request Status Failed' });
-
-        }
-        res.send({ message: 'Change Order Request Status Success' });
-      }
-
-    });
-
-  };
+  
 
   updateOrderExtendDay = function (req, res) {
     const data = req.body;
@@ -302,12 +282,11 @@ class OrderController {
 
     // const uploadPath = '../Prolancer/public/delivery' + deliverFile.name;
     const newFileName = `${orderID}_${deliverFile.name}`;
-    const commonPath = path.join('public', 'delivery', newFileName);
+    const commonPath = path.join('uploads', 'delivery', newFileName);
 
     console.log("🚀 ~ file: OrderController.js:284 ~ OrderController ~ uploadPath:", commonPath)
-    const uploadPath = path.join(__dirname, '..', '..', '..', commonPath);
+    const uploadPath = path.join(__dirname, '..', '..', commonPath);
     console.log("🚀 ~ file: OrderController.js:289 ~ OrderController ~ uploadPath:", uploadPath)
-    
     if (fs.existsSync(uploadPath)) {
       // Delete the existing file
       console.log("Run Here")
@@ -339,7 +318,7 @@ class OrderController {
           else {
             console.log("File uploaded successfully Run Here")
             if (result.affectedRows == 0) {
-              res.send({ message: 'File uploaded Failed' });
+              return res.send({ message: 'File uploaded Failed' });
     
             }
             res.json({ message: 'File uploaded successfully' });

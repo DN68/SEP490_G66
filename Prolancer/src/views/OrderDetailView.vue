@@ -27,7 +27,7 @@
             "
             :class="{ status_item_active: isrequirement }"
           >
-            <h6>Requirements</h6>
+            <h6>Job Description</h6>
           </div>
           <div
             class="col-md-2 status_item"
@@ -87,9 +87,9 @@
                         <span class="delivery_time_left">Delivery Day </span>
                         <span class="col-md-6 delivery_time_right text-end"
                           >{{
-                            moment(order.Order_Date)
+                            moment(order.EndAt)
                               .add(
-                                24 * (order.Delivery_Day + order.Extend_Day),
+                                24 * (order.Extend_Day),
                                 "h"
                               )
                               .format("MMMM Do, h:mm A")
@@ -109,8 +109,8 @@
                   <div class="col-md-3 order_detail_title">
                     <h5 class="text-end" style="font-size: 20px">
                       ${{
-                        order.Price * order.Total_Amount +
-                        order.Price * order.Total_Amount * 0.1
+                        order.Price * order.TotalEstimation +
+                        order.Price * order.TotalEstimation * 0.1
                       }}
                     </h5>
                   </div>
@@ -131,7 +131,7 @@
                     <thead>
                       <tr>
                         <th scope="col" class="th_item text-start">ITEM</th>
-                        <th scope="col">QTY</th>
+                        <th scope="col">ESTIMATION</th>
                         <th scope="col">DURATION</th>
                         <th scope="col">PRICE</th>
                       </tr>
@@ -139,8 +139,8 @@
                     <tbody>
                       <tr>
                         <td scope="row">{{ order.Title }}</td>
-                        <td>{{ order.Total_Amount }}</td>
-                        <td>{{ order.Delivery_Day }} days</td>
+                        <td>{{ order.TotalEstimation }} hour</td>
+                        <td>{{ moment(order.StartFrom ).format("MMMM Do, h:mm A")}} - {{ moment(order.EndAt ).format("MMMM Do, h:mm A")}}</td>
                         <td>${{ order.Price }}</td>
                       </tr>
                       <tr>
@@ -162,14 +162,14 @@
                         <th scope="row">SUBTOTAL</th>
                         <th colspan="2"></th>
                         <th class="order_price">
-                          ${{ order.Price * order.Total_Amount }}
+                          ${{ order.Price * order.TotalEstimation }}
                         </th>
                       </tr>
                       <tr class="backgroud_gray">
                         <th scope="row">SERVICE FEE</th>
                         <th colspan="2"></th>
                         <th class="order_price">
-                          ${{ order.Price * order.Total_Amount * 0.1 }}
+                          ${{ order.Price * order.TotalEstimation * 0.1 }}
                         </th>
                       </tr>
 
@@ -178,8 +178,8 @@
                         <th colspan="2"></th>
                         <th class="order_price">
                           ${{
-                            order.Price * order.Total_Amount +
-                            order.Price * order.Total_Amount * 0.1
+                            order.Price * order.TotalEstimation +
+                            order.Price * order.TotalEstimation * 0.1
                           }}
                         </th>
                       </tr>
@@ -200,7 +200,7 @@
                   <div class="col-md-12 order_detail_title">
                     <h6 class="text-start">
                       <i class="bi bi-1-circle-fill icon_number"></i> Writing
-                      your requiremnet here. Do you have any ideals of what you
+                      job description here. Do you have any ideals of what you
                       want ?
                     </h6>
                   </div>
@@ -212,7 +212,7 @@
                     <span>Hello!</span>
                   </div>
                   <p class="lh-lg">
-                    Here is order requirement:  {{ order.Description }}
+                    Here is job description:  {{ order.JobDescription }}
                   </p>
                   <div class="text_thanks">
                     <span>Thanks!</span>
@@ -226,7 +226,7 @@
                   <div class="col-md-12 order_detail_title">
                     <h6 class="text-start">
                       <i class="bi bi-2-circle-fill icon_number"></i> You can
-                      send more requiremnet here. Do you have any new ideals of
+                      send more job description here. Do you have any new ideals of
                       what you want ?
                     </h6>
                   </div>
@@ -274,25 +274,15 @@
                     v-if="user.role == 'F'"
                   >
                      <!-- if freelancer has been delivered before -->
-                    <div v-if="order.Delivery" class="Free_Delivered">
+                    <div v-if="order.Status == 'Delivered'" class="Free_Delivered">
                       <div>
                         <label for="uploadProduct">
                           <i
                             class="bi bi-box-seam-fill box_icon_delivery text-black"
                           ></i>
-                          <div>
-                            <span class="d-inline">Click Here</span>
-                          </div>
+                          
                         </label>
-                        <input
-                          id="uploadProduct"
-                          type="file"
-                          class="d-none"
-                          name="sampleFile"
-                          ref="fileInput"
-                          accept="image/*,.pdf,.txt"
-                          @change="checkInputFile=true"
-                        />
+                       
                       </div>
                        <!-- if freelancer not upload new file -->
                       <p class="text-danger" v-if="!checkInputFile">
@@ -305,7 +295,7 @@
                       <div class="delivery_infomation">
                         <span class="ordered_from_right">You </span>
                         <span class="delivery_infomation_date">
-                          has delivered this order. You can upload your product again</span
+                          has delivered this order.</span
                         >
                       </div>
 
@@ -334,7 +324,7 @@
                           class="d-none"
                           name="sampleFile"
                           ref="fileInput"
-                          accept="image/*,.pdf,.txt"
+                          accept="image/*,.pdf,.txt,.zip,.rar"
                           @change="checkInputFile=true"
                         />
                         <label for="uploadProduct">
@@ -393,7 +383,7 @@
                    <!-- if user are Customer, Admin -->
                   <div class="col-md-12 order_detail_title" v-else>
                      <!-- if freelancer has not delivered before -->
-                    <div v-if="!order.Delivery">
+                    <div v-if="order.Status != 'Delivered'">
                       <div>
                         <i class="bi bi-box-seam box_icon_delivery"></i>
                       </div>
@@ -412,9 +402,9 @@
                         <span class="delivery_infomation_date">
                           should deliver this order on
                           {{
-                            moment(order.Order_Date)
+                            moment(order.EndAt)
                               .add(
-                                24 * (order.Delivery_Day + order.Extend_Day),
+                                24 * (order.Extend_Day),
                                 "h"
                               )
                               .format("MMMM Do, h:mm A")
@@ -605,15 +595,22 @@
                       >Delivery Time</span
                     >
                     <span class="col-md-6 delivery_time_right text-end"
-                      >{{ order.Delivery_Day }} days</span
+                      >{{
+                            moment(order.EndAt)
+                              .add(
+                                24 * (order.Extend_Day),
+                                "h"
+                              )
+                              .format("MMMM Do, h:mm A")
+                          }} </span
                     >
                   </div>
                   <div class="total_price row">
                     <span class="col-md-6 total_price_left">Total price</span>
                     <span class="col-md-6 total_price_right text-end"
                       >${{
-                        order.Price * order.Total_Amount +
-                        order.Price * order.Total_Amount * 0.1
+                        order.Price * order.TotalEstimation +
+                        order.Price * order.TotalEstimation * 0.1
                       }}
                     </span>
                   </div>
@@ -894,26 +891,26 @@ export default {
     };
   },
   async created() {
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
-    const responseUserInfor = await axios.get("/users/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const userInfor = responseUserInfor.data.user;
-    this.user = userInfor;
+    // if (localStorage.getItem("token") === null) {
+    //   this.$router.push("/login");
+    // }
+    // const responseUserInfor = await axios.get("/users/info", {
+    //   headers: { token: localStorage.getItem("token") },
+    // });
+    // const userInfor = responseUserInfor.data.user;
+    // this.user = userInfor;
     const responseOrder = await axios.get(
       "/orders/details/" + this.$route.params.id
     );
     const order = responseOrder.data[0];
     this.order = order;
-    if (
-      this.user.userId != this.order.CustomerID &&
-      this.user.userId != this.order.FreelancerID &&
-      this.user.role != "A"
-    ) {
-      this.$router.push("/");
-    }
+    // if (
+    //   this.user.userId != this.order.CustomerID &&
+    //   this.user.userId != this.order.FreelancerID &&
+    //   this.user.role != "A"
+    // ) {
+    //   this.$router.push("/");
+    // }
   },
   methods: {
     async addOrderRequirement(OrderDescription, addRequirement, orderID) {
@@ -1035,6 +1032,7 @@ export default {
   text-transform: uppercase;
   margin-right: 30px;
   padding: 0;
+  cursor: pointer;
 }
 .view_order_detail .order_status .status_item h6 {
   font-weight: 600;
