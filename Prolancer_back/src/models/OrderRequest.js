@@ -8,14 +8,15 @@ var OrderRequest = function (orderRequest) {
   this.TotalEstimation = orderRequest.Create_At;
   this.StartFrom = orderRequest.Status;
   this.EndAt = orderRequest.Request_Action;
-  this.Description = orderRequest.OrderID;
   this.Status = orderRequest.Request_Type;
+  this.Note = orderRequest.Note;
+
 };
 
 OrderRequest.createOrderRequest = function (orderRequest, result) {
   const dateStart = require('moment')(orderRequest.StartFrom).format('YYYY-MM-DD HH:mm:ss');
   const dateEnd = require('moment')(orderRequest.EndAt).format('YYYY-MM-DD HH:mm:ss');
-  connectDb.query("INSERT INTO `OrderRequest` (`OrderRequestID`, `CustomerID`, `GigID`, `JobDescription`, `TotalEstimation`, `StartFrom`, `EndAt`, `Description`, `Status`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, 'Pending')", [orderRequest.CustomerID, orderRequest.GigID, orderRequest.JobDescription, orderRequest.TotalEstimation, dateStart, dateEnd, orderRequest.Description], function (err, res) {
+  connectDb.query("INSERT INTO `OrderRequest` (`OrderRequestID`, `CustomerID`, `GigID`, `JobDescription`, `TotalEstimation`, `StartFrom`, `EndAt`, `Status`) VALUES (NULL, ?, ?, ?, ?, ?, ?, 'Pending')", [orderRequest.CustomerID, orderRequest.GigID, orderRequest.JobDescription, orderRequest.TotalEstimation, dateStart, dateEnd], function (err, res) {
     if (err) {
 
       result(err,null);
@@ -94,6 +95,20 @@ OrderRequest.updateOrderRequestNote = function (Note,OrderRequestID, result) {
       }
     });
   };
+
+  OrderRequest.updateOrderRequestJobDescription = function (JobDescription,OrderRequestID, result) {
+    connectDb.query("UPDATE `OrderRequest` SET `JobDescription` = ? WHERE `OrderRequest`.`OrderRequestID` = ?", [JobDescription,OrderRequestID], function (err, res) {
+      if (err) {
+  
+        result(err,null);
+      }
+      else {
+  
+        result(null,res);
+      }
+    });
+  };
+
 
 
 module.exports = OrderRequest;

@@ -10,7 +10,7 @@
               (isdetail = true),
                 (isrequirement = false),
                 (isdelivery = false),
-                (isOrderRequest = false)
+                (isChangeRequest = false)
             "
             :class="{ status_item_active: isdetail }"
           >
@@ -23,7 +23,7 @@
               (isdetail = false),
                 (isrequirement = true),
                 (isdelivery = false),
-                (isOrderRequest = false)
+                (isChangeRequest = false)
             "
             :class="{ status_item_active: isrequirement }"
           >
@@ -35,24 +35,24 @@
               (isdetail = false),
                 (isrequirement = false),
                 (isdelivery = true),
-                (isOrderRequest = false)
+                (isChangeRequest = false)
             "
             :class="{ status_item_active: isdelivery }"
           >
             <h6>Delivery</h6>
           </div>
           <div
-            v-if="user.role != 'A'"
+            v-if="currentAccountInfo.Role != 'A'"
             class="col-md-2 status_item"
             @click="
               (isdetail = false),
                 (isrequirement = false),
                 (isdelivery = false),
-                (isOrderRequest = true)
+                (isChangeRequest = true)
             "
-            :class="{ status_item_active: isOrderRequest }"
+            :class="{ status_item_active: isChangeRequest }"
           >
-            <h6>Order Request</h6>
+            <h6>Change Request</h6>
           </div>
         </div>
 
@@ -88,10 +88,7 @@
                         <span class="col-md-6 delivery_time_right text-end"
                           >{{
                             moment(order.EndAt)
-                              .add(
-                                24 * (order.Extend_Day),
-                                "h"
-                              )
+                              .add(24 * order.Extend_Day, "h")
                               .format("MMMM Do, h:mm A")
                           }}
                         </span>
@@ -140,7 +137,12 @@
                       <tr>
                         <td scope="row">{{ order.Title }}</td>
                         <td>{{ order.TotalEstimation }} hour</td>
-                        <td>{{ moment(order.StartFrom ).format("MMMM Do, h:mm A")}} - {{ moment(order.EndAt ).format("MMMM Do, h:mm A")}}</td>
+                        <td>
+                          {{
+                            moment(order.StartFrom).format("MMMM Do, h:mm A")
+                          }}
+                          - {{ moment(order.EndAt).format("MMMM Do, h:mm A") }}
+                        </td>
                         <td>${{ order.Price }}</td>
                       </tr>
                       <tr>
@@ -212,7 +214,7 @@
                     <span>Hello!</span>
                   </div>
                   <p class="lh-lg">
-                    Here is job description:  {{ order.JobDescription }}
+                    Here is job description: {{ order.JobDescription }}
                   </p>
                   <div class="text_thanks">
                     <span>Thanks!</span>
@@ -221,13 +223,13 @@
               </div>
               <hr class="featurette-divider" />
 
-              <div class="order_detail_overview" v-if="user.role == 'C'">
+              <div class="order_detail_overview" v-if="currentAccountInfo.Role == 'C'">
                 <div class="order_detail_overview_head row">
                   <div class="col-md-12 order_detail_title">
                     <h6 class="text-start">
                       <i class="bi bi-2-circle-fill icon_number"></i> You can
-                      send more job description here. Do you have any new ideals of
-                      what you want ?
+                      send more job description here. Do you have any new ideals
+                      of what you want ?
                     </h6>
                   </div>
                   <div class="form-outline more_requirment">
@@ -250,9 +252,8 @@
                       @click="
                         addRequirement != ''
                           ? ((isshowConfirmAddRequirementModal =
-                              !isshowConfirmAddRequirementModal),
-                            (this.isUploadFile = false))
-                          : (notInputRequirement = !notInputRequirement)
+                              !isshowConfirmAddRequirementModal))
+                          : (notInputRequirement = true)
                       "
                     >
                       Save
@@ -271,23 +272,22 @@
                 <div class="order_detail_overview_head row">
                   <div
                     class="col-md-12 order_detail_title"
-                    v-if="user.role == 'F'"
+                    v-if="currentAccountInfo.Role == 'F'"
                   >
-                     <!-- if freelancer has been delivered before -->
-                    <div v-if="order.Status == 'Delivered'" class="Free_Delivered">
+                    <!-- if freelancer has been delivered before -->
+                    <div
+                      v-if="order.Status == 'Delivered'"
+                      class="Free_Delivered"
+                    >
                       <div>
                         <label for="uploadProduct">
                           <i
                             class="bi bi-box-seam-fill box_icon_delivery text-black"
                           ></i>
-                          
                         </label>
-                       
                       </div>
-                       <!-- if freelancer not upload new file -->
-                      <p class="text-danger" v-if="!checkInputFile">
-                        {{ messageDanger }}
-                      </p>
+                      <!-- if freelancer not upload new file -->
+                     
 
                       <h6 class="text-center text_sologan">
                         Packages Delivered at the Speed of Need.
@@ -303,14 +303,6 @@
                         <button
                           class="co-white bg-co-black deliver_btn"
                           type="btn"
-                          @click="
-                            this.$refs.fileInput.files.length > 0
-                              ? ((this.isshowConfirmSendRequestModal =
-                                  !this.isshowConfirmSendRequestModal),
-                                (this.modalMessage = 'deliver your product'),
-                                (this.isUploadFile = true))
-                              : (messageDanger = 'Please upload new file!')
-                          "
                         >
                           Deliver
                         </button>
@@ -318,25 +310,8 @@
                     </div>
                     <div v-else class="Free_NotDelivered">
                       <div>
-                        <input
-                          id="uploadProduct"
-                          type="file"
-                          class="d-none"
-                          name="sampleFile"
-                          ref="fileInput"
-                          accept="image/*,.pdf,.txt,.zip,.rar"
-                          @change="checkInputFile=true"
-                        />
-                        <label for="uploadProduct">
-                          <i
-                            class="bi bi-box-seam-fill box_icon_delivery text-black"
-                            v-if="checkInputFile"
-                          ></i>
-                          <i class="bi bi-box-seam box_icon_delivery" v-else></i>
-                          <div>
-                            <span class="d-inline">Click Here</span>
-                          </div>
-                        </label>
+                         <i class="bi bi-box-seam box_icon_delivery"></i>
+                        
                         
                       </div>
                       <!-- if freelancer not upload file -->
@@ -352,9 +327,9 @@
                         <span class="delivery_infomation_date">
                           should deliver this order on
                           {{
-                            moment(order.Order_Date)
+                            moment(order.EndAt)
                               .add(
-                                24 * (order.Delivery_Day + order.Extend_Day),
+                                24 * (order.Extend_Day),
                                 "h"
                               )
                               .format("MMMM Do, h:mm A")
@@ -380,9 +355,9 @@
                       </div>
                     </div>
                   </div>
-                   <!-- if user are Customer, Admin -->
+                  <!-- if user are Customer, Admin -->
                   <div class="col-md-12 order_detail_title" v-else>
-                     <!-- if freelancer has not delivered before -->
+                    <!-- if freelancer has not delivered before -->
                     <div v-if="order.Status != 'Delivered'">
                       <div>
                         <i class="bi bi-box-seam box_icon_delivery"></i>
@@ -403,16 +378,13 @@
                           should deliver this order on
                           {{
                             moment(order.EndAt)
-                              .add(
-                                24 * (order.Extend_Day),
-                                "h"
-                              )
+                              .add(24 * order.Extend_Day, "h")
                               .format("MMMM Do, h:mm A")
                           }}</span
                         >
                       </div>
                     </div>
-                     <!-- if freelancer has been delivered before -->
+                    <!-- if freelancer has been delivered before -->
                     <div v-else>
                       <div>
                         <i
@@ -433,9 +405,9 @@
                       <div class="common_btn_class mt-4">
                         <button
                           class="co-white bg-co-black common_btn w.20"
-                          type="btn"                        
+                          type="btn"
                         >
-                         <span>Completed</span> 
+                          <span>Completed</span>
                         </button>
                       </div>
                     </div>
@@ -446,7 +418,7 @@
           </div>
           <div
             class="col-md-8 order_detail_information step3"
-            :style="{ display: isOrderRequest ? 'block' : 'none' }"
+            :style="{ display: isChangeRequest ? 'block' : 'none' }"
           >
             <div class="container text-start">
               <h3
@@ -458,7 +430,7 @@
                     Arial, sans-serif;
                 "
               >
-                <span>Create Order Request</span>
+                <span>Create Change Request</span>
               </h3>
               <form>
                 <div class="formbold-input-group">
@@ -475,7 +447,7 @@
                       <option value="Cancel" data-custom-style="top: 30px;">
                         Cancel order request
                       </option>
-                      <option value="Extend" v-if="user.role != 'C'">
+                      <option value="Extend" v-if="currentAccountInfo.Role != 'C'">
                         Extend deliver date
                       </option>
                     </select>
@@ -596,14 +568,11 @@
                     >
                     <span class="col-md-6 delivery_time_right text-end"
                       >{{
-                            moment(order.EndAt)
-                              .add(
-                                24 * (order.Extend_Day),
-                                "h"
-                              )
-                              .format("MMMM Do, h:mm A")
-                          }} </span
-                    >
+                        moment(order.EndAt)
+                          .add(24 * order.Extend_Day, "h")
+                          .format("MMMM Do, h:mm A")
+                      }}
+                    </span>
                   </div>
                   <div class="total_price row">
                     <span class="col-md-6 total_price_left">Total price</span>
@@ -691,7 +660,7 @@
         </div>
       </div>
     </div>
-    <div class="confirm_send_request">
+    <div class="confirm_add_requirment">
       <div
         class="modal fade show"
         style="display: block; background-color: #000000ad; padding-top: 10%"
@@ -721,7 +690,7 @@
               <div class="row">
                 <div>
                   <p class="modal-title">
-                    Do you really want to change these records?
+                    Do you really want to save these change?
                   </p>
                   <p class="modal-title">This process cannot be undone.</p>
                 </div>
@@ -733,10 +702,10 @@
                 type="button"
                 class="btn btn-info waves-effect waves-light text-white"
                 @click="
-                  addOrderRequirement(
-                    order.OrderDescription,
+                  addChangeRequirement(
+                    order.JobDescription,
                     addRequirement,
-                    order.OrderID
+                    order.OrderRequestID
                   ),
                     (isshowConfirmAddRequirementModal =
                       !isshowConfirmAddRequirementModal)
@@ -758,7 +727,7 @@
         </div>
       </div>
     </div>
-    <div class="confirm_add_requirment">
+    <div class="confirm_send_request">
       <div
         class="modal fade show"
         style="display: block; background-color: #000000ad; padding-top: 10%"
@@ -793,32 +762,8 @@
                 </div>
               </div>
             </div>
-            <div
-              class="modal-footer justify-content-center"
-              v-if="isUploadFile"
-            >
-              <a
-                type="button"
-                class="btn btn-info waves-effect waves-light text-white"
-                @click="
-                  uploadFiles(),
-                    (isshowConfirmSendRequestModal =
-                      !isshowConfirmSendRequestModal)
-                "
-                >Save</a
-              >
-              <a
-                type="button"
-                class="btn btn-outline-info waves-effect"
-                @click="
-                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
-                "
-                data-dismiss="modal"
-                >Cancel</a
-              >
-            </div>
 
-            <div class="modal-footer justify-content-center" v-else>
+            <div class="modal-footer justify-content-center">
               <a
                 type="button"
                 class="btn btn-info waves-effect waves-light text-white"
@@ -828,7 +773,7 @@
                     requestTitle,
                     requestDescription,
                     order.OrderID,
-                    user.userId,
+                    currentAccountInfo.AccountID,
                     requestExtend
                   ),
                     (isshowConfirmSendRequestModal =
@@ -859,6 +804,8 @@ import axios from "axios";
 var moment = require("moment");
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import VueJwtDecode from "vue-jwt-decode";
+
 export default {
   name: "OrderDetailView",
   components: {
@@ -871,12 +818,12 @@ export default {
       isdelivery: false,
       order: {},
       moment: moment,
-      isOrderRequest: false,
+      isChangeRequest: false,
       addRequirement: "",
       requestType: "Cancel",
       requestTitle: "",
       requestDescription: "",
-      user: [],
+      currentAccountInfo: [],
       isshowConfirmAddRequirementModal: false,
       notInputRequirement: false,
       isshowConfirmSendRequestModal: false,
@@ -891,14 +838,7 @@ export default {
     };
   },
   async created() {
-    // if (localStorage.getItem("token") === null) {
-    //   this.$router.push("/login");
-    // }
-    // const responseUserInfor = await axios.get("/users/info", {
-    //   headers: { token: localStorage.getItem("token") },
-    // });
-    // const userInfor = responseUserInfor.data.user;
-    // this.user = userInfor;
+    await this.onUpdateAccountInfo();
     const responseOrder = await axios.get(
       "/orders/details/" + this.$route.params.id
     );
@@ -913,22 +853,29 @@ export default {
     // }
   },
   methods: {
-    async addOrderRequirement(OrderDescription, addRequirement, orderID) {
-      var newRequirement = OrderDescription + " " + addRequirement;
-      const data = await axios.put("/orders/updateRequirement", {
-        newRequirement: newRequirement,
-        orderID: orderID,
-      });
-      console.log(data);
-      if (data.data.message == "Add Requirement Success") {
-        toast.success("Add Requirement Successfully!", {
-          theme: "colored",
-          autoClose: 2000,
-          onClose: () => location.reload(),
-        });
-      } else {
-        toast.warn("Add Requirement Faild!", { autoClose: 2000 });
+    async addChangeRequirement(JobDescription, addRequirement, OrderRequestID) {
+      var newRequirement = JobDescription + " " + addRequirement;
+      if(addRequirement==''){
+        return;
       }
+      const data = await axios
+        .put("/orderrequest/updateOrderRequestJobDescription", {
+          newJobDescription: newRequirement,
+          OrderRequestID: OrderRequestID,
+        })
+        .then((response) => {
+          toast.success("Add Job Description Successfully!", {
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        });
+      
     },
     checkRequestForm() {
       if (this.requestTitle != "" && this.requestDescription == "") {
@@ -953,30 +900,28 @@ export default {
       userId,
       extendDay
     ) {
-
-      const data = await axios.post("/orders/createOrderRequest", {
-        orderRequest: {
+      const data = await axios.post("/changerequest/createChangeRequest", {
+        changeRequest: {
           CreateByID: userId,
           Request_Title: requestTitle,
           Request_Description: requestDescription,
           requestType: requestType,
           OrderID: OrderID,
           ExtendDay: parseInt(extendDay),
-          Request_Action: "",
         },
-      });
-
-      console.log(data);
-
-      if (data.data.message == "Send Request Success") {
-        toast.success("Send Request Successfully!", {
-          theme: "colored",
-          autoClose: 2000,
-          onClose: () => location.reload(),
+      }).then((response) => {
+          toast.success("Send Request Successfully!", {
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
         });
-      } else {
-        toast.warn("Send Request Faild!", { autoClose: 2000 });
-      }
+
     },
     async uploadFiles() {
       // this.files = this.$refs.myFiles.files
@@ -1008,6 +953,49 @@ export default {
       } else {
         // Handle case when no file is selected
         console.warn("Please select a file to upload");
+      }
+    },
+
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/login");
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+        await  axios
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.freelancer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else if (decoded.role === "C") {
+          await  axios
+            .get("/customers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.customer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else {
+          this.currentAccountInfo = {Email: decoded.email, Role: decoded.role};
+
+        }
       }
     },
   },
@@ -1211,7 +1199,7 @@ export default {
 .order_detail_overview .start_order .start_btn,
 .order_detail_information .save_change .save_btn,
 .deliver_order .deliver_btn,
-.common_btn_class .common_btn{
+.common_btn_class .common_btn {
   border: 1px solid transparent;
   border-radius: 4px;
   box-sizing: border-box;

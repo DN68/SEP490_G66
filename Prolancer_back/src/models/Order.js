@@ -39,12 +39,12 @@ Order.getOrderById = function (id, result) {
 };
 
 Order.getOrderWithPagingAndSearching = function (userId,userRole,status,search,limit, offset, order, pagination) {
-  var sqlForCustomer ="SELECT o.*, g.Title, g.Gig_IMG,g.Delivery_Day, g.Price, user1.First_Name as CustomerFirstName, user1.Last_Name as CustomerLastName, user1.Profile_Picture as CustomerProfilePicture, user2.First_Name as FreelancerFirstName, user2.Last_Name as FreelancerLastName, user2.Profile_Picture as FreelancerProfilePicture FROM `Order` o INNER JOIN Gig g ON o.GigID = g.GigID  INNER JOIN User user1 on o.CustomerID = user1.UserID INNER JOIN User user2 on o.FreelancerID = user2.UserID WHERE o.CustomerID = "+userId+" AND o.Status = ? AND g.Title LIKE ? ORDER BY o.OrderID ASC LIMIT ? OFFSET ?";
-  var sqlForFreelancer ="SELECT o.*, g.Title, g.Gig_IMG,g.Delivery_Day, g.Price, user1.First_Name as CustomerFirstName, user1.Last_Name as CustomerLastName, user1.Profile_Picture as CustomerProfilePicture, user2.First_Name as FreelancerFirstName, user2.Last_Name as FreelancerLastName, user2.Profile_Picture as FreelancerProfilePicture FROM `Order` o INNER JOIN Gig g ON o.GigID = g.GigID  INNER JOIN User user1 on o.CustomerID = user1.UserID INNER JOIN User user2 on o.FreelancerID = user2.UserID WHERE o.FreelancerID = "+userId+" AND o.Status = ? AND g.Title LIKE ? ORDER BY o.OrderID ASC LIMIT ? OFFSET ?";
+  var sqlForCustomer ="SELECT o.*, ro.JobDescription, ro.TotalEstimation, ro.StartFrom, ro.EndAt, g.Price, g.Gig_IMG, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM `Order` o INNER JOIN OrderRequest ro ON ro.OrderRequestID = o.OrderRequestID INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE o.Status = ? AND ro.CustomerID = "+userId+" ORDER BY o.OrderID ASC LIMIT ? OFFSET ?";
+  var sqlForFreelancer ="SELECT o.*, ro.JobDescription, ro.TotalEstimation, ro.StartFrom, ro.EndAt, g.Price, g.Gig_IMG, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM `Order` o INNER JOIN OrderRequest ro ON ro.OrderRequestID = o.OrderRequestID INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE o.Status = ? AND g.FreelancerID = "+userId+" ORDER BY o.OrderID ASC LIMIT ? OFFSET ?";
   var sqlForAdmin = "SELECT o.*, ro.JobDescription, ro.TotalEstimation, ro.StartFrom, ro.EndAt, g.Price, g.Gig_IMG, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM `Order` o INNER JOIN OrderRequest ro ON ro.OrderRequestID = o.OrderRequestID INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE o.Status = ? ORDER BY o.OrderID ASC LIMIT ? OFFSET ?";
   var sql;
-  var sqlCountForCustomer="Select COUNT(*) AS count FROM `Order` INNER JOIN Gig ON Order.GigID = Gig.GigID  WHERE Order.CustomerID = "+userId+" AND Order.Status = ? AND Gig.Title LIKE ? ";
-  var sqlCountForFreelancer="Select COUNT(*) AS count FROM `Order` INNER JOIN Gig ON Order.GigID = Gig.GigID  WHERE Order.FreelancerID = "+userId+" AND Order.Status = ? AND Gig.Title LIKE ? ";
+  var sqlCountForCustomer="SELECT COUNT(*) AS count FROM `Order` o INNER JOIN OrderRequest ro ON ro.OrderRequestID = o.OrderRequestID INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE o.Status = ? AND ro.CustomerID = "+userId;
+  var sqlCountForFreelancer="SELECT COUNT(*) AS count FROM `Order` o INNER JOIN OrderRequest ro ON ro.OrderRequestID = o.OrderRequestID INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE o.Status = ? AND g.FreelancerID = "+userId;
   var sqlCountForAdmin="SELECT COUNT(*) AS count FROM `Order` WHERE Order.Status = ? ";
   var sqlCount;
   if(userRole=='C'){
@@ -74,7 +74,7 @@ Order.getOrderWithPagingAndSearching = function (userId,userRole,status,search,l
       order(null, res);
     }
   });
-  connectDb.query(sqlCount, [status,'%'+search+'%'], function (err, res) {
+  connectDb.query(sqlCount, [status], function (err, res) {
     if (err) {
 
       pagination(err,null);

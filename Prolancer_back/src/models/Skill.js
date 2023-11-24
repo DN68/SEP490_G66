@@ -24,11 +24,11 @@ Skill.getAllMajorSkill = function (result) {
 
 Skill.getAllFreelancerWithSkillScore  = function (queryBy,ParentSkillID,result) {
 
-    var sql = "SELECT f.FreelancerID, u.First_Name, u.Last_Name, u.Profile_Picture " +
+    var sql = "SELECT f.FreelancerID, fr.First_Name, fr.Last_Name, fr.Profile_Picture " +
     queryBy +
     " FROM FreelancerSkill f " +
     "INNER JOIN Skill s ON f.SkillID = s.SkillID " +
-    "INNER JOIN User u ON f.FreelancerID = u.UserID " +
+    "INNER JOIN Freelancer fr ON f.FreelancerID = fr.FreelancerID " +
     "WHERE s.ParentSkillID = "+ParentSkillID +
     " GROUP BY f.FreelancerID";
 

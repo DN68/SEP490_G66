@@ -14,7 +14,8 @@ class GigController {
     var filterByDeliveryDay = '';
     var filterByPrice = '';
 
-    if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null && pageQuery.filterBy1 != undefined) {
+
+    if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null&&pageQuery.filterBy1 != undefined) {
       filterByCategory = pageQuery.filterBy1;
       console.log('filterByCategory');
 

@@ -253,10 +253,6 @@ export default {
           console.log(err.response);
         }
       );
-    const responseCategory = await axios.get("/categories/get");
-    const categories = responseCategory.data;
-    this.categories = categories;
-    console.log(this.categories);
 
     const responseGig = await axios.get("/gigs/index", {
       params: {

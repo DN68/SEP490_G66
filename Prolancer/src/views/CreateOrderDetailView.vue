@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header></Header>
+    <Header @update-account-info="onUpdateAccountInfo"></Header>
     <div class="container">
       <div class="row">
         <article class="col-sm-12">
@@ -264,22 +264,16 @@ export default {
     Header,
     VueDatePicker,
   },
-  async created() {
+  async mounted() {
     const responseGig = await axios.get(
       "/gigs/details/" + this.$route.query.gigID
     );
     const gig = responseGig.data;
     this.gig = gig;
     console.log("Run here 1");
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    } else {
-      const responseUserInfor = await axios.get("/users/info", {
-        headers: { token: localStorage.getItem("token") },
-      });
-      const userInfor = responseUserInfor.data.user;
-      this.user = userInfor;
-    }
+    // await this.onUpdateAccountInfo();
+    console.log("🚀 ~ file: HERE", JSON.stringify(this.user))
+
   },
   data() {
     return {
@@ -308,11 +302,13 @@ export default {
     };
   },
   methods: {
-    changeTypePayment: function (type) {
-      if (type == 1) {
-        this.iscreditcard = true;
-      } else {
-        this.iscreditcard = false;
+    onUpdateAccountInfo(newAccountInfo) {
+      // Update parent's currentAccountInfo based on the data received from the child
+      this.user = newAccountInfo;
+      
+      console.log("🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:", JSON.stringify(this.user))
+      if(this.user==null){
+        this.$router.push('/login')
       }
     },
     changeStep: function (step) {
@@ -343,11 +339,12 @@ export default {
       
         alert("Please Submit Job Description And Click On Confirm Checkbox!");
       } else {
-        this.orderRequest.CustomerID = this.user.userId;
+        this.orderRequest.CustomerID = this.user.CustomerID;
         this.orderRequest.GigID = this.gig.GigID;
-
+        console.log(this.orderRequest);
         await axios
         .post("/orderrequest/createOrderRequest", {
+          
           orderRequest: this.orderRequest,
         })
         .then((response) => {
@@ -368,6 +365,8 @@ export default {
         
       }
     },
+
+    
    
   },
 };
