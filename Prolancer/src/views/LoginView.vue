@@ -126,12 +126,12 @@ export default {
   computed: {
     checkInput() {
       if (!this.account.emailOrUsername) {
-        this.message = "you must enter username or email";
+        this.message = "You must enter username or email";
         this.$refs.message.style.color = "red";
         return false;
       }
       if (!this.account.password) {
-        this.message = "you must enter password";
+        this.message = "You must enter password";
         this.$refs.message.style.color = "red";
         return false;
       }
@@ -143,12 +143,24 @@ export default {
       if (this.checkInput) {
         axios.post("/accounts/login", this.account).then(
           (res) => {
-            //if successfull
+            if (this.rememberMe) {
+              localStorage.setItem(
+                "rememberedCredentials",
+                JSON.stringify(this.account)
+              );
+            }
+            if (res.status === 201) {
+              //if account status not active -> not allowed to login, thus no token
+              this.message =
+                "Account not allowed to login (Status: " +
+                res.data.status +
+                ")";
+              this.$refs.message.style.color = "red";
+            }
             if (res.status === 200) {
-              localStorage.setItem("token", res.data.token);
-              if (this.rememberMe) {
-                localStorage.setItem("rememberedCredentials", JSON.stringify(this.account));
-              }
+              //if successfull
+              const token = res.data.token;
+              localStorage.setItem("token", token);
               this.$router.push("/");
             }
           },
@@ -162,7 +174,9 @@ export default {
     },
   },
   mounted() {
-    const rememberedAccountToken = localStorage.getItem("rememberedCredentials")
+    const rememberedAccountToken = localStorage.getItem(
+      "rememberedCredentials"
+    );
     if (rememberedAccountToken) {
       const remememberedAccount = JSON.parse(rememberedAccountToken);
       console.log(remememberedAccount);
