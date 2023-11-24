@@ -82,4 +82,4 @@ ChangeRequest.changeOrderRequestStatus = function (status,orderID, result) {
 };
 
 
-module.exports = OrderRequest;
+module.exports = ChangeRequest;

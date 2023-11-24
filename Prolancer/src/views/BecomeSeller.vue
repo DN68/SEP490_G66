@@ -227,7 +227,6 @@
 
 <script>
 import Footer from "../components/Footer.vue";
-
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -333,7 +332,8 @@ export default {
       pdfWindow.onbeforeunload = function () {
         URL.revokeObjectURL(blobUrl);
       };
-    },
+    }
+  },
   mounted() {
     if(this.$route.query.data){
       this.account = JSON.parse(decodeURIComponent(this.$route.query.data))
@@ -355,7 +355,7 @@ export default {
       );
     }
   },
-};
+}
 </script>
 
 <style>
