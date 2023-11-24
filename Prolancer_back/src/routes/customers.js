@@ -9,6 +9,8 @@ router.get('/info',
 router.put('/info/:accountID/update', 
     customerController.updateCustomerInfo
 );
-
+router.post('/create',
+    customerController.customerRegister
+);
 
 module.exports = router;

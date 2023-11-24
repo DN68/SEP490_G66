@@ -20,12 +20,12 @@ class GigController {
       console.log('filterByCategory');
 
     }
-    if (pageQuery.filterBy2 != '' && pageQuery.filterBy2 != null && pageQuery.filterBy2 != 'Anytime'&&pageQuery.filterBy2 != undefined) {
+    if (pageQuery.filterBy2 != '' && pageQuery.filterBy2 != null && pageQuery.filterBy2 != 'Anytime' && pageQuery.filterBy2 != undefined) {
       filterByDeliveryDay = pageQuery.filterBy2;
       console.log('filterByDeliveryDay');
 
     }
-    if (pageQuery.filterBy3 != '' && pageQuery.filterBy3 != null&&pageQuery.filterBy3 != undefined) {
+    if (pageQuery.filterBy3 != '' && pageQuery.filterBy3 != null && pageQuery.filterBy3 != undefined) {
       filterByPrice = pageQuery.filterBy3;
       console.log('filterByPrice');
 
@@ -35,8 +35,8 @@ class GigController {
 
       search = pageQuery.search;
 
-      console.log('Search here '+ search);
-      
+      console.log('Search here ' + search);
+
     } else {
       search = '';
     }
@@ -66,16 +66,16 @@ class GigController {
           }
 
         }
-      }, function (err,totalRowsData) {
+      }, function (err, totalRowsData) {
         if (err) {
           reject(err);
         } else {
-        totalRows = totalRowsData;
-        if (gig !== undefined) {
+          totalRows = totalRowsData;
+          if (gig !== undefined) {
 
-          resolve();
+            resolve();
+          }
         }
-      }
       });
     });
 
@@ -101,8 +101,90 @@ class GigController {
       console.error(error);
       res.status(500).send("An error occurred");
     });
+  };
 
+  getGigByFreelancer = function (req, res) {
+    const limit = 16;
+    var pageQuery = req.query;
+    // console.log("🚀 ~ file: GigController.js:9 ~ GigController ~ pageQuery:", pageQuery)
+    var page;
+    var status = pageQuery.status;
+    var search;
+    var freelancerId;
 
+    if (pageQuery.freelancerId != '' && pageQuery.freelancerId != null && pageQuery.freelancerId != undefined) {
+      freelancerId = pageQuery.freelancerId;
+      console.log(freelancerId)
+    }
+
+    if (pageQuery.search != null) {
+
+      search = pageQuery.search;
+
+      console.log('Search here ' + search);
+
+    } else {
+      search = '';
+    }
+    console.log(search);
+
+    if (pageQuery.page != null) {
+      page = pageQuery.page;
+    } else {
+      page = 1;
+    }
+    console.log(page);
+
+    const offset = (page - 1) * limit;
+    console.log(offset);
+    let gig, totalRows;
+
+    // Create a Promise to handle the asynchronous operation
+    const fetchData = new Promise((resolve, reject) => {
+      Gig.getFreelancerGigWithPagingAndSearching(status, freelancerId, search, limit, offset, function (err, gigData) {
+        if (err) {
+
+          reject(err);
+        } else {
+          gig = gigData;
+          if (totalRows !== undefined) {
+            resolve();
+          }
+
+        }
+      }, function (err, totalRowsData) {
+        if (err) {
+          reject(err);
+        } else {
+          totalRows = totalRowsData;
+          if (gig !== undefined) {
+
+            resolve();
+          }
+        }
+      });
+    });
+
+    fetchData.then(() => {
+      // Both callbacks have been called, so you can send the response now.
+      res.send({
+        gig, pagination: {
+          totalPage: Math.ceil(totalRows[0].count / limit),
+          page: parseInt(page),
+          totalRow: totalRows[0].count
+        }, searchQuery: {
+          search: search,
+          status: status,
+          freelancerId: freelancerId
+        }
+      });
+    }, (err) => {
+      res.send(err);
+    }
+    ).catch(error => {
+      console.error(error);
+      res.status(500).send("An error occurred");
+    });
   };
 
   getGigById = function (req, res) {
@@ -112,8 +194,8 @@ class GigController {
       if (err) {
         res.send(err);
       } else {
-        
-        res.send(gig[0]?gig[0]:'Gig not exist');
+
+        res.send(gig[0] ? gig[0] : 'Gig not exist');
       }
     });
   };

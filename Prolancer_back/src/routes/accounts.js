@@ -2,8 +2,15 @@ const express = require('express');
 const router = express.Router();
 const AccountController = require('../controllers/AccountController');
 
+
+router.get('/index', 
+    AccountController.getAccountsByStatusAndPaging
+);
 router.post('/create',
-    AccountController.register
+    AccountController.accountRegister
+);
+router.post('/create/confirm',
+    AccountController.confirmCreateACcount
 );
 router.post('/login',
     AccountController.login

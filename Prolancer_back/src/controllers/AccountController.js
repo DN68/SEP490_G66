@@ -30,14 +30,12 @@ const generateRandomString = (myLength) => {
 class AccountController {
 
     //Create new Account
-    register = function (req, res) {
+    accountRegister = function (req, res) {
         const email = req.body.email;
         const username = req.body.username;
-        const firstName = req.body.firstName;
-        const lastName = req.body.lastName;
-        const phoneNo = req.body.phoneNo;
+        const role = req.body.role;
         const password = bcrypt.hashSync(req.body.password, 10);
-        Account.createAccount(email, username, firstName, lastName, phoneNo, password, function (err, result) {
+        Account.createAccount(email, username, password, role, function (err, result) {
             if (err) {
                 res.send(err);
             } else {
@@ -69,13 +67,21 @@ class AccountController {
                     error: 'invalid credentials'
                 })
             }
+            
             //IF ALL IS GOOD create a token and send to frontend
-            let token = jwt.sign({accountID: results[0].AccountID, email: results[0].Email, role: results[0].Role }, 'secretkey', { expiresIn: 43200 });
+            let token = jwt.sign({ accountID: results[0].AccountID, email: results[0].Email, role: results[0].Role }, 'secretkey', { expiresIn: 43200 });
             // console.log(token)
+            if(results[0].Status != 'Active'){
+                return res.status(201).json({
+                    title: 'access denied',
+                    status: results[0].Status
+                })
+            }
             return res.status(200).json({
                 title: 'login sucess',
                 token: token
             })
+            
         })
     }
 
@@ -183,6 +189,79 @@ class AccountController {
 
     }
 
+    confirmCreateACcount = function (req, res) {
+        const email = req.body.email;
+        const accessToken = oAuth2Client.getAccessToken();
+        const transport = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                type: 'OAuth2',
+                user: 'anpqhe160968@fpt.edu.vn',
+                clientId: CLIENT_ID,
+                clientSecret: CLIENT_SECRET,
+                refreshToken: REFRESH_TOKEN,
+                accessToken: accessToken
+            }
+        })
+
+        const account = req.body
+        console.log(account)
+        const encodedAccountData = encodeURIComponent(JSON.stringify(account));
+        let redirectLink;
+        if(account.role == 'C'){
+            redirectLink = `http://localhost:8080/register-company?data=${encodedAccountData}`
+        }else if (account.role == 'F'){
+            redirectLink = `http://localhost:8080/becomesel?data=${encodedAccountData}`
+        }
+        
+        const info = transport.sendMail({
+            from: '"Prolancer" <anpqhe160968@fpt.edu.vn>', // sender address
+            to: "" + email + "", // list of receivers
+            subject: "Verify your email:", // Subject line
+            text: "Hello world?", // plain text body
+            // html: "<b>Please verify your email: <a href='" + redirectLink + "'>Verify email</a></b>", // html body
+            html: "<b>Please verify your email: <a href='" + redirectLink + "'>Verify email</a></b>", // html body
+        });
+        return res.status(200).json({
+            title: 'success',
+            message: 'Sent password to mail'
+        })
+        // console.log(info)
+    }
+
+
+    getAccountInfo = function (req, res) {
+        let token = req.headers.token;
+        jwt.verify(token, 'secretkey', (err, decoded) => {
+            if (err) {
+                // res.redirect('/login')
+                return res.status(401).json({
+                    title: 'unauthorized'
+                })
+            }
+            const email = decoded.email
+            Account.getAccountByEmail(email, function (err, results) {
+                if (err) {
+                    return console.log(err)
+                }
+                return res.status(200).json({
+                    title: 'Account grabbed',
+                    //can add more fields
+                    account: {
+                        accountId: results[0].AccountID,
+                        email: results[0].Email,
+                        username: results[0].Username,
+                        password: results[0].Password,
+                        role: results[0].Role,
+                        fid: results[0].Status,
+                        id: results[0].AccountID
+                    }
+                })
+            })
+        })
+
+    }
+
 
     checkMailExist = function (req, res) {
         const email = req.params.email;
@@ -190,7 +269,7 @@ class AccountController {
             if (err) {
                 return console.log(err)
             }
-            if(!results[0]){
+            if (!results[0]) {
                 return res.status(200).send(false)
             }
             return res.status(200).send(true)
@@ -204,7 +283,7 @@ class AccountController {
             if (err) {
                 return console.log(err)
             }
-            if(!results[0]){
+            if (!results[0]) {
                 return res.status(200).send(false)
             }
             return res.status(200).send(true)
@@ -212,30 +291,84 @@ class AccountController {
         })
     }
 
-    // updateProfile = function (req, res) {
-    //     const email = req.params.email;
-    //     const data = req.body;
-    //     console.log(data)
-    //     Account.updateAccountInfo(data, email, function (err, results) {
-    //         if (err) {
-    //             res.send(err);
-    //         } else {
-    //             res.json(results);
-    //         }
-    //     })
-    // }
 
-    // changeFreelancerMode = function (req, res) {
-    //     const email = req.body.email
-    //     const role = req.body.role
-    //     Account.changeFreelancerRole(role, email, function (err, results) {
-    //         if (err) {
-    //             res.send(err);
-    //         } else {
-    //             res.json(results);
-    //         }
-    //     })
-    // }
+    getAccountsByStatusAndPaging = function (req, res) {
+        const limit = 16;
+        var pageQuery = req.query;
+        var page;
+        var status = pageQuery.status;
+
+        // if (pageQuery.search != null) {
+
+        //   search = pageQuery.search;
+
+        //   console.log('Search here ' + search);
+
+        // } else {
+        //   search = '';
+        // }
+        // console.log(search);
+
+        if (pageQuery.page != null) {
+            page = pageQuery.page;
+        } else {
+            page = 1;
+        }
+        console.log(page);
+
+        const offset = (page - 1) * limit;
+        console.log(offset);
+        let account, totalRows;
+
+        // Create a Promise to handle the asynchronous operation
+        const fetchData = new Promise((resolve, reject) => {
+            Account.getAllAccountsWithPaging(status, limit, offset, function (err, accountData) {
+                console.log(accountData)
+                if (err) {
+                    reject(err);
+                } else {
+                    account = accountData;
+                    if (totalRows !== undefined) {
+                        resolve();
+                    }
+
+                }
+            }, function (err, totalRowsData) {
+                if (err) {
+                    reject(err);
+                } else {
+                    totalRows = totalRowsData;
+                    if (account !== undefined) {
+
+                        resolve();
+                    }
+                }
+            });
+        });
+
+        fetchData.then(() => {
+            // Both callbacks have been called, so you can send the response now.
+            res.send({
+                account, pagination: {
+                    totalPage: Math.ceil(totalRows[0].count / limit),
+                    page: parseInt(page),
+                    totalRow: totalRows[0].count
+                }, searchQuery: {
+                    //   search: search,
+                    status: status,
+                }
+            });
+        }, (err) => {
+            res.send(err);
+        }
+        ).catch(error => {
+            console.error(error);
+            res.status(500).send("An error occurred");
+        });
+    };
 }
+
+
+
 
 module.exports = new AccountController;   

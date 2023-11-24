@@ -9,6 +9,9 @@ const accountRoute = require('./accounts')
 const freelancerRoute = require('./freelancers')
 const customerRoute = require('./customers')
 const  changeRequestRoute = require('./changerequest')
+const interviewRoute = require('./interviews')
+
+
 function route(app) {
     // app.get("/", function(req,res){
     //     res.send('home');
@@ -30,6 +33,8 @@ function route(app) {
     app.use("/freelancers", freelancerRoute);  
     app.use("/customers", customerRoute);  
     app.use("/changerequest", changeRequestRoute);  
+    app.use("/interviews", interviewRoute);  
+
 }
 
 module.exports = route;
