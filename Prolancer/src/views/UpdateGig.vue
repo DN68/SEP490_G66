@@ -164,17 +164,18 @@ export default {
       // price: 0,
       // image: "",
       gig: {},
-      user: {},
+      freelancer: {},
+      role: "",
     };
   },
   created() {
     axios
-      .get("/users/info", {
+      .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
-          this.role = res.data.user.role;
+          this.role = res.data.freelancer.Role;
           if (this.role != "F") {
             this.$router.push("/");
           }
@@ -195,12 +196,12 @@ export default {
           CategoryID: this.gig.CategoryID,
           Price: this.gig.Price,
           Delivery_Day: this.gig.Delivery_Day,
-          FreelancerID: this.user.id,
+          FreelancerID: this.freelancer.FreelancerID,
         })
         .then(
           (res) => {
             // console.log(res.data);
-            this.$router.push("/managegigsel/Active");
+            this.$router.push("/managegigsel");
           },
           (err) => {
             console.log("Update failed");
@@ -223,12 +224,12 @@ export default {
       // console.log(res.data);
     }),
       axios
-        .get("/users/info", {
+        .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
         .then(
           (res) => {
-            this.user = res.data.user;
+            this.freelancer = res.data.freelancer;
           },
           (err) => {
             console.log(err.response);

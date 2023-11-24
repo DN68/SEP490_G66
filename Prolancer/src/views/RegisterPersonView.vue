@@ -1,23 +1,31 @@
 <template>
-  <section class="vh-100" style="background-color: #eee">
+  <section class="vh-1000" style="background-color: #eee">
     <div class="container h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="row justify-content-center align-items-center">
         <div class="col-lg-12 col-xl-11">
           <div class="card text-black" style="border-radius: 25px">
             <div class="card-body p-md-5">
-              <router-link to="/login">
-                <i class="fa-solid fa-arrow-left-long text-danger"></i>
-              </router-link>
-
               <div class="row justify-content-center">
                 <div
-                  class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1"
-                  style="border-right: 2px #ccc solid; padding-right: 50px"
+                  class=""
+                  style="
+                    border-right: 2px #ccc solid;
+                    padding-right: 50px;
+                    float: left;
+                    width: 50%;
+                  "
                 >
+                  <router-link to="/login">
+                    <i
+                      class="fa-solid fa-arrow-left-long text-danger"
+                      style="float: left"
+                    ></i>
+                  </router-link>
+
                   <p
                     class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-danger"
                   >
-                    Register
+                    As a person
                   </p>
 
                   <form class="mx-1 mx-md-4">
@@ -72,7 +80,7 @@
                       </div>
                     </div>
                     <div class="d-flex flex-row align-items-center mb-4">
-                      <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                      <i class="fa-solid fa-phone fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
                         <input
                           type="email"
@@ -83,7 +91,54 @@
                         />
                       </div>
                     </div>
-
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fa-solid fa-building fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="email"
+                          id="form3Example3c"
+                          class="form-control"
+                          placeholder="Company"
+                          v-model="company"
+                        />
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="email"
+                          id="form3Example3c"
+                          class="form-control"
+                          placeholder="Company Email"
+                          v-model="companyemail"
+                        />
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fa-solid fa-location-dot fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="email"
+                          id="form3Example3c"
+                          class="form-control"
+                          placeholder="Address"
+                          v-model="address"
+                        />
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fa-solid fa-location-dot fa-lg me-3 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                        <input
+                          type="email"
+                          id="form3Example3c"
+                          class="form-control"
+                          placeholder="Company Address"
+                          v-model="companyaddress"
+                        />
+                      </div>
+                    </div>
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
@@ -111,28 +166,31 @@
                     </div>
 
                     <div
-                      class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"
+                      class="d-flex flex-column justify-content-center mx-4 mb-3 mb-lg-4"
                     >
+                      <div class="mess text-danger">
+                        {{ message }}
+                      </div>
+
                       <button
                         type="button"
-                        class="btn bg-danger bg-gradient text-light btn-lg"
+                        class="btn bg-danger bg-gradient text-light btn-lg mt-3"
                         @click="Register"
                       >
                         Register
                       </button>
-                      {{ message }}
                     </div>
                   </form>
                 </div>
                 <div
                   class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2"
+                  style="float: right; width: 50%"
                 >
-                  <router-link to="/"
-                    ><img
-                      src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
-                      class="img-fluid"
-                      alt="Sample image"
-                  /></router-link>
+                  <img
+                    src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
+                    class="img-fluid"
+                    alt="Sample image"
+                  />
                 </div>
               </div>
             </div>
@@ -158,7 +216,7 @@ export default {
       repeatPassword: "",
       message: "",
       emailExist: false,
-      usernameExist: false
+      usernameExist: false,
     };
   },
   computed: {
@@ -179,7 +237,7 @@ export default {
     checkInput() {
       //input validation here
       if (!this.username) {
-        this.message = "you must enter username";
+        this.message = "You must enter username";
         return false;
       }
       if (this.usernameExist) {
@@ -192,15 +250,15 @@ export default {
         return false;
       }
       if (!this.firstName) {
-        this.message = "you must enter your first name";
+        this.message = "You must enter your first name";
         return false;
       }
       if (!this.lastName) {
-        this.message = "you must enter your last name";
+        this.message = "You must enter your last name";
         return false;
       }
       if (!this.email) {
-        this.message = "you must enter Email";
+        this.message = "You must enter Email";
         return false;
       }
       if (!this.isValidEmail) {
@@ -212,11 +270,11 @@ export default {
         return false;
       }
       if (!this.phoneNo) {
-        this.message = "you must enter your phone number";
+        this.message = "You must enter your phone number";
         return false;
       }
       if (!this.password) {
-        this.message = "you must enter password";
+        this.message = "You must enter password";
         return false;
       }
       if (!this.isValidPassword) {
@@ -225,7 +283,7 @@ export default {
         return false;
       }
       if (!this.repeatPassword) {
-        this.message = "you must enter repeat password";
+        this.message = "You must enter repeat password";
         return false;
       }
       if (this.password != this.repeatPassword) {
@@ -248,11 +306,10 @@ export default {
             lastName: this.lastName,
             phoneNo: this.phoneNo,
             password: this.password,
-
           })
           .then(
             (res) => {
-              this.$router.push("/login");
+              this.$router.push("/sendmessage");
               // console.log("Added successfully");
             },
             (err) => {
@@ -261,14 +318,14 @@ export default {
           );
       }
     },
-    isEmailExist(){
+    isEmailExist() {
       axios.get(`/users/${this.email}/checkEmail`).then(
         (res) => {
-          console.log(res.data)
+          console.log(res.data);
           if (res.data) {
-            this.emailExist = true
-          }else{
-            this.emailExist = false
+            this.emailExist = true;
+          } else {
+            this.emailExist = false;
           }
         },
         (err) => {
@@ -276,14 +333,14 @@ export default {
         }
       );
     },
-    isUsernameExist(){
+    isUsernameExist() {
       axios.get(`/users/${this.username}/checkUsername`).then(
         (res) => {
-          console.log(res.data)
+          console.log(res.data);
           if (res.data) {
-            this.usernameExist = true
-          }else{
-            this.usernameExist = false
+            this.usernameExist = true;
+          } else {
+            this.usernameExist = false;
           }
         },
         (err) => {

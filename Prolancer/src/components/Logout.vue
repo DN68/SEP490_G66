@@ -3,7 +3,7 @@
 <script>
 export default {
   mounted() {
-    localStorage.clear();
+    localStorage.removeItem("token");
     this.$router.push("/login");
   },
 };

@@ -227,9 +227,11 @@
 
 <script>
 import Footer from "../components/Footer.vue";
+
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+
 export default {
   name: "",
   components: {
@@ -248,6 +250,7 @@ export default {
       cvDescription: "",
       blobUrl: "",
       CV_Uploads: "AnhLTHE153286.pdf",
+      account: {}
     };
   },
   methods: {
@@ -331,6 +334,26 @@ export default {
         URL.revokeObjectURL(blobUrl);
       };
     },
+  mounted() {
+    if(this.$route.query.data){
+      this.account = JSON.parse(decodeURIComponent(this.$route.query.data))
+      axios
+      .post("/accounts/create", {
+        email: this.account.email,
+        username: this.account.username,
+        password: this.account.password,
+        role: this.account.role
+      })
+      .then(
+        (res) => {
+          console.log(res.data);
+          // console.log("Added successfully");
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+    }
   },
 };
 </script>

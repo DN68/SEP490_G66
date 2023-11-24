@@ -170,7 +170,7 @@ export default {
       dayDeliveries: 0,
       price: 0,
       image: "",
-      user: {},
+      freelancer: {},
       message: ""
     };
   },
@@ -185,7 +185,7 @@ export default {
           CategoryID: this.category,
           Price: this.price,
           Delivery_Day: this.dayDeliveries,
-          FreelancerID: this.user.id,
+          FreelancerID: this.freelancer.FreelancerID,
         })
         .then(
           (res) => {
@@ -193,7 +193,7 @@ export default {
             // this.$router.push("/giglist")
             this.message = "Created successfully"
             const countdown = setTimeout(() => {
-              this.$router.push("/managegigsel/Active")
+              this.$router.push("/managegigsel")
             }, 3000);
           },
           (err) => {
@@ -211,12 +211,12 @@ export default {
       // console.log(res.data);
     }),
     axios
-      .get("/users/info", {
+      .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
-          this.user = res.data.user;
+          this.freelancer = res.data.freelancer;
         },
         (err) => {
           console.log(err.response);
