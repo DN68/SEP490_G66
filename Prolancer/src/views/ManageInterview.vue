@@ -89,22 +89,22 @@
 
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Finished' }"
+          :class="{ status_item_active: this.status == 'Passed' }"
         >
           <router-link
-            @click="(this.status = 'Finished'), (selectedPage = '1')"
+            @click="(this.status = 'Passed'), (selectedPage = '1')"
             :to="{
               path: '/manageinterview',
               query: {
                 page: 1,
-                status: 'Finished',
+                status: 'Passed',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Finished<span
-                v-if="this.status == 'Finished'"
+              Passed<span
+                v-if="this.status == 'Passed'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -113,22 +113,22 @@
         </div>
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Deleted' }"
+          :class="{ status_item_active: this.status == 'Failed' }"
         >
           <router-link
-            @click="(this.status = 'Deleted'), (selectedPage = '1')"
+            @click="(this.status = 'Failed'), (selectedPage = '1')"
             :to="{
               path: '/manageinterview',
               query: {
                 page: 1,
-                status: 'Deleted',
+                status: 'Failed',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Deleted<span
-                v-if="this.status == 'Deleted'"
+              Failed<span
+                v-if="this.status == 'Failed'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -218,14 +218,14 @@
                     Ongoing</span
                   >
                   <span
-                    v-if="interview.Status == 'Deleted'"
-                    class="badge rounded-pill bg-secondary"
-                    >Deleted</span
+                    v-if="interview.Status == 'Failed'"
+                    class="badge rounded-pill bg-danger"
+                    >Failed</span
                   >
                   <span
-                    v-if="interview.Status == 'Finished'"
+                    v-if="interview.Status == 'Passed'"
                     class="badge rounded-pill bg-success"
-                    >Finished</span
+                    >Passed</span
                   >
                 </div>
               </td>
@@ -299,11 +299,11 @@
                       <option class="" value="Ongoing">
                         <span>Ongoing</span>
                       </option>
-                      <option class="" value="Deleted">
-                        <span>Deleted</span>
+                      <option class="" value="Failed">
+                        <span>Failed</span>
                       </option>
-                      <option class="" value="Finished">
-                        <span>Finished</span>
+                      <option class="" value="Passed">
+                        <span>Passed</span>
                       </option>
                     </select>
                   </div>

@@ -67,13 +67,21 @@ class AccountController {
                     error: 'invalid credentials'
                 })
             }
+            
             //IF ALL IS GOOD create a token and send to frontend
             let token = jwt.sign({ accountID: results[0].AccountID, email: results[0].Email, role: results[0].Role }, 'secretkey', { expiresIn: 43200 });
             // console.log(token)
+            if(results[0].Status != 'Active'){
+                return res.status(201).json({
+                    title: 'access denied',
+                    status: results[0].Status
+                })
+            }
             return res.status(200).json({
                 title: 'login sucess',
                 token: token
             })
+            
         })
     }
 
