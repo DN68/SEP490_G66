@@ -10,12 +10,15 @@ router.put('/updateOrderExtendDay',
             OrderController.updateOrderExtendDay
 
 );
+router.put('/updateOrderRequestStatus',
+            OrderController.changeOrderRequestStatus
 
+);
 router.get('/getOrderRequest',
             OrderController.getOrderRequestWithPagingAndFilter
 
 );
-router.post('/createOrder',
+router.post('/index',
             OrderController.createOrder
 
 );

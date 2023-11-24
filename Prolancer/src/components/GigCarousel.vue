@@ -84,7 +84,7 @@
                                   <li class="list-inline-item">
                                     <div style="display: inline">
                                       <i class="fa fa-star"
-                                        ><b class="ratingScore">{{ gig.Rating?parseFloat(gig.Rating).toFixed(1):'...'}}</b></i
+                                        ><b class="ratingScore">5.0</b></i
                                       >
                                     </div>
                                   </li>
@@ -166,7 +166,7 @@
                                   <li class="list-inline-item">
                                     <div style="display: inline">
                                       <i class="fa fa-star"
-                                        ><b class="ratingScore">{{ gig.Rating?parseFloat(gig.Rating).toFixed(1):'...'}}</b></i
+                                        ><b class="ratingScore">5.0</b></i
                                       >
                                     </div>
                                   </li>
@@ -246,7 +246,7 @@
                                   <li class="list-inline-item">
                                     <div style="display: inline">
                                       <i class="fa fa-star"
-                                        ><b class="ratingScore">{{ gig.Rating?parseFloat(gig.Rating).toFixed(1):'...'}}</b></i
+                                        ><b class="ratingScore">5.0</b></i
                                       >
                                     </div>
                                   </li>

@@ -6,7 +6,7 @@
     <header class="row">
       <Header :searchText="search"></Header>
     </header>
-    <NavCategory></NavCategory>
+    <NavCategory :listCategories="categories"></NavCategory>
     <div class="container">
       <div class="row">
         <!-- <aside class="col-sm-3">
@@ -75,7 +75,7 @@
                 class="dropdown-menu program_dropdown"
                 :style="{ display: isshowListProgram ? 'block' : 'none' }"
               >
-                <li v-for="category in categories" :key="category.CategoryID">
+                <li v-for="category in categories" :key="category.id">
                   <router-link
                     class="dropdown-item"
                     @click="filterBy1 = category.CategoryID,selectedPage='1'"
@@ -102,7 +102,7 @@
               @click="isshowListFreelancer = !isshowListFreelancer"
               v-click-outside="() => onClickOutside(2)"
             >
-              <p class="textDefault">Estimation Time</p>
+              <p class="textDefault">Delivery Time</p>
               <i class="bi bi-chevron-down"></i>
               <ul
                 class="dropdown-menu freelancer_dropdown"
@@ -492,9 +492,6 @@ export default {
     
     const paging = responseGig.data.pagination;
     this.pagination = paging;
-    this.filterBy1 =this.$route.query.filterBy1
-    this.filterBy2 =this.$route.query.filterBy2
-    this.filterBy3 =this.$route.query.filterBy3
 
   },
   

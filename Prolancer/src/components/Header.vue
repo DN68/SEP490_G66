@@ -85,7 +85,6 @@
                 <span class="small">Favourite</span></a
               >
             </li>
-
             <!-- <li class="nav-item" v-if="account && account.isFreelancer != 1">
               <a
                 class="nav-link d-flex flex-column text-center text-danger"
@@ -98,7 +97,6 @@
               >
             </li> -->
             <li class="nav-item dropdown" style="" v-if="currentAccountInfo">
-
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
@@ -138,8 +136,8 @@
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/manageOrderRequest"
-                    >Order request</router-link
+                  <router-link class="dropdown-item" to="/setting"
+                    >Settings</router-link
                   >
                 </li>
 

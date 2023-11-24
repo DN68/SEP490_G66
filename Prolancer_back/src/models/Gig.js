@@ -25,9 +25,9 @@ Gig.getAll = function (result) {
     }
   });
 };
-Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
-  var sql2 = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID WHERE";
-  var sql ="Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription , AVG(Rating_Score) as Rating from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID WHERE";
+
+Gig.getGigWithFilterAndPagingAndSearching = function (status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, gig, pagination) {
+  var sql = "Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as FreelancerDescription, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Category c ON g.CategoryID = c.CategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   if (filterByDeliveryDay != '') {
@@ -46,8 +46,8 @@ Gig.getGigWithFilterAndPagingAndSearching = function (filterByCategory, filterBy
   console.log("sql: ", sql);
   console.log("sqlCount: ", sqlCount);
 
-  var check = connectDb.query(sql + " CategoryID LIKE ? AND Title LIKE ? GROUP BY g.GigID, rv.ReceiverID LIMIT ? OFFSET ? ", ['%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
 
+  var check = connectDb.query(sql + " g.Status = ? AND g.CategoryID LIKE ? AND g.Title LIKE ? LIMIT ? OFFSET ?", [status,'%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
     if (err) {
       console.log("error: ", err);
       gig(err,null)
@@ -106,7 +106,7 @@ Gig.getFreelancerGigWithPagingAndSearching = function (status, freelancerId, sea
 };
 
 Gig.getGigById = function (id, result) {
-  connectDb.query("Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID Where GigID = ?", [id], function (err, res) {
+  connectDb.query("Select g.* from Gig g Where g.GigID = ?", [id], function (err, res) {
     if (err) {
       result(null, err);
     }

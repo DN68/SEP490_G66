@@ -1,34 +1,74 @@
 <template>
   <div>
     <nav id="navCategory" class="navbar navbar-inverse nav_header">
-      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto " v-for="ca in listCategories" :key="ca.CategoryID">
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto ">
         <!-- Links -->
-        <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ ca.CategoryID">
-        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn=ca.CategoryID" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn==ca.CategoryID }">{{ca.Category_Name}}</span></h6>
-        <!-- <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered"> -->
-         </a>
-        <!-- </ul> -->
+        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered, hoveredOn='1'" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn=='1' }">Programming & Tech</span></h6>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered">
+          <li v-for="category in listCategories" :key="category.id">
+            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+          </li>       
+        </ul>
+      </div>
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <!-- Links -->
+        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn='2'" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn=='2' }">Programming & Tech</span></h6>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered">
+          <li v-for="category in listCategories" :key="category.id">
+            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+          </li>       
+        </ul>
+      </div>
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <!-- Links -->
+        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn='3'" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn=='3' }">Programming & Tech</span></h6>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered">
+          <li v-for="category in listCategories" :key="category.id">
+            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+          </li>       
+        </ul>
+      </div>
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <!-- Links -->
+        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn='4'" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn=='4' }">Programming & Tech</span></h6>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered">
+          <li v-for="category in listCategories" :key="category.id">
+            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+          </li>       
+        </ul>
+      </div>
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <!-- Links -->
+        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn='5'" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn=='5' }">Programming & Tech</span></h6>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered">
+          <li v-for="category in listCategories" :key="category.id">
+            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+          </li>       
+        </ul>
+      </div>
+      <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <!-- Links -->
+        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn='6'" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn=='6' }">Programming & Tech</span></h6>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered">
+          <li v-for="category in listCategories" :key="category.id">
+            <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ category.CategoryID">{{category.Category_Name}}</a>
+          </li>       
+        </ul>
       </div>
     </nav>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
+    props: [
+    'listCategories'
+  ],
   data() {
     return {
       isHovered: false,
-      hoveredOn: '',
-      listCategories: []
+      hoveredOn: ''
     };
-  },
-  async created() {
-    
-    const responseCategory = await axios.get("/categories/get");
-    const categories = responseCategory.data;
-    this.listCategories = categories;
-
   },
 }
 </script>
