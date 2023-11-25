@@ -207,6 +207,16 @@ const routes = [
   }
   ,
   {
+    path: '/manageaccount',
+    name: 'manageaccount',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageAccount.vue')
+
+  }
+  ,
+  {
     path: '/becomesel',
     name: 'becomesel',
     // route level code-splitting
@@ -243,15 +253,6 @@ const routes = [
 
   },
   {
-    path: '/interview',
-    name: 'interview',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/InterviewManagement.vue')
-
-  },
-  {
     path: '/usermanage',
     name: 'usermanage',
     // route level code-splitting
@@ -270,6 +271,15 @@ const routes = [
 
   },
   {
+
+    path: '/manageSkill',
+    name: 'manageSkill',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageSkillScoreView.vue')
+
+  },{
     path: '/redirect',
     name: 'redirect',
     // route level code-splitting
@@ -286,8 +296,26 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/SendMessageView.vue')
 
-  }
 
+  },
+  {
+    path: '/manageOrderRequest',
+    name: 'manageOrderRequest',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageOrderRequestView.vue')
+
+  },
+  {
+    path: '/manageChangeRequest',
+    name: 'manageChangeRequest',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageChangeRequestView.vue')
+
+  }
 ]
 
 const router = createRouter({

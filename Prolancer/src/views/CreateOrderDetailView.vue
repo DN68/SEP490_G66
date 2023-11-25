@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header></Header>
+    <Header @update-account-info="onUpdateAccountInfo"></Header>
     <div class="container">
       <div class="row">
         <article class="col-sm-12">
@@ -10,22 +10,23 @@
               :class="{ active: isstep1 }"
               @click="isstep2 ? changeStep(1) : ''"
             >
-              <span>1. Order Details</span> <i class="bi bi-chevron-right"></i>
+              <span>1. Order Request Details</span>
+              <i class="bi bi-chevron-right ms-4"></i>
             </div>
             <div
               class="col-sm-3 order_header_item"
               :class="{ active: isstep2 }"
               @click="isstep3 ? changeStep(2) : ''"
             >
-              <span>2. Confirm & Payment</span>
-              <i class="bi bi-chevron-right"></i>
+              <span>2. Duration</span>
+              <i class="bi bi-chevron-right ms-4"></i>
             </div>
             <div
               class="col-sm-3 order_header_item"
               :class="{ active: isstep3 }"
               @click="isstep2 ? changeStep(2) : ''"
             >
-              <span>3. Submit Requirements</span>
+              <span>3. Job Description</span>
             </div>
           </div>
         </article>
@@ -50,22 +51,23 @@
                       <h4 class="gig_description">
                         {{ gig.Title }}
                       </h4>
-                      <div style="display: inline">
+                      <!-- <div style="display: inline">
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"><b class="ratingScore">5.0</b></i>
-                      </div>
+                      </div> -->
                       <div class="row quantity">
-                        <span class="col-md-2 qty_title">Qty</span>
+                        <span class="col-md-2 qty_title">Estimation </span>
                         <input
                           type="number"
-                          class="form-control form-icon-trailing"
+                          class="form-control form-icon-trailing me-2"
                           style="width: 10%"
                           min="1"
-                          v-model="order.orderAmout"
+                          v-model="orderRequest.TotalEstimation"
                         />
+                        hour
                       </div>
                     </div>
                     <div class="user_other_information">
@@ -106,193 +108,24 @@
                 <!-- End -->
                 <div class="row">
                   <div class="col-lg-12 mx-auto">
-                    <div class="payment_card">
-                      <div class="card-header">
-                        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
-                          <!-- Credit card form tabs -->
-                          <ul
-                            role="tablist"
-                            class="nav bg-light nav-pills rounded nav-fill mb-3"
-                          >
-                            <li class="nav-item select_payment">
-                              <a
-                                href="#"
-                                class="nav-link"
-                                :class="{ active: iscreditcard }"
-                                @click="changeTypePayment(1)"
-                              >
-                                <i class="fas fa-credit-card mr-2"></i> Credit
-                                Card
-                              </a>
-                            </li>
-
-                            <li class="nav-item select_payment">
-                              <a
-                                href="#"
-                                class="nav-link"
-                                :class="{ active: !iscreditcard }"
-                                @click="changeTypePayment(2)"
-                              >
-                                <i class="fas fa-mobile-alt mr-2"></i> Net
-                                Banking
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <!-- End -->
-                        <!-- Credit card form content -->
-                        <div class="tab-content">
-                          <!-- credit card info-->
-                          <div
-                            id="credit-card"
-                            class="tab-pane fade show active pt-3"
-                            :style="{
-                              display: iscreditcard ? 'block' : 'none',
-                            }"
-                          >
-                            <form role="form" onsubmit="">
-                              <div class="form-group">
-                                <div class="card_title">
-                                  <label for="username">
-                                    <h6>Card Owner</h6>
-                                  </label>
-                                </div>
-                                <input
-                                  type="text"
-                                  name="username"
-                                  placeholder="Card Owner Name"
-                                  required
-                                  class="form-control"
-                                />
-                              </div>
-                              <div class="form-group">
-                                <div class="card_title">
-                                  <label for="cardNumber" class="card_title">
-                                    <h6>Card number</h6>
-                                  </label>
-                                </div>
-                                <div class="input-group">
-                                  <input
-                                    type="text"
-                                    name="cardNumber"
-                                    placeholder="Valid card number"
-                                    class="form-control"
-                                    required
-                                  />
-                                  <div class="input-group-append">
-                                    <span class="input-group-text text-muted">
-                                      <i class="fab fa-cc-visa mx-1"></i>
-                                      <i class="fab fa-cc-mastercard mx-1"></i>
-                                      <i class="fab fa-cc-amex mx-1"></i>
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-sm-8">
-                                  <div class="form-group">
-                                    <label
-                                      ><span class="hidden-xs">
-                                        <h6>Expiration Date</h6>
-                                      </span></label
-                                    >
-                                    <div class="input-group">
-                                      <input
-                                        type="number"
-                                        placeholder="MM"
-                                        name=""
-                                        class="form-control"
-                                        required
-                                      />
-                                      <input
-                                        type="number"
-                                        placeholder="YY"
-                                        name=""
-                                        class="form-control"
-                                        required
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-sm-4">
-                                  <div class="form-group mb-4">
-                                    <label
-                                      data-toggle="tooltip"
-                                      title="Three digit CV code on the back of your card"
-                                    >
-                                      <h6>
-                                        CVV
-                                        <i
-                                          class="fa fa-question-circle d-inline"
-                                        ></i>
-                                      </h6>
-                                    </label>
-                                    <input
-                                      type="text"
-                                      required
-                                      class="form-control"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="card-footer">
-                                <button
-                                  type="button"
-                                  class="subscribe btn btn-primary btn-block shadow-sm"
-                                >
-                                  Confirm Payment
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                        <!-- End -->
-
-                        <!-- End -->
-                        <!-- bank transfer info -->
-                        <div
-                          id="net-banking"
-                          class="tab-pane pt-3"
-                          :style="{ display: !iscreditcard ? 'block' : 'none' }"
-                        >
-                          <div class="form-group">
-                            <div class="card_title">
-                              <label for="Select Your Bank">
-                                <h6>Select your Bank</h6>
-                              </label>
-                            </div>
-                            <select class="form-control" id="ccmonth">
-                              <option value="" selected disabled>
-                                --Please select your Bank--
-                              </option>
-                              <option>Bank 1</option>
-                              <option>Bank 2</option>
-                              <option>Bank 3</option>
-                              <option>Bank 4</option>
-                              <option>Bank 5</option>
-                              <option>Bank 6</option>
-                              <option>Bank 7</option>
-                              <option>Bank 8</option>
-                              <option>Bank 9</option>
-                              <option>Bank 10</option>
-                            </select>
-                          </div>
-                          <div class="form-group">
-                            <p>
-                              <button type="button" class="btn btn-primary">
-                                <i class="fas fa-mobile-alt mr-2"></i> Proceed
-                                Payment
-                              </button>
-                            </p>
-                          </div>
-                          <p class="text-muted">
-                            Note: After clicking on the button, you will be
-                            directed to a secure gateway for payment.
-                          </p>
-                        </div>
-                        <!-- End -->
-                        <!-- End -->
+                    <div>
+                      <div>
+                        <h5 class="text-start">
+                          You need to specify the start and end times for your
+                          work.
+                        </h5>
                       </div>
+                      <div class="text-start">
+                        <span >Start Date</span>
+                        <VueDatePicker v-model="orderRequest.StartFrom" class="my-2" :format="'yyyy-MM-dd hh:mm a'"/>
+                      </div>
+                      <div class="text-start">
+                        <span>End Date</span>
+                        <VueDatePicker v-model="orderRequest.EndAt" class="my-2" :format="'yyyy-MM-dd hh:mm a'"/>
+                      </div>
+                      <p>
+                      Note: Please check your start date and end date before go to the next step.
+                    </p>
                     </div>
                   </div>
                 </div>
@@ -305,21 +138,21 @@
               <div class="container" style="text-align: left">
                 <div class="rqm_header">
                   <form>
-                    <h4>Submit Requirement to send your order</h4>
+                    <h4>Submit job description to send your order request</h4>
                     <hr class="featurette-divider rqm_featurette" />
                     <h5>
                       You need to provide the information to start working on
                       your order:
                     </h5>
                     <p>
-                      1. Writing your requirement here. Do you have any ideals
-                      of what you want ?
+                      1. Writing your job description here. Do you have any
+                      ideals of what you want ?
                     </p>
                     <div class="form-outline mb-4">
                       <textarea
                         class="form-control"
                         id="textAreaExample6"
-                        v-model="order.orderDescription"
+                        v-model="orderRequest.JobDescription"
                         rows="5"
                         required
                       ></textarea>
@@ -351,9 +184,9 @@
                       <button
                         class="co-white bg-co-black start_btn"
                         type="button"
-                        @click="startOrder()"
+                        @click="sendOrderRequest()"
                       >
-                        Start Order
+                        Send
                       </button>
                     </div>
                   </form>
@@ -368,13 +201,13 @@
                     <div class="subtotal row">
                       <span class="col-md-6">Subtotal</span>
                       <span class="col-md-6 subtotal_price"
-                        >${{ gig.Price }}x{{ order.orderAmout }}</span
+                        >${{ gig.Price }}x{{ orderRequest.TotalEstimation }}</span
                       >
                     </div>
                     <div class="service_fee row">
                       <span class="col-md-6">Service Fee</span>
                       <span class="col-md-6 service_price"
-                        >${{ gig.Price * order.orderAmout * 0.1 }}</span
+                        >${{ gig.Price * orderRequest.TotalEstimation * 0.1 }}</span
                       >
                     </div>
                     <hr class="featurette-divider" />
@@ -382,15 +215,15 @@
                       <span class="col-md-6">Total</span>
                       <span class="col-md-6 total_all"
                         >${{
-                          gig.Price * order.orderAmout +
-                          gig.Price * order.orderAmout * 0.1
+                          gig.Price * orderRequest.TotalEstimation +
+                          gig.Price * orderRequest.TotalEstimation * 0.1
                         }}</span
                       >
                     </div>
                     <div class="delivery_time row">
-                      <span class="col-md-6">Delivery Time</span>
+                      <span class="col-md-6">Estimation Time</span>
                       <span class="col-md-6 delivery_day"
-                        >{{ gig.Delivery_Day }} day</span
+                        >{{ orderRequest.TotalEstimation }} hour</span
                       >
                     </div>
                     <div class="checkout_order">
@@ -418,31 +251,29 @@
 
 <script>
 /* eslint-disable */
-
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import Header from "../components/Header.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+var moment = require("moment");
 export default {
   name: "OrderDetailPage",
   components: {
     Header,
+    VueDatePicker,
   },
-  async created() {
+  async mounted() {
     const responseGig = await axios.get(
       "/gigs/details/" + this.$route.query.gigID
     );
     const gig = responseGig.data;
     this.gig = gig;
     console.log("Run here 1");
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
-    const responseUserInfor = await axios.get("/users/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const userInfor = responseUserInfor.data.user;
-    this.user = userInfor;
+    // await this.onUpdateAccountInfo();
+    console.log("🚀 ~ file: HERE", JSON.stringify(this.user))
+
   },
   data() {
     return {
@@ -454,28 +285,38 @@ export default {
       confirmSubmit: "",
       gig: {},
 
-      order: {
-        orderID: "",
-        orderCustomerID: "4",
-        orderFreelancerID: "",
-        orderGigID: "",
-        orderDate: new Date(),
-        orderAmout: "1",
-        orderStatus: "Active",
-        orderDescription: "",
+      orderRequest: {
+
+        OrderRequestID:'',
+        CustomerID:'',
+        GigID:'',
+        JobDescription: '',
+        TotalEstimation:1,
+        StartFrom:new Date(),
+        EndAt:moment(new Date()).add(24 , "h"),
+        Description: '',
+        Status:'Pending'
       },
-      user:[]
+      user: [],
+      moment: moment,
     };
   },
   methods: {
-    changeTypePayment: function (type) {
-      if (type == 1) {
-        this.iscreditcard = true;
-      } else {
-        this.iscreditcard = false;
+    onUpdateAccountInfo(newAccountInfo) {
+      // Update parent's currentAccountInfo based on the data received from the child
+      this.user = newAccountInfo;
+      
+      console.log("🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:", JSON.stringify(this.user))
+      if(this.user==null){
+        this.$router.push('/login')
       }
     },
     changeStep: function (step) {
+      var isafter =  moment(this.orderRequest.EndAt).isAfter(this.orderRequest.StartFrom);
+      if(!isafter){
+         alert('End date must be after start date!');
+         return
+        }
       if (step == 2) {
         this.isstep2 = true;
         this.isstep1 = false;
@@ -493,32 +334,41 @@ export default {
         this.currentStep = 2;
       }
     },
-    async startOrder() {
-      if (this.order.orderDescription == "" || !this.confirmSubmit) {
-        console.log("Please Submit Requirt", this.order.orderDescription);
-        alert("Please Submit Requirment And Click On Confirm!");
+    async sendOrderRequest() {
+      if (this.orderRequest.JobDescription == "" || !this.confirmSubmit) {
+      
+        alert("Please Submit Job Description And Click On Confirm Checkbox!");
       } else {
-        this.order.orderCustomerID = this.user.userId;
-        this.order.orderFreelancerID = this.gig.FreelancerID;
-        this.order.orderGigID = this.gig.GigID;
-        const data = await axios.post("/orders/index", {
-          order: this.order,
-        });       
-
-        if (data.data.message == "Create Order Success") {
-          toast.success("Create Order Successfully!", {
+        this.orderRequest.CustomerID = this.user.CustomerID;
+        this.orderRequest.GigID = this.gig.GigID;
+        console.log(this.orderRequest);
+        await axios
+        .post("/orderrequest/createOrderRequest", {
+          
+          orderRequest: this.orderRequest,
+        })
+        .then((response) => {
+          console.log(response.data);
+          toast.success("Send successfully!", {
             theme: "colored",
             autoClose: 2000,
+            onClose: () => location.reload(),
           });
-          window.setTimeout(function () {
-            window.location.href = '/vieworderdetail/'+data.data.insertId;
-          }, 3000);
-        } else {
-          toast.warn("Create Order Faild!", { autoClose: 2000 });
-        }
+          
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        });
+
+        
       }
     },
-  }
+
+    
+   
+  },
 };
 </script>
 

@@ -4,39 +4,39 @@
     <Sidebar></Sidebar>
     <div class="container-manaInterviewad">
       <div class="manage_title row">
-        <div class="col-md-3"><h3>Manage Interviews</h3></div>
+        <div class="col-md-3"><h3>Manage Accounts</h3></div>
         <div class="col-md-3"><h3></h3></div>
         <!-- <div class="col-md-3 search_bar">
-            <div class="input-group rounded">
-              <input
-                type="search"
-                class="form-control Interview_search"
-                placeholder="Search interview ..."
-                v-model="searchInterview"
-                aria-label="Search"
-                aria-describedby="search-addon"
-              />
-              <router-link
-                :to="{
-                  path: '/manageInterviewad',
-                  query: {
-                    search: searchInterview,
-                    status: status,
-                  },
-                }"
-                class="text-decoration-none"
-              >
-                <span
-                  class="input-group-text border-0 icon_search"
-                  id="search-addon"
+              <div class="input-group rounded">
+                <input
+                  type="search"
+                  class="form-control Interview_search"
+                  placeholder="Search account ..."
+                  v-model="searchInterview"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                />
+                <router-link
+                  :to="{
+                    path: '/manageInterviewad',
+                    query: {
+                      search: searchInterview,
+                      status: status,
+                    },
+                  }"
+                  class="text-decoration-none"
                 >
-                  <i class="fas fa-search"></i>
-                </span>
-              </router-link>
-            </div>
-          </div> -->
+                  <span
+                    class="input-group-text border-0 icon_search"
+                    id="search-addon"
+                  >
+                    <i class="fas fa-search"></i>
+                  </span>
+                </router-link>
+              </div>
+            </div> -->
       </div>
-      <div class="interview_status row">
+      <div class="account_status row">
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Pending' }"
@@ -44,7 +44,7 @@
           <router-link
             @click="(this.status = 'Pending'), (selectedPage = '1')"
             :to="{
-              path: '/manageinterview',
+              path: '/manageaccount',
               query: {
                 status: 'Pending',
               },
@@ -69,7 +69,7 @@
           <router-link
             @click="(this.status = 'Ongoing'), (selectedPage = '1')"
             :to="{
-              path: '/manageinterview',
+              path: '/manageaccount',
               query: {
                 page: 1,
                 status: 'Ongoing',
@@ -89,22 +89,22 @@
 
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Passed' }"
+          :class="{ status_item_active: this.status == 'Finished' }"
         >
           <router-link
-            @click="(this.status = 'Passed'), (selectedPage = '1')"
+            @click="(this.status = 'Finished'), (selectedPage = '1')"
             :to="{
-              path: '/manageinterview',
+              path: '/manageaccount',
               query: {
                 page: 1,
-                status: 'Passed',
+                status: 'Finished',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Passed<span
-                v-if="this.status == 'Passed'"
+              Finished<span
+                v-if="this.status == 'Finished'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -113,22 +113,22 @@
         </div>
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Failed' }"
+          :class="{ status_item_active: this.status == 'Deleted' }"
         >
           <router-link
-            @click="(this.status = 'Failed'), (selectedPage = '1')"
+            @click="(this.status = 'Deleted'), (selectedPage = '1')"
             :to="{
-              path: '/manageinterview',
+              path: '/manageaccount',
               query: {
                 page: 1,
-                status: 'Failed',
+                status: 'Deleted',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Failed<span
-                v-if="this.status == 'Failed'"
+              Deleted<span
+                v-if="this.status == 'Deleted'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -136,51 +136,52 @@
           </router-link>
         </div>
       </div>
-      <div class="interview_table">
+      <div class="account_table">
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
               <th class="th_no">NO.</th>
-              <th class="th_Freelancer">CANDIDATE</th>
-              <th class="th_ScheduledDate">DATE</th>
-              <th class="th_Location">VENUE</th>
-              <th class="th_description">DESCRIPTION</th>
-              <th class="th_status">STATUS</th>
+              <th class="th_AccountID">ACCOUNTID</th>
+              <th class="th_Username">USERNAME</th>
+              <th class="th_Email">EMAIL</th>
+              <th class="th_Role">ROLE</th>
+              <th class="th_Status">STATUS</th>
               <th class="th_actions">ACTIONS</th>
             </tr>
           </thead>
-          <tbody v-if="interviews.length >= 1">
-            <tr v-for="(interview, index) in interviews" :key="index">
+          <tbody v-if="accounts.length >= 1">
+            <tr v-for="(account, index) in accounts" :key="index">
               <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
-                      coding -->
+                        coding -->
                     {{ index + 1 }}
                   </p>
                 </div>
               </td>
-              <td class="td_freelancer">
-                <div class="d-flex align-items-center">
-                  <img
-                    :src="interview.Profile_Picture"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                    class="rounded-circle"
-                  />
-                  <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{ interview.First_Name + " " + interview.Last_Name }}
-                    </p>
+              <!-- <td class="td_freelancer">
+                  <div class="d-flex align-items-center">
+                    <img
+                      :src="account.Profile_Picture"
+                      alt=""
+                      style="width: 45px; height: 45px"
+                      class="rounded-circle"
+                    />
+                    <div class="ms-3">
+                      <p class="fw-bold mb-1">
+                        {{ account.First_Name + " " + account.Last_Name }}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td class="td_Interviews">
+                </td> -->
+              <td class="td_AccountID">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
-                      coding -->
-                    {{ getFormattedDate(interview.ScheduledDate) }}
+                        coding -->
+                    <!-- {{ getFormattedDate(account.ScheduledDate) }} -->
+                    ACC-{{ account.AccountID }}
                   </p>
                 </div>
               </td>
@@ -188,8 +189,8 @@
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
-                      coding -->
-                    {{ interview.Location }}
+                        coding -->
+                    {{ account.Username }}
                   </p>
                 </div>
               </td>
@@ -197,35 +198,44 @@
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
-                      coding -->
-                    {{ interview.Description }}
+                        coding -->
+                    {{ account.Email }}
                   </p>
                 </div>
               </td>
-
-              <td class="td_Interviews">
+              <td class="td_Role">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
+                    <!-- I will convert your design layout into email template HTML
+                        coding -->
+                    <span v-if="account.Role === 'F'">Freelancer</span>
+                    <span v-if="account.Role === 'C'">Customer</span>
+                  </p>
+                </div>
+              </td>
+              <td class="td_Status">
                 <div class="d-flex align-items-center">
                   <span
-                    v-if="interview.Status == 'Pending'"
+                    v-if="account.Status == 'Active'"
                     class="badge bg-primary rounded-pill d-inline"
                   >
-                    Pending</span
+                    Active</span
                   >
                   <span
-                    v-if="interview.Status == 'Ongoing'"
+                    v-if="account.Status == 'Blocked'"
                     class="badge rounded-pill bg-info d-inline"
                   >
-                    Ongoing</span
+                    Blocked</span
                   >
                   <span
-                    v-if="interview.Status == 'Failed'"
-                    class="badge rounded-pill bg-danger"
-                    >Failed</span
+                    v-if="account.Status == 'Deleted'"
+                    class="badge rounded-pill bg-secondary"
+                    >Deleted</span
                   >
                   <span
-                    v-if="interview.Status == 'Passed'"
+                    v-if="account.Status == 'Finished'"
                     class="badge rounded-pill bg-success"
-                    >Passed</span
+                    >Finished</span
                   >
                 </div>
               </td>
@@ -233,33 +243,33 @@
                 <i
                   @click="
                     (isshowModal = !isshowModal),
-                      (slectedInterviewID = interview.InterviewID)
+                      (slectedInterviewID = account.InterviewID)
                   "
                   class="bi bi-gear-fill"
                 ></i>
               </td>
 
               <!-- <div class="dropdown">
-                    <button
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      style="border: none; width: 35px"
-                    >
-                      ...
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Pending</a></li>
-                      <li><a class="dropdown-item" href="#">Pause</a></li>
-                      <li><a class="dropdown-item" href="#">Delete</a></li>
-                      <li><a class="dropdown-item" href="#">Block</a></li>
-                      <li><a class="dropdown-item" href="#">Unblock</a></li>
-                    </ul>
-                  </div> -->
+                      <button
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        style="border: none; width: 35px"
+                      >
+                        ...
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Pending</a></li>
+                        <li><a class="dropdown-item" href="#">Pause</a></li>
+                        <li><a class="dropdown-item" href="#">Delete</a></li>
+                        <li><a class="dropdown-item" href="#">Block</a></li>
+                        <li><a class="dropdown-item" href="#">Unblock</a></li>
+                      </ul>
+                    </div> -->
             </tr>
           </tbody>
         </table>
-        <div v-if="interviews.length == 0" class="text-center">
-          <h5>interview Not Found</h5>
+        <div v-if="accounts.length == 0" class="text-center">
+          <h5>Account Not Found</h5>
         </div>
 
         <div>
@@ -275,7 +285,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Change Interview Status</h5>
+                  <h5 class="modal-title">Change account Status</h5>
                   <button
                     type="button"
                     class="btn-close"
@@ -299,11 +309,11 @@
                       <option class="" value="Ongoing">
                         <span>Ongoing</span>
                       </option>
-                      <option class="" value="Failed">
-                        <span>Failed</span>
+                      <option class="" value="Deleted">
+                        <span>Deleted</span>
                       </option>
-                      <option class="" value="Passed">
-                        <span>Passed</span>
+                      <option class="" value="Finished">
+                        <span>Finished</span>
                       </option>
                     </select>
                   </div>
@@ -337,7 +347,7 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/manageinterview',
+              path: '/manageaccount',
               query: {
                 page: 1,
                 search: searchInterview,
@@ -351,7 +361,7 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/manageinterview',
+              path: '/manageaccount',
               query: {
                 page: pagination.page - 1,
                 status: status,
@@ -361,7 +371,7 @@
           ></router-link>
           <router-link
             :to="{
-              path: '/manageinterview',
+              path: '/manageaccount',
               query: {
                 page: index,
                 status: status,
@@ -381,7 +391,7 @@
             class="page-number"
             @click="selectedPage = pagination.page + 1"
             :to="{
-              path: '/manageInterviewad',
+              path: '/manageaccount',
               query: {
                 page: pagination.page + 1,
                 search: searchInterview,
@@ -395,8 +405,8 @@
     </div>
   </div>
 </template>
-    
-    <script>
+      
+      <script>
 import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
@@ -406,7 +416,7 @@ import "vue3-toastify/dist/index.css";
 var moment = require("moment");
 
 export default {
-  name: "CreateInterviewDetailPage",
+  name: "CreateAccountDetailPage",
   components: {
     Header,
     Sidebar,
@@ -414,13 +424,13 @@ export default {
   data() {
     return {
       account: {},
-      interviews: [],
+      accounts: [],
       pagination: [],
       moment: moment,
       // searchInterview: "",
       selectedPage: 1,
       // status: this.$route.query.status,
-      status: "Pending",
+      status: "Active",
       isshowModal: false,
       selectedStatus: "Pending",
     };
@@ -430,20 +440,20 @@ export default {
     getFormattedDate(date) {
       return moment(date).format("YYYY-MM-DD");
     },
-    async changeInterviewStatus(status, interviewID) {
-      const data = await axios.put("/interviews/updateStatus", {
+    async changeInterviewStatus(status, accountID) {
+      const data = await axios.put("/accounts/updateStatus", {
         status: status,
-        interviewID: interviewID,
+        accountID: accountID,
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        toast.success("Change interview Status Successfully!", {
+        toast.success("Change account Status Successfully!", {
           theme: "colored",
           autoClose: 2000,
           onClose: () => location.reload(),
         });
       } else {
-        toast.warn("Change interview Status Failed!", { autoClose: 2000 });
+        toast.warn("Change account Status Failed!", { autoClose: 2000 });
       }
     },
   },
@@ -472,15 +482,15 @@ export default {
     // const accountInfor = responseAccountInfor.data.account;
     // this.account = accountInfor;
     // console.log(this.account.accountID);
-    const responseData = await axios.get("/interviews/index", {
+    const responseData = await axios.get("/accounts/index", {
       params: {
         page: this.selectedPage,
         status: this.status,
       },
     });
-    const interviews = responseData.data.interview;
-    // console.log(interviews)
-    this.interviews = interviews;
+    const accounts = responseData.data.account;
+    // console.log(accounts)
+    this.accounts = accounts;
     const paging = responseData.data.pagination;
     this.pagination = paging;
     console.log(this.pagination.totalRow);
@@ -497,7 +507,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/interviews/index", {
+    const responseDateWithPage = await axios.get("/accounts/index", {
       params: {
         page: this.selectedPage,
         // search: this.searchInterview,
@@ -505,9 +515,9 @@ export default {
       },
     });
 
-    const interviews = responseDateWithPage.data.interview;
-    this.interviews = interviews;
-    console.log(interviews);
+    const accounts = responseDateWithPage.data.account;
+    this.accounts = accounts;
+    console.log(accounts);
     // const searchQuery = responseDateWithPage.data.searchQuery;
     // this.searchInterview = searchQuery.search;
     const paging = responseDateWithPage.data.pagination;
@@ -516,8 +526,8 @@ export default {
   },
 };
 </script>
-    
-    <style>
+      
+      <style>
 .container-manaInterviewad {
   margin-left: 17%;
   margin-right: 5%;
@@ -557,34 +567,34 @@ export default {
 .search_bar {
   border-bottom: 1px solid #dcd8d8;
 }
-.interview_status {
+.account_status {
   padding-bottom: 10px;
   border-bottom: 1px solid #dcd8d8;
 }
-.interview_status {
+.account_status {
   margin: 20px 0;
 }
 
-.interview_status .status_item {
+.account_status .status_item {
   text-align: left;
   width: fit-content;
   text-transform: uppercase;
 }
-.interview_status .status_item h6 {
+.account_status .status_item h6 {
   font-weight: 500;
   color: #9f9fa0;
 
   font-size: 15px;
 }
 
-.interview_status .status_item_active h6 {
+.account_status .status_item_active h6 {
   color: #303032;
 }
 .manage_title h3 {
   text-align: left;
   font-weight: 600;
 }
-.interview_table .table th {
+.account_table .table th {
   padding: 10px;
 }
 .table .th_user,
@@ -609,7 +619,7 @@ export default {
 .td_Interview {
   text-align: left;
 }
-.interview_table .table th {
+.account_table .table th {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;

@@ -58,7 +58,7 @@
             <!-- <li class="nav-item">
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-account-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
-            <li class="nav-item" v-if="account">
+            <li class="nav-item" v-if="currentAccountInfo">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -67,7 +67,7 @@
                 ><span class="small">Orders</span></a
               >
             </li>
-            <li class="nav-item" v-if="account">
+            <li class="nav-item" v-if="currentAccountInfo">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -76,7 +76,7 @@
                 ><span class="small">Messaging</span></a
               >
             </li>
-            <li class="nav-item" v-if="account">
+            <li class="nav-item" v-if="currentAccountInfo">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -85,6 +85,7 @@
                 <span class="small">Favourite</span></a
               >
             </li>
+
             <!-- <li class="nav-item" v-if="account && account.isFreelancer != 1">
               <a
                 class="nav-link d-flex flex-column text-center text-danger"
@@ -97,6 +98,7 @@
               >
             </li> -->
             <li class="nav-item dropdown" style="" v-if="currentAccountInfo">
+
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
@@ -136,8 +138,8 @@
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/setting"
-                    >Settings</router-link
+                  <router-link class="dropdown-item" to="/manageOrderRequest"
+                    >Order request</router-link
                   >
                 </li>
 
@@ -325,6 +327,7 @@ export default {
         .then(
           (res) => {
             this.currentAccountInfo = res.data.customer;
+            this.$emit('update-account-info', this.currentAccountInfo);
             console.log(this.currentAccountInfo)
           },
           (err) => {
