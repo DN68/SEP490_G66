@@ -129,14 +129,14 @@
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th class="w-10">ID</th>
                 <th style="width: 20%">CUSTOMER</th>
-                <th class="w-25">Job Description</th>
-                <th>Estimation</th>
+                <th class="w-25">JOB DESCRIPTION</th>
+                <th>ESTIMATION</th>
 
-                <th>Start On</th>
-                <th>End At</th>
-                <th>Status</th>
+                <th>START ON</th>
+                <th>END AT</th>
+                <th>STATUS</th>
 
-                <th>Action</th>
+                <th>ACTION</th>
 
                 <!-- <th>Action</th> -->
               </tr>
