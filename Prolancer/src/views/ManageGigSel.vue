@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderSeller></HeaderSeller>
-    <div class="container-managigad">
+    <div class="container-managigsel">
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Gigs</h3></div>
         <div class="col-md-3"><h3></h3></div>
@@ -594,8 +594,8 @@ export default {
 </script>
   
   <style>
-.container-managigad {
-  margin-left: 17%;
+.container-managigsel {
+  margin-left: 5%;
   margin-right: 5%;
 }
 .input-group-text {
