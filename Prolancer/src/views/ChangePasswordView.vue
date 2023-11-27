@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="header">
-      <HeaderAdmin v-if="account.Role == 'A'"></HeaderAdmin>
-      <Headers v-else></Headers>
+      <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
+      <HeaderSeller v-if="role == 'F'"></HeaderSeller>
+      <Headers v-if="role == 'C'"></Headers>
     </div>
     <div class="sidebar">
       <Sidebar></Sidebar>
@@ -58,6 +59,7 @@
 <script>
 import Headers from "../components/Header.vue";
 import HeaderAdmin from "../components/HeaderAdmin.vue";
+import HeaderSeller from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import axios from "axios";
 
@@ -66,7 +68,8 @@ export default {
   components: {
     Headers,
     Sidebar,
-    HeaderAdmin
+    HeaderAdmin,
+    HeaderSeller
 },
   data() {
     return {
@@ -75,6 +78,7 @@ export default {
       newPassword: "",
       reNewPassword: "",
       message: "",
+      role: ""
     };
   },
   created() {
@@ -91,6 +95,7 @@ export default {
       .then(
         (res) => {
           this.account = res.data.account;
+          this.role = this.account.role
         },
         (err) => {
           console.log(err.response);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header></Header>
+    <HeaderSeller></HeaderSeller>
     <div class="container-managigad">
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Gigs</h3></div>
@@ -470,7 +470,7 @@
 </template>
   
   <script>
-import Header from "../components/Header.vue";
+import HeaderSeller from "../components/HeaderSeller.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -480,7 +480,7 @@ var moment = require("moment");
 export default {
   name: "CreateOrderDetailPage",
   components: {
-    Header,
+    HeaderSeller,
   },
   data() {
     return {

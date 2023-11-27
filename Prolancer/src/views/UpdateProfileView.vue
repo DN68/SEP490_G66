@@ -2,7 +2,8 @@
   <div>
     <div class="header">
       <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
-      <Headers v-else></Headers>
+      <HeaderSeller v-if="role == 'F'"></HeaderSeller>
+      <Headers v-if="role == 'C'"></Headers>
     </div>
     <div class="Sidebarudpf">
       <Sidebarpf></Sidebarpf>
@@ -246,7 +247,7 @@
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.Description"
               />
-              <label
+              <!-- <label
                 class="form-label mt-5"
                 style="float: left"
                 for="form3Example3"
@@ -257,7 +258,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.MainCategoryID"
-              />
+              /> -->
             </div>
 
             <!-- <label class="form-label mt-5" style="float: left" for="form3Example3"
@@ -288,6 +289,7 @@
 import Headers from "../components/Header.vue";
 import Sidebarpf from "../components/Sidebarprf.vue";
 import HeaderAdmin from "../components/HeaderAdmin.vue";
+import HeaderSeller from "../components/HeaderSeller.vue"
 import Footer from "../components/Footer.vue";
 import VueJwtDecode from "vue-jwt-decode";
 import axios from "axios";
@@ -296,9 +298,10 @@ export default {
   name: "App",
   components: {
     Headers,
+    HeaderAdmin,
+    HeaderSeller,
     Sidebarpf,
     Footer,
-    HeaderAdmin,
   },
   data() {
     return {
