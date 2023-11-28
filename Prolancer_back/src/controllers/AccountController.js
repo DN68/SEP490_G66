@@ -71,7 +71,7 @@ class AccountController {
             //IF ALL IS GOOD create a token and send to frontend
             let token = jwt.sign({ accountID: results[0].AccountID, email: results[0].Email, role: results[0].Role }, 'secretkey', { expiresIn: 43200 });
             // console.log(token)
-            if (results[0].Status != 'Active') {
+            if (results[0].Status != 'Active' && results[0].Status != 'Pending') {
                 return res.status(201).json({
                     title: 'access denied',
                     status: results[0].Status
@@ -207,12 +207,12 @@ class AccountController {
         const account = req.body
         console.log(account)
         const encodedAccountData = encodeURIComponent(JSON.stringify(account));
-        let redirectLink;
-        if (account.role == 'C') {
-            redirectLink = `http://localhost:8080/register-company?data=${encodedAccountData}`
-        } else if (account.role == 'F') {
-            redirectLink = `http://localhost:8080/becomesel?data=${encodedAccountData}`
-        }
+        let verificationCode = generateRandomString(6);
+        // if (account.role == 'C') {
+        //     redirectLink = `http://localhost:8080/register-company?data=${encodedAccountData}`
+        // } else if (account.role == 'F') {
+        //     redirectLink = `http://localhost:8080/becomesel?data=${encodedAccountData}`
+        // }
 
         const info = transport.sendMail({
             from: '"Prolancer" <anpqhe160968@fpt.edu.vn>', // sender address
@@ -220,11 +220,12 @@ class AccountController {
             subject: "Verify your email:", // Subject line
             text: "Hello world?", // plain text body
             // html: "<b>Please verify your email: <a href='" + redirectLink + "'>Verify email</a></b>", // html body
-            html: "<b>Please verify your email: <a href='" + redirectLink + "'>Verify email</a></b>", // html body
+            html: "<b>This is your verification code:" + verificationCode + "</b>", // html body
         });
         return res.status(200).json({
             title: 'success',
-            message: 'Sent password to mail'
+            message: 'Sent verification code to mail',
+            link: verificationCode
         })
         // console.log(info)
     }

@@ -610,6 +610,13 @@
   .account_table .table th {
     padding: 10px;
   }
+  /* scroll handling */
+  .account_table{
+    max-width: 100%; /* Set a maximum width for the container */
+    overflow-x: auto;
+    max-height: 100%; /* Set a maximum height for the container */
+    overflow-y: auto;
+  }
   .table .th_user,
   .th_Interview {
     text-align: left;

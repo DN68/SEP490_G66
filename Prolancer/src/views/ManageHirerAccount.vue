@@ -498,7 +498,7 @@ export default {
       params: {
         page: this.selectedPage,
         status: this.status,
-        search: this.searchHirer
+        search: this.searchHirer,
       },
     });
     const customers = responseData.data.customer;
@@ -636,6 +636,13 @@ export default {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
+}
+/* scroll handling */
+.account_table {
+  max-width: 100%; /* Set a maximum width for the container */
+  overflow-x: auto;
+  max-height: 100%; /* Set a maximum height for the container */
+  overflow-y: auto;
 }
 .d-flex {
   justify-content: center;
