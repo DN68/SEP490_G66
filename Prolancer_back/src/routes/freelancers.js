@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const freelancerController = require('../controllers/FreelancerController');
 
-
+router.get('/index', 
+    freelancerController.getfreelancersByStatusAndPaging
+);
 router.get('/info', 
     freelancerController.getFreelancerInfo
 );

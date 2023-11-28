@@ -67,11 +67,11 @@ class AccountController {
                     error: 'invalid credentials'
                 })
             }
-            
+
             //IF ALL IS GOOD create a token and send to frontend
             let token = jwt.sign({ accountID: results[0].AccountID, email: results[0].Email, role: results[0].Role }, 'secretkey', { expiresIn: 43200 });
             // console.log(token)
-            if(results[0].Status != 'Active'){
+            if (results[0].Status != 'Active') {
                 return res.status(201).json({
                     title: 'access denied',
                     status: results[0].Status
@@ -81,7 +81,7 @@ class AccountController {
                 title: 'login sucess',
                 token: token
             })
-            
+
         })
     }
 
@@ -208,12 +208,12 @@ class AccountController {
         console.log(account)
         const encodedAccountData = encodeURIComponent(JSON.stringify(account));
         let redirectLink;
-        if(account.role == 'C'){
+        if (account.role == 'C') {
             redirectLink = `http://localhost:8080/register-company?data=${encodedAccountData}`
-        }else if (account.role == 'F'){
+        } else if (account.role == 'F') {
             redirectLink = `http://localhost:8080/becomesel?data=${encodedAccountData}`
         }
-        
+
         const info = transport.sendMail({
             from: '"Prolancer" <anpqhe160968@fpt.edu.vn>', // sender address
             to: "" + email + "", // list of receivers
@@ -366,8 +366,29 @@ class AccountController {
             res.status(500).send("An error occurred");
         });
     };
-}
 
+    changeAccountStatus = function (req, res) {
+        const data = req.body;
+        var status = data.status;
+        var accountID = data.accountID;
+
+        console.log(status + accountID);
+
+        Account.updateAccountStatus(status, accountID, function (err, result) {
+            if (err)
+                return res.send(err);
+            else {
+                console.log('res', result);
+                if (result.affectedRows == 0) {
+                    res.send({ message: 'Change Status Failed' });
+
+                }
+                res.send({ message: 'Change Status Success' });
+            }
+
+        });
+    }
+}
 
 
 

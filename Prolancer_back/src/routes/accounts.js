@@ -30,6 +30,9 @@ router.get('/:email/checkEmail',
 router.get('/:username/checkUsername',
     AccountController.checkUsernameExist
 );
+router.put('/updateStatus',
+    AccountController.changeAccountStatus
+)
 // router.put('/:email/info/update',
 //     AccountController.updateProfile
 // );

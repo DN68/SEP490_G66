@@ -56,5 +56,82 @@ class FreelancerController {
             })
         })
     }
+
+
+    getfreelancersByStatusAndPaging = function (req, res) {
+        const limit = 16;
+        var pageQuery = req.query;
+        var page;
+        var search
+        var status = pageQuery.status;
+
+        if (pageQuery.search != null) {
+
+          search = pageQuery.search;
+
+          console.log('Search here ' + search);
+
+        } else {
+          search = '';
+        }
+        console.log(search);
+
+        if (pageQuery.page != null) {
+            page = pageQuery.page;
+        } else {
+            page = 1;
+        }
+        console.log(page);
+
+        const offset = (page - 1) * limit;
+        console.log(offset);
+        let freelancer, totalRows;
+
+        // Create a Promise to handle the asynchronous operation
+        const fetchData = new Promise((resolve, reject) => {
+            Freelancer.getAllFreelancersWithPaging(status, search, limit, offset, function (err, freelancerData) {
+                console.log(freelancerData)
+                if (err) {
+                    reject(err);
+                } else {
+                    freelancer = freelancerData;
+                    if (totalRows !== undefined) {
+                        resolve();
+                    }
+
+                }
+            }, function (err, totalRowsData) {
+                if (err) {
+                    reject(err);
+                } else {
+                    totalRows = totalRowsData;
+                    if (freelancer !== undefined) {
+
+                        resolve();
+                    }
+                }
+            });
+        });
+
+        fetchData.then(() => {
+            // Both callbacks have been called, so you can send the response now.
+            res.send({
+                freelancer, pagination: {
+                    totalPage: Math.ceil(totalRows[0].count / limit),
+                    page: parseInt(page),
+                    totalRow: totalRows[0].count
+                }, searchQuery: {
+                    //   search: search,
+                    status: status,
+                }
+            });
+        }, (err) => {
+            res.send(err);
+        }
+        ).catch(error => {
+            console.error(error);
+            res.status(500).send("An error occurred");
+        });
+    };
 }
 module.exports = new FreelancerController;

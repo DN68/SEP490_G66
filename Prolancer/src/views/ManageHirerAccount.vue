@@ -4,37 +4,51 @@
     <Sidebar></Sidebar>
     <div class="container-manaInterviewad">
       <div class="manage_title row">
-        <div class="col-md-3"><h3>Manage Accounts</h3></div>
+        <div class="col-md-3"><h3>Manage Hirers</h3></div>
         <div class="col-md-3"><h3></h3></div>
-        <!-- <div class="col-md-3 search_bar">
-              <div class="input-group rounded">
-                <input
-                  type="search"
-                  class="form-control Interview_search"
-                  placeholder="Search account ..."
-                  v-model="searchInterview"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                />
-                <router-link
-                  :to="{
-                    path: '/manageInterviewad',
-                    query: {
-                      search: searchInterview,
-                      status: status,
-                    },
-                  }"
-                  class="text-decoration-none"
-                >
-                  <span
-                    class="input-group-text border-0 icon_search"
-                    id="search-addon"
-                  >
-                    <i class="fas fa-search"></i>
-                  </span>
-                </router-link>
-              </div>
-            </div> -->
+        <div class="col-md-3 search_bar">
+          <div class="input-group rounded">
+            <input
+              type="search"
+              class="form-control Interview_search"
+              placeholder="Search account ..."
+              v-model="searchHirer"
+              aria-label="Search"
+              aria-describedby="search-addon"
+            />
+            <router-link
+              :to="{
+                path: '/manageaccount/hirer',
+                query: {
+                  search: searchHirer,
+                  status: status,
+                },
+              }"
+              class="text-decoration-none"
+            >
+              <span
+                class="input-group-text border-0 icon_search"
+                id="search-addon"
+              >
+                <i class="fas fa-search"></i>
+              </span>
+            </router-link>
+          </div>
+        </div>
+        <!-- <div class="col-md-2">
+          <router-link to="/manageaccount/hirer/freelancer" style="text-decoration: none">
+            <h6
+              style="
+                color: #fff;
+                border: 1px #ccc solid;
+                background-color: red;
+                line-height: 35px;
+              "
+            >
+              Manage Freelancers
+            </h6>
+          </router-link>
+        </div> -->
       </div>
       <div class="account_status row">
         <div
@@ -44,9 +58,10 @@
           <router-link
             @click="(this.status = 'Pending'), (selectedPage = '1')"
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 status: 'Pending',
+                search: searchHirer,
               },
             }"
             class="text-decoration-none"
@@ -64,22 +79,23 @@
 
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Ongoing' }"
+          :class="{ status_item_active: this.status == 'Active' }"
         >
           <router-link
-            @click="(this.status = 'Ongoing'), (selectedPage = '1')"
+            @click="(this.status = 'Active'), (selectedPage = '1')"
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 page: 1,
-                status: 'Ongoing',
+                status: 'Active',
+                search: searchHirer,
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Ongoing<span
-                v-if="this.status == 'Ongoing'"
+              Active<span
+                v-if="this.status == 'Active'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -87,14 +103,14 @@
           </router-link>
         </div>
 
-        <div
+        <!-- <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Finished' }"
         >
           <router-link
             @click="(this.status = 'Finished'), (selectedPage = '1')"
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 page: 1,
                 status: 'Finished',
@@ -110,25 +126,26 @@
               >
             </h6>
           </router-link>
-        </div>
+        </div> -->
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Deleted' }"
+          :class="{ status_item_active: this.status == 'Blocked' }"
         >
           <router-link
-            @click="(this.status = 'Deleted'), (selectedPage = '1')"
+            @click="(this.status = 'Blocked'), (selectedPage = '1')"
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 page: 1,
-                status: 'Deleted',
+                status: 'Blocked',
+                search: searchHirer,
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Deleted<span
-                v-if="this.status == 'Deleted'"
+              Blocked<span
+                v-if="this.status == 'Blocked'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -142,15 +159,15 @@
             <tr style="border-bottom: 2px solid #dcd8d8">
               <th class="th_no">NO.</th>
               <th class="th_AccountID">ACCOUNTID</th>
+              <th class="th_Hirer">HIRER</th>
               <th class="th_Username">USERNAME</th>
               <th class="th_Email">EMAIL</th>
-              <th class="th_Role">ROLE</th>
               <th class="th_Status">STATUS</th>
               <th class="th_actions">ACTIONS</th>
             </tr>
           </thead>
-          <tbody v-if="accounts.length >= 1">
-            <tr v-for="(account, index) in accounts" :key="index">
+          <tbody v-if="customers.length >= 1">
+            <tr v-for="(customer, index) in customers" :key="index">
               <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
@@ -160,80 +177,71 @@
                   </p>
                 </div>
               </td>
-              <!-- <td class="td_freelancer">
-                  <div class="d-flex align-items-center">
-                    <img
-                      :src="account.Profile_Picture"
-                      alt=""
-                      style="width: 45px; height: 45px"
-                      class="rounded-circle"
-                    />
-                    <div class="ms-3">
-                      <p class="fw-bold mb-1">
-                        {{ account.First_Name + " " + account.Last_Name }}
-                      </p>
-                    </div>
-                  </div>
-                </td> -->
+
               <td class="td_AccountID">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                         coding -->
                     <!-- {{ getFormattedDate(account.ScheduledDate) }} -->
-                    ACC-{{ account.AccountID }}
+                    ACC-{{ customer.AccountID }}
                   </p>
                 </div>
               </td>
-              <td class="td_Interviews">
+              <td class="td_hirer">
+                <div class="d-flex align-items-center">
+                  <img
+                    :src="customer.Profile_Picture"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">
+                      {{ customer.First_Name + " " + customer.Last_Name }}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td class="td_username">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                         coding -->
-                    {{ account.Username }}
+                    {{ customer.Username }}
                   </p>
                 </div>
               </td>
-              <td class="td_Interviews">
+              <td class="td_email">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                         coding -->
-                    {{ account.Email }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_Role">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                        coding -->
-                    <span v-if="account.Role === 'F'">Freelancer</span>
-                    <span v-if="account.Role === 'C'">Customer</span>
+                    {{ customer.Email }}
                   </p>
                 </div>
               </td>
               <td class="td_Status">
                 <div class="d-flex align-items-center">
                   <span
-                    v-if="account.Status == 'Active'"
+                    v-if="customer.Status == 'Active'"
                     class="badge bg-primary rounded-pill d-inline"
                   >
                     Active</span
                   >
                   <span
-                    v-if="account.Status == 'Blocked'"
+                    v-if="customer.Status == 'Blocked'"
                     class="badge rounded-pill bg-info d-inline"
                   >
                     Blocked</span
                   >
                   <span
-                    v-if="account.Status == 'Deleted'"
+                    v-if="customer.Status == 'Blocked'"
                     class="badge rounded-pill bg-secondary"
-                    >Deleted</span
+                    >Blocked</span
                   >
                   <span
-                    v-if="account.Status == 'Finished'"
+                    v-if="customer.Status == 'Finished'"
                     class="badge rounded-pill bg-success"
                     >Finished</span
                   >
@@ -243,7 +251,7 @@
                 <i
                   @click="
                     (isshowModal = !isshowModal),
-                      (slectedInterviewID = account.InterviewID)
+                      (slectedAccountID = customer.AccountID)
                   "
                   class="bi bi-gear-fill"
                 ></i>
@@ -268,7 +276,7 @@
             </tr>
           </tbody>
         </table>
-        <div v-if="accounts.length == 0" class="text-center">
+        <div v-if="customers.length == 0" class="text-center">
           <h5>Account Not Found</h5>
         </div>
 
@@ -306,15 +314,15 @@
                       <option class="" value="Pending">
                         <span>Pending</span>
                       </option>
-                      <option class="" value="Ongoing">
-                        <span>Ongoing</span>
+                      <option class="" value="Active">
+                        <span>Active</span>
                       </option>
-                      <option class="" value="Deleted">
-                        <span>Deleted</span>
+                      <option class="" value="Blocked">
+                        <span>Blocked</span>
                       </option>
-                      <option class="" value="Finished">
+                      <!-- <option class="" value="Finished">
                         <span>Finished</span>
-                      </option>
+                      </option> -->
                     </select>
                   </div>
                 </div>
@@ -330,7 +338,7 @@
                     type="button"
                     class="btn btn-primary"
                     @click="
-                      changeInterviewStatus(selectedStatus, slectedInterviewID),
+                      changeAccountStatus(selectedStatus, slectedAccountID),
                         (isshowModal = !isshowModal)
                     "
                   >
@@ -347,10 +355,10 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 page: 1,
-                search: searchInterview,
+                search: searchHirer,
                 status: status,
               },
             }"
@@ -361,20 +369,22 @@
             class="page-number"
             @click="selectedPage = pagination.page - 1"
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 page: pagination.page - 1,
                 status: status,
+                search: searchHirer,
               },
             }"
             ><i class="bi bi-arrow-left"></i
           ></router-link>
           <router-link
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 page: index,
                 status: status,
+                search: searchHirer,
               },
             }"
             class="page-number"
@@ -391,10 +401,10 @@
             class="page-number"
             @click="selectedPage = pagination.page + 1"
             :to="{
-              path: '/manageaccount',
+              path: '/manageaccount/hirer',
               query: {
                 page: pagination.page + 1,
-                search: searchInterview,
+                search: searchHirer,
                 status: status,
               },
             }"
@@ -424,13 +434,14 @@ export default {
   data() {
     return {
       account: {},
-      accounts: [],
+      customers: [],
       pagination: [],
       moment: moment,
       // searchInterview: "",
       selectedPage: 1,
       // status: this.$route.query.status,
-      status: "Active",
+      status: "Pending",
+      searchHirer: "",
       isshowModal: false,
       selectedStatus: "Pending",
     };
@@ -440,7 +451,7 @@ export default {
     getFormattedDate(date) {
       return moment(date).format("YYYY-MM-DD");
     },
-    async changeInterviewStatus(status, accountID) {
+    async changeAccountStatus(status, accountID) {
       const data = await axios.put("/accounts/updateStatus", {
         status: status,
         accountID: accountID,
@@ -458,6 +469,7 @@ export default {
     },
   },
   async created() {
+    //Admin role permission
     await axios
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
@@ -482,15 +494,16 @@ export default {
     // const accountInfor = responseAccountInfor.data.account;
     // this.account = accountInfor;
     // console.log(this.account.accountID);
-    const responseData = await axios.get("/accounts/index", {
+    const responseData = await axios.get("/customers/index", {
       params: {
         page: this.selectedPage,
         status: this.status,
+        search: this.searchHirer
       },
     });
-    const accounts = responseData.data.account;
+    const customers = responseData.data.customer;
     // console.log(accounts)
-    this.accounts = accounts;
+    this.customers = customers;
     const paging = responseData.data.pagination;
     this.pagination = paging;
     console.log(this.pagination.totalRow);
@@ -507,17 +520,17 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/accounts/index", {
+    const responseDateWithPage = await axios.get("/customers/index", {
       params: {
         page: this.selectedPage,
-        // search: this.searchInterview,
+        search: this.searchHirer,
         status: this.status,
       },
     });
 
-    const accounts = responseDateWithPage.data.account;
-    this.accounts = accounts;
-    console.log(accounts);
+    const customers = responseDateWithPage.data.customer;
+    this.customers = customers;
+    console.log(customers);
     // const searchQuery = responseDateWithPage.data.searchQuery;
     // this.searchInterview = searchQuery.search;
     const paging = responseDateWithPage.data.pagination;
@@ -623,5 +636,8 @@ export default {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
+}
+.d-flex {
+  justify-content: center;
 }
 </style>
