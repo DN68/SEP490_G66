@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <div class="header">
     <Headers></Headers>
   </div>
@@ -146,6 +148,8 @@
   <div class="footer">
     <Footer></Footer>
   </div>
+</div>
+
 </template>
 
 <script>
