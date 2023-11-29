@@ -11,22 +11,22 @@
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Gig Management</span>
           </router-link>
-          <router-link to="/ordermanaad" v-on:click="ChangeActive"
+          <router-link to="/manageorder" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Order Management</span>
           </router-link>
-          <router-link to="/skilltest" v-on:click="ChangeActive"
+          <router-link to="/manageSkill" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Skill Test Management</span>
           </router-link>
-          <router-link to="/interview" v-on:click="ChangeActive"
+          <router-link to="/manageinterview" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Interview Management</span>
           </router-link>
-          <router-link to="/usermanage" v-on:click="ChangeActive"
+          <router-link to="/manageaccount" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Users Management</span>
@@ -40,27 +40,7 @@
         </div>
       </div>
     </nav>
-    <!-- Sidebar -->
-
-    <!-- Navbar -->
-    <!-- <nav
-      id="main-navbar"
-      class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
-    >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-mdb-toggle="collapse"
-          data-mdb-target="#sidebarMenu"
-          aria-controls="sidebarMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-            
-    </nav> -->
-    <!-- Navbar -->
+    
   </header>
   <!--Main Navigation-->
 

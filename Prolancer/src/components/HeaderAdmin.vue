@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top customer_header">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
@@ -28,7 +28,7 @@
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-user-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
            
-            <li class="nav-item dropdown" style="" v-if="user">
+            <li class="nav-item dropdown" style="" v-if="account">
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
@@ -38,7 +38,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="user.image"
+                  :src="account.image"
                   class="rounded-circle"
                   height="30"
                   alt=""
@@ -208,21 +208,21 @@ export default {
   data() {
     return {
       isShow: false,
-      user: {},
+      account: {},
     };
   },
   mounted() {
     //user is not authorized
     if (localStorage.getItem("token") === null) {
-      this.user = null;
+      this.account = null;
     } else {
       axios
-        .get("/users/info", {
+        .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })
         .then(
           (res) => {
-            this.user = res.data.user;
+            this.account = res.data.account;
           },
           (err) => {
             console.log(err.response);

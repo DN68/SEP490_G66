@@ -56,9 +56,9 @@
         </li> -->
 
             <!-- <li class="nav-item">
-          <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-user-friends fa-lg"></i><span class="small">My Network</span></a>
+          <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-account-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
-            <li class="nav-item">
+            <li class="nav-item" v-if="currentAccountInfo">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -67,7 +67,7 @@
                 ><span class="small">Orders</span></a
               >
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="currentAccountInfo">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -76,7 +76,7 @@
                 ><span class="small">Messaging</span></a
               >
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="currentAccountInfo">
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
@@ -85,18 +85,20 @@
                 <span class="small">Favourite</span></a
               >
             </li>
-            <li class="nav-item" v-if="user && user.isFreelancer != 1">
+
+            <!-- <li class="nav-item" v-if="account && account.isFreelancer != 1">
               <a
                 class="nav-link d-flex flex-column text-center text-danger"
                 aria-current="page"
                 href="/becomesel"
               >
-                <span class="small" style="margin-top: 5px; font-size: 20px"
+                <span class="small" style="margin-top: 5px; font-size: 17px"
                   >Become a Seller</span
                 ></a
               >
-            </li>
-            <li class="nav-item dropdown" style="" v-if="user">
+            </li> -->
+            <li class="nav-item dropdown" style="" v-if="currentAccountInfo">
+
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
@@ -106,7 +108,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="user.image"
+                  :src="currentAccountInfo.Profile_Picture"
                   class="rounded-circle"
                   height="30"
                   width="30"
@@ -123,21 +125,21 @@
                     >My Profile</router-link
                   >
                 </li>
-                <li v-if="user.isFreelancer == 1">
+                <!-- <li v-if="account.isFreelancer == 1">
                   <router-link
                     class="dropdown-item"
                     to="/changeRole/F"
                     >Selling</router-link
                   >
-                </li>
+                </li> -->
                 <li>
                   <router-link class="dropdown-item" to="/change"
                     >Change password</router-link
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/setting"
-                    >Settings</router-link
+                  <router-link class="dropdown-item" to="/manageOrderRequest"
+                    >Order request</router-link
                   >
                 </li>
 
@@ -283,32 +285,68 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
+import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
   props: ["searchText"],
   data() {
     return {
       isShow: false,
-      user: {},
+      currentAccountInfo: null,
+      // freelancer: null,
+      // customer: null,
     };
   },
   mounted() {
-    //user is not authorized
-    if (localStorage.getItem("token") === null) {
-      this.user = null;
+    let token = localStorage.getItem("token")
+    //account is not authorized
+    if (!token) {
+      this.account = null;
     } else {
-      axios
-        .get("/users/info", {
+      let decoded = VueJwtDecode.decode(token)
+      console.log(decoded.role)
+      if(decoded.role === "F"){
+        axios
+        .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
         .then(
           (res) => {
-            this.user = res.data.user;
+            this.currentAccountInfo = res.data.freelancer;
+            console.log(this.currentAccountInfo)
           },
           (err) => {
             console.log(err.response);
           }
         );
+      }else if(decoded.role === "C"){
+        axios
+        .get("/customers/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.currentAccountInfo = res.data.customer;
+            this.$emit('update-account-info', this.currentAccountInfo);
+            console.log(this.currentAccountInfo)
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+      }
+      // axios
+      //   .get("/accounts/info", {
+      //     headers: { token: localStorage.getItem("token") },
+      //   })
+      //   .then(
+      //     (res) => {
+      //       this.account = res.data.account;
+      //     },
+      //     (err) => {
+      //       console.log(err.response);
+      //     }
+      //   );
     }
   },
   methods: {

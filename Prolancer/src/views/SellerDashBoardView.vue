@@ -1,15 +1,17 @@
 <template>
+  <div class="sel"> 
   <Headerseller></Headerseller>
+  <div class="body" > 
   <div
-    class="content"
-    style="float: left; width: 25%; margin-top: 2%; margin-bottom: 50px"
+    class="content" 
+    style="float: left; width: 25%; margin-top: 2%; margin-bottom: 50px;"
   >
     <div class="inbox-side">
       <nav id="sidebarMenu" class="">
-        <img src="../assets/image/large_1588936738888.png" alt="" />
+        <img :src="freelancer.Profile_Picture" alt="" />
         <br />
         <div class="info-user">
-          <h5 class="">Duy Nguyen</h5>
+          <h5 class="">{{ freelancer.First_Name + " " + freelancer.Last_Name }}</h5>
         </div>
       </nav>
       <div class="inbox-content nonetextalign">
@@ -55,7 +57,7 @@
     class="content nonetextalign"
     style="float: right; width: 70%; margin-top: 2%; margin-bottom: 25%"
   >
-    <h1>Welcome,D</h1>
+    <h1>Welcome, {{ freelancer.First_Name }}</h1>
     <p style="color: #818181; margin-bottom: 30px">
       Find important messages, tips, and links to helpful resources here:
     </p>
@@ -85,9 +87,11 @@
       </router-link>
     </div>
   </div>
+  </div>
   <div class="footer">
     <Footer></Footer>
   </div>
+</div>
 </template>
 
 <script>
@@ -106,22 +110,21 @@ export default {
   },
   data() {
     return {
-      user: {}
+      freelancer: {}
     };
   },
   async mounted() {
     await axios
-      .get("/users/info", {
+      .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
-          this.role = res.data.user.role;
-          if (this.role != "F") {
-            this.$router.push("/");
-          }
+          this.freelancer = res.data.freelancer
+          console.log(this.freelancer)
         },
         (err) => {
+          this.$router.push("/");
           console.log(err.response);
         }
       );
@@ -132,7 +135,7 @@ export default {
 <style>
 html {
   position: relative;
-  background-color: #f1f1f1;
+
 }
 .footer {
   position: absolute;

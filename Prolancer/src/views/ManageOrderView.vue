@@ -1,19 +1,27 @@
 <template>
-  <div>
-    <Header></Header>
-    <div class="container">
+  <div >
+    <Header v-if="currentAccountInfo.Role == 'C'"></Header>
+    <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
+    <header-admin v-else></header-admin>
+    <div :class="{'row' : currentAccountInfo.Role == 'A'}">
+      <div v-if="currentAccountInfo.Role == 'A'" class="col-md-2" >
+      <Sidebar ></Sidebar>
+      </div>
+      <div class="container " :class="{'col-md-9 ms-0' : currentAccountInfo.Role == 'A'}" 
+
+      >
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Orders</h3></div>
-        <div class="col-md-3 search_bar" v-if="isOrderList">
-          <div class="input-group rounded">
-            <input
+          <!-- <div class="col-md-3 search_bar" v-if="isOrderList">
+            <div class="input-group rounded">
+              <input
               type="search"
               class="form-control order_search"
               placeholder="Search Order History ..."
               aria-label="Search"
               aria-describedby="search-addon"
               v-model="searchOrder"  
-            />
+              />
 
             <router-link
               :to="{
@@ -34,27 +42,18 @@
               </span>
             </router-link>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="order_status row">
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Active' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+          
         >
           <router-link
-            @click="(this.status = 'Active'), (selectedPage = '1')"
+            @click="(this.status = 'Active'), (selectedPage = '1'), getOrder(selectedPage)"
             :to="{
-              path: '/manageorder',
-              query: {
-                search: searchOrder,
-                user: user,
-                status: 'Active',
-              },
+              path: '#',           
             }"
             class="text-decoration-none"
           >
@@ -71,24 +70,17 @@
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Late' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+         
         >
           <router-link
-            @click="(this.status = 'Late'), (selectedPage = '1')"
+            @click="(this.status = 'Late'), (selectedPage = '1'), getOrder(selectedPage)"
             :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                user: user,
-                status: 'Late',
-              },
+              path: '#',
+            
             }"
             class="text-decoration-none"
+
+
           >
             <h6>
               Late<span
@@ -102,22 +94,11 @@
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Delivered' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
         >
           <router-link
-            @click="(this.status = 'Delivered'), (selectedPage = '1')"
+            @click="(this.status = 'Delivered'), (selectedPage = '1'), getOrder(selectedPage)"
             :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                user: user,
-                status: 'Delivered',
-              },
+              path: '#',           
             }"
             class="text-decoration-none"
           >
@@ -133,22 +114,11 @@
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Completed' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
         >
           <router-link
-            @click="(this.status = 'Completed'), (selectedPage = '1')"
+            @click="(this.status = 'Completed'), (selectedPage = '1'), getOrder(selectedPage)"
             :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                user: user,
-                status: 'Completed',
-              },
+              path: '#',
             }"
             class="text-decoration-none"
           >
@@ -164,22 +134,12 @@
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Cancelled' }"
-          @click="
-            (isOrderRequest = false),
-              (isOrderList = true),
-              (requestTypeStatus = 'Cancel')
-          "
+
         >
           <router-link
-            @click="(this.status = 'Cancelled'), (selectedPage = '1')"
+            @click="(this.status = 'Cancelled'), (selectedPage = '1'), getOrder(selectedPage)"
             :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                user: user,
-                status: 'Cancelled',
-              },
+              path: '#',
             }"
             class="text-decoration-none"
           >
@@ -196,24 +156,25 @@
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'OrderRequest' }"
           style="margin-left: 40%"
-          @click="
-            (isOrderRequest = true),
-              (isOrderList = false),
-              (this.status = 'OrderRequest'),
-              (requestTypeStatus = 'Cancel'),
-              getOrderRequest(user, requestTypeStatus, 1)
-          "
+
         >
+        <router-link
+            :to="{
+              path: '/manageChangeRequest',
+            }"
+            class="text-decoration-none"
+          >
           <h6 class="position-relative">
             <span
               class="position-absolute top-0 translate-middle badge rounded-pill bg-danger"
               style="left: 120%"
             >
-              {{ totalOrderRequest }}+
+              +
               <span class="visually-hidden">unread messages</span>
             </span>
-            Order Request
+            Change Request
           </h6>
+        </router-link>
         </div>
       </div>
       <div
@@ -223,27 +184,16 @@
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
-              <!-- <th class="th_user"><span>CUSTOMER</span></th> -->
-              <!-- <th class=""><span>ORDER ID</span></th> -->
-              <th class="th_user" v-if="user.role == 'C'">
-                <span>FREELANCER</span>
+              <th >
+                ID
+              </th>
+              <th class="th_user">
+                ORDER FROM
               </th>
 
-              <th class="th_user" v-if="user.role == 'F'">
-                <span>CUSTOMER</span>
-              </th>
-              <th class="th_user" v-if="user.role == 'A'" style="width: 20%">
-                <span>CUSTOMER</span>
-              </th>
-
-              <th class="th_user" v-if="user.role == 'A'" style="width: 20%">
-                <span>FREELANCER</span>
-              </th>
-
-              <th class="th_gig">GIG</th>
+              <th class="th_gig">JOB DESCRIPTION</th>
               <th>DUE ON</th>
               <th>TOTAL</th>
-              <th>NOTE</th>
               <th>STATUS</th>
               <th>ACTION</th>
             </tr>
@@ -251,7 +201,26 @@
 
           <tbody v-if="orders.length >= 1">
             <tr v-for="(order, index) in orders" :key="index">
-              <td class="td_user" v-if="user.role == 'C'">
+
+              <td  >{{ order.OrderID }}</td>
+              <td class="td_user" >
+                <div class="d-flex align-items-center">
+                  <img
+                    :src="order.CustomerProfilePicture"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">
+                      {{
+                        order.CustomerFirstName + " " + order.CustomerLastName
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <!-- <td class="td_user" v-if="user.role == 'A'">
                 <div class="d-flex align-items-center">
                   <img
                     :src="order.FreelancerProfilePicture"
@@ -269,82 +238,28 @@
                     </p>
                   </div>
                 </div>
-              </td>
-              <td class="td_user" v-if="user.role == 'F'">
-                <div class="d-flex align-items-center">
-                  <img
-                    :src="order.CustomerProfilePicture"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                    class="rounded-circle"
-                  />
-                  <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{
-                        order.CustomerFirstName + " " + order.CustomerLastName
-                      }}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td class="td_user" v-if="user.role == 'A'">
-                <div class="d-flex align-items-center">
-                  <img
-                    :src="order.CustomerProfilePicture"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                    class="rounded-circle"
-                  />
-                  <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{
-                        order.CustomerFirstName + " " + order.CustomerLastName
-                      }}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td class="td_user" v-if="user.role == 'A'">
-                <div class="d-flex align-items-center">
-                  <img
-                    :src="order.FreelancerProfilePicture"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                    class="rounded-circle"
-                  />
-                  <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{
-                        order.FreelancerFirstName +
-                        " " +
-                        order.FreelancerLastName
-                      }}
-                    </p>
-                  </div>
-                </div>
-              </td>
+              </td> -->
 
               <td class="td_gig">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    {{ order.Title }}
+                <div class=" align-items-center JobDescription">
+                  <p class="fw-normal mb-1 ">
+                    {{ order.JobDescription }}
                   </p>
                 </div>
               </td>
 
               <td class="td_dueon">
                 {{
-                  moment(order.Order_Date)
-                    .add(24 * (order.Delivery_Day + order.Extend_Day), "h")
+                  moment(order.EndAt)
+                    
                     .format("MMMM Do")
                 }}
               </td>
-              <td class="td_note">{{ order.Total_Amount }}</td>
 
               <td class="td_price">
                 ${{
-                  order.Price * order.Total_Amount +
-                  order.Price * order.Total_Amount * 0.1
+                  order.Price * order.TotalEstimation +
+                  order.Price * order.TotalEstimation * 0.1
                 }}
               </td>
               <td class="td_status">
@@ -379,11 +294,13 @@
 
               <td>
                 <i
+                v-if="currentAccountInfo.Role=='A'"
                   @click="
                     (isshowModal = !isshowModal),
                       (slectedOrderID = order.OrderID)
                   "
                   class="bi bi-gear-fill"
+                  style=" cursor: pointer;"
                 ></i>
                 <router-link
                   :to="{
@@ -401,341 +318,62 @@
           <h5>Order Not Found</h5>
         </div>
 
-        <div class="pagination">
-          <router-link
-            v-if="pagination.page - 1 == 0 && pagination.totalPage != 0"
-            class="page-number"
-            @click="selectedPage = pagination.page - 1"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: 1,
-                search: searchOrder,
-                user: user,
-                status: status,
-              },
-            }"
-            ><i class="bi bi-arrow-left"></i
-          ></router-link>
-          <router-link
-            v-if="pagination.page - 1 > 0"
-            class="page-number"
-            @click="selectedPage = pagination.page - 1"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: pagination.page - 1,
-                search: searchOrder,
-                user: user,
-                status: status,
-              },
-            }"
-            ><i class="bi bi-arrow-left"></i
-          ></router-link>
-          <router-link
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: index,
-                search: searchOrder,
-                user: user,
-                status: status,
-              },
-            }"
-            class="page-number"
-            @click="selectedPage = index"
-            v-for="index in pagination.totalPage"
-            :key="index"
-            href="#"
-            :class="{ active: index == pagination.page }"
-            ><span>{{ index }}</span>
-          </router-link>
+        <div class="pagination" v-if="orders.length > 0">
+            <router-link
+              v-if="pagination.page - 1 == 0"
+              class="page-number"
+              :disabled="true"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-left text-black-50"></i
+            ></router-link>
+            <router-link
+              v-if="pagination.page - 1 > 0"
+              class="page-number"
+              :disabled="true"
+              @click="getOrder( pagination.page - 1)"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-left"></i
+            ></router-link>
+            <router-link
+              :to="{
+                path: '#',
+              }"
+              class="page-number"
+              @click="getOrder( index)"
+              v-for="index in pagination.totalPage"
+              :key="index"
+              :disabled="true"
+              :class="{ active: index == pagination.page }"
+              ><span>{{ index }}</span>
+            </router-link>
 
-          <router-link
-            v-if="pagination.page + 1 <= pagination.totalPage"
-            class="page-number"
-            @click="selectedPage = pagination.page + 1"
-            :to="{
-              path: '/manageorder',
-              query: {
-                page: pagination.page + 1,
-                search: searchOrder,
-                user: user,
-                status: status,
-              },
-            }"
-            ><i class="bi bi-arrow-right"></i
-          ></router-link>
-        </div>
+            <router-link
+              v-if="pagination.page + 1 <= pagination.totalPage"
+              class="page-number"
+              :disabled="true"
+              @click="getOrder( pagination.page + 1)"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-right"></i
+            ></router-link>
+            <router-link
+              v-if="pagination.page == pagination.totalPage"
+              class="page-number"
+              :disabled="true"
+              :to="{
+                path: '#',
+              }"
+              ><i class="bi bi-arrow-right text-black-50"></i
+            ></router-link>
+          </div>
       </div>
 
-      <div
-        class="order_request_table"
-        :style="{ display: isOrderRequest ? 'block' : 'none' }"
-      >
-        <div
-          class="order_status row"
-          style="justify-content: end; margin: 0; border: none"
-        >
-          <div
-            class="col-md-2 status_item"
-            :class="{ status_item_active: this.requestTypeStatus == 'Extend' }"
-            @click="
-              (requestTypeStatus = 'Extend'),
-                getOrderRequest(user, requestTypeStatus, 1)
-            "
-          >
-            <h6>Extend Date</h6>
-          </div>
-          <div
-            class="col-md-2 status_item"
-            :class="{ status_item_active: this.requestTypeStatus == 'Cancel' }"
-            @click="
-              (requestTypeStatus = 'Cancel'),
-                getOrderRequest(user, requestTypeStatus, 1)
-            "
-          >
-            <h6>Cancel Order</h6>
-          </div>
-        </div>
-        <table class="table align-middle mb-0 bg-white">
-          <thead class="bg-light">
-            <tr style="border-bottom: 2px solid #dcd8d8">
-              <th><span>Order ID</span></th>
 
-              <th class="w-15"><span>CREATE BY</span></th>
-
-              <th class="text-start w-20">TITLE</th>
-              <th class="text-start w-25">NOTE</th>
-
-              <th>CREATE ON</th>
-              <th>STATUS</th>
-              <th v-if="user.role == 'C' && requestTypeStatus == 'Extend'">
-                ACTION
-              </th>
-              <th v-if="user.role == 'A' && requestTypeStatus == 'Cancel'">
-                ACTION
-              </th>
-            </tr>
-          </thead>
-          <tbody v-if="orderRequests.length >= 1">
-            <tr v-for="(orderRequest, index) in orderRequests" :key="index">
-              <td>
-                {{ orderRequest.OrderID }}
-              </td>
-              <td class="td_user">
-                <div class="d-flex align-items-center">
-                  <img
-                    :src="orderRequest.CreateByProfilePicture"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                    class="rounded-circle"
-                  />
-                  <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{
-                        orderRequest.CreateByFirstName +
-                        " " +
-                        orderRequest.CreateByLastName
-                      }}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td class="td_gig">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    <!-- I want cancel this order -->
-                    {{ orderRequest.Request_Title }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_gig">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    <!-- I want cancel this order because freelancer don't delivery on time
-                   -->
-                    {{ orderRequest.Request_Description }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_dueon">
-                {{ moment(orderRequest.Create_At).format("MMMM Do") }}
-              </td>
-
-              <td class="td_status">
-                <div v-if="orderRequest.Status == 'Pending'">
-                  <span
-                    class="status text-warning"
-                    style="
-                      font-size: 40px;
-                      margin: 2px 2px 0 0;
-                      display: inline-block;
-                      vertical-align: middle;
-                      line-height: 10px;
-                    "
-                    >•</span
-                  ><span>Pending</span>
-                </div>
-                <div v-if="orderRequest.Status == 'Accept'">
-                  <span
-                    class="status text-success"
-                    style="
-                      font-size: 40px;
-                      margin: 2px 2px 0 0;
-                      display: inline-block;
-                      vertical-align: middle;
-                      line-height: 10px;
-                    "
-                    >•</span
-                  ><span>Accept</span>
-                </div>
-
-                <div v-if="orderRequest.Status == 'Reject'">
-                  <span
-                    class="status text-secondary"
-                    style="
-                      font-size: 40px;
-                      margin: 2px 2px 0 0;
-                      display: inline-block;
-                      vertical-align: middle;
-                      line-height: 10px;
-                    "
-                    >•</span
-                  ><span>Reject</span>
-                </div>
-
-                <!-- <span class="badge rounded-pill bg-warning text-light">Pending</span> -->
-              </td>
-              <td
-                v-if="user.role == 'C' && orderRequest.Request_Type == 'Extend'"
-              >
-                <div v-if="orderRequest.Status == 'Pending'">
-                  <span
-                    class="badge rounded-pill bg-info text-light me-1"
-                    style="cursor: pointer"
-                    @click="
-                      (messageModal = 'accept'),
-                        (isshowConfirmRequestModal =
-                          !isshowConfirmRequestModal),
-                        (selectedRequest = orderRequest)
-                    "
-                    >Accept</span
-                  >
-
-                  <span
-                    class="badge rounded-pill text-info decline_button"
-                    style="cursor: pointer"
-                    @click="
-                      (messageModal = 'decline'),
-                        (isshowConfirmRequestModal = !isshowConfirmRequestModal)
-                    "
-                    >Decline</span
-                  >
-                </div>
-                <div v-else>
-                  <span
-                    class="badge rounded-pill bg-secondary"
-                    style="cursor: pointer"
-                    >None</span
-                  >
-                </div>
-              </td>
-
-              <td
-                v-if="user.role == 'A' && orderRequest.Request_Type == 'Cancel'"
-              >
-                <div v-if="orderRequest.Status == 'Pending'">
-                  <span
-                    class="badge rounded-pill bg-info text-light me-1"
-                    @click="
-                      (messageModal = 'accept'),
-                        (isshowConfirmRequestModal =
-                          !isshowConfirmRequestModal),
-                        (selectedRequest = orderRequest)
-                    "
-                    >Accept</span
-                  >
-
-                  <span
-                    class="badge rounded-pill text-info decline_button"
-                    @click="
-                      (messageModal = 'decline'),
-                        (isshowConfirmRequestModal = !isshowConfirmRequestModal)
-                    "
-                    >Decline</span
-                  >
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div v-if="orders.length == 0" class="text-center">
-          <h5>Order Not Found</h5>
-        </div>
-
-        <div class="pagination">
-          <router-link
-            v-if="pagination.page - 1 == 0"
-            class="page-number"
-            :disabled="true"
-            :to="{
-              path: '#'
-            }"
-            ><i class="bi bi-arrow-left text-black-50"></i
-          ></router-link>
-          <router-link
-            v-if="pagination.page - 1 > 0"
-            class="page-number"
-            :disabled="true"
-            @click="getOrderRequest(user, requestTypeStatus, (pagination.page - 1))"
-            :to="{
-              path: '#'
-            }"
-            ><i class="bi bi-arrow-left"></i
-          ></router-link>
-          <router-link
-            :to="{
-              path: '#'
-              
-            }"
-            class="page-number"
-            @click="getOrderRequest(user, requestTypeStatus, index)"
-            v-for="index in pagination.totalPage"
-            :key="index"
-            :disabled="true"
-            :class="{ active: index == pagination.page }"
-            ><span>{{ index }}</span>
-          </router-link>
-
-          <router-link
-            v-if="pagination.page + 1 <= pagination.totalPage"
-            class="page-number"
-            :disabled="true"
-            @click="getOrderRequest(user, requestTypeStatus, (pagination.page + 1))"
-            :to="{
-              path: '#'
-              
-            }"
-            ><i class="bi bi-arrow-right"></i
-          ></router-link>
-          <router-link
-            v-if="pagination.page == pagination.totalPage"
-            class="page-number"
-            :disabled="true"
-            :to="{
-              path: '#',
-              
-            }"
-            ><i
-              class="bi bi-arrow-right text-black-50"
-            ></i
-          ></router-link>
-        </div>
       </div>
     </div>
     <div>
@@ -802,80 +440,32 @@
         </div>
       </div>
     </div>
-    <div class="confirm_request">
-      <div
-        class="modal fade show"
-        style="display: block; background-color: #000000ad; padding-top: 10%"
-        v-if="isshowConfirmRequestModal"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div
-              class="modal-header text-end"
-              style="background-color: #33b5e5; color: white"
-            >
-              <h5 class="modal-title" style="text-align: center">
-                Are you sure?
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                @click="isshowConfirmRequestModal = !isshowConfirmRequestModal"
-                aria-label="Close"
-                style="color: white"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div>
-                  <p class="modal-title">
-                    Do you really want to {{ messageModal }} these request?
-                  </p>
-                  <p class="modal-title">This process cannot be undone.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="modal-footer justify-content-center">
-              <a
-                type="button"
-                class="btn btn-info waves-effect waves-light text-white"
-                @click="
-                  acceptRequest(selectedRequest),
-                    (isshowConfirmRequestModal = !isshowConfirmRequestModal)
-                "
-                >Save</a
-              >
-              <a
-                type="button"
-                class="btn btn-outline-info waves-effect"
-                @click="isshowConfirmRequestModal = !isshowConfirmRequestModal"
-                data-dismiss="modal"
-                >Cancel</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
   </div>
 </template>
   
   <script>
 import Header from "../components/Header.vue";
+import HeaderAdmin from "../components/HeaderAdmin.vue"
 import axios from "axios";
 var moment = require("moment");
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import HeaderSell from "../components/HeaderSeller.vue"
+import Sidebar from "../components/Sidebar.vue";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "CreateOrderDetailPage",
   components: {
     Header,
+    HeaderAdmin,
+    HeaderSell,
+    Sidebar
   },
   data() {
     return {
-      user: [],
+      currentAccountInfo: [],
       orders: [],
       pagination: [],
       moment: moment,
@@ -885,70 +475,43 @@ export default {
       isshowModal: false,
       selectedStatus: "Active",
       slectedOrderID: "",
-      isOrderRequest: false,
       isOrderList: true,
-      orderRequests: [],
-      requestTypeStatus: "Cancel",
-      isshowConfirmRequestModal: false,
       messageModal: "",
-      selectedRequest: {},
-      totalOrderRequest: 0,
     };
   },
   async created() {
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
-    const responseUserInfor = await axios.get("/users/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const userInfor = responseUserInfor.data.user;
-    this.user = userInfor;
-    console.log(this.user.userId);
-    const responseData = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        user: this.user,
-        status: this.status,
-      },
-    });
-    const orders = responseData.data.order;
-    this.orders = orders;
-    const paging = responseData.data.pagination;
-    this.pagination = paging;
-    console.log(this.pagination);
-    const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
-      params: {
-        user: this.user,
-        requestType: this.user.role == "C" ? "Extend" : "Cancel",
-        status: "Pending",
-      },
-    });
-    const totalNewRequest = responseOrderReqData.data.pagination;
-    this.totalOrderRequest = totalNewRequest.totalRow;
-  },
-  async beforeRouteUpdate() {
-    console.log("Run Here");
-    const responseDateWithPage = await axios.get("/orders/index", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchOrder,
-        user: this.user,
-        status: this.status,
-      },
-    });
+    await this.onUpdateAccountInfo();
+    console.log(
+      "🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:",
+      JSON.stringify(this.currentAccountInfo)
+    );
+    await this.getOrder( 1);
 
-    const orders = responseDateWithPage.data.order;
-    this.orders = orders;
-
-    const searchQuery = responseDateWithPage.data.searchQuery;
-    this.searchOrder = searchQuery.search;
-    const paging = responseDateWithPage.data.pagination;
-    this.pagination = paging;
-    console.log("this.selectedPage " + (this.pagination.page + 1));
   },
+ 
   methods: {
+    async getOrder(user, currentPage) {
+      const responseData = await axios
+        .get("/orders/index", {
+          params: {
+            page: currentPage,
+            user: this.currentAccountInfo ,
+            status: this.status,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          const orders = response.data.order;
+          this.orders = orders;
+          const paging = response.data.pagination;
+          this.pagination = paging;
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        });
+    },
     async changeOrderStatus(status, orderID) {
       const data = await axios.put("/orders/updateStatus", {
         status: status,
@@ -965,89 +528,50 @@ export default {
         toast.warn("Change Order Status Failed!", { autoClose: 2000 });
       }
     },
-
-    async getOrderRequest(user, requestType, currentPage) {
-      const responseData = await axios.get("/orders/getOrderRequest", {
-        params: {
-          page: currentPage,
-          user: this.user,
-          requestType: requestType,
-        },
-      });
-      const orderRequests = responseData.data.orderRequest;
-      this.orderRequests = orderRequests;
-      const paging = responseData.data.pagination;
-      this.pagination = paging;
-    },
-
-    async acceptRequest(selectedRequest) {
-      if (selectedRequest.Request_Type == "Cancel") {
-        alert("Cancel :" + selectedRequest.Request_Action);
-        const changeOrderStatusRes = await axios.put("/orders/updateStatus", {
-          status: selectedRequest.Request_Action,
-          orderID: selectedRequest.OrderID,
-        });
-        if (changeOrderStatusRes.data.message == "Change Status Success") {
-          const changeOrderRequestStatusRes = await axios.put(
-            "/orders/updateOrderRequestStatus",
-            {
-              status: "Accept",
-              orderRequestID: selectedRequest.OrderRequestID,
-            }
-          );
-
-          if (
-            changeOrderRequestStatusRes.data.message ==
-            "Change Order Request Status Success"
-          ) {
-            toast.success("Accept Request Status Successfully!", {
-              theme: "colored",
-              autoClose: 2000,
-              onClose: () => location.reload(),
-            });
-          } else {
-            toast.warn("Accept Request Status Faild!", { autoClose: 2000 });
-          }
-        } else {
-          toast.warn("Request Faild!", { autoClose: 2000 });
-        }
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/login");
       } else {
-        alert("Extend :" + selectedRequest.Request_Action);
-        const updateOrderExtendDayRes = await axios.put(
-          "/orders/updateOrderExtendDay",
-          {
-            extendDay: selectedRequest.Request_Action,
-            orderID: selectedRequest.OrderID,
-          }
-        );
-        if (
-          updateOrderExtendDayRes.data.message == "Update Extend Day Success"
-        ) {
-          const changeOrderRequestStatusRes = await axios.put(
-            "/orders/updateOrderRequestStatus",
-            {
-              status: "Accept",
-              orderRequestID: selectedRequest.OrderRequestID,
-            }
-          );
-
-          if (
-            changeOrderRequestStatusRes.data.message ==
-            "Change Order Request Status Success"
-          ) {
-            toast.success("Accept Request Status Successfully!", {
-              theme: "colored",
-              autoClose: 2000,
-              onClose: () => location.reload(),
-            });
-          } else {
-            toast.warn("Accept Request Status Faild!", { autoClose: 2000 });
-          }
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+        await  axios
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.freelancer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else if (decoded.role === "C") {
+          await  axios
+            .get("/customers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.customer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
         } else {
-          toast.warn("Request Faild!", { autoClose: 2000 });
+          this.currentAccountInfo = {Email: decoded.email, Role: decoded.role};
+
         }
       }
     },
+
+
   },
 };
 </script>
@@ -1151,5 +675,14 @@ export default {
 
 .order_request_table .decline_button {
   border: 1px solid #0dcaf0;
+}
+
+.JobDescription {
+  text-align: start;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
 }
 </style>
