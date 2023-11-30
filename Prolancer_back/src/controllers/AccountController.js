@@ -38,8 +38,19 @@ class AccountController {
         Account.createAccount(email, username, password, role, function (err, result) {
             if (err) {
                 res.send(err);
-            } else {
-                res.json(result);
+            }
+            if(result){
+                Account.getAccountByEmail(email, function(err, results){
+                    if (err) {
+                        return console.log(err)
+                    }
+                    // console.log(results[0])
+                    if (results[0]) {
+                        return res.status(200).json({
+                            account: results[0]
+                        })
+                    }
+                })
             }
         })
     }
@@ -225,42 +236,9 @@ class AccountController {
         return res.status(200).json({
             title: 'success',
             message: 'Sent verification code to mail',
-            link: verificationCode
+            code: verificationCode
         })
         // console.log(info)
-    }
-
-
-    getAccountInfo = function (req, res) {
-        let token = req.headers.token;
-        jwt.verify(token, 'secretkey', (err, decoded) => {
-            if (err) {
-                // res.redirect('/login')
-                return res.status(401).json({
-                    title: 'unauthorized'
-                })
-            }
-            const email = decoded.email
-            Account.getAccountByEmail(email, function (err, results) {
-                if (err) {
-                    return console.log(err)
-                }
-                return res.status(200).json({
-                    title: 'Account grabbed',
-                    //can add more fields
-                    account: {
-                        accountId: results[0].AccountID,
-                        email: results[0].Email,
-                        username: results[0].Username,
-                        password: results[0].Password,
-                        role: results[0].Role,
-                        fid: results[0].Status,
-                        id: results[0].AccountID
-                    }
-                })
-            })
-        })
-
     }
 
 

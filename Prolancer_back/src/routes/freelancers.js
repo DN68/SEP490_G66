@@ -11,5 +11,7 @@ router.get('/info',
 router.put('/info/:accountID/update', 
     freelancerController.updateFreelancerInfo
 );
-
+router.post('/create',
+    freelancerController.freelancerRegister
+);
 module.exports = router;

@@ -133,5 +133,24 @@ class FreelancerController {
             res.status(500).send("An error occurred");
         });
     };
+
+    freelancerRegister = function (req, res) {
+        const accountID = req.body.accountID;
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const profilePicture = req.body.profilePicture;
+        const location = req.body.location;
+        const description = req.body.description;
+        const phoneNo = req.body.phoneNo;
+
+        console.log(accountID)
+        Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, function (err, result) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.status(200).json(result);
+            }
+        })
+    }
 }
 module.exports = new FreelancerController;
