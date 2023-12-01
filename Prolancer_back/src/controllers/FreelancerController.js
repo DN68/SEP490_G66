@@ -148,12 +148,13 @@ class FreelancerController {
             if (err) {
                 res.send(err);
             }
+            console.log(result)
             if(result){
                 Freelancer.getFreelancerByAccountID(accountID, function(err, results){
                     if (err) {
                         return console.log(err)
                     }
-                    // console.log(results[0])
+                    console.log(results[0])
                     if (results[0]) {
                         return res.status(200).json({
                             freelancer: results[0]

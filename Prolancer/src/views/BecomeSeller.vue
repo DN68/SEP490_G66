@@ -627,7 +627,6 @@ export default {
                 lastName: this.lastName,
                 profilePicture:
                   "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
-                // location: this.location,
                 phoneNo: this.phoneNo,
                 location: this.location,
                 description: this.description,
@@ -636,9 +635,9 @@ export default {
                 (res) => {
                   this.message =
                     "Info added successfully. Returning to homepage";
-                  
-                  // console.log(res.data);
-                  this.freelancer = res.data.freelancer;
+                  console.log(res.data.freelancer.FreelancerID)
+                  this.freelancer = res.data.freelancer.FreelancerID;
+                  this.saveCV()
                 },
                 (err) => {
                   console.log(err.response);
@@ -649,6 +648,9 @@ export default {
             console.log(err.response);
           }
         );
+      
+    },
+    saveCV(){
       //Save CV pdf file
       const fileInput = this.$refs.fileCV;
       console.log(
@@ -660,29 +662,37 @@ export default {
         const formData = new FormData();
         formData.append("file", fileInput.files[0]);
         console.log(formData);
+        console.log(this.freelancer)
         axios
-          .post("/cv/createCV", formData)
+          .post("/cv/createCV", formData, {FreelancerID: this.freelancer})
           .then((response) => {
             // Handle the successful upload response
             console.log("File uploaded successfully", response);
             console.log(response);
             console.log(response.data);
+            console.log(this.freelancer)
             this.CV_Uploads = response.data;
 
-            // Create a URL for the Blob (for storing in DB)
-            const apiUrl = "/cv/" + this.CV_Uploads;
-            const resData = axios.get(apiUrl, { responseType: "arraybuffer" });
-            console.log(resData);
-            const blob = new Blob([resData.data], { type: "application/pdf" });
-            const blobUrl = URL.createObjectURL(blob);
-            this.blobUrl = blobUrl;
-            console.log(blobUrl);
+            //Add CV in DB
+            axios.post('/cv/saveCV', {
+              FreelancerID: this.freelancer,
+              Title: this.cvTitle,
+              Description: this.cvDescription,
+              CV_Upload: response.data
+            }).then(
+              res => {
+                console.log(res.data)
+              },
+              err => {
+                console.log(err.response)
+              }
+            )
 
             //message
             toast.success("Upload CV Successfully!", {
               theme: "colored",
               autoClose: 2000,
-              onClose: () => location.href("/sendmessage"),
+              // onClose: () => location.replace("/sendmessage"),
             });
           })
           .catch((error) => {
@@ -695,33 +705,35 @@ export default {
         console.warn("Please select a file to upload");
       }
     },
-    async openPdfPage() {
-      const apiUrl = "/cv/" + this.CV_Uploads;
-      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
-      console.log(resData);
-      const blob = new Blob([resData.data], { type: "application/pdf" });
 
-      // Create a URL for the Blob
-      const blobUrl = URL.createObjectURL(blob);
-      this.blobUrl = blobUrl;
-      console.log(this.blobUrl);
+    // async openPdfPage() {
+    //   const apiUrl = "/cv/" + this.CV_Uploads;
+    //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+    //   console.log(resData);
+    //   const blob = new Blob([resData.data], { type: "application/pdf" });
 
-      // Open a new window or tab and display the PDF
-      const pdfWindow = window.open();
-      pdfWindow.document.write(`
-      <html>
-      <head>
-      <title>CV Viewer</title>
-      </head>
-      <body>
-      <embed src="${this.blobUrl}" type="application/pdf" width="100%" height="100%">
-      </body>
-      </html>
-              `);
-      pdfWindow.onbeforeunload = function () {
-        URL.revokeObjectURL(this.blobUrl);
-      };
-    },
+    //   // Create a URL for the Blob
+    //   const blobUrl = URL.createObjectURL(blob);
+    //   this.blobUrl = blobUrl;
+    //   console.log(this.blobUrl);
+
+
+    //   // Open a new window or tab and display the PDF
+    //   const pdfWindow = window.open();
+    //   pdfWindow.document.write(`
+    //   <html>
+    //   <head>
+    //   <title>CV Viewer</title>
+    //   </head>
+    //   <body>
+    //   <embed src="${this.blobUrl}" type="application/pdf" width="100%" height="100%">
+    //   </body>
+    //   </html>
+    //           `);
+    //   pdfWindow.onbeforeunload = function () {
+    //     URL.revokeObjectURL(this.blobUrl);
+    //   };
+    // },
   },
   mounted() {
     axios.get("/categories/get").then((res) => {
