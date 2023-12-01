@@ -76,12 +76,12 @@ class FreelancerController {
         }
         console.log(search);
 
-        if (pageQuery.page != null) {
+        if (pageQuery.page != null && pageQuery.page > 0) {
             page = pageQuery.page;
         } else {
             page = 1;
         }
-        console.log(page);
+        console.log("page:" + page);
 
         const offset = (page - 1) * limit;
         console.log(offset);
@@ -147,8 +147,19 @@ class FreelancerController {
         Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, function (err, result) {
             if (err) {
                 res.send(err);
-            } else {
-                res.status(200).json(result);
+            }
+            if(result){
+                Freelancer.getFreelancerByAccountID(accountID, function(err, results){
+                    if (err) {
+                        return console.log(err)
+                    }
+                    // console.log(results[0])
+                    if (results[0]) {
+                        return res.status(200).json({
+                            freelancer: results[0]
+                        })
+                    }
+                })
             }
         })
     }

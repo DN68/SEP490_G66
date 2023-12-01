@@ -172,6 +172,18 @@
             </td>
           </tr>
           <tr>
+            <td class="line-info"><span>Profile Picture </span></td>
+            <td>
+              <input
+                style="width: 80%"
+                type="file"
+                ref="fileImage"
+                accept=".jpeg, .jpg, .png"
+              />
+              (.jpeg, .jpg, .png)
+            </td>
+          </tr>
+          <tr>
             <td class="line-info"><span>Description </span></td>
             <td>
               <textarea
@@ -307,7 +319,8 @@
               </div>
               <div class="modal-body">
                 <!-- <p>This is the content of the modal.</p> -->
-                Verification code: <input type="password" maxlength="6" v-model="inputCode" />
+                Verification code:
+                <input type="password" maxlength="6" v-model="inputCode" />
               </div>
               <div class="modal-footer">
                 <button
@@ -333,7 +346,7 @@
           </div>
         </div>
       </div>
-      <button @click="openPdfPage">See PDF</button>
+      <button v-if="isstep3" @click="openPdfPage">See PDF</button>
       <!-- <embed :src="blobUrl" type="application/pdf" width="100%" height="900px"> -->
     </div>
     <div class="footer">
@@ -392,6 +405,7 @@ export default {
       location: "",
       role: "F",
       mainCategory: -1,
+      freelancer: {},
       //email verification
       verificationCode: "",
       inputCode: "123456",
@@ -616,14 +630,15 @@ export default {
                 // location: this.location,
                 phoneNo: this.phoneNo,
                 location: this.location,
-                description: this.description
+                description: this.description,
               })
               .then(
                 (res) => {
                   this.message =
                     "Info added successfully. Returning to homepage";
-                  // this.$router.push("/");
-                  console.log(res.data);
+                  
+                  // console.log(res.data);
+                  this.freelancer = res.data.freelancer;
                 },
                 (err) => {
                   console.log(err.response);
@@ -652,10 +667,22 @@ export default {
             console.log("File uploaded successfully", response);
             console.log(response);
             console.log(response.data);
+            this.CV_Uploads = response.data;
+
+            // Create a URL for the Blob (for storing in DB)
+            const apiUrl = "/cv/" + this.CV_Uploads;
+            const resData = axios.get(apiUrl, { responseType: "arraybuffer" });
+            console.log(resData);
+            const blob = new Blob([resData.data], { type: "application/pdf" });
+            const blobUrl = URL.createObjectURL(blob);
+            this.blobUrl = blobUrl;
+            console.log(blobUrl);
+
+            //message
             toast.success("Upload CV Successfully!", {
               theme: "colored",
               autoClose: 2000,
-              onClose: () => location.reload(),
+              onClose: () => location.href("/sendmessage"),
             });
           })
           .catch((error) => {
@@ -677,7 +704,8 @@ export default {
       // Create a URL for the Blob
       const blobUrl = URL.createObjectURL(blob);
       this.blobUrl = blobUrl;
-      console.log(blobUrl);
+      console.log(this.blobUrl);
+
       // Open a new window or tab and display the PDF
       const pdfWindow = window.open();
       pdfWindow.document.write(`
@@ -686,18 +714,19 @@ export default {
       <title>CV Viewer</title>
       </head>
       <body>
-      <embed src="${blobUrl}" type="application/pdf" width="100%" height="100%">
+      <embed src="${this.blobUrl}" type="application/pdf" width="100%" height="100%">
       </body>
       </html>
               `);
       pdfWindow.onbeforeunload = function () {
-        URL.revokeObjectURL(blobUrl);
+        URL.revokeObjectURL(this.blobUrl);
       };
     },
   },
   mounted() {
     axios.get("/categories/get").then((res) => {
       this.categories = res.data;
+      // console.log(this.categories)
     }),
       (this.modal = new bootstrap.Modal(this.$refs.myModal));
   },

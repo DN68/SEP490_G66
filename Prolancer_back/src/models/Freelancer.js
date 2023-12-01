@@ -79,4 +79,16 @@ Freelancer.createFreelancer = function (accountID, firstName, lastName, profileP
       })
 }
 
+Freelancer.getFreelancerByAccountID = function (accountId, results) {
+  connectDb.query("SELECT * FROM Freelancer WHERE AccountID = ?",
+      [accountId], function (err, res) {
+          if (err) {
+              results(null, err);
+          }
+          else {
+              results(null, res);
+          }
+      })
+}
+
 module.exports = Freelancer;

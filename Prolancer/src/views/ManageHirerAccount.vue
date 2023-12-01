@@ -230,10 +230,10 @@
                     Active</span
                   >
                   <span
-                    v-if="customer.Status == 'Blocked'"
+                    v-if="customer.Status == 'Pending'"
                     class="badge rounded-pill bg-info d-inline"
                   >
-                    Blocked</span
+                    Pending</span
                   >
                   <span
                     v-if="customer.Status == 'Blocked'"
