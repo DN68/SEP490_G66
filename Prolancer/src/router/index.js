@@ -207,13 +207,21 @@ const routes = [
   }
   ,
   {
-    path: '/manageaccount',
-    name: 'manageaccount',
+    path: '/manageaccount/hirer',
+    name: 'managehirer',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/ManageAccount.vue')
-
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageHirerAccount.vue')
+  }
+  ,
+  {
+    path: '/manageaccount/freelancer',
+    name: 'managefreelancer',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageFreelancerAccount.vue')
   }
   ,
   {
@@ -278,8 +286,8 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/ManageSkillScoreView.vue')
-
-  },{
+  },
+  {
     path: '/redirect',
     name: 'redirect',
     // route level code-splitting
@@ -295,7 +303,6 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/SendMessageView.vue')
-
 
   },
   {
@@ -333,6 +340,15 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/chartgigsuccess.vue')
 
   },
+  {
+    path: '/vieworderrequestdetail/:id',
+    name: 'vieworderrequestdetail',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/OrderRequestDetailView.vue')
+
+  }
 ]
 
 const router = createRouter({

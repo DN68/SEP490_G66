@@ -36,32 +36,17 @@
             ><i class="bi bi-stack me-3"></i>
             <span>Interview Management</span>
           </router-link>
-          <div class="item-1">
-            <router-link
-              to="/manageaccount"
-              v-on:click="ChangeActive"
-              class="list-group-item list-group-item-action py-2 ripple sub-btn"
-              id="btn-gig"
-              style="border-right: unset; border-left: unset"
-              ><i class="bi bi-stack me-3"></i>
-              <span>Users Management</span>
-            </router-link>
-            
-            <div class="sub-menu">
-              <a
-                href="#"
-                class="list-group-item list-group-item-action py-2 ripple unset-border sub-item"
-                id="btn-gig"
-                ><i class="fa-solid fa-user"></i> Freelancer Account Management</a
-              >
-              <a
-                href="#"
-                class="list-group-item list-group-item-action py-2 ripple unset-border sub-item"
-                id="btn-gig"
-                ><i class="fa-solid fa-user-tie"></i> Hirer Account Management</a
-              >
-            </div>
-          </div>
+          <router-link to="/manageaccount/hirer" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Hirer Management</span>
+          </router-link>
+          <router-link to="/manageaccount/freelancer" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Freelancer Management</span>
+          </router-link>
+          
           <a
             href="/logout"
             class="list-group-item list-group-item-action py-2 ripple"

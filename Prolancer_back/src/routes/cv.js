@@ -1,16 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const CvController = require('../controllers/CvController');
+const bodyParser = require('body-parser');
 
-router.get('/:cvName', 
-CvController.getCV
+router.use(bodyParser.json());
 
+router.get('/:cvName',
+        CvController.getCV
 );
-
 
 router.post('/createCV',
         CvController.createCV
+);
 
+router.post('/updateCV',
+        CvController.updateCV
+);
+
+router.post('/saveCV',
+        CvController.saveCV
 );
 
 

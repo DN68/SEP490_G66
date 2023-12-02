@@ -12,6 +12,7 @@
         <br />
         <div class="info-user">
           <h5 class="">{{ freelancer.First_Name + " " + freelancer.Last_Name }}</h5>
+          <h7>Freelancer</h7>
         </div>
       </nav>
       <div class="inbox-content nonetextalign">
@@ -184,10 +185,18 @@ html {
   width: 20%;
   margin: 20px;
 }
-h5 {
+
+.info-user {
+  margin-top: 45px ;
+  margin-left: 55px;
+  /* padding-left: 25px;
+  border-left: 1px #ccc solid; */
+
+.info-user h5 {
   margin: 45px 55px;
   padding-left: 25px;
   border-left: 1px #ccc solid;
+
 }
 .nonetextalign {
   text-align: start;

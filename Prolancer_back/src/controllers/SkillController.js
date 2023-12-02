@@ -16,12 +16,13 @@ class SkillController {
         console.log(childSkills);
         var ParentSkillID =childSkills[0].ParentSkillID; 
         var queryBy ='';
+        var user = pageQuery.user;
         for ( let cs of childSkills) {
             queryBy += " , MAX(CASE WHEN s.Skill_Name = '"+cs.Skill_Name+ "' THEN f.Score END) AS '" +cs.Skill_Name+"'";
         } 
         console.log(queryBy);
                  
-        Skill.getAllFreelancerWithSkillScore(queryBy,ParentSkillID,function (err, skills) {
+        Skill.getAllFreelancerWithSkillScore(queryBy,ParentSkillID,user,function (err, skills) {
             if (err) { res.send(err); }
             else {
                 res.json(skills);

@@ -167,7 +167,20 @@ class OrderRequestController {
             
             return res.send(result);
           }
+        });
+        }
     
+      getOrderRequestById = function (req, res) {
+        var id = req.params.id;
+    
+    
+        OrderRequest.getOrderRequestById(id, function (err, orderRequest) {
+          if (err)
+            res.status(500).send(err);
+          else {
+            res.send(orderRequest.length > 0 ? orderRequest : 'Order request not exist');
+    
+          }
         });
     
       };
