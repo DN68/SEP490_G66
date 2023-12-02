@@ -12,7 +12,7 @@
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
             <!-- Content -->
             <h6 class="fw-bold mb-4">
-              <i class="fas fa-gem me-3 text-secondary"></i>Company name
+              <i class="fas fa-gem me-3 text-secondary"></i>Prolancer
             </h6>
             <p>
               Here you can find the best service.
@@ -26,16 +26,16 @@
             <!-- Links -->
             <h6 class="fw-bold mb-4">Category</h6>
             <p>
-              <a href="#!" class="text-reset">Angular</a>
+              <a href="#!" class="text-reset">Programming & Tech</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">React</a>
+              <a href="#!" class="text-reset">Graphics & Design</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">Vue</a>
+              <a href="#!" class="text-reset">Digital Marketing</a>
             </p>
             <p>
-              <a href="#!" class="text-reset">Javascript</a>
+              <a href="#!" class="text-reset">Writing & Translation</a>
             </p>
           </div>
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">

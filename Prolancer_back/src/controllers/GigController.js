@@ -11,24 +11,76 @@ class GigController {
     var status = pageQuery.status;
     var search;
     var filterByCategory = '';
-    var filterByDeliveryDay = '';
-    var filterByPrice = '';
+    var filterByPriceRange = '';
+    var filterByLanguage='';
+    var filterByDatabase='';
+    var sqlFilterByLanguage='';
+    var sqlFilterByDatabase='';
+    var sqlFilterByPrice='';
+    var sqlFilterByTitle='';
+    if (pageQuery.filterByLanguage != '' && pageQuery.filterByLanguage != null&&pageQuery.filterByLanguage != undefined) {
+      filterByLanguage = pageQuery.filterByLanguage;
+      // for ( let language of filterByLanguage) {
+      //   sqlFilterByLanguage += " Title LIKE '%'"+ language +"'%' OR";
+      // } 
+      for (const [index, language] of filterByLanguage.entries()) {
+        sqlFilterByLanguage += " Title LIKE '%" + language + "%'";
+        
+        // Check if it's not the last element
+        if (index < filterByLanguage.length - 1) {
+          sqlFilterByLanguage += ' OR';
+        }
+      }
+      // console.log('filterByLanguage');
+      // console.log(sqlFilterByLanguage);
+    }
 
+    if (pageQuery.filterByDatabase != '' && pageQuery.filterByDatabase != null&&pageQuery.filterByDatabase != undefined) {
+      filterByDatabase = pageQuery.filterByDatabase;
 
-    if (pageQuery.filterBy1 != '' && pageQuery.filterBy1 != null&&pageQuery.filterBy1 != undefined) {
-      filterByCategory = pageQuery.filterBy1;
-      console.log('filterByCategory');
+      for (const [index, database] of filterByDatabase.entries()) {
+        // Check if it's not the last element
+        if(sqlFilterByLanguage!=''){
+          
+          sqlFilterByDatabase += "  OR Title LIKE '%" + database + "%'";
+        }else{
+          
+          sqlFilterByDatabase += " Title LIKE '%" + database + "%'";
+          if (index < filterByDatabase.length - 1) {
+            sqlFilterByDatabase += ' OR';
+          }
+        }
+        
+        
+        
+      }
+      // console.log('filterByDatabase');
+      // console.log(sqlFilterByDatabase);
 
     }
-    if (pageQuery.filterBy2 != '' && pageQuery.filterBy2 != null && pageQuery.filterBy2 != 'Anytime' && pageQuery.filterBy2 != undefined) {
-      filterByDeliveryDay = pageQuery.filterBy2;
-      console.log('filterByDeliveryDay');
 
+    if(sqlFilterByLanguage!=''||sqlFilterByDatabase!=''){
+      sqlFilterByTitle= " AND (" + sqlFilterByLanguage + sqlFilterByDatabase +")";
     }
-    if (pageQuery.filterBy3 != '' && pageQuery.filterBy3 != null && pageQuery.filterBy3 != undefined) {
-      filterByPrice = pageQuery.filterBy3;
+    console.log('sqlFilterByTitle');
+    console.log(sqlFilterByTitle);
+    if (pageQuery.filterByPriceRange != '' && pageQuery.filterByPriceRange != null&&pageQuery.filterByPriceRange != undefined) {
+      filterByPriceRange = pageQuery.filterByPriceRange;
+      if(filterByPriceRange=='Under 5$'){
+        sqlFilterByPrice= "AND Price < 5 ";
+      }else if(filterByPriceRange=='5$ to 10$'){
+        sqlFilterByPrice= "AND Price >= 5 AND Price < 10 ";
+      }else{
+        sqlFilterByPrice= "AND Price > 10";
+      }
       console.log('filterByPrice');
-
+      console.log(sqlFilterByPrice);
+    }
+    if (pageQuery.filterByCategory != '' && pageQuery.filterByCategory != null&&pageQuery.filterByCategory != undefined) {
+      filterByCategory = pageQuery.filterByCategory;
+      
+      console.log('filterByCategory');
+      console.log(filterByCategory);
     }
 
     if (pageQuery.search != null) {
@@ -55,7 +107,7 @@ class GigController {
 
     // Create a Promise to handle the asynchronous operation
     const fetchData = new Promise((resolve, reject) => {
-      Gig.getGigWithFilterAndPagingAndSearching(status, filterByCategory, filterByDeliveryDay, filterByPrice, search, limit, offset, function (err, gigData) {
+      Gig.getGigWithFilterAndPagingAndSearching(status, filterByCategory, sqlFilterByTitle, sqlFilterByPrice, search, limit, offset, function (err, gigData) {
         if (err) {
 
           reject(err);
@@ -89,9 +141,10 @@ class GigController {
         }, searchQuery: {
           search: search,
           status: status,
-          filterBy1: filterByCategory,
-          filterBy2: filterByDeliveryDay,
-          filterBy3: filterByPrice
+          filterByCategory: filterByCategory,
+          filterByLanguage: filterByLanguage,
+          filterByDatabase: filterByDatabase,
+          filterByPriceRange: filterByPriceRange,
         }
       });
     }, (err) => {

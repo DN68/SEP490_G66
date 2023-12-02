@@ -2,7 +2,7 @@
   <div >
     <Header v-if="currentAccountInfo.Role == 'C'"></Header>
     <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
-    <header-admin v-else></header-admin>
+    <HeaderAdmin v-else></HeaderAdmin>
     <div :class="{'row' : currentAccountInfo.Role == 'A'}">
       <div v-if="currentAccountInfo.Role == 'A'" class="col-md-2" >
       <Sidebar ></Sidebar>
@@ -187,10 +187,12 @@
               <th >
                 ID
               </th>
-              <th class="th_user">
-                ORDER FROM
+              <th class="th_user" v-if="currentAccountInfo.Role == 'F'||currentAccountInfo.Role == 'A'">
+                HIRER
               </th>
-
+              <th class="th_user" v-if="currentAccountInfo.Role == 'C'||currentAccountInfo.Role == 'A'">
+                FREELANCER
+              </th>
               <th class="th_gig">JOB DESCRIPTION</th>
               <th>DUE ON</th>
               <th>TOTAL</th>
@@ -203,7 +205,7 @@
             <tr v-for="(order, index) in orders" :key="index">
 
               <td  >{{ order.OrderID }}</td>
-              <td class="td_user" >
+              <td class="td_user" v-if="currentAccountInfo.Role == 'F'||currentAccountInfo.Role == 'A'" >
                 <div class="d-flex align-items-center">
                   <img
                     :src="order.CustomerProfilePicture"
@@ -220,7 +222,7 @@
                   </div>
                 </div>
               </td>
-              <!-- <td class="td_user" v-if="user.role == 'A'">
+              <td class="td_user" v-if="currentAccountInfo.Role == 'C'||currentAccountInfo.Role == 'A'" >
                 <div class="d-flex align-items-center">
                   <img
                     :src="order.FreelancerProfilePicture"
@@ -231,15 +233,13 @@
                   <div class="ms-3">
                     <p class="fw-bold mb-1">
                       {{
-                        order.FreelancerFirstName +
-                        " " +
-                        order.FreelancerLastName
+                        order.FreelancerFirstName + " " + order.FreelancerLastName
                       }}
                     </p>
                   </div>
                 </div>
-              </td> -->
-
+              </td>
+             
               <td class="td_gig">
                 <div class=" align-items-center JobDescription">
                   <p class="fw-normal mb-1 ">

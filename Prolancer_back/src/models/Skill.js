@@ -22,9 +22,9 @@ Skill.getAllMajorSkill = function (result) {
     });
 };
 
-Skill.getAllFreelancerWithSkillScore  = function (queryBy,ParentSkillID,result) {
-
-    var sql = "SELECT f.FreelancerID, fr.First_Name, fr.Last_Name, fr.Profile_Picture " +
+Skill.getAllFreelancerWithSkillScore  = function (queryBy,ParentSkillID,user,result) {
+    var sql='';
+    var sqlForAdmin = "SELECT f.FreelancerID, fr.First_Name, fr.Last_Name, fr.Profile_Picture " +
     queryBy +
     " FROM FreelancerSkill f " +
     "INNER JOIN Skill s ON f.SkillID = s.SkillID " +
@@ -32,6 +32,20 @@ Skill.getAllFreelancerWithSkillScore  = function (queryBy,ParentSkillID,result) 
     "WHERE s.ParentSkillID = "+ParentSkillID +
     " GROUP BY f.FreelancerID";
 
+    var sqlForFreelancer = "SELECT f.FreelancerID, fr.First_Name, fr.Last_Name, fr.Profile_Picture " +
+    queryBy +
+    " FROM FreelancerSkill f " +
+    "INNER JOIN Skill s ON f.SkillID = s.SkillID " +
+    "INNER JOIN Freelancer fr ON f.FreelancerID = fr.FreelancerID " +
+    "WHERE s.ParentSkillID = "+ParentSkillID +
+    " AND f.FreelancerID = "+user.FreelancerID+
+    " GROUP BY f.FreelancerID";
+
+    if(user.Role=='A'){
+        sql=sqlForAdmin;
+    }else{
+        sql=sqlForFreelancer;
+    }
     
     connectDb.query(sql, function (err, res) {
         if (err) {
@@ -76,4 +90,5 @@ Skill.updateManySkillScore  = function (updateQuery,result) {
         }
     });
 };
+
 module.exports = Skill;

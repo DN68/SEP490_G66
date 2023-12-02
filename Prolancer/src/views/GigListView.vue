@@ -4,7 +4,7 @@
     style="height: auto; max-width: -webkit-fill-available"
   >
     <header class="row">
-      <Header :searchText="search"></Header>
+      <Header :searchText="searchQuery"></Header>
     </header>
     <NavCategory></NavCategory>
     <div class="container">
@@ -45,7 +45,7 @@
                     >Programming & Tech</a
                   >
                 </div>
-                <div class="col-md-1 col-sm-1 page_title_item">
+                <!-- <div class="col-md-1 col-sm-1 page_title_item">
                   <p class="">/</p>
                 </div>
 
@@ -56,7 +56,7 @@
                     href="/categories/programming-tech?source=gig_category_link"
                     >Website development</a
                   >
-                </div>
+                </div> -->
               </div>
               <div class="type_title"><h1>Web Application</h1></div>
             </div>
@@ -66,221 +66,158 @@
           <div class="col-md-6 row list_filter">
             <div
               class="col-sm-2 guildeFilterIteam"
-              @click="isshowListProgram = !isshowListProgram"
               v-click-outside="() => onClickOutside(1)"
             >
-              <p class="textDefault">Programming language</p>
-              <i class="bi bi-chevron-down"></i>
+              <div
+                @click="isshowListProgram = !isshowListProgram"
+                style="display: flex; align-items: center"
+              >
+                <p class="textDefault">Service options</p>
+                <i class="bi bi-chevron-down"></i>
+              </div>
               <ul
                 class="dropdown-menu program_dropdown"
                 :style="{ display: isshowListProgram ? 'block' : 'none' }"
               >
-                <li v-for="category in categories" :key="category.CategoryID">
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy1 = category.CategoryID,selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: '1',
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: category.CategoryID,
-                        filterBy2: this.filterBy2,
-                        filterBy3: this.filterBy3,
-                        status: status
-                      },
-                    }"
+                <li class="ms-2 row">
+                  <h5>Programming language</h5>
+                  <div
+                    class="col-md-6"
+                    v-for="(language, index) in allLanguages"
+                    :key="index"
                   >
-                    {{ category.Category_Name }}</router-link
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        v-model="selectedLanguages"
+                        :value="language.value"
+                        :id="language.value"
+                        :name="language.value"
+                      />
+                      <label class="form-check-label" :for="language.value">
+                        {{ language.label }}
+                      </label>
+                    </div>
+                  </div>
+                </li>
+
+                <li class="ms-2 row">
+                  <hr style="height: 0; width: 330px" />
+                  <h5>Databases</h5>
+                  <div
+                    class="col-md-6"
+                    v-for="(database, index) in allDatabases"
+                    :key="index"
                   >
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        v-model="selectedDatabases"
+                        :value="database.value"
+                        :id="database.value"
+                        :name="database.value"
+                      />
+                      <label class="form-check-label" :for="database.value">
+                        {{ database.label }}
+                      </label>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="bottom_nav" style="border-top: 1px solid #dcd8d8">
+                    <div class="row" style="justify-content: space-around">
+                      <button
+                        class="clear-all col-sm-3"
+                        @click="clearSelectedLanguageAndDatabase()"
+                      >
+                        Clear All
+                      </button>
+
+                      <button
+                        class="apply my-2 col-sm-3"
+                        @click="
+                          getGigWithFilterAndSearch(1),
+                            (isshowListProgram = false)
+                        "
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
+
             <div
               class="col-sm-2 guildeFilterIteam"
-              @click="isshowListFreelancer = !isshowListFreelancer"
-              v-click-outside="() => onClickOutside(2)"
-            >
-              <p class="textDefault">Estimation Time</p>
-              <i class="bi bi-chevron-down"></i>
-              <ul
-                class="dropdown-menu freelancer_dropdown"
-                :style="{ display: isshowListFreelancer ? 'block' : '' }"
-              >
-                <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy2 = '1',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: '1',
-                        filterBy3: filterBy3,
-                        status: status
-                      },
-                    }"
-                  >
-                    1 day</router-link
-                  >
-                  <!-- <a class="dropdown-item" href="#">1 day</a> -->
-                </li>
-                <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy2 = '3',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: '3',
-                        filterBy3: filterBy3,
-                        status: status
-                      },
-                    }"
-                  >
-                    Up to 3 days</router-link
-                  >
-                </li>
-                <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy2 = '7',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: '7',
-                        filterBy3: filterBy3,
-                        status: status
-                      },
-                    }"
-                  >
-                    Up to 7 days</router-link
-                  >
-                </li>
-                <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy2 = 'Anytime',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: 'Anytime',
-                        filterBy3: filterBy3,
-                        status: status
-                      },
-                    }"
-                  >
-                    Anytime</router-link
-                  >
-                </li>
-              </ul>
-            </div>
-            <div
-              class="col-sm-2 guildeFilterIteam"
-              @click="isshowListBuget = !isshowListBuget"
               v-click-outside="() => onClickOutside(3)"
             >
-              <p class="textDefault">Buget</p>
-              <i class="bi bi-chevron-down"></i>
+              <div
+                @click="isshowListBuget = !isshowListBuget"
+                style="display: flex; align-items: center"
+              >
+                <p class="textDefault">Rate</p>
+                <i class="bi bi-chevron-down"></i>
+              </div>
               <ul
                 class="dropdown-menu buget_dropdown"
                 :style="{ display: isshowListBuget ? 'block' : '' }"
               >
                 <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy3 = '10',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: filterBy2,
-                        filterBy3: '10',
-                        status: status
-                      },
-                    }"
-                  >
-                    Up to 10$</router-link
-                  >
+                  <input
+                    type="radio"
+                    class="ms-2 my-2"
+                    v-model="selectedPriceRange"
+                    :value="'Under 5$'"
+                    name="radioGroupName1"
+                    id="radioUnder5"
+                  /><label for="radioUnder5"><span class="ms-1">Under 5$</span></label>
                 </li>
                 <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy3 = '50',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: filterBy2,
-                        filterBy3: '50',
-                        status: status
-                      },
-                    }"
-                  >
-                    Up to 50$</router-link
-                  >
+                  <input
+                    type="radio"
+                    class="ms-2 my-2"
+                    v-model="selectedPriceRange"
+                    :value="'5$ to 10$'"
+                    name="radioGroupName2"
+                    id="radioUnder5to10"
+                  /><label for="radioUnder5to10"><span class="ms-1">From 5$-10$</span></label>
                 </li>
                 <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy3 = '100',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: filterBy2,
-                        filterBy3: '100',
-                        status: status
-                      },
-                    }"
-                  >
-                    Up to 100$</router-link
-                  >
+                  <input
+                    type="radio"
+                    class="ms-2 my-2"
+                    v-model="selectedPriceRange"
+                    :value="'Above 10$'"
+                    name="radioGroupName3"
+                    id="radioAbove10"
+                  /><label for="radioAbove10"><span class="ms-1">Above 10$</span></label>
                 </li>
+
                 <li>
-                  <router-link
-                    class="dropdown-item"
-                    @click="filterBy3 = '1000',selectedPage='1'"
-                    :to="{
-                      path: '/giglist',
-                      query: {
-                        page: selectedPage,
-                        search: this.$route.query.search,
-                        sort: sortBy,
-                        filterBy1: filterBy1,
-                        filterBy2: filterBy2,
-                        filterBy3: '1000',
-                        status: status
-                      },
-                    }"
-                  >
-                    Up to 1000$</router-link
-                  >
+                  <div class="bottom_nav" style="border-top: 1px solid #dcd8d8">
+                    <div class="row" style="justify-content: space-around">
+                      <button
+                        class="clear-all col-sm-3"
+                        @click="clearSelectedPrice()"
+                      >
+                        Clear All
+                      </button>
+
+                      <button
+                        class="apply my-2 col-sm-3"
+                        @click="
+                          getGigWithFilterAndSearch(1),
+                            (isshowListBuget = false)
+                        "
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -302,27 +239,17 @@
               class="dropdown-menu filter_dropdown"
               :style="{ display: isshowlistfilter ? 'block' : '' }"
             >
-              
               <li>
                 <router-link
                   class="dropdown-item"
                   @click="
-                    (isshowlistfilter = !isshowlistfilter), (sortBy = 'Best Seller')
+                    (isshowlistfilter = !isshowlistfilter), (sortBy = 'Rating')
                   "
                   :to="{
                     path: '/giglist',
-                    query: {
-                      page: this.$route.query.page,
-                      search: this.$route.query.search,
-                      sort: 'BestSeller',
-                      filterBy1: filterBy1,
-                      filterBy2: filterBy2,
-                      filterBy3: filterBy3,
-                      status: status
-                    },
                   }"
                 >
-                Best Seller</router-link
+                  Rating</router-link
                 >
               </li>
               <li>
@@ -333,74 +260,94 @@
                   "
                   :to="{
                     path: '/giglist',
-                    query: {
-                      page: this.$route.query.page,
-                      search: this.$route.query.search,
-                      sort: 'Price',
-                      filterBy1: filterBy1,
-                      filterBy2: filterBy2,
-                      filterBy3: filterBy3,
-                      status: status
-                    },
                   }"
                 >
                   Price</router-link
                 >
-
               </li>
             </ul>
           </div>
         </div>
+        <div class="filter_list">
+          <span
+            class="badge rounded-pill d-inline text-dark ms-2"
+            style="background-color: #efeff0; font-size: 16px; float: left"
+            v-for="(selectedlanguage, index) in selectedLanguages"
+            :key="index"
+            >{{ selectedlanguage }}</span
+          >
+
+          <span
+            class="badge rounded-pill d-inline text-dark ms-2"
+            style="background-color: #efeff0; font-size: 16px; float: left"
+            v-for="(selecteddatabase, index) in selectedDatabases"
+            :key="index"
+            >{{ selecteddatabase }}</span
+          >
+
+          <span
+            v-if="selectedPriceRange"
+            class="badge rounded-pill d-inline text-dark ms-2"
+            style="background-color: #efeff0; font-size: 16px; float: left"
+            >{{ selectedPriceRange }}</span
+          >
+        </div>
         <div class="gig_content">
           <GigList :listGigs="sortFilter"></GigList>
-
         </div>
       </div>
 
-      <div class="pagination">
+      <div class="pagination" v-if="gigs.length > 0">
+        <router-link
+          v-if="pagination.page - 1 == 0"
+          class="page-number"
+          :disabled="true"
+          :to="{
+            path: '#',
+          }"
+          ><i class="bi bi-arrow-left text-black-50"></i
+        ></router-link>
         <router-link
           v-if="pagination.page - 1 > 0"
           class="page-number"
-          @click="selectedPage = (pagination.page - 1)"
+          :disabled="true"
+          @click="getGigWithFilterAndSearch(pagination.page - 1)"
           :to="{
-          path:'/giglist',query: {
-                      page: (pagination.page - 1),
-                      search: this.$route.query.search,
-                      sort: sortBy,
-                      filterBy1: filterBy1,
-                      filterBy2: filterBy2,
-                      filterBy3: filterBy3,
-                      status: status
-                    }}"
+            path: '#',
+          }"
           ><i class="bi bi-arrow-left"></i
         ></router-link>
-        <router-link :to="{
-          path:'/giglist',query: {
-                      page: index,
-                      search: this.$route.query.search,
-                      sort: sortBy,
-                      filterBy1: filterBy1,
-                      filterBy2: filterBy2,
-                      filterBy3: filterBy3,
-                      status: status
-                    }}"
-          class="page-number" @click="selectedPage = index" v-for="index in pagination.totalPage" :key="index" href="#"  :class="{active: index==pagination.page}"><span>{{ index }}</span> </router-link>
+        <router-link
+          :to="{
+            path: '#',
+          }"
+          class="page-number"
+          @click="getGigWithFilterAndSearch(index)"
+          v-for="index in pagination.totalPage"
+          :key="index"
+          :disabled="true"
+          :class="{ active: index == pagination.page }"
+          ><span>{{ index }}</span>
+        </router-link>
 
         <router-link
           v-if="pagination.page + 1 <= pagination.totalPage"
           class="page-number"
-          @click="selectedPage = (pagination.page + 1)"
+          :disabled="true"
+          @click="getGigWithFilterAndSearch(pagination.page + 1)"
           :to="{
-          path:'/giglist',query: {
-                      page: (pagination.page + 1),
-                      search: this.$route.query.search,
-                      sort: sortBy,
-                      filterBy1: filterBy1,
-                      filterBy2: filterBy2,
-                      filterBy3: filterBy3,
-                      status: status
-                    }}"
+            path: '#',
+          }"
           ><i class="bi bi-arrow-right"></i
+        ></router-link>
+        <router-link
+          v-if="pagination.page == pagination.totalPage"
+          class="page-number"
+          :disabled="true"
+          :to="{
+            path: '#',
+          }"
+          ><i class="bi bi-arrow-right text-black-50"></i
         ></router-link>
       </div>
     </div>
@@ -442,13 +389,28 @@ export default {
       gigs: [],
       pagination: [],
       search: "",
-      sortBy: "Best Seller",
+      sortBy: "None",
       filterBy1: "",
       filterBy2: "",
       filterBy3: "",
       searchQuery: [],
       selectedPage: "1",
-      status: "Active"
+      status: "Active",
+      selectedPriceRange: "",
+      allLanguages: [
+        { label: "Java", value: "java" },
+        { label: "PHP", value: "php" },
+        { label: ".NET", value: ".net" },
+        { label: "Javascript", value: "javascript" },
+      ],
+      selectedLanguages: [],
+      allDatabases: [
+        { label: "MS SQL", value: "MS SQL" },
+        { label: "MySQL", value: "MySQL" },
+        { label: "Oracle", value: "Oracle" },
+        { label: "Postgre", value: "Postgre" },
+      ],
+      selectedDatabases: [],
     };
   },
   methods: {
@@ -462,87 +424,64 @@ export default {
       } else if (type == 4) {
         this.isshowlistfilter = false;
       }
-    }, 
+    },
 
-    
+    async getGigWithFilterAndSearch(currentPage) {
+      var searchFilterQuery = this.$route.query;
+      console.log("Filter By Progaming L " + this.selectedLanguages);
+      console.log("Filter By Database " + this.selectedDatabases);
+      this.sortBy = "None";
+      const responseWithFilter = await axios
+        .get("/gigs/index", {
+          params: {
+            page: currentPage,
+            search: searchFilterQuery.search,
+            status: this.status,
+            filterByCategory: 1,
+            filterByPriceRange: this.selectedPriceRange,
+            filterByLanguage: this.selectedLanguages,
+            filterByDatabase: this.selectedDatabases,
+          },
+        })
+        .then((response) => {
+          const gigsFilter = response.data.gig;
+          this.gigs = gigsFilter;
 
+          const searchQuery = response.data.searchQuery;
+          this.searchQuery = searchQuery.search;
+          console.log(
+            "🚀 ~ file: GigListView.vue:464 ~ getGigWithFilterAndSearch ~ this.searchQuery:",
+            this.searchQuery
+          );
+
+          const paging = response.data.pagination;
+          this.pagination = paging;
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+        });
+    },
+
+    clearSelectedLanguageAndDatabase() {
+      this.selectedLanguages = [];
+      this.selectedDatabases = [];
+    },
+    clearSelectedPrice() {
+      this.selectedPriceRange = "";
+    },
   },
   async created() {
-
-    const responseCategory = await axios.get("/categories/get");
-    const categories = responseCategory.data;
-    this.categories = categories;
-
-    console.log("created");
-
-    var searchFilterQuery = this.$route.query;
-    console.log(searchFilterQuery.searchQuery + "1");
-    const responseGig = await axios.get("/gigs/index", {
-      params: {
-        page: '1',
-        search: searchFilterQuery.search,
-            filterBy1: this.$route.query.filterBy1,
-            filterBy2: this.$route.query.filterBy2,
-            filterBy3: this.$route.query.filterBy3,
-            status: this.status
-      },
-    });
-    const gigs = responseGig.data.gig;
-    this.gigs = gigs;
-    
-    const paging = responseGig.data.pagination;
-    this.pagination = paging;
-    this.filterBy1 =this.$route.query.filterBy1
-    this.filterBy2 =this.$route.query.filterBy2
-    this.filterBy3 =this.$route.query.filterBy3
-
+    await this.getGigWithFilterAndSearch(1);
   },
-  
-  async beforeRouteUpdate   () {
-  
-     var searchFilterQuery = this.$route.query;
-     console.log('Q Here '+searchFilterQuery)
-     console.log('Run before update '+searchFilterQuery)
 
-        console.log('Category Here '+this.filterBy1)
-        console.log('Delivery Here '+this.filterBy2)
-        console.log('Buget Here '+this.filterBy3)
-
-             const responseWithFilter =await axios.get("/gigs/index", {
-          params: {
-            page: this.selectedPage,
-            search: searchFilterQuery.search,
-            filterBy1: this.filterBy1,
-            filterBy2: this.filterBy2,
-            filterBy3: this.filterBy3,
-            status: this.status
-          },
-        });
-        
-        const gigsFilter = responseWithFilter.data.gig;
-        this.gigs = gigsFilter;
-
-        const searchQuery = responseWithFilter.data.searchQuery;
-        this.searchQuery = searchQuery;
-        this.filterBy1 = searchQuery.filterBy1
-        console.log('filterBy1 ID = '+this.filterBy1)
-        this.filterBy2 = searchQuery.filterBy2
-        console.log('filterBy2 ID = '+this.filterBy2)
-        this.filterBy3 = searchQuery.filterBy3
-        console.log('filterBy3 ID = '+this.filterBy3)
-        const paging = responseWithFilter.data.pagination;
-        this.pagination = paging;
-  },
   computed: {
     sortFilter: function () {
-      this.search = this.$route.query.search;
-      var sortQuery = this.$route.query.sort;
-      if (sortQuery != null) {
-
+      if (this.sortBy != "None") {
         var filterGig = this.gigs;
-        console.log("Sorted By "+sortQuery);
+        console.log("Sorted By " + this.sortBy);
 
-        if ((this.$route.query.sort == "Price")) {
+        if (this.sortBy == "Price") {
           console.log("Sorted");
           console.log("================");
 
@@ -552,20 +491,20 @@ export default {
             return 0;
           });
         } else {
-        console.log("Sorted By Best sell");
+          console.log("Sorted By Best sell");
 
           return filterGig.sort((a, b) => {
-            if (a.GigID < b.GigID) return -1;
-            if (a.GigID > b.GigID) return 1;
+            if (a.Rating < b.Rating) return 1;
+            if (a.Rating > b.Rating) return -1;
             return 0;
-          });;
+          });
         }
       } else {
         console.log("run here");
         return this.gigs;
       }
     },
-  }
+  },
 };
 </script>
       
@@ -689,10 +628,11 @@ export default {
   padding-bottom: 4px;
 }
 .program_dropdown {
-  margin-top: 13%;
+  margin-top: 22%;
   margin-left: -1%;
-  position: absolute;
   width: 350px;
+  overflow: scroll;
+  max-height: 350px;
 }
 .freelancer_dropdown {
   margin-top: 13%;
@@ -701,9 +641,36 @@ export default {
   width: 2 50px;
 }
 .buget_dropdown {
-  margin-top: 13%;
+  margin-top: 14.5%;
   margin-left: -1%;
   position: absolute;
-  width: 150px;
+  width: 210px;
+}
+
+.apply {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 100%;
+  padding: 12px 24px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  background-color: #000;
+  width: 90px;
+}
+
+.clear-all {
+  border: none;
+  line-height: 24px;
+  padding: 0;
+  background: none;
+  width: 80px;
 }
 </style>
