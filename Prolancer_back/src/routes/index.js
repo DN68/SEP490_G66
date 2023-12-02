@@ -10,8 +10,8 @@ const freelancerRoute = require('./freelancers')
 const customerRoute = require('./customers')
 const  changeRequestRoute = require('./changerequest')
 const interviewRoute = require('./interviews')
-
-
+const deliveryRoute = require('./delivery')
+const reviewRoute = require('./review')
 function route(app) {
     // app.get("/", function(req,res){
     //     res.send('home');
@@ -34,7 +34,8 @@ function route(app) {
     app.use("/customers", customerRoute);  
     app.use("/changerequest", changeRequestRoute);  
     app.use("/interviews", interviewRoute);  
-
+    app.use("/delivery", deliveryRoute); 
+    app.use("/review", reviewRoute); 
 }
 
 module.exports = route;

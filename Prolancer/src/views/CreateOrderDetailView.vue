@@ -207,7 +207,7 @@
                     <div class="service_fee row">
                       <span class="col-md-6">Service Fee</span>
                       <span class="col-md-6 service_price"
-                        >${{ gig.Price * orderRequest.TotalEstimation * 0.1 }}</span
+                        >${{ gig.Price * orderRequest.TotalEstimation * 10/100  }}</span
                       >
                     </div>
                     <hr class="featurette-divider" />
@@ -216,7 +216,7 @@
                       <span class="col-md-6 total_all"
                         >${{
                           gig.Price * orderRequest.TotalEstimation +
-                          gig.Price * orderRequest.TotalEstimation * 0.1
+                          gig.Price * orderRequest.TotalEstimation * 10/100
                         }}</span
                       >
                     </div>

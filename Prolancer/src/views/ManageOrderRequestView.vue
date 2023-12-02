@@ -1,13 +1,9 @@
 <template>
   <div>
-    <Header
-      v-if="currentAccountInfo.Role == 'C'"
-     
-    ></Header>
+    <Header v-if="currentAccountInfo.Role == 'C'"></Header>
     <HeaderSell v-else></HeaderSell>
-    <div >
-      
-      <div class="container" >
+    <div>
+      <div class="container">
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Order Request</h3></div>
           <!-- <div class="col-md-3 search_bar" >
@@ -49,7 +45,8 @@
               major_head_item_active: this.majorItem == 1,
             }"
             @click="
-              ((majorItem = 1), (status = 'Pending')), getOrderRequest(currentAccountInfo, 1)
+              ((majorItem = 1), (status = 'Pending')),
+                getOrderRequest(currentAccountInfo, 1)
             "
           >
             <router-link
@@ -76,7 +73,8 @@
               major_head_item_active: this.majorItem == 2,
             }"
             @click="
-              ((majorItem = 2), (status = 'Accept')), getOrderRequest(currentAccountInfo, 1)
+              ((majorItem = 2), (status = 'Accept')),
+                getOrderRequest(currentAccountInfo, 1)
             "
           >
             <router-link
@@ -102,7 +100,8 @@
               major_head_item_active: this.majorItem == 3,
             }"
             @click="
-              ((majorItem = 3), (status = 'Reject')), getOrderRequest(currentAccountInfo, 1)
+              ((majorItem = 3), (status = 'Reject')),
+                getOrderRequest(currentAccountInfo, 1)
             "
           >
             <router-link
@@ -122,13 +121,43 @@
             </router-link>
           </div>
 
+
+          <div
+            class="col-md-2 major_head_item"
+            :class="{
+              major_head_item_active: this.majorItem == 4,
+            }"
+            @click="
+              ((majorItem = 4), (status = 'Cancelled')),
+                getOrderRequest(currentAccountInfo, 1)
+            "
+          >
+            <router-link
+              :to="{
+                path: '#',
+              }"
+              class="text-decoration-none"
+              disabled
+            >
+              <h6>
+                Cancelled<span
+                  v-if="this.status == 'Cancelled'"
+                  class="badge bg-secondary"
+                  >{{ pagination.totalRow }}</span
+                >
+              </h6>
+            </router-link>
+          </div>
         </div>
         <div class="base_table">
           <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th class="w-10">ID</th>
-                <th style="width: 20%">CUSTOMER</th>
+                <th style="width: 20%" v-if="currentAccountInfo.Role == 'F'">
+                  HIRER
+                </th>
+                <th style="width: 20%" v-else>FREELANCER</th>
                 <th class="w-25">JOB DESCRIPTION</th>
                 <th>ESTIMATION</th>
 
@@ -145,16 +174,35 @@
             <tbody>
               <tr v-for="(orderRequest, index) in orderRequests" :key="index">
                 <td>
+                  <router-link :to="'/vieworderrequestdetail/'+orderRequest.OrderRequestID" class="text-decoration-none text-dark">
                   {{ orderRequest.OrderRequestID }}
+                 </router-link>
                 </td>
-                <td>
+                <td v-if="currentAccountInfo.Role == 'F'">
                   <img
-                    :src="orderRequest.Profile_Picture"
+                    :src="orderRequest.CustomerProfilePicture"
                     alt=""
                     style="width: 35px; height: 35px"
                     class="rounded-circle"
                   />
-                  {{ orderRequest.First_Name + " " + orderRequest.Last_Name }}
+                  {{
+                    orderRequest.CustomerFirstName +
+                    " " +
+                    orderRequest.CustomerLastName
+                  }}
+                </td>
+                <td v-else>
+                  <img
+                    :src="orderRequest.FreelancerProfilePicture"
+                    alt=""
+                    style="width: 35px; height: 35px"
+                    class="rounded-circle"
+                  />
+                  {{
+                    orderRequest.FreelancerFirstName +
+                    " " +
+                    orderRequest.FreelancerLastName
+                  }}
                 </td>
                 <td>
                   <div class="JobDescription">
@@ -175,48 +223,43 @@
                 <td>
                   <div v-if="orderRequest.Status == 'Pending'">
                     <span
-                      class="status text-warning"
-                      style="
-                        font-size: 40px;
-                        margin: 2px 2px 0 0;
-                        display: inline-block;
-                        vertical-align: middle;
-                        line-height: 10px;
-                      "
+                      class="status text-warning request_status"
+                      
                       >•</span
                     ><span>Pending</span>
                   </div>
                   <div v-if="orderRequest.Status == 'Accept'">
                     <span
-                      class="status text-success"
-                      style="
-                        font-size: 40px;
-                        margin: 2px 2px 0 0;
-                        display: inline-block;
-                        vertical-align: middle;
-                        line-height: 10px;
-                      "
+                      class="status text-success request_status"
+                      
                       >•</span
                     ><span>Accept</span>
                   </div>
 
                   <div v-if="orderRequest.Status == 'Reject'">
                     <span
-                      class="status text-secondary"
-                      style="
-                        font-size: 40px;
-                        margin: 2px 2px 0 0;
-                        display: inline-block;
-                        vertical-align: middle;
-                        line-height: 10px;
-                      "
+                      class="status text-secondary request_status"
+                      
                       >•</span
                     ><span>Reject</span>
+                  </div>
+
+                  <div v-if="orderRequest.Status == 'Cancelled'">
+                    <span
+                      class="status text-danger request_status"
+                      
+                      >•</span
+                    ><span>Cancelled</span>
                   </div>
                 </td>
                 <td>
                   <!-- v-if="user.role == 'C'" -->
-                  <div v-if="currentAccountInfo.Role=='F'&& orderRequest.Status == 'Pending'">
+                  <div
+                    v-if="
+                      currentAccountInfo.Role == 'F' &&
+                      orderRequest.Status == 'Pending'
+                    "
+                  >
                     <span
                       class="badge rounded-pill bg-info text-light me-1"
                       style="cursor: pointer"
@@ -241,6 +284,25 @@
                           (selectedOrderRequestID = orderRequest.OrderRequestID)
                       "
                       >Decline</span
+                    >
+                  </div>
+                  <div
+                    v-if="
+                      currentAccountInfo.Role == 'C' &&
+                      orderRequest.Status == 'Pending'
+                    "
+                  >
+                    <span
+                      class="badge rounded-pill text-info decline_button"
+                      style="cursor: pointer"
+                      @click="
+                        (messageModal = 'cancel this request?'),
+                          (isshowConfirmRequestModal =
+                            !isshowConfirmRequestModal),
+                          (action = 'Cancel'),
+                          (selectedOrderRequestID = orderRequest.OrderRequestID)
+                      "
+                      >Cancel</span
                     >
                   </div>
                   <!-- <div v-else>
@@ -347,7 +409,18 @@
                       </div>
                     </div>
                   </div>
-
+                  <div class="modal-body" v-if="action == 'Cancel'">
+                    <div class="row">
+                      <div>
+                        <p class="modal-title">
+                          Do you really want to {{ messageModal }}
+                        </p>
+                        <p class="modal-title">
+                          This process cannot be undone.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <div class="modal-body" v-else>
                     <div class="row">
                       <div>
@@ -483,8 +556,8 @@ export default {
     };
   },
   async created() {
-     await this.onUpdateAccountInfo();
-     console.log(
+    await this.onUpdateAccountInfo();
+    console.log(
       "🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:",
       JSON.stringify(this.currentAccountInfo)
     );
@@ -492,7 +565,7 @@ export default {
   },
   methods: {
     async getOrderRequest(user, currentPage) {
-      console.log('Here : '+JSON.stringify(user))
+      console.log("Here : " + JSON.stringify(user));
       const responseData = await axios
         .get("/orderrequest/getOrderRequest", {
           params: {
@@ -541,6 +614,29 @@ export default {
           console.error("Error here:", error);
           toast.warn("Failed!", { autoClose: 2000 });
         }
+      } else if (status == "Cancel") {
+        try {
+          const responseStep1 = await axios.put(
+            "/orderrequest/changeOrderRequestStatus",
+            {
+              status: 'Cancelled',
+              orderRequestID: orderRequestID,
+            }
+          );
+          if (responseStep1) {
+           
+              toast.success("Successfully!", {
+                theme: "colored",
+                autoClose: 2000,
+                onClose: () => location.reload(),
+              });
+            
+          }
+        } catch (error) {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        }
       } else {
         const responseStep1 = await axios.put(
           "/orderrequest/changeOrderRequestStatus",
@@ -567,7 +663,7 @@ export default {
         }
       }
     },
-   async onUpdateAccountInfo() {
+    async onUpdateAccountInfo() {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
@@ -576,7 +672,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded.role);
         if (decoded.role === "F") {
-        await  axios
+          await axios
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -590,7 +686,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await  axios
+          await axios
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -606,7 +702,6 @@ export default {
         }
       }
     },
-  
   },
 };
 </script>
@@ -719,5 +814,13 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   display: -webkit-box;
+}
+
+.request_status {
+  font-size: 40px;
+  margin: 2px 2px 3px 0;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 10px;
 }
 </style>

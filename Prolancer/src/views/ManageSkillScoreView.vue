@@ -1,16 +1,16 @@
 <template>
   <div>
-    <Header v-if="user.role == 'C'"></Header>
-    <HeaderSell v-else-if="user.role == 'F'"></HeaderSell>
-    <header-admin v-else></header-admin>
-    <div :class="{ row: user.role == 'A' }">
-      <div v-if="user.role == 'A'" :class="{ 'col-md-2': user.role == 'A' }">
+    <Header v-if="currentAccountInfo.Role == 'C'"></Header>
+    <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
+    <HeaderAdmin v-else></HeaderAdmin>
+    <div :class="{ row: currentAccountInfo.Role == 'A' }">
+      <div v-if="currentAccountInfo.Role == 'A'" :class="{ 'col-md-2': currentAccountInfo.Role == 'A' }">
         <Sidebar></Sidebar>
       </div>
-      <div class="container" :class="{ 'col-md-9': user.role == 'A' }">
+      <div class="container" :class="{ 'col-md-9 ms-0': currentAccountInfo.Role == 'A' }">
         <div class="manage_title row">
-          <div class="col-md-3"><h3>Manage Skills Score</h3></div>
-          <div class="col-md-3 search_bar" v-if="isOrderList">
+          <div class="col-md-5"><h3>Manage Skills Score</h3></div>
+          <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
               <input
                 type="search"
@@ -40,7 +40,7 @@
                 </span>
               </router-link>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="major_skill row">
           <div
@@ -71,7 +71,7 @@
         </div>
         <div class="skill_table">
           <table class="table align-middle mb-0 bg-white">
-            <thead class="bg-light">
+            <thead class="bg-light position-sticky top-0">
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th class="w-10">ID</th>
                 <th class="w-25">FREELANCER</th>
@@ -79,18 +79,12 @@
                 <th v-for="childSkill in childSkills" :key="childSkill.SkillID">
                   {{ childSkill.Skill_Name }}
                 </th>
-                <!-- <th>SRS</th>
-                <th>BD</th>
-                <th>DD</th>
-                <th>Coding</th>
-                <th>Testing</th>
-                <th>Auto Testing</th> --> 
-
+                
                 <!-- <th>Action</th> -->
               </tr>
             </thead>
-
-            <tbody>
+            
+            <tbody >
               <tr v-for="(skillScore, index) in skillscores" :key="index">
                 <td>F5-000{{ skillScore.FreelancerID }}</td>
                 <td>
@@ -109,10 +103,10 @@
                 >
                   <!-- {{ skillScore[childSkill.Skill_Name] }} -->
                   <input
-                    type="number"
+                    type="text"
                     class="ms-3"
                     style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore[childSkill.Skill_Name]"
+                    v-model="skillScore[childSkill.Skill_Name]"                   
                     min="1"
                     max="10"
                     @input="
@@ -122,93 +116,26 @@
                         skillScore.FreelancerID
                       )
                     "
-                  />
+                    :readonly="currentAccountInfo.Role!='A'"
+                  />                
                 </td>
-                <!-- <td>
-                  <input
-                    type="number"
-                    style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore.SRS"
-                    min="1"
-                    max="10"
-                    @input="updateScore(skillScore.BD, 'SRS')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore.BD"
-                    min="1"
-                    max="10"
-                    @input="updateScore(skillScore.BD, 'SRS')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore.DD"
-                    min="1"
-                    max="10"
-                    @input="updateScore(skillScore.BD, 'SRS')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore.Coding"
-                    min="1"
-                    max="10"
-                    @input="updateScore(skillScore.BD, 'SRS')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore.Testing"
-                    min="1"
-                    max="10"
-                    @input="updateScore(skillScore.BD, 'SRS')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore.AutomationTest"
-                    min="1"
-                    max="10"
-                    @input="updateScore(skillScore.BD, 'SRS')"
-                  />
-                </td> -->
-                <!-- <td
-                  @click="
-                    listUpdate.length >= 1
-                      ? ((isshowConfirmRequestModal =
-                          !isshowConfirmRequestModal),
-                        (messageModal = 'save these change?'))
-                      : alertMessage()
-                  "
-                >
-                  Save
-                </td> -->
+              
               </tr>
             </tbody>
           </table>
           <!-- <div v-if="orders.length == 0" class="text-center">
             <h5>Order Not Found</h5>
           </div> -->
-          <div class="button text-start" >
+          
+        </div>
+        <div class="button text-start" v-if="currentAccountInfo.Role=='A'">
             <button
               id="btn-sub"
               type="submit"
               class="btn btn-primary bg-danger"
               style="border: none; width: 80px; margin-top: 40px"
               @click="
-                listUpdate.length >= 1
+                listUpdate.length >= 1 && isError==false
                   ? ((isshowConfirmRequestModal = !isshowConfirmRequestModal),
                     (messageModal = 'save these change?'))
                   : alertMessage()
@@ -284,7 +211,6 @@
               </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
   </div>
@@ -299,6 +225,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "CreateOrderDetailPage",
@@ -310,7 +237,7 @@ export default {
   },
   data() {
     return {
-      user: [],
+      currentAccountInfo: [],
       majorSkills: [],
       pagination: [],
       moment: moment,
@@ -324,6 +251,7 @@ export default {
       childSkills: [],
       listUpdate: [],
       messageModal: "",
+      isError: false
     };
   },
   async created() {
@@ -335,7 +263,7 @@ export default {
     // });
     // const userInfor = responseUserInfor.data.user;
     // this.user = userInfor;
-
+    await this.onUpdateAccountInfo();
     const responseMajorSkill = await axios.get("/skills/getMajorSkill");
     const majorSkill = responseMajorSkill.data;
     this.majorSkills = majorSkill;
@@ -346,6 +274,7 @@ export default {
     const responseSkillScore = await axios.get("/skills/getSkillScore", {
       params: {
         childSkills: this.childSkills,
+        user: this.currentAccountInfo
       },
     });
     const skillScore = responseSkillScore.data;
@@ -364,10 +293,10 @@ export default {
         // Display an error message or handle the invalid input as needed
         alert("Please enter a value between 1 and 10.");
         // Optionally reset the input to a valid value
-
+        this.isError = true;
         return;
       }
-
+      this.isError = false;
       // Check if the entry already exists in listUpdate
       const existingEntryIndex = this.listUpdate.findIndex(
         (entry) =>
@@ -398,6 +327,7 @@ export default {
       const responseSkillScore = await axios.get("/skills/getSkillScore", {
         params: {
           childSkills: this.childSkills,
+          user: this.currentAccountInfo
         },
       });
       const skillScore = responseSkillScore.data;
@@ -405,7 +335,7 @@ export default {
     },
 
     alertMessage() {
-      alert("Nothing change!");
+      alert("It seem like nothing change or invalid data input check your input value!");
     },
     async updateChange() {
       await axios
@@ -425,6 +355,49 @@ export default {
           console.error("Error ", error);
           toast.warn("Faild!", { autoClose: 2000 });
         });
+    },
+
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/login");
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+        await  axios
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.freelancer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else if (decoded.role === "C") {
+          await  axios
+            .get("/customers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.customer;
+                console.log(this.currentAccountInfo);
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else {
+          this.currentAccountInfo = {Email: decoded.email, Role: decoded.role};
+
+        }
+      }
     },
   },
 };
@@ -527,7 +500,9 @@ export default {
   background-color: #f9f9f9;
 }
 
-.order_request_table .decline_button {
-  border: 1px solid #0dcaf0;
+
+.skill_table {
+ max-height: 400px;
+ overflow: auto;
 }
 </style>
