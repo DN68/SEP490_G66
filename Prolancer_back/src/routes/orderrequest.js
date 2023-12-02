@@ -22,6 +22,9 @@ router.post('/createOrderRequest',
 OrderRequestController.createOrderRequest
 
 );
+router.get('/getGigTitle', 
+OrderRequestController.chartgig
 
+);
 
 module.exports = router;

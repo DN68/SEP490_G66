@@ -14,6 +14,7 @@
     "chart.js": "^4.4.0",
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.8.3",
+    "hchs-vue-charts": "^1.2.8",
     "moment": "^2.29.4",
     "v-click-outside": "^3.1.2",
     "vue": "^3.2.13",
@@ -29,7 +30,9 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.2"
   },
   "eslintConfig": {
     "root": true,
