@@ -94,9 +94,10 @@ class CvController {
   updateCV = function (req, res) {
 
     let cvFile;
+    var CV_Upload = req.body.CV_Upload
     var FreelancerID = req.body.FreelancerID;
 
-
+    
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).json({ error: 'No files were uploaded.' });
     }
@@ -107,15 +108,16 @@ class CvController {
 
     // const uploadPath = '../Prolancer/public/delivery' + deliverFile.name;
     const newFileName = `${FreelancerID}_${cvFile.name}`;
-    const commonPath = path.join('uploads', 'other', newFileName);
+    const commonPath = path.join('uploads', 'other');
 
     console.log("🚀 ~ file: OrderController.js:26 ~ OrderController ~ uploadPath:", commonPath)
-    const uploadPath = path.join(__dirname, '..', '..', commonPath);
+    const uploadPath = path.join(__dirname, '..', '..', commonPath, newFileName);
+    const oldPath = path.join(__dirname, '..', '..', commonPath, CV_Upload);
     console.log("🚀 ~ file: OrderController.js:28 ~ OrderController ~ uploadPath:", uploadPath)
-    if (fs.existsSync(uploadPath)) {
+    if (fs.existsSync(oldPath)) {
       // Delete the existing file
       console.log("Run Here")
-      fsp.unlink(uploadPath)
+      fsp.unlink(oldPath)
         .then(() => {
           console.log('Existing file deleted successfully');
           continueWithFileUpload();
@@ -146,10 +148,8 @@ class CvController {
               return res.send({ message: 'File uploaded Failed' });
 
             }
-            res.json({ message: 'File uploaded successfully' });
-
+            return res.status(200).json(newFileName);
           }
-
         })
       });
     }

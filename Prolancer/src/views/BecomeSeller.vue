@@ -661,10 +661,11 @@ export default {
       if (fileInput.files.length > 0) {
         const formData = new FormData();
         formData.append("file", fileInput.files[0]);
+        formData.append("FreelancerID", this.freelancer);
         console.log(formData);
         console.log(this.freelancer)
         axios
-          .post("/cv/createCV", formData, {FreelancerID: this.freelancer})
+          .post("/cv/createCV", formData)
           .then((response) => {
             // Handle the successful upload response
             console.log("File uploaded successfully", response);

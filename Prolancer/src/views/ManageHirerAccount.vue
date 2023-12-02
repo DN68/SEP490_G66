@@ -160,7 +160,6 @@
               <th class="th_no">NO.</th>
               <th class="th_AccountID">ACCOUNTID</th>
               <th class="th_Hirer">HIRER</th>
-              <th class="th_Username">USERNAME</th>
               <th class="th_Email">EMAIL</th>
               <th class="th_Status">STATUS</th>
               <th class="th_actions">ACTIONS</th>
@@ -198,18 +197,9 @@
                   />
                   <div class="ms-3">
                     <p class="fw-bold mb-1">
-                      {{ customer.First_Name + " " + customer.Last_Name }}
+                      {{ customer.Username }}
                     </p>
                   </div>
-                </div>
-              </td>
-              <td class="td_username">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                        coding -->
-                    {{ customer.Username }}
-                  </p>
                 </div>
               </td>
               <td class="td_email">
@@ -425,7 +415,9 @@
                           </td>
                         </tr>
                         <tr>
-                          <td class="line-info"><span>Company Address: </span></td>
+                          <td class="line-info">
+                            <span>Company Address: </span>
+                          </td>
                           <td>
                             {{ selectedHirer.CompanyAddress }}
                           </td>

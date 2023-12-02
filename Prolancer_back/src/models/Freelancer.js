@@ -10,7 +10,7 @@ var Freelancer = function (freelancer) {
 
 
 Freelancer.getFreelancerInfo = function (accountID, results) {
-  connectDb.query("SELECT f.*, a.* FROM Freelancer f INNER JOIN Account a ON f.AccountID = a.AccountID WHERE f.AccountID = ?",
+  connectDb.query("SELECT f.*, a.*, c.Category_Name, cv.CV_Upload FROM Freelancer f INNER JOIN Account a ON f.AccountID = a.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID  INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE f.AccountID = ?",
     [accountID], (err, res) => {
       if (err) {
         results(null, err);

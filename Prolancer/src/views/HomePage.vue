@@ -213,10 +213,8 @@ export default {
                     this.$router.push("/seldash");
                   //if not, go to add freelancer info page
                   }else{
-                    let encodedAccountData = encodeURIComponent(JSON.stringify(this.account));
-                    this.$router.push(`/becomesel?data=${encodedAccountData}`);
+                    console.log("Not freelancer")
                   }
-                  
                   // if (this.account.role == "A") {
                   //   this.$router.push("/managegigad");
                   // }
