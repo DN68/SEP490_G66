@@ -10,6 +10,10 @@ router.post('/createCV',
         CvController.createCV
 );
 
+router.post('/saveCV',
+        CvController.saveCV
+);
+
 
 
 module.exports = router;

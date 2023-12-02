@@ -255,6 +255,14 @@
                   "
                   class="bi bi-gear-fill"
                 ></i>
+                &nbsp;
+                <i
+                  @click="
+                    (isShowInfoModal = !isShowInfoModal),
+                      (selectedHirer = customer)
+                  "
+                  class="bi bi-eye-fill"
+                ></i>
               </td>
 
               <!-- <div class="dropdown">
@@ -343,6 +351,133 @@
                     "
                   >
                     Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="modal fade show"
+            style="
+              display: block;
+              background-color: #000000ad;
+              padding-top: 10%;
+            "
+            v-if="isShowInfoModal"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Hirer Info</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    @click="isShowInfoModal = !isShowInfoModal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row" style="padding-left: 25px">
+                    <div>
+                      <table class="freelancerInfoForm">
+                        <tr>
+                          <td class="line-info"><span>Full Name:</span></td>
+                          <td>
+                            {{
+                              selectedHirer.First_Name +
+                              " " +
+                              selectedHirer.Last_Name
+                            }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="line-info"><span>Phone: </span></td>
+                          <td>
+                            {{ selectedHirer.Phoneno }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="line-info"><span>Address: </span></td>
+                          <td>
+                            {{ selectedHirer.Location }}
+                          </td>
+                        </tr>
+                        <!-- <tr>
+                          <td class="line-info">
+                            <span>Profile Picture </span>
+                          </td>
+                          <td>
+                            <input
+                              style="width: 80%"
+                              type="file"
+                              ref="fileImage"
+                              accept=".jpeg, .jpg, .png"
+                            />
+                            (.jpeg, .jpg, .png)
+                          </td>
+                        </tr> -->
+                        <tr>
+                          <td class="line-info"><span>Company Name: </span></td>
+                          <td>
+                            {{ selectedHirer.CompanyName }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="line-info"><span>Company Address: </span></td>
+                          <td>
+                            {{ selectedHirer.CompanyAddress }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="line-info"><span>Tax Code: </span></td>
+                          <td>
+                            {{ selectedHirer.TaxCode }}
+                          </td>
+                        </tr>
+                        <!-- <tr>
+                          <td class="line-info"><span>Language </span></td>
+                          <td>
+                            <div class="dropdown">
+                              <button
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                style="
+                                  border: 1px #ccc solid;
+                                  background-color: #fff;
+                                  padding-top: 10px;
+                                  padding-bottom: 10px;
+                                  width: 100%;
+                                "
+                              >
+                                <span style="float: left"> Vietnamese </span>
+                                <i
+                                  class="fa-solid fa-chevron-down"
+                                  style="float: right; align-self: center"
+                                ></i>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li class="dropdown-item" href="#">
+                                  Vietnamese
+                                </li>
+                                <li class="dropdown-item" href="#">English</li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr> -->
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="isShowInfoModal = !isShowInfoModal"
+                  >
+                    Close
                   </button>
                 </div>
               </div>
@@ -443,6 +578,7 @@ export default {
       status: "Pending",
       searchHirer: "",
       isshowModal: false,
+      isShowInfoModal: false,
       selectedStatus: "Pending",
     };
   },
@@ -540,7 +676,7 @@ export default {
 };
 </script>
       
-      <style>
+      <style scoped>
 .container-manaInterviewad {
   margin-left: 17%;
   margin-right: 5%;
@@ -645,6 +781,19 @@ export default {
   overflow-y: auto;
 }
 .d-flex {
-  justify-content: center;
+  justify-content: left;
+  padding-left: 53px;
+}
+.freelancerInfoForm {
+  width: 100%;
+}
+.line-info {
+  margin-top: 5%;
+  display: flex;
+  color: red;
+}
+.freelancerInfoForm td {
+  text-align: right;
+  padding-right: 25px;
 }
 </style>
