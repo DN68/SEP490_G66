@@ -185,11 +185,18 @@ html {
   width: 20%;
   margin: 20px;
 }
+
 .info-user {
   margin-top: 45px ;
   margin-left: 55px;
   /* padding-left: 25px;
   border-left: 1px #ccc solid; */
+
+.info-user h5 {
+  margin: 45px 55px;
+  padding-left: 25px;
+  border-left: 1px #ccc solid;
+
 }
 .nonetextalign {
   text-align: start;

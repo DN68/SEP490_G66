@@ -100,6 +100,9 @@
                 <router-link class="dropdown-item" to="/manageChangeRequest">Change Request</router-link>
               </li>
               <li>
+                <router-link class="dropdown-item" to="/manageSkill">Skill Test Score</router-link>
+              </li>
+              <li>
                 <router-link class="dropdown-item" to="/logout"
                   >Logout</router-link
                 >

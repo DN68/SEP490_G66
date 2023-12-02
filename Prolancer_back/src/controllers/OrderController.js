@@ -220,5 +220,24 @@ class OrderController {
       });
     }
   }
+
+  addOrderEfford = function (req, res) {
+    const data = req.body;
+    var orderID = data.orderID;
+    var addEfford = parseInt(data.addEfford);
+
+    Order.addOrderEfford(addEfford, orderID, function (err, result) {
+      if (err)
+        res.status(500).send(err);
+      else {
+        if (result.affectedRows == 0) {
+          res.send({ message: 'Add Order Efford Failed' });
+
+        }
+        res.send({ message: 'Add Order Efford Success' });
+      }
+
+    })
+  }
 }
 module.exports = new OrderController;   
