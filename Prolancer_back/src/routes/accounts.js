@@ -27,9 +27,15 @@ router.get('/info',
 router.get('/:email/checkEmail',
     AccountController.checkMailExist
 );
+// router.get('/:email/',
+//     AccountController.getAccountByEmail
+// );
 router.get('/:username/checkUsername',
     AccountController.checkUsernameExist
 );
+router.put('/updateStatus',
+    AccountController.changeAccountStatus
+)
 // router.put('/:email/info/update',
 //     AccountController.updateProfile
 // );

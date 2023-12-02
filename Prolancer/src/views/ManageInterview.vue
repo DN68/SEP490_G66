@@ -340,7 +340,7 @@
               path: '/manageinterview',
               query: {
                 page: 1,
-                search: searchInterview,
+                // search: searchInterview,
                 status: status,
               },
             }"
@@ -384,7 +384,7 @@
               path: '/manageInterviewad',
               query: {
                 page: pagination.page + 1,
-                search: searchInterview,
+                // search: searchInterview,
                 status: status,
               },
             }"

@@ -2,7 +2,8 @@
   <div>
     <div class="header">
       <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
-      <Headers v-else></Headers>
+      <HeaderSeller v-if="role == 'F'"></HeaderSeller>
+      <Headers v-if="role == 'C'"></Headers>
     </div>
     <div class="Sidebarudpf">
       <Sidebarpf></Sidebarpf>
@@ -91,7 +92,7 @@
   </div> -->
     <div id="content" class="">
       <div class="container-profile">
-        <form class="form-profile">
+        <div class="form-profile">
           <div class="field">
             <label
               class="form-label mt-5"
@@ -207,9 +208,8 @@
               />
             </div>
 
-
             <!-- if role is Freelancer -->
-            <div v-if="role === 'F'">
+            <div v-if="role == 'F'">
               <label
                 class="form-label mt-5"
                 style="float: left"
@@ -256,8 +256,28 @@
                 type="text"
                 id="form3Example3"
                 class="form-control form-control-lg"
-                v-model="currentAccountInfo.MainCategoryID"
+                v-model="currentAccountInfo.Category_Name"
+                readonly
               />
+              <label
+                class="form-label mt-5"
+                style="float: left"
+                for="form3Example3"
+                >CV</label
+              >
+              <div>
+                <input
+                  id="form3Example3"
+                  class="form-control form-control-lg"
+                  type="file"
+                  ref="fileCV"
+                  accept=".pdf"
+                />
+                (.pdf only)
+                <button @click="showCV(currentAccountInfo.CV_Upload)">
+                  View CV
+                </button>
+              </div>
             </div>
 
             <!-- <label class="form-label mt-5" style="float: left" for="form3Example3"
@@ -278,7 +298,7 @@
               Update
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
@@ -288,17 +308,21 @@
 import Headers from "../components/Header.vue";
 import Sidebarpf from "../components/Sidebarprf.vue";
 import HeaderAdmin from "../components/HeaderAdmin.vue";
+import HeaderSeller from "../components/HeaderSeller.vue";
 import Footer from "../components/Footer.vue";
 import VueJwtDecode from "vue-jwt-decode";
 import axios from "axios";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   name: "App",
   components: {
     Headers,
+    HeaderAdmin,
+    HeaderSeller,
     Sidebarpf,
     Footer,
-    HeaderAdmin,
   },
   data() {
     return {
@@ -394,25 +418,76 @@ export default {
   //   }
   // },
   methods: {
+    async showCV(cvName) {
+      const apiUrl = "/cv/" + cvName;
+      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+      console.log(resData);
+      const blob = new Blob([resData.data], { type: "application/pdf" });
+
+      // Create a URL for the Blob
+      const blobUrl = URL.createObjectURL(blob);
+      this.blobUrl = blobUrl;
+      console.log(this.blobUrl);
+
+      // Open a new window or tab and display the PDF
+      const pdfWindow = window.open();
+      pdfWindow.document.write(`
+      <html>
+      <head>
+      <title>CV Viewer</title>
+      </head>
+      <body>
+      <embed src="${this.blobUrl}" type="application/pdf" width="100%" height="100%">
+      </body>
+      </html>
+              `);
+      pdfWindow.onbeforeunload = function () {
+        URL.revokeObjectURL(this.blobUrl);
+      };
+    },
     updateProfile() {
       // console.log(this.user)
       if (this.currentAccountInfo.Role == "F") {
-        axios.put(
-          `/freelancers/info/${this.currentAccountInfo.AccountID}/update`,
-          {
-            First_Name: this.currentAccountInfo.First_Name,
-            Last_Name: this.currentAccountInfo.Last_Name,
-            Phoneno: this.currentAccountInfo.Phoneno,
-            Profile_Picture: this.currentAccountInfo.Profile_Picture,
-            Location: this.currentAccountInfo.Location,
-            Description: this.currentAccountInfo.Description,
-            MainCategoryID: this.currentAccountInfo.MainCategoryID
-          }
-        );
+        axios
+          .put(
+            `/freelancers/info/${this.currentAccountInfo.AccountID}/update`,
+            {
+              First_Name: this.currentAccountInfo.First_Name,
+              Last_Name: this.currentAccountInfo.Last_Name,
+              Phoneno: this.currentAccountInfo.Phoneno,
+              Profile_Picture: this.currentAccountInfo.Profile_Picture,
+              Location: this.currentAccountInfo.Location,
+              Description: this.currentAccountInfo.Description,
+              MainCategoryID: this.currentAccountInfo.MainCategoryID,
+            }
+          )
+          .then(
+            (res) => {
+              //if cv updated successfully
+              if (this.updateCV()) {
+                toast.success("Profile updated successfully!", {
+                  theme: "colored",
+                  autoClose: 2000,
+                });
+              }else{
+                toast.warn("Update CV Failed!", {
+                  theme: "colored",
+                  autoClose: 2000,
+                });
+              }
+            },
+            (err) => {
+              //message
+              toast.error("Profile updated failed", {
+                theme: "colored",
+                autoClose: 2000,
+                // onClose: () => location.replace("/sendmessage"),
+              });
+            }
+          );
       } else if (this.currentAccountInfo.Role == "C") {
-        axios.put(
-          `/customers/info/${this.currentAccountInfo.AccountID}/update`,
-          {
+        axios
+          .put(`/customers/info/${this.currentAccountInfo.AccountID}/update`, {
             First_Name: this.currentAccountInfo.First_Name,
             Last_Name: this.currentAccountInfo.Last_Name,
             Phoneno: this.currentAccountInfo.Phoneno,
@@ -420,10 +495,61 @@ export default {
             Location: this.currentAccountInfo.Location,
             CompanyName: this.currentAccountInfo.CompanyName,
             CompanyAddress: this.currentAccountInfo.CompanyAddress,
-            TaxCode: this.currentAccountInfo.TaxCode
-          }
-        );
+            TaxCode: this.currentAccountInfo.TaxCode,
+          })
+          .then(
+            (res) => {
+              // console.log(res.data);
+              //message
+              toast.success("Profile updated successfully!", {
+                theme: "colored",
+                autoClose: 2000,
+              });
+            },
+            (err) => {
+              //message
+              toast.error("Profile updated failed", {
+                theme: "colored",
+                autoClose: 2000,
+              });
+            }
+          );
       }
+    },
+    updateCV() {
+      const fileInput = this.$refs.fileCV;
+      console.log(
+        "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
+        fileInput.files
+      );
+      console.log("🚀 ~ ", this.cvTitle + "   " + this.cvDescription);
+
+      // if a file is chosen
+      if (fileInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+        formData.append("FreelancerID", this.currentAccountInfo.FreelancerID);
+        formData.append("CV_Upload", this.currentAccountInfo.CV_Upload);
+        console.log(formData);
+        axios
+          .post("/cv/updateCV", formData)
+          .then((response) => {
+            // Handle the successful upload response
+            console.log("File updated successfully", response);
+            console.log(response);
+            console.log(response.data);
+            //update cv name to view in page (no page reloading needed)
+            this.currentAccountInfo.CV_Upload = response.data;
+            return true;
+          })
+          .catch((error) => {
+            // update CV failed
+            console.error("Error updatefile", error);
+            return false;
+          });
+      }
+      //if no file is chosen then keep old cv name
+      return true;
     },
   },
 };
