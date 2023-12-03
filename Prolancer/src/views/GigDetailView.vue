@@ -140,7 +140,6 @@
                 <div class="main_title">
                   <h5 class="">Reviews</h5>
                 </div>
-                <hr class="featurette-divider" />
                 <Review></Review>
               </div>
             </div>
@@ -189,7 +188,7 @@
                           type="button"
                         >
                        
-                          Get Order
+                          Get Order Request
 
                         </button>
 
