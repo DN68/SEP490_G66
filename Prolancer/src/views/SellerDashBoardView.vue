@@ -191,7 +191,7 @@ html {
   margin-left: 55px;
   /* padding-left: 25px;
   border-left: 1px #ccc solid; */
-
+}
 .info-user h5 {
   margin: 45px 55px;
   padding-left: 25px;

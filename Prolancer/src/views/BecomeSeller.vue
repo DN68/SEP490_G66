@@ -630,9 +630,11 @@ export default {
                 phoneNo: this.phoneNo,
                 location: this.location,
                 description: this.description,
+                mainCategoryID: this.mainCategory
               })
               .then(
                 (res) => {
+                  console.log(res.data)
                   this.message =
                     "Info added successfully. Returning to homepage";
                   console.log(res.data.freelancer.FreelancerID)
