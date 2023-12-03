@@ -67,9 +67,9 @@ Freelancer.updateFreelancerInfo = function (data, accountID, results) {
     })
 }
 
-Freelancer.createFreelancer = function (accountID, firstName, lastName, profilePicture, location, description, phone, result) {
-  connectDb.query("INSERT INTO Freelancer SET AccountID = ?,  First_Name = ?, Last_Name = ?, Profile_Picture = ?,  Location = ?, Description = ?, Phoneno = ?, MainCategoryID = 1",
-      [accountID, firstName, lastName, profilePicture, location, description, phone], function (err, res) {
+Freelancer.createFreelancer = function (accountID, firstName, lastName, profilePicture, location, description, phone, mainCategoryID, result) {
+  connectDb.query("INSERT INTO Freelancer SET AccountID = ?,  First_Name = ?, Last_Name = ?, Profile_Picture = ?,  Location = ?, Description = ?, Phoneno = ?, MainCategoryID = ?",
+      [accountID, firstName, lastName, profilePicture, location, description, phone, mainCategoryID], function (err, res) {
           if (err) {
               result(null, err);
           }

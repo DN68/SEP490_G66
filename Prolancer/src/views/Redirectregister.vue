@@ -37,7 +37,7 @@
                       
                     <div class="d-flex flex-row align-items-center mb-4"  >
                       <router-link
-                        to="/register/customer"
+                        to="/becomehire"
                         class="bg-danger bg-gradient text-light"
                         style="
                           text-decoration: none;
