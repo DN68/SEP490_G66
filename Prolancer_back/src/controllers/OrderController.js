@@ -16,7 +16,6 @@ class OrderController {
     Order.createOrder(order, function (err, result) {
 
       if (result) {
-
         return res.send({ message: 'Create Order Success', insertId: result.insertId });
       }
       else {

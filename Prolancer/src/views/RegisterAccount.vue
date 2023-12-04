@@ -285,6 +285,7 @@
               (res) => {
                 this.$router.push("/sendmessage");
                 // console.log("Added successfully");
+                console.log(res.data.link);
               },
               (err) => {
                 console.log(err.response);

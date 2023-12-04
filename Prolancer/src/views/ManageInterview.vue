@@ -340,7 +340,7 @@
               path: '/manageinterview',
               query: {
                 page: 1,
-                search: searchInterview,
+                // search: searchInterview,
                 status: status,
               },
             }"
@@ -384,7 +384,7 @@
               path: '/manageInterviewad',
               query: {
                 page: pagination.page + 1,
-                search: searchInterview,
+                // search: searchInterview,
                 status: status,
               },
             }"
@@ -455,7 +455,7 @@ export default {
       .then(
         (res) => {
           this.account = res.data.account;
-          if (this.account.role != "A") {
+          if (this.account.Role != "A") {
             this.$router.push("/");
           }
         },

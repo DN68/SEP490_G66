@@ -21,7 +21,7 @@ class InterviewController {
         // }
         // console.log(search);
 
-        if (pageQuery.page != null) {
+        if (pageQuery.page != null && pageQuery.page > 0) {
             page = pageQuery.page;
         } else {
             page = 1;
