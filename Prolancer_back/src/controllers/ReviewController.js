@@ -5,7 +5,7 @@ class ReviewController {
         const data = req.body;
         var review = (data.Review)
         if (!review) {
-            return res.status(500).send('Send Review Failed');
+            return res.status(500).send('Invalid or missing order data');
         }
 
         Review.createReview(review, function (err, result) {
@@ -27,13 +27,14 @@ class ReviewController {
     getReviewByOrderId = function (req, res) {
         var id = req.query.id;
 
-
+        if (!id) {
+            return res.status(500).send('Invalid or missing data');
+        }
         Review.getReviewByOrderId(id, function (err, review) {
             if (err)
                 res.status(500).send(err);
             else {
-                res.send( {review});
-
+                res.send(review.length > 0 ? {review} : 'Review not exist');
             }
         });
 

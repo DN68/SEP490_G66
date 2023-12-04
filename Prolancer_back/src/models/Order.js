@@ -126,8 +126,8 @@ Order.deliverOrder = function (deliverFile,orderID, result) {
  
  };
 
- Order.addOrderEfford = function (addEfford,orderID, result) {
-  connectDb.query("UPDATE `Order` SET `AddEfford` = ? WHERE `Order`.`OrderID` = ?", [addEfford,orderID], function (err, res) {
+ Order.addOrderEffort = function (addEffort,orderID, result) {
+  connectDb.query("UPDATE `Order` SET `AddEffort` = ? WHERE `Order`.`OrderID` = ?", [addEffort,orderID], function (err, res) {
      if (err) {
  
        result(err,null);

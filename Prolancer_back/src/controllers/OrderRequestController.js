@@ -2,14 +2,14 @@ const OrderRequest = require('../models/OrderRequest');
 class OrderRequestController {
     createOrderRequest = function (req, res) {
         const data = req.body;
-        var orderRequest = (data.orderRequest);
-        console.log(orderRequest);
+        var orderRequest = (data.orderRequest);    
+
         if (orderRequest){
             OrderRequest.createOrderRequest(orderRequest, function (err, result) {
                 console.log(result);
 
                 if (err)
-                    res.status(500).send({message: 'Lỗi truy vấn: ' + err});
+                    res.status(500).send({message: 'Send Request Failed' + err});
                 else {
                     res.send({ message: 'Send Request Success' });
                 }
@@ -17,7 +17,7 @@ class OrderRequestController {
             })
         }
         else {
-            res.send({ message: 'Send Request Failed' });
+            res.send({ message: 'Invalid or missing data' });
 
         }
     }
@@ -29,6 +29,7 @@ class OrderRequestController {
         var userId = '';
         var userRole = '';
         var status = '';
+        var user = '';
         console.log(pageQuery);
         if (pageQuery.page != null) {
           page = pageQuery.page;
@@ -39,12 +40,16 @@ class OrderRequestController {
           status = pageQuery.status
           console.log("🚀 ~ file: OrderController.js:186 ~ OrderController ~ status:", status)
         }
-        userRole = pageQuery.user.Role;
+        user = pageQuery.user;
+        if (!status||!user) {
+          return res.status(400).send('Invalid or missing data');
+        }
+        userRole = user.Role;
         if (userRole == 'C') {
-            userId = pageQuery.user.CustomerID;
+            userId = user.CustomerID;
 
         }else{
-            userId = pageQuery.user.FreelancerID;
+            userId = user.FreelancerID;
         }
         console.log( page, userId, userRole);
     
@@ -117,7 +122,9 @@ class OrderRequestController {
         const data = req.body;
         var OrderRequestID = data.OrderRequestID;
         var Note = data.Note;
-    
+        if (!OrderRequestID||!Note) {
+          return res.status(400).send('Invalid or missing data');
+        }
         OrderRequest.updateOrderRequestNote(Note, OrderRequestID, function (err, result) {
           if (err)
             res.status(500).send(err);
@@ -158,7 +165,9 @@ class OrderRequestController {
       getOrderRequestById = function (req, res) {
         var id = req.params.id;
     
-    
+        if (!id) {
+          return res.status(400).send('Invalid or missing data');
+        }
         OrderRequest.getOrderRequestById(id, function (err, orderRequest) {
           if (err)
             res.status(500).send(err);
