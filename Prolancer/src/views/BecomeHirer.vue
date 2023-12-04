@@ -571,14 +571,16 @@ export default {
                 description: this.description,
                 companyName: this.companyName,
                 companyAddress: this.companyAddress,
-                taxCode: this.taxCode
+                taxCode: this.taxCode,
               })
               .then(
                 (res) => {
-                  this.message =
-                    "Info added successfully. Returning to homepage";
-                  // this.$router.push("/");
-                  console.log(res.data);
+                  //message
+                  toast.success("Account registered successfully", {
+                    theme: "colored",
+                    autoClose: 2000,
+                    onClose: () => location.replace("/sendmessage"),
+                  });
                 },
                 (err) => {
                   console.log(err.response);
