@@ -1,6 +1,11 @@
 const connectDb = require('../common/connectdb.js');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const fs = require('fs');
+const fsp = require('fs/promises');
 const Freelancer = require('../models/Freelancer.js');
+
+
 class FreelancerController {
 
 
@@ -14,7 +19,7 @@ class FreelancerController {
                 })
             }
             const accountID = decoded.accountID
-            // console.log(accountID)
+            console.log(accountID)
             Freelancer.getFreelancerInfo(accountID, function (err, results) {
                 if (err) {
                     return console.log(err)
@@ -67,12 +72,12 @@ class FreelancerController {
 
         if (pageQuery.search != null) {
 
-          search = pageQuery.search;
+            search = pageQuery.search;
 
-          console.log('Search here ' + search);
+            console.log('Search here ' + search);
 
         } else {
-          search = '';
+            search = '';
         }
         console.log(search);
 
@@ -142,27 +147,39 @@ class FreelancerController {
         const location = req.body.location;
         const description = req.body.description;
         const phoneNo = req.body.phoneNo;
+        const mainCategoryID = req.body.mainCategoryID
 
-        console.log(accountID)
-        Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, function (err, result) {
-            if (err) {
-                res.send(err);
-            }
-            console.log(result)
-            if(result){
-                Freelancer.getFreelancerByAccountID(accountID, function(err, results){
-                    if (err) {
-                        return console.log(err)
-                    }
-                    console.log(results[0])
-                    if (results[0]) {
-                        return res.status(200).json({
-                            freelancer: results[0]
-                        })
-                    }
-                })
-            }
-        })
+        createFreelancer();
+
+        //Create freelancer
+        function createFreelancer() {
+            Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, mainCategoryID, function (err, result) {
+                if (err) {
+                    res.send(err);
+                }
+                console.log(result)
+                if (result) {
+                    Freelancer.getFreelancerByAccountID(accountID, function (err, results) {
+                        if (err) {
+                            return console.log(err)
+                        }
+                        console.log(results[0])
+                        if (results[0]) {
+                            return res.status(200).json({
+                                freelancer: results[0]
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    getAvatarImage = function (req, res) {
+        var imgName = req.params.imgName;
+
+        const imgPath = path.join(__dirname, '..', '..', 'uploads', 'images', 'avatar', imgName);
+        res.sendFile(imgPath);
     }
 }
 module.exports = new FreelancerController;
