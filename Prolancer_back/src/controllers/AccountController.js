@@ -185,15 +185,7 @@ class AccountController {
                 return res.status(200).json({
                     title: 'Account grabbed',
                     //can add more fields
-                    account: {
-                        accountId: results[0].AccountID,
-                        email: results[0].Email,
-                        username: results[0].Username,
-                        password: results[0].Password,
-                        role: results[0].Role,
-                        fid: results[0].Status,
-                        id: results[0].AccountID
-                    }
+                    account: results[0]
                 })
             })
         })

@@ -374,6 +374,20 @@ export default {
               console.log(err.response);
             }
           );
+      } else if (decoded.role === "A"){
+        axios
+          .get("/accounts/info", {
+            headers: { token: localStorage.getItem("token") },
+          })
+          .then(
+            (res) => {
+              this.currentAccountInfo = res.data.account;
+              this.role = "A";
+            },
+            (err) => {
+              console.log(err.response);
+            }
+          );
       }
     }
   },
