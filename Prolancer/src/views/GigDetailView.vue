@@ -6,7 +6,7 @@
     <header class="row">
       <Header></Header>
     </header>
-    <NavCategory :listCategories="categories"></NavCategory>
+    <NavCategory ></NavCategory>
 
     <div class="container">
       <div class="row">
@@ -239,13 +239,9 @@ export default {
   },
   data() {
     return {
-      categories: [], gig: {},
+       gig: {},
     };
   },async created() {
-    const responseCategory = await axios.get('/categories/get');
-    const categories = responseCategory.data;
-    this.categories = categories;
-
     const responseGig = await axios.get('/gigs/details/'+ this.$route.params.id);
     const gig = responseGig.data;
     this.gig = gig;

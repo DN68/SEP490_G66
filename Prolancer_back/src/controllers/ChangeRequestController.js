@@ -5,6 +5,9 @@ class ChangeRequestController {
         const data = req.body;
         var changeRequest = (data.changeRequest);
         console.log(changeRequest);
+        if (!changeRequest) {
+          return res.status(400).send('Invalid or missing data');
+        }
         if (changeRequest.requestType == "Cancel")
            changeRequest.ExtendDay = null;
         
@@ -27,6 +30,7 @@ class ChangeRequestController {
         var userId = '';
         var userRole = '';
         var status = '';
+        var user = '';
         console.log(pageQuery);
         if (pageQuery.page != null) {
           page = pageQuery.page;
@@ -35,11 +39,15 @@ class ChangeRequestController {
         }
         if (pageQuery.status != undefined) {
           status = pageQuery.status
-          console.log("🚀 ~ file: OrderController.js:186 ~ OrderController ~ status:", status)
+          
         }
         requestType = pageQuery.requestType;
-        userId = pageQuery.user.AccountID;
-        userRole = pageQuery.user.Role;
+        user = pageQuery.user;
+        if (!requestType||!user) {
+          return res.status(400).send('Invalid or missing data');
+        }
+        userId = user.AccountID;
+        userRole = user.Role;
         console.log(requestType, page, userId, userRole);
     
         const offset = (page - 1) * limit;
@@ -91,7 +99,9 @@ class ChangeRequestController {
         var changeRequestID = data.changeRequestID;
     
         console.log(status + changeRequestID);
-        
+        if (!status||!changeRequestID) {
+          return res.status(400).send('Invalid or missing data');
+        }
         ChangeRequest.changeChangeRequestStatus(status, changeRequestID, function (err, result) {
           if (err)
             return res.status(500).send(err);

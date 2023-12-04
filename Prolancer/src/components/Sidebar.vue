@@ -26,6 +26,12 @@
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Interview Management</span>
           </router-link>
+
+          <router-link to="/manageChangeRequest" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Change Request Management</span>
+          </router-link>
           <router-link to="/manageaccount" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>

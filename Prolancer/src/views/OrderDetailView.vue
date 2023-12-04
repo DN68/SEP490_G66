@@ -627,8 +627,8 @@
                             :key="index"
                           >
                             <td>{{ index + 1 }}</td>
-                            <td class="scrollable-row">
-                              <div>
+                            <td >
+                              <div class="scrollable-row">
                                 {{ delivery.DeliveryName }}
                               </div>
                             </td>
@@ -649,8 +649,8 @@
                                 )
                               }}
                             </td>
-                            <td class="text-start scrollable-row">
-                              <div>
+                            <td class="text-start ">
+                              <div class="scrollable-row">
                                 {{ delivery.Note }}
                               </div>
                             </td>
@@ -948,13 +948,13 @@
                   <div v-if="order.Status == 'Completed'">
                     <div class="order_number row">
                       <span class="col-md-8 order_number_left"
-                        >Add efford(hour)</span
+                        >Add effort(hour)</span
                       >
                       <span class="col-md-4 order_number_right text-end"
                         ><input
                           type="number"
                           class="form-control w-100"
-                          v-model="addEfford"
+                          v-model="addEffort"
                           style="padding: 0 5px"
                           :readonly="
                             currentAccountInfo.Role == 'A' ||
@@ -964,8 +964,8 @@
                       </span>
                     </div>
                     <div>
-                      <p v-if="!isInputAddEfford" class="text-danger">
-                        Please input valid efford
+                      <p v-if="!isInputAddEffort" class="text-danger">
+                        Please input valid effort
                       </p>
                     </div>
                     <div
@@ -979,7 +979,7 @@
                           type="submit"
                           class="btn btn-primary bg-danger mt-1"
                           style="border: none; padding: 0 5px; font-size: 14px"
-                          @click="checkInputEfford()"
+                          @click="checkInputEffort()"
                         >
                           Save
                         </button></span
@@ -1399,7 +1399,7 @@
           <div class="modal-body">
             <div class="row">
               <div>
-                <p class="modal-title">Do you really want to add efford?</p>
+                <p class="modal-title">Do you really want to add effort?</p>
                 <p class="modal-title">This process cannot be undone.</p>
               </div>
             </div>
@@ -1415,7 +1415,7 @@
             <button
               type="button"
               class="btn btn-info text-light"
-              @click="addEffordAfterOrderCompleted()"
+              @click="addEffortAfterOrderCompleted()"
             >
               Save
             </button>
@@ -1476,8 +1476,8 @@ export default {
       action: "",
       isInputActualAfford: true,
       actualAfford: 1,
-      isInputAddEfford: true,
-      addEfford: 1,
+      isInputAddEffort: true,
+      addEffort: 1,
       rating: 0,
       feedBack: "",
       notInputRating: false,
@@ -1506,7 +1506,7 @@ export default {
         .then((response) => {
           const order = response.data[0];
           this.order = order;
-          this.addEfford = this.order.AddEfford;
+          this.addEffort = this.order.AddEffort;
         })
         .catch((error) => {
           // Handle the error
@@ -1727,32 +1727,32 @@ export default {
           toast.warn("Deliver Order Failed!", { autoClose: 2000 });
         });
     },
-    async checkInputEfford() {
-      const inputValue = parseInt(this.addEfford);
+    async checkInputEffort() {
+      const inputValue = parseInt(this.addEffort);
 
-      if (isNaN(inputValue) || !/^-?\d+$/.test(this.addEfford)) {
+      if (isNaN(inputValue) || !/^-?\d+$/.test(this.addEffort)) {
         // Display an error message or handle the invalid input as needed
         // Optionally reset the input to a valid value
-        this.isInputAddEfford = false;
+        this.isInputAddEffort = false;
         return;
       } else {
-        this.isInputAddEfford = true;
+        this.isInputAddEffort = true;
         $("#completeModal").modal("show");
       }
     },
 
-    async addEffordAfterOrderCompleted() {
+    async addEffortAfterOrderCompleted() {
       if (!this.actualAfford) {
         this.isInputActualAfford = false;
       } else {
         $("#completeModal").modal("hide");
         await axios
-          .put("/orders/addOrderEfford", {
-            addEfford: this.addEfford,
+          .put("/orders/addOrderEffort", {
+            addEffort: this.addEffort,
             orderID: this.order.OrderID,
           })
           .then((response) => {
-            toast.success("Add Order Efford Successfully!", {
+            toast.success("Add Order Effort Successfully!", {
               theme: "colored",
               autoClose: 2000,
               onClose: () => location.reload(),
@@ -1761,7 +1761,7 @@ export default {
           .catch((error) => {
             // Handle the error
             console.error("Error here:", error);
-            toast.warn("Add Order Efford Failed!", { autoClose: 2000 });
+            toast.warn("Add Order Effort Failed!", { autoClose: 2000 });
           });
       }
     },
@@ -1771,7 +1771,6 @@ export default {
 
     async sendReview() {
       var review = {
-        ReviewID: this.order.CustomerID,
         ReviewerID: this.order.CustomerID,
         ReceiverID: this.order.FreelancerID,
         Rating_Score: this.rating,
@@ -1810,8 +1809,9 @@ export default {
         })
         .then((response) => {
           const review = response.data.review;
-
+          if(review)
           this.reviews = review;
+          else this.reviews =[];
         })
         .catch((error) => {
           // Handle the error
@@ -2195,9 +2195,11 @@ export default {
 }
 
 .scrollable-row {
-  max-width: 0px;
+  /* max-width: 0px;
   overflow-x: auto;
-  white-space: nowrap;
+  white-space: nowrap; */
+  max-height: 50px; 
+  overflow-y: auto; 
 }
 
 .product_delivery_end {
