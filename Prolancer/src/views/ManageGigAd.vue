@@ -320,7 +320,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Change Order Status</h5>
+                  <h5 class="modal-title">Change Gig Status</h5>
                   <button
                     type="button"
                     class="btn-close"
@@ -495,29 +495,32 @@ export default {
     },
   },
   async created() {
-    await axios
-      .get("/accounts/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.account = res.data.account;
-          if (this.account.role != "A") {
-            this.$router.push("/");
-          }
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
-    if (localStorage.getItem("token") === null) {
+    console.log(localStorage.getItem("token"));
+    if (localStorage.getItem("token") == null) {
       this.$router.push("/login");
+    } else {
+      await axios
+        .get("/accounts/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.account = res.data.account;
+            if (this.account.role != "A") {
+              this.$router.push("/");
+            }
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
     }
-    const responseAccountInfor = await axios.get("/accounts/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const accountInfor = responseAccountInfor.data.account;
-    this.account = accountInfor;
+
+    // const responseAccountInfor = await axios.get("/accounts/info", {
+    //   headers: { token: localStorage.getItem("token") },
+    // });
+    // const accountInfor = responseAccountInfor.data.account;
+    // this.account = accountInfor;
     // console.log(this.account.accountId);
     const responseData = await axios.get("/gigs/index", {
       params: {
