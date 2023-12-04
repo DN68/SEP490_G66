@@ -455,7 +455,7 @@ export default {
       .then(
         (res) => {
           this.account = res.data.account;
-          if (this.account.role != "A") {
+          if (this.account.Role != "A") {
             this.$router.push("/");
           }
         },

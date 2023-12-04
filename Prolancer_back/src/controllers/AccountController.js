@@ -102,7 +102,7 @@ class AccountController {
         const inputOldPassword = req.body.inputOldPassword;
         const oldPassword = req.body.oldPassword;
         const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-
+        console.log(oldPassword)
         if (!bcrypt.compareSync(inputOldPassword, oldPassword)) {
             return res.status(401).json({
                 title: 'change pass failed',
@@ -185,15 +185,7 @@ class AccountController {
                 return res.status(200).json({
                     title: 'Account grabbed',
                     //can add more fields
-                    account: {
-                        accountId: results[0].AccountID,
-                        email: results[0].Email,
-                        username: results[0].Username,
-                        password: results[0].Password,
-                        role: results[0].Role,
-                        fid: results[0].Status,
-                        id: results[0].AccountID
-                    }
+                    account: results[0]
                 })
             })
         })

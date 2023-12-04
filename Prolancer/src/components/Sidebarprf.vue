@@ -11,7 +11,8 @@
   <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
       <div class="position-sticky">
         <div class="list-group list-group-flush mx-3 mt-4">
-          <img class="imgsidebar" :src="currentAccountInfo.Profile_Picture" alt="" />
+          <img class="imgsidebar" :src="currentAccountInfo.Profile_Picture" alt="" v-if="currentAccountInfo.Role != 'A'"/>
+          <img class="imgsidebar" src="../assets/image/logo2.png" alt="" v-else/>
     <br />
     <div class="info-user">
       <h5 class="username">{{ currentAccountInfo.Username }}</h5>
@@ -96,6 +97,20 @@ export default {
           (res) => {
             this.currentAccountInfo = res.data.customer;
             console.log(this.currentAccountInfo.Username)
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+      } else if(decoded.role === "A"){
+        axios
+        .get("/accounts/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.currentAccountInfo = res.data.account;
+            console.log(this.currentAccountInfo.username)
           },
           (err) => {
             console.log(err.response);

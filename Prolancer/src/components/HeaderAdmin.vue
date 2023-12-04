@@ -38,7 +38,7 @@
                 aria-expanded="false"
               >
                 <img
-                  :src="account.image"
+                  src="../assets/image/logo2.png"
                   class="rounded-circle"
                   height="30"
                   alt=""
