@@ -18,7 +18,14 @@
           </span>
         </div>
         <div class="right">
-          <textarea name="" id="" cols="60" rows="3" v-model="title" required></textarea>
+          <textarea
+            name=""
+            id=""
+            cols="60"
+            rows="3"
+            v-model="title"
+            required
+          ></textarea>
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -54,7 +61,6 @@
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select> -->
-          
         </div>
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
@@ -79,11 +85,23 @@
             </div>
             <div class="daydeli third">
               <label for="">Day Deliveries</label><br />
-              <input type="number" class="third" v-model="dayDeliveries" min="0" />
+              <input
+                type="number"
+                class="third"
+                v-model="dayDeliveries"
+                min="0"
+              />
             </div>
             <div class="price">
               <label for="">Price($)</label> <br />
-              <input type="number" class="third" v-model="price" min="0" step="5" /> $
+              <input
+                type="number"
+                class="third"
+                v-model="price"
+                min="0"
+                step="5"
+              />
+              $
             </div>
           </div>
         </div>
@@ -157,6 +175,9 @@ import Headers from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
 
 export default {
   name: "App",
@@ -175,7 +196,7 @@ export default {
       price: 0,
       image: "",
       freelancer: {},
-      message: ""
+      message: "",
     };
   },
   methods: {
@@ -195,10 +216,11 @@ export default {
           (res) => {
             // console.log(res.data);
             // this.$router.push("/giglist")
-            this.message = "Created successfully"
-            const countdown = setTimeout(() => {
-              this.$router.push("/managegigsel")
-            }, 3000);
+            toast.success("Gig created successfully", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.replace("/managegigsel"),
+            });
           },
           (err) => {
             console.log("Added failed");
@@ -214,18 +236,18 @@ export default {
       this.categories = res.data;
       // console.log(res.data);
     }),
-    axios
-      .get("/freelancers/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.freelancer = res.data.freelancer;
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
+      axios
+        .get("/freelancers/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.freelancer = res.data.freelancer;
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
   },
 };
 </script>

@@ -95,7 +95,7 @@ export default {
       .then(
         (res) => {
           this.account = res.data.account;
-          this.role = this.account.role
+          this.role = this.account.Role
         },
         (err) => {
           console.log(err.response);
@@ -145,9 +145,9 @@ export default {
       if (this.checkInput) {
         // console.log("Wrong password confirm");
         axios
-          .put(`/accounts/${this.account.email}/changepw`, {
+          .put(`/accounts/${this.account.Email}/changepw`, {
             inputOldPassword: this.inputOldPassword,
-            oldPassword: this.account.password,
+            oldPassword: this.account.Password,
             newPassword: this.newPassword,
           })
           .then(

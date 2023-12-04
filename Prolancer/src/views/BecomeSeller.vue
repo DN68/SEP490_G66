@@ -179,6 +179,7 @@
                 type="file"
                 ref="fileImage"
                 accept=".jpeg, .jpg, .png"
+                @change="updateFileImage"
               />
               (.jpeg, .jpg, .png)
             </td>
@@ -406,6 +407,7 @@ export default {
       role: "F",
       mainCategory: -1,
       freelancer: {},
+      fileImage: null,
       //email verification
       verificationCode: "",
       inputCode: "123456",
@@ -607,6 +609,10 @@ export default {
     },
     async saveFreelancer() {
       //save freelancer account info
+      const FormData = this.processImageFile()
+      console.log(FormData)
+
+
       axios
         .post("/accounts/create", {
           email: this.email,
@@ -620,24 +626,39 @@ export default {
             console.log(res.data.account);
             this.account = res.data.account;
             //add new freelancer with newly created account ID
+             FormData.append("accountID", this.account.AccountID);
+             FormData.append("firstName", this.firstName);
+             FormData.append("lastName", this.lastName);
+             FormData.append("phoneNo", this.phoneNo);
+             FormData.append("location", this.location);
+             FormData.append("description", this.description);
+             FormData.append("mainCategoryID", this.mainCategory);
+
+
+             FormData.append("profilePicture", "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg");
+
+            
             axios
-              .post("/freelancers/create", {
-                accountID: this.account.AccountID,
-                firstName: this.firstName,
-                lastName: this.lastName,
-                profilePicture:
-                  "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
-                phoneNo: this.phoneNo,
-                location: this.location,
-                description: this.description,
-              })
+              .post("/freelancers/create", FormData)
+              // .post("/freelancers/create", {
+              //   accountID: this.account.AccountID,
+              //   firstName: this.firstName,
+              //   lastName: this.lastName,
+              //   profilePicture:
+              //     "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
+              //   phoneNo: this.phoneNo,
+              //   location: this.location,
+              //   description: this.description,
+              //   mainCategoryID: this.mainCategory,
+              // })
               .then(
                 (res) => {
+                  console.log(res.data);
                   this.message =
                     "Info added successfully. Returning to homepage";
-                  console.log(res.data.freelancer.FreelancerID)
+                  console.log(res.data.freelancer.FreelancerID);
                   this.freelancer = res.data.freelancer.FreelancerID;
-                  this.saveCV()
+                  this.saveCV();
                 },
                 (err) => {
                   console.log(err.response);
@@ -648,9 +669,8 @@ export default {
             console.log(err.response);
           }
         );
-      
     },
-    saveCV(){
+    saveCV() {
       //Save CV pdf file
       const fileInput = this.$refs.fileCV;
       console.log(
@@ -663,7 +683,7 @@ export default {
         formData.append("file", fileInput.files[0]);
         formData.append("FreelancerID", this.freelancer);
         console.log(formData);
-        console.log(this.freelancer)
+        console.log(this.freelancer);
         axios
           .post("/cv/createCV", formData)
           .then((response) => {
@@ -671,29 +691,31 @@ export default {
             console.log("File uploaded successfully", response);
             console.log(response);
             console.log(response.data);
-            console.log(this.freelancer)
+            console.log(this.freelancer);
             this.CV_Uploads = response.data;
 
             //Add CV in DB
-            axios.post('/cv/saveCV', {
-              FreelancerID: this.freelancer,
-              Title: this.cvTitle,
-              Description: this.cvDescription,
-              CV_Upload: response.data
-            }).then(
-              res => {
-                console.log(res.data)
-              },
-              err => {
-                console.log(err.response)
-              }
-            )
+            axios
+              .post("/cv/saveCV", {
+                FreelancerID: this.freelancer,
+                Title: this.cvTitle,
+                Description: this.cvDescription,
+                CV_Upload: response.data,
+              })
+              .then(
+                (res) => {
+                  console.log(res.data);
+                },
+                (err) => {
+                  console.log(err.response);
+                }
+              );
 
             //message
             toast.success("Upload CV Successfully!", {
               theme: "colored",
               autoClose: 2000,
-              // onClose: () => location.replace("/sendmessage"),
+              onClose: () => location.replace("/sendmessage"),
             });
           })
           .catch((error) => {
@@ -706,7 +728,32 @@ export default {
         console.warn("Please select a file to upload");
       }
     },
-
+    updateFileImage(){
+      this.fileImage = this.$refs.fileImage
+    },
+    processImageFile() {
+      //Save CV pdf file
+      const fileImageInput = this.fileImage;
+      console.log(fileImageInput);
+      console.log(
+        "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
+        fileImageInput.files
+      );
+      console.log("🚀 ~ ", this.cvTitle + "   " + this.cvDescription);
+      //if there is image chosen
+      if (fileImageInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append("file", fileImageInput.files[0]);
+       
+        console.log(formData);
+        console.log(this.freelancer);
+        return formData;
+      } else {
+        // Handle case when no file is selected
+        console.warn("Please select a file to upload");
+        return null;
+      }
+    },
     // async openPdfPage() {
     //   const apiUrl = "/cv/" + this.CV_Uploads;
     //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
@@ -717,7 +764,6 @@ export default {
     //   const blobUrl = URL.createObjectURL(blob);
     //   this.blobUrl = blobUrl;
     //   console.log(this.blobUrl);
-
 
     //   // Open a new window or tab and display the PDF
     //   const pdfWindow = window.open();
