@@ -255,6 +255,26 @@ export default {
     };
   },
   async created() {
+    console.log(localStorage.getItem("token"));
+    if (localStorage.getItem("token") == null) {
+      this.$router.push("/login");
+    } else {
+      await axios
+        .get("/accounts/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.account = res.data.account;
+            if (this.account.Role != "A") {
+              this.$router.push("/");
+            }
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    }
     // if (localStorage.getItem("token") === null) {
     //   this.$router.push("/login");
     // }

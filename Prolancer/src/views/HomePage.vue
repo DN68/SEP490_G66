@@ -21,7 +21,7 @@
                 data-testid="personalized-header"
                 class="personalized-header"
               >
-                <p v-if="account != null">Hello, {{ account.username }}</p>
+                <p v-if="account != null">Hello, {{ account.Username }}</p>
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -201,7 +201,7 @@ export default {
         (res) => {
           this.account = res.data.account;
           //Freelancer route
-          if (this.account.role == "F") {
+          if (this.account.Role == "F") {
             axios
               .get("/freelancers/info", {
                 headers: { token: localStorage.getItem("token") },
@@ -225,7 +225,7 @@ export default {
               );
           }
           //Customer route
-          else if (this.account.role == "C") {
+          else if (this.account.Role == "C") {
             axios
               .get("/customers/info", {
                 headers: { token: localStorage.getItem("token") },
@@ -243,7 +243,7 @@ export default {
                 }
               );
           }
-          else if (this.account.role == "A") {
+          else if (this.account.Role == "A") {
             this.$router.push("/managegigad");
           }
         },

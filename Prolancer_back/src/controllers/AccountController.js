@@ -102,7 +102,7 @@ class AccountController {
         const inputOldPassword = req.body.inputOldPassword;
         const oldPassword = req.body.oldPassword;
         const newPassword = bcrypt.hashSync(req.body.newPassword, 10);
-
+        console.log(oldPassword)
         if (!bcrypt.compareSync(inputOldPassword, oldPassword)) {
             return res.status(401).json({
                 title: 'change pass failed',

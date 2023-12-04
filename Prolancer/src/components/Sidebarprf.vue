@@ -110,7 +110,7 @@ export default {
         .then(
           (res) => {
             this.currentAccountInfo = res.data.account;
-            console.log(this.currentAccountInfo.Username)
+            console.log(this.currentAccountInfo.username)
           },
           (err) => {
             console.log(err.response);
