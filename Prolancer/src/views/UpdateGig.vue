@@ -1,143 +1,145 @@
 <template>
-  <div class="header">
-    <Headers></Headers>
-  </div>
+  <div>
+    <div class="header">
+      <Headers></Headers>
+    </div>
 
-  <div id="content" class="">
-    <div class="container-creagig">
-      <div class="line" style="text-align: left; margin-top: 35px">
-        <div style="float: left; width: 30%">
-          <span style="font-weight: bold">Gig Title</span>
-          <br />
-          <span>
-            As your Gig storefront, your title is the most important place to
-            include keywords that buyers would likely use to search for a
-            service like yours.
-          </span>
+    <div id="content" class="">
+      <div class="container-creagig">
+        <div class="line" style="text-align: left; margin-top: 35px">
+          <div style="float: left; width: 30%">
+            <span style="font-weight: bold">Gig Title</span>
+            <br />
+            <span>
+              As your Gig storefront, your title is the most important place to
+              include keywords that buyers would likely use to search for a
+              service like yours.
+            </span>
+          </div>
+          <div class="right">
+            <textarea
+              name=""
+              id=""
+              cols="60"
+              rows="3"
+              v-model="gig.Title"
+            ></textarea>
+          </div>
         </div>
-        <div class="right">
-          <textarea
-            name=""
-            id=""
-            cols="60"
-            rows="3"
-            v-model="gig.Title"
-          ></textarea>
-        </div>
-      </div>
-      <div class="line" style="text-align: left; margin-top: 35px">
-        <div style="float: left; width: 30%">
-          <span style="font-weight: bold">Category</span>
-          <br />
-          <span>
-            Choose the category and sub-category most suitable for your Gig.
-          </span>
-        </div>
-        <div class="right">
-          <select
-            v-model="gig.CategoryID"
-            @change="displayCategory"
-            class="form-select lefthalf"
-            aria-label="Default select example"
-          >
-            <option :value="-1">Select a category</option>
-            <option
-              v-for="category in categories"
-              :key="category.id"
-              :value="category.CategoryID"
+        <div class="line" style="text-align: left; margin-top: 35px">
+          <div style="float: left; width: 30%">
+            <span style="font-weight: bold">Category</span>
+            <br />
+            <span>
+              Choose the category and sub-category most suitable for your Gig.
+            </span>
+          </div>
+          <div class="right">
+            <select
+              v-model="gig.CategoryID"
+              @change="displayCategory"
+              class="form-select lefthalf"
+              aria-label="Default select example"
             >
-              {{ category.Category_Name }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="line" style="text-align: left; margin-top: 35px">
-        <div style="float: left; width: 30%">
-          <span style="font-weight: bold">Scope & Pricing</span>
-        </div>
-        <div class="right">
-          <div class="choice" style="display: flex; flex-direction: row">
-            <div class="numpage">
-              <label for="">Number of page</label>
-              <select
-                class="form-select third"
-                aria-label="Default select example"
-                v-model="gig.Numberpage"
+              <option :value="-1">Select a category</option>
+              <option
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.CategoryID"
               >
-                <option value="">Select number of page</option>
-                <option value="less than 3">less than 3</option>
-                <option value="3-5">3-5</option>
-                <option value="more than 5">more than 5</option>
-              </select>
-            </div>
-            <div class="daydeli third">
-              <label for="">Day Deliveries</label><br />
-              <input type="number" class="third" v-model="gig.Delivery_Day" />
-            </div>
-            <div class="price">
-              <label for="">Price($)</label> <br />
-              <input type="number" class="third" v-model="gig.Price" /> $
+                {{ category.Category_Name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="line" style="text-align: left; margin-top: 35px">
+          <div style="float: left; width: 30%">
+            <span style="font-weight: bold">Scope & Pricing</span>
+          </div>
+          <div class="right">
+            <div class="choice" style="display: flex; flex-direction: row">
+              <div class="numpage">
+                <label for="">Number of page</label>
+                <select
+                  class="form-select third"
+                  aria-label="Default select example"
+                  v-model="gig.Numberpage"
+                >
+                  <option value="">Select number of page</option>
+                  <option value="less than 3">less than 3</option>
+                  <option value="3-5">3-5</option>
+                  <option value="more than 5">more than 5</option>
+                </select>
+              </div>
+              <div class="daydeli third">
+                <label for="">Day Deliveries</label><br />
+                <input type="number" class="third" v-model="gig.Delivery_Day" />
+              </div>
+              <div class="price">
+                <label for="">Price($)</label> <br />
+                <input type="number" class="third" v-model="gig.Price" /> $
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="line" style="text-align: left; margin-top: 35px">
-        <div style="float: left; width: 30%">
-          <span style="font-weight: bold">Description</span>
-          <br />
-          <span> Briefly Describe Your Gig </span>
+        <div class="line" style="text-align: left; margin-top: 35px">
+          <div style="float: left; width: 30%">
+            <span style="font-weight: bold">Description</span>
+            <br />
+            <span> Briefly Describe Your Gig </span>
+          </div>
+          <div class="right">
+            <textarea
+              name=""
+              id=""
+              cols="60"
+              rows="3"
+              v-model="gig.Description"
+            ></textarea>
+          </div>
         </div>
-        <div class="right">
-          <textarea
-            name=""
-            id=""
-            cols="60"
-            rows="3"
-            v-model="gig.Description"
-          ></textarea>
-        </div>
-      </div>
-      <div class="line" style="text-align: left; margin-top: 35px">
-        <div style="float: left; width: 30%">
-          <span style="font-weight: bold">Image</span>
-          <br />
-          <span>
-            Get noticed by the right buyers with visual examples of your
-            services.
-          </span>
-        </div>
-        <div class="right">
-          <div
-            class="img-gig"
-            style="
-              padding-top: 40px;
-              padding-left: 10px;
-              padding-right: 10px;
-              text-align: center;
-            "
-          >
-            <span style="font-size: 12px"
-              >Drag & drop a Photo or
-              <span style="color: blue">Browse</span></span
+        <div class="line" style="text-align: left; margin-top: 35px">
+          <div style="float: left; width: 30%">
+            <span style="font-weight: bold">Image</span>
+            <br />
+            <span>
+              Get noticed by the right buyers with visual examples of your
+              services.
+            </span>
+          </div>
+          <div class="right">
+            <div
+              class="img-gig"
+              style="
+                padding-top: 40px;
+                padding-left: 10px;
+                padding-right: 10px;
+                text-align: center;
+              "
             >
+              <span style="font-size: 12px"
+                >Drag & drop a Photo or
+                <span style="color: blue">Browse</span></span
+              >
+            </div>
           </div>
         </div>
-      </div>
-      <div class="button">
-        <button
-          id="btn-sub"
-          type="submit"
-          class="btn btn-primary bg-danger"
-          style="border: none; width: 100px; margin-top: 40px"
-          @click="updateGig"
-        >
-          Update
-        </button>
+        <div class="button">
+          <button
+            id="btn-sub"
+            type="submit"
+            class="btn btn-primary bg-danger"
+            style="border: none; width: 100px; margin-top: 40px"
+            @click="updateGig"
+          >
+            Update
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="footer">
-    <Footer></Footer>
+    <div class="footer">
+      <Footer></Footer>
+    </div>
   </div>
 </template>
 

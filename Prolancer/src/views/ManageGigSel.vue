@@ -155,7 +155,7 @@
           </router-link>
         </div>
       </div>
-      <div class="order_table">
+      <div class="gig_table">
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
@@ -222,7 +222,7 @@
                   </p>
                 </div>
               </td>
-              
+
               <td class="td_gigs">
                 <div class="d-flex align-items-center">
                   <span
@@ -249,7 +249,7 @@
                   >
                 </div>
               </td>
-              
+
               <td class="td_gigs">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
@@ -264,6 +264,7 @@
                   @click="
                     (isshowModal = !isshowModal), (slectedGigID = gig.GigID)
                   "
+                  v-if="status != 'Blocked'"
                   class="bi bi-gear-fill"
                 ></i>
                 &nbsp;
@@ -335,9 +336,6 @@
                       </option>
                       <option class="" value="Deleted">
                         <span>Deleted</span>
-                      </option>
-                      <option class="" value="Blocked">
-                        <span>Blocked</span>
                       </option>
                     </select>
                   </div>
@@ -520,7 +518,7 @@ export default {
       },
     });
     const gigs = responseData.data.gig;
-    console.log(gigs)
+    console.log(gigs);
     this.gigs = gigs;
     const paging = responseData.data.pagination;
     this.pagination = paging;
@@ -559,7 +557,7 @@ export default {
 };
 </script>
   
-  <style>
+  <style scoped>
 .container-managigsel {
   margin-left: 5%;
   margin-right: 5%;
@@ -626,7 +624,7 @@ export default {
   text-align: left;
   font-weight: 600;
 }
-.order_table .table th {
+.gig_table .table th {
   padding: 10px;
 }
 .table .th_user,
@@ -651,9 +649,12 @@ export default {
 .td_gig {
   text-align: left;
 }
-.order_table .table th {
+.gig_table .table th {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
+}
+.align-items-center {
+  justify-content: center;
 }
 </style>

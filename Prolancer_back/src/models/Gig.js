@@ -28,14 +28,14 @@ Gig.getAll = function (result) {
 
 Gig.getGigWithFilterAndPagingAndSearching = function (status,filterByCategory, sqlFilterByTitle, sqlFilterByPrice, search, limit, offset, gig, pagination) {
   var sql2 = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID WHERE";
-  var sql ="Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription , AVG(Rating_Score) as Rating from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID WHERE";
+  var sql ="Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription , AVG(Rating_Score) as Rating, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Category c ON c.CategoryID = g.CategoryID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   console.log("sql: ", sql);
   console.log("sqlCount: ", sqlCount);
 
 
-  var check = connectDb.query(sql + " g.Status = ? AND CategoryID LIKE ? AND Title LIKE ? "+sqlFilterByTitle + sqlFilterByPrice+" GROUP BY g.GigID, rv.ReceiverID LIMIT ? OFFSET ? ", [status,'%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
+  var check = connectDb.query(sql + " g.Status = ? AND g.CategoryID LIKE ? AND Title LIKE ? "+sqlFilterByTitle + sqlFilterByPrice+" GROUP BY g.GigID, rv.ReceiverID LIMIT ? OFFSET ? ", [status,'%' + filterByCategory + '%', '%' + search + '%', limit, offset], function (err, res) {
     if (err) {
       console.log("error: ", err);
       gig(err,null)

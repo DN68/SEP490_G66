@@ -230,11 +230,6 @@
                     class="badge rounded-pill bg-secondary"
                     >Blocked</span
                   >
-                  <span
-                    v-if="freelancer.Status == 'Finished'"
-                    class="badge rounded-pill bg-success"
-                    >Finished</span
-                  >
                 </div>
               </td>
               <td class="td_actions">
@@ -291,7 +286,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Change account Status</h5>
+                  <h5 class="modal-title">Change Freelancer Status</h5>
                   <button
                     type="button"
                     class="btn-close"
@@ -309,9 +304,6 @@
                       style="margin-bottom: 15px"
                       class="text-center py-2"
                     >
-                      <option class="" value="Pending">
-                        <span>Pending</span>
-                      </option>
                       <option class="" value="Active">
                         <span>Active</span>
                       </option>
@@ -570,7 +562,7 @@ export default {
       searchFreelancer: "",
       isshowModal: false,
       isShowInfoModal: false,
-      selectedStatus: "Pending",
+      selectedStatus: "Active",
     };
   },
   methods: {
