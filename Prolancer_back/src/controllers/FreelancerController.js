@@ -69,7 +69,7 @@ class FreelancerController {
         var page;
         var search
         var status = pageQuery.status;
-
+        // console.log(status)
         if (pageQuery.search != null) {
 
             search = pageQuery.search;
@@ -94,6 +94,7 @@ class FreelancerController {
 
         // Create a Promise to handle the asynchronous operation
         const fetchData = new Promise((resolve, reject) => {
+            console.log(status)
             Freelancer.getAllFreelancersWithPaging(status, search, limit, offset, function (err, freelancerData) {
                 console.log(freelancerData)
                 if (err) {
