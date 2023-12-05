@@ -218,13 +218,13 @@ html {
   margin-bottom: 15px;
 }
 #sidebarMenu > img {
-  width: 20%;
+  width: 30%;
   margin: 20px;
 }
 
 .info-user {
-  margin-top: 45px;
-  margin-left: 55px;
+  margin-top: 0px;
+  margin-left: 0px;
   /* padding-left: 25px;
   border-left: 1px #ccc solid; */
 }
