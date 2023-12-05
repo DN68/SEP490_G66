@@ -6,7 +6,7 @@
     <header class="row">
       <Header></Header>
     </header>
-    <NavCategory :listCategories="categories"></NavCategory>
+    <NavCategory ></NavCategory>
 
     <div class="container">
       <div class="row">
@@ -140,7 +140,6 @@
                 <div class="main_title">
                   <h5 class="">Reviews</h5>
                 </div>
-                <hr class="featurette-divider" />
                 <Review></Review>
               </div>
             </div>
@@ -189,7 +188,7 @@
                           type="button"
                         >
                        
-                          Get Order
+                          Get Order Request
 
                         </button>
 
@@ -240,13 +239,9 @@ export default {
   },
   data() {
     return {
-      categories: [], gig: {},
+       gig: {},
     };
   },async created() {
-    const responseCategory = await axios.get('/categories/get');
-    const categories = responseCategory.data;
-    this.categories = categories;
-
     const responseGig = await axios.get('/gigs/details/'+ this.$route.params.id);
     const gig = responseGig.data;
     this.gig = gig;

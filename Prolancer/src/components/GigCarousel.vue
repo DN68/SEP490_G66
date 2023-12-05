@@ -50,7 +50,7 @@
                             <img
                               :src="gig.Gig_IMG"
                               class="img-fluid rounded"
-                              alt="Macbook"
+                              alt="Img"
                             />
                           </div>
                           <div class="thumb-content">
@@ -132,7 +132,7 @@
                             <img
                               :src="gig.Gig_IMG"
                               class="img-fluid rounded"
-                              alt="Macbook"
+                              alt="Img"
                             />
                           </div>
                           <div class="thumb-content" >
@@ -212,7 +212,7 @@
                             <img
                               :src="gig.Gig_IMG"
                               class="img-fluid rounded"
-                              alt="Macbook"
+                              alt="Img"
                             />
                           </div>
                           <div class="thumb-content">

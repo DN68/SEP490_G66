@@ -26,10 +26,21 @@
             id="btn-gig"><i class="bi bi-stack me-3"></i>
             <span>Interview Management</span>
           </router-link>
-          <router-link to="/manageaccount" v-on:click="ChangeActive"
+
+          <router-link to="/manageChangeRequest" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"><i class="bi bi-stack me-3"></i>
-            <span>Users Management</span>
+            <span>Change Request Management</span>
+          </router-link>
+          <router-link to="/manageaccount/hirer" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Hirer Management</span>
+          </router-link>
+          <router-link to="/manageaccount/freelancer" v-on:click="ChangeActive"
+            class="list-group-item list-group-item-action py-2 ripple"
+            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            <span>Freelancer Management</span>
           </router-link>
           
           <a

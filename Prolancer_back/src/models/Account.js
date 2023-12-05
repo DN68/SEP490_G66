@@ -11,7 +11,7 @@ var Account = function (account) {
 };
 
 Account.createAccount = function (email, username, password, role, result) {
-    connectDb.query("INSERT INTO Account SET Email = ?, Username = ?, Password = ?, Role = ?, Status = 'Active'",
+    connectDb.query("INSERT INTO Account SET Email = ?, Username = ?, Password = ?, Role = ?, Status = 'Pending'",
         [email, username, password, role], function (err, res) {
             if (err) {
                 result(null, err);
@@ -97,33 +97,45 @@ Account.updateAccountPassword = function (newPassword, email, results) {
 Account.getAllAccountsWithPaging = function (status, limit, offset, account, pagination) {
     var sql = "Select * from Account WHERE";
     var sqlCount = "Select COUNT(*) AS count from Account WHERE";
-    
+
     console.log("sql: ", sql);
     console.log("sqlCount: ", sqlCount);
-  
+
     var check = connectDb.query(sql + " Role != 'A' AND Status = ? LIMIT ? OFFSET ?", [status, limit, offset], function (err, res) {
-      if (err) {
-        console.log("error: ", err);
-        account(err,null)
-      }
-      else {
-  
-        account(null,res);
-      }
+        if (err) {
+            console.log("error: ", err);
+            account(err, null)
+        }
+        else {
+
+            account(null, res);
+        }
     });
-  
+
     connectDb.query(sqlCount + " Role != 'A' AND Status = ?", [status], function (err, res) {
-      if (err) {
-  
-        pagination(err,null);
-      }
-      else {
-        pagination(null,res);
-      }
+        if (err) {
+
+            pagination(err, null);
+        }
+        else {
+            pagination(null, res);
+        }
     });
-  
-    
-  }
+
+
+}
+
+
+Account.updateAccountStatus = function (status, id, result) {
+    connectDb.query("UPDATE Account SET Status = ? WHERE AccountID = ?", [status, id], function (err, res) {
+        if (err) {
+            result(err, null);
+        }
+        else {
+            result(null, res);
+        }
+    })
+}
 
 module.exports = Account;
 

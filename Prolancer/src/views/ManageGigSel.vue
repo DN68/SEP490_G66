@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header></Header>
-    <div class="container-managigad">
+    <HeaderSeller></HeaderSeller>
+    <div class="container-managigsel">
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Gigs</h3></div>
         <div class="col-md-3"><h3></h3></div>
@@ -155,20 +155,17 @@
           </router-link>
         </div>
       </div>
-      <div class="order_table">
+      <div class="gig_table">
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
               <th class="th_no">NO.</th>
-              <th class="th_Freelancer">FREELANCER</th>
               <th class="th_Title">TITLE</th>
               <th class="th_description">DESCRIPTION</th>
               <th class="th_img">GIG IMAGE</th>
               <th class="th_category">CATEGORY NAME</th>
               <th class="th_creationDate">CREATION DATE</th>
-              <th class="th_deliveryDays">DELEVERY DAY</th>
               <th class="th_status">STATUS</th>
-              <th class="th_numberPage">NUMBER OF PAGE</th>
               <th class="th_price">PRICE</th>
               <th class="th_actions">ACTIONS</th>
             </tr>
@@ -182,21 +179,6 @@
                     coding -->
                     {{ index + 1 }}
                   </p>
-                </div>
-              </td>
-              <td class="td_user">
-                <div class="d-flex align-items-center">
-                  <img
-                    :src="gig.Profile_Picture"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                    class="rounded-circle"
-                  />
-                  <div class="ms-3">
-                    <p class="fw-bold mb-1">
-                      {{ gig.First_Name + " " + gig.Last_Name }}
-                    </p>
-                  </div>
                 </div>
               </td>
               <td class="td_gigs">
@@ -240,15 +222,7 @@
                   </p>
                 </div>
               </td>
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Delivery_Day }}
-                  </p>
-                </div>
-              </td>
+
               <td class="td_gigs">
                 <div class="d-flex align-items-center">
                   <span
@@ -275,15 +249,7 @@
                   >
                 </div>
               </td>
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
-                    {{ gig.Numberpage }}
-                  </p>
-                </div>
-              </td>
+
               <td class="td_gigs">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
@@ -298,6 +264,7 @@
                   @click="
                     (isshowModal = !isshowModal), (slectedGigID = gig.GigID)
                   "
+                  v-if="status != 'Blocked'"
                   class="bi bi-gear-fill"
                 ></i>
                 &nbsp;
@@ -369,9 +336,6 @@
                       </option>
                       <option class="" value="Deleted">
                         <span>Deleted</span>
-                      </option>
-                      <option class="" value="Blocked">
-                        <span>Blocked</span>
                       </option>
                     </select>
                   </div>
@@ -470,7 +434,7 @@
 </template>
   
   <script>
-import Header from "../components/Header.vue";
+import HeaderSeller from "../components/HeaderSeller.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -480,7 +444,7 @@ var moment = require("moment");
 export default {
   name: "CreateOrderDetailPage",
   components: {
-    Header,
+    HeaderSeller,
   },
   data() {
     return {
@@ -554,7 +518,7 @@ export default {
       },
     });
     const gigs = responseData.data.gig;
-    console.log(gigs)
+    console.log(gigs);
     this.gigs = gigs;
     const paging = responseData.data.pagination;
     this.pagination = paging;
@@ -593,9 +557,9 @@ export default {
 };
 </script>
   
-  <style>
-.container-managigad {
-  margin-left: 17%;
+  <style scoped>
+.container-managigsel {
+  margin-left: 5%;
   margin-right: 5%;
 }
 .input-group-text {
@@ -660,7 +624,7 @@ export default {
   text-align: left;
   font-weight: 600;
 }
-.order_table .table th {
+.gig_table .table th {
   padding: 10px;
 }
 .table .th_user,
@@ -685,9 +649,12 @@ export default {
 .td_gig {
   text-align: left;
 }
-.order_table .table th {
+.gig_table .table th {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
+}
+.align-items-center {
+  justify-content: center;
 }
 </style>

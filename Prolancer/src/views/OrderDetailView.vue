@@ -1,6 +1,8 @@
 <template>
   <div class="view_order_detail">
-    <Header></Header>
+    <Header v-if="currentAccountInfo.Role == 'C'"></Header>
+    <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
+    <HeaderAdmin v-else></HeaderAdmin>
     <div class="container">
       <div class="row">
         <div class="order_status row">
@@ -26,6 +28,7 @@
                 (isChangeRequest = false)
             "
             :class="{ status_item_active: isrequirement }"
+            style="display: none"
           >
             <h6>Job Description</h6>
           </div>
@@ -35,7 +38,8 @@
               (isdetail = false),
                 (isrequirement = false),
                 (isdelivery = true),
-                (isChangeRequest = false)
+                (isChangeRequest = false),
+                getDeliveryByOrderID()
             "
             :class="{ status_item_active: isdelivery }"
           >
@@ -100,6 +104,14 @@
                             >
                           </span>
                         </div>
+                        <div class="mt-1">
+                          <span class="delivery_time_right"
+                            >Job Description:
+                            <span class="text-danger"
+                              >{{ order.JobDescription }}
+                            </span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -107,13 +119,13 @@
                     <h5 class="text-end" style="font-size: 20px">
                       ${{
                         order.Price * order.TotalEstimation +
-                        order.Price * order.TotalEstimation * 0.1
+                        (order.Price * order.TotalEstimation * 10) / 100
                       }}
                     </h5>
                   </div>
                 </div>
               </div>
-              <hr class="featurette-divider" />
+              <hr class="featurette-divider" style="height: 0" />
               <div class="order_detail_overview_body row">
                 <div class="order_detail_title order_table_head text-start">
                   <span class="col-md-6 order_number_right"
@@ -171,7 +183,9 @@
                         <th scope="row">SERVICE FEE</th>
                         <th colspan="2"></th>
                         <th class="order_price">
-                          ${{ order.Price * order.TotalEstimation * 0.1 }}
+                          ${{
+                            (order.Price * order.TotalEstimation * 10) / 100
+                          }}
                         </th>
                       </tr>
 
@@ -181,7 +195,7 @@
                         <th class="order_price">
                           ${{
                             order.Price * order.TotalEstimation +
-                            order.Price * order.TotalEstimation * 0.1
+                            (order.Price * order.TotalEstimation * 10) / 100
                           }}
                         </th>
                       </tr>
@@ -194,7 +208,6 @@
           <div
             class="col-md-8 order_detail_information step2"
             style="display: none"
-            :style="{ display: isrequirement ? 'block' : 'none' }"
           >
             <div class="container">
               <div class="order_detail_overview">
@@ -223,7 +236,10 @@
               </div>
               <hr class="featurette-divider" />
 
-              <div class="order_detail_overview" v-if="currentAccountInfo.Role == 'C'">
+              <div
+                class="order_detail_overview"
+                v-if="currentAccountInfo.Role == 'C'"
+              >
                 <div class="order_detail_overview_head row">
                   <div class="col-md-12 order_detail_title">
                     <h6 class="text-start">
@@ -251,8 +267,8 @@
                       type="submit"
                       @click="
                         addRequirement != ''
-                          ? ((isshowConfirmAddRequirementModal =
-                              !isshowConfirmAddRequirementModal))
+                          ? (isshowConfirmAddRequirementModal =
+                              !isshowConfirmAddRequirementModal)
                           : (notInputRequirement = true)
                       "
                     >
@@ -287,7 +303,6 @@
                         </label>
                       </div>
                       <!-- if freelancer not upload new file -->
-                     
 
                       <h6 class="text-center text_sologan">
                         Packages Delivered at the Speed of Need.
@@ -299,7 +314,13 @@
                         >
                       </div>
 
-                      <div class="deliver_order mt-4">
+                      <div
+                        class="deliver_order mt-4"
+                        v-if="
+                          order.Status != 'Delivered' &&
+                          order.Status != 'Completed'
+                        "
+                      >
                         <button
                           class="co-white bg-co-black deliver_btn"
                           type="btn"
@@ -308,16 +329,16 @@
                         </button>
                       </div>
                     </div>
-                    <div v-else class="Free_NotDelivered">
+                    <div
+                      v-else-if="
+                        order.Status != 'Delivered' &&
+                        order.Status != 'Completed'
+                      "
+                      class="Free_NotDelivered"
+                    >
                       <div>
-                         <i class="bi bi-box-seam box_icon_delivery"></i>
-                        
-                        
+                        <i class="bi bi-box-seam box_icon_delivery"></i>
                       </div>
-                      <!-- if freelancer not upload file -->
-                      <p class="text-danger" v-if="!checkInputFile">
-                        {{ messageDanger }}
-                      </p>
 
                       <h6 class="text-center text_sologan">
                         Packages Delivered at the Speed of Need.
@@ -328,10 +349,7 @@
                           should deliver this order on
                           {{
                             moment(order.EndAt)
-                              .add(
-                                24 * (order.Extend_Day),
-                                "h"
-                              )
+                              .add(24 * order.Extend_Day, "h")
                               .format("MMMM Do, h:mm A")
                           }}</span
                         >
@@ -342,23 +360,48 @@
                           class="co-white bg-co-black deliver_btn"
                           type="btn"
                           @click="
-                            this.$refs.fileInput.files.length > 0
-                              ? ((this.isshowConfirmSendRequestModal =
-                                  !this.isshowConfirmSendRequestModal),
-                                (this.modalMessage = 'deliver your product'),
-                                (this.isUploadFile = true))
-                              : (messageDanger = 'Please upload file!')
+                            (modalMessage = 'deliver this order'),
+                              (action = 'Deliver'),
+                              (this.isshowConfirmSendRequestModal =
+                                !this.isshowConfirmSendRequestModa)
                           "
                         >
                           Deliver
                         </button>
                       </div>
                     </div>
+                    <div v-else-if="order.Status == 'Completed'">
+                      <div>
+                        <i
+                          class="bi bi-box-seam-fill box_icon_delivery text-black"
+                        ></i>
+                      </div>
+                      <h6 class="text-center text_sologan">
+                        Your order has been completed!
+                      </h6>
+                      <div class="delivery_infomation">
+                        <span class="ordered_from_right"> </span>
+                        <span
+                          class="delivery_infomation_date fs-5"
+                          v-if="reviews.length == 0"
+                        >
+                          Waiting review from hirer for you!
+                        </span>
+                        <span class="delivery_infomation_date fs-5" v-else>
+                          Here is review from hirer for you!
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <!-- if user are Customer, Admin -->
                   <div class="col-md-12 order_detail_title" v-else>
                     <!-- if freelancer has not delivered before -->
-                    <div v-if="order.Status != 'Delivered'">
+                    <div
+                      v-if="
+                        order.Status != 'Delivered' &&
+                        order.Status != 'Completed'
+                      "
+                    >
                       <div>
                         <i class="bi bi-box-seam box_icon_delivery"></i>
                       </div>
@@ -385,31 +428,317 @@
                       </div>
                     </div>
                     <!-- if freelancer has been delivered before -->
-                    <div v-else>
+                    <div
+                      v-if="
+                        order.Status == 'Delivered' ||
+                        order.Status == 'Completed'
+                      "
+                    >
                       <div>
                         <i
                           class="bi bi-box-seam-fill box_icon_delivery text-black"
                         ></i>
                       </div>
+                      <div v-if="order.Status == 'Delivered'">
+                        <h6 class="text-center text_sologan">
+                          Your order has been delivered!
+                        </h6>
+                        <div class="delivery_infomation">
+                          <span class="ordered_from_right"> </span>
+                          <span class="delivery_infomation_date">
+                            Please check delivery product on this order. Are you
+                            are satisfied with the delivery?
+                          </span>
+                        </div>
+                        <!-- <div class="common_btn_class mt-4">
+                          <button
+                            class="co-white bg-co-black common_btn"
+                            type="btn"
+                            style="width: 20%"
+                            data-bs-toggle="modal"
+                            data-bs-target="#completeModal"
+                          >
+                            <span>Yes, I Approve</span>
+                          </button>
+                          <button
+                            class="co-white bg-co-black common_btn ms-2"
+                            type="btn"
+                            style="width: 20%"
+                          >
+                            <span>I'm Not Ready</span>
+                          </button>
+                        </div> -->
+                      </div>
+                      <!-- if order is completed -->
+                      <div v-else>
+                        <!-- if order is not review -->
+                        <div v-if="reviews.length == 0">
+                          <h6 class="text-center text_sologan">
+                            Your order has been completed!
+                          </h6>
+                          <div class="delivery_infomation">
+                            <span class="ordered_from_right"> </span>
+                            <span class="delivery_infomation_date">
+                              We hope you're satisfied with your order. Please
+                              take a moment to leave your feedback about the
+                              freelancer here. Thank you!
+                            </span>
+                          </div>
+                          <div>
+                            <hr class="featurette-divider" style="height: 0" />
+                            <div class="mt-4 text-start">
+                              <div>
+                                <h6 class="text-secondary fs-5">
+                                  Public Feedback
+                                </h6>
+                                <div class="mb-4">
+                                  <h5 class="common_title fs-6">
+                                    Share your experience about this order and
+                                    freelancer
+                                  </h5>
+                                </div>
+                              </div>
+                              <div
+                                class="row mb-3"
+                                style="justify-content: space-between"
+                              >
+                                <h5 class="common_title fs-6">Common Rating</h5>
 
-                      <h6 class="text-center text_sologan">
-                        Your order has been delivered!
-                      </h6>
-                      <div class="delivery_infomation">
-                        <span class="ordered_from_right"> </span>
-                        <span class="delivery_infomation_date">
-                          Please check delivery product on this order. If you
-                          are satisfied please click on the completed button.
-                        </span>
+                                <div class="col-md-6 feedback_infomation">
+                                  <h6>
+                                    Are you satisfied with the freelancer?
+                                  </h6>
+                                </div>
+                                <div
+                                  class="col-md-3"
+                                  style="width: fit-content"
+                                >
+                                  <star-rating
+                                    v-model="rating"
+                                    star-size="20"
+                                    :show-rating="false"
+                                    @update:rating="setRating"
+                                  ></star-rating>
+                                </div>
+                              </div>
+
+                              <div class="text-start">
+                                <label for="comments"
+                                  ><h5 class="fs-6">
+                                    What was It like working with this Seller?
+                                  </h5></label
+                                >
+
+                                <textarea
+                                  rows="6"
+                                  id="comments"
+                                  name="comments"
+                                  placeholder="Your feedback here..."
+                                  class="formbold-form-input"
+                                  v-model="feedBack"
+                                  maxlength="250"
+                                  required
+                                ></textarea>
+                                <span v-if="notInputRating" class="text-danger"
+                                  >Please input rating score and feedback!</span
+                                >
+                              </div>
+                              <div class="button text-end mt-1">
+                                <button
+                                  id="btn-sub"
+                                  type="submit"
+                                  class="btn btn-primary bg-danger"
+                                  style="border: none; width: 150px"
+                                  @click="sendReview()"
+                                >
+                                  Send Feedback
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- if order is reviewed -->
+                        <div v-else>
+                          <h6 class="text-center text_sologan">
+                            Your order has been completed!
+                          </h6>
+                          <div class="delivery_infomation">
+                            <span class="ordered_from_right"> </span>
+                            <span class="delivery_infomation_date fs-5">
+                              Thanks for your Review!
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <div class="common_btn_class mt-4">
-                        <button
-                          class="co-white bg-co-black common_btn w.20"
-                          type="btn"
-                        >
-                          <span>Completed</span>
-                        </button>
+                    </div>
+                  </div>
+                  <div v-if="reviews.length > 0 && order.Status == 'Completed'">
+                    <div class="text-start">
+                      <h5 class="">Reviews</h5>
+                    </div>
+                    <Review :reviewList="reviews"></Review>
+                  </div>
+                  <div
+                    v-if="
+                      order.Status == 'Delivered' ||
+                      currentAccountInfo.Role == 'F' ||
+                      order.Status == 'Completed'
+                    "
+                  >
+                    <hr class="featurette-divider" style="height: 0" />
+                    <div class="product_delivery">
+                      <div style="float: left">
+                        <h5 class="product_delivery_start">Product Delivery</h5>
                       </div>
+                      <div
+                        v-if="
+                          currentAccountInfo.Role == 'F' &&
+                          order.Status != 'Completed'
+                        "
+                        class="float-end product_delivery_end px-2 rounded-1"
+                        data-bs-toggle="modal"
+                        data-bs-target="#commonModal"
+                      >
+                        <i
+                          class="bi bi-plus-circle"
+                          style="font-size: 14px"
+                        ></i>
+                        <span style="font-size: 14px"> Add Product </span>
+                      </div>
+                    </div>
+                    <div class="order_table mb-5">
+                      <table class="table align-middle mb-0 bg-white">
+                        <thead class="bg-light">
+                          <tr style="border-bottom: 2px solid #dcd8d8">
+                            <th>ID</th>
+                            <th style="width: 20%">PRODUCT NAME</th>
+                            <th style="width: 17%">PLAN END</th>
+                            <th style="width: 17%">ACTUAL END</th>
+                            <th style="width: 20%">NOTE</th>
+
+                            <th style="width: 15%">STATUS</th>
+                            <th>ACTION</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr
+                            v-for="(delivery, index) in deliveries"
+                            :key="index"
+                          >
+                            <td>{{ index + 1 }}</td>
+                            <td >
+                              <div class="scrollable-row">
+                                {{ delivery.DeliveryName }}
+                              </div>
+                            </td>
+                            <td class="">
+                              <div>
+                                {{
+                                  moment(delivery.PlanEndDate).format(
+                                    "yyyy-MM-DD hh:mm A"
+                                  )
+                                }}
+                              </div>
+                            </td>
+
+                            <td class="">
+                              {{
+                                moment(delivery.ActualEndDate).format(
+                                  "yyyy-MM-DD hh:mm A"
+                                )
+                              }}
+                            </td>
+                            <td class="text-start ">
+                              <div class="scrollable-row">
+                                {{ delivery.Note }}
+                              </div>
+                            </td>
+
+                            <td>
+                              <div>
+                                
+                                <div v-if="delivery.Status == 'Delivered'">
+                                  <span
+                                    class="status text-primary request_status"
+                                    >•</span
+                                  ><span class="fs-6">Delivered</span>
+                                </div>
+                               
+                                <div v-if="delivery.Status == 'Accept'">
+                                  <span
+                                    class="status text-success request_status"
+                                    >•</span
+                                  ><span>Accept</span>
+                                </div>
+                                <div v-if="delivery.Status == 'Reject'">
+                                  <span
+                                    class="status text-danger request_status"
+                                    >•</span
+                                  ><span >Reject</span>
+                                </div>
+                               
+                              </div>
+                            </td>
+
+                            <td>
+                              <!-- v-if="user.role == 'C'" -->
+                              <div
+                                v-if="
+                                  currentAccountInfo.Role == 'C' &&
+                                  delivery.Status == 'Delivered'
+                                "
+                              >
+                                <span
+                                  class="badge rounded-pill bg-info text-light me-1"
+                                  style="cursor: pointer"
+                                  @click="
+                                    (modalMessage = 'approve this deliver'),
+                                      (action = 'ApproveDeliver'),
+                                      (this.isshowConfirmSendRequestModal =
+                                        !this.isshowConfirmSendRequestModa),
+                                      (selectedDeliverID = delivery.DeliveryID)
+                                  "
+                                  >Accept</span
+                                >
+
+                                <span
+                                  class="badge rounded-pill text-info decline_button"
+                                  style="cursor: pointer"
+                                  @click="
+                                    (modalMessage = 'decline this deliver'),
+                                      (action = 'DeclineDeliver'),
+                                      (this.isshowConfirmSendRequestModal =
+                                        !this.isshowConfirmSendRequestModa),
+                                      (selectedDeliverID = delivery.DeliveryID)
+                                  "
+                                  >Decline</span
+                                >
+                              </div>
+
+                              <div
+                                v-if="
+                                  currentAccountInfo.Role == 'F' &&
+                                  delivery.Status == 'Reject'
+                                "
+                              >
+                                <span
+                                  class="badge rounded-pill text-info decline_button me-1"
+                                  style="cursor: pointer"
+                                  @click="
+                                    (modalMessage = 'deliver again'),
+                                      (action = 'ReDeliver'),
+                                      (this.isshowConfirmSendRequestModal =
+                                        !this.isshowConfirmSendRequestModa),
+                                      (selectedDeliverID = delivery.DeliveryID)
+                                  "
+                                  >Deliver Again</span
+                                >
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -447,7 +776,10 @@
                       <option value="Cancel" data-custom-style="top: 30px;">
                         Cancel order request
                       </option>
-                      <option value="Extend" v-if="currentAccountInfo.Role != 'C'">
+                      <option
+                        value="Extend"
+                        v-if="currentAccountInfo.Role != 'C'"
+                      >
                         Extend deliver date
                       </option>
                     </select>
@@ -510,7 +842,7 @@
                   <button
                     class="co-white bg-co-black save_btn"
                     type="button"
-                    @click="checkRequestForm"
+                    @click="checkRequestForm(), (action = 'Request')"
                   >
                     Save
                   </button>
@@ -544,8 +876,32 @@
                           </div>
                         </div>
                         <div class="information_order_status">
-                          <span class="badge bg-primary rounded-pill d-inline">
+                          <span
+                            v-if="order.Status == 'Active'"
+                            class="badge bg-primary rounded-pill d-inline"
+                          >
                             In Progress</span
+                          >
+                          <span
+                            v-if="order.Status == 'Late'"
+                            class="badge rounded-pill bg-danger"
+                            >Late</span
+                          >
+                          <span
+                            v-if="order.Status == 'Delivered'"
+                            class="badge rounded-pill bg-info"
+                            >Delivered</span
+                          >
+                          <span
+                            v-if="order.Status == 'Completed'"
+                            class="badge rounded-pill bg-success d-inline"
+                          >
+                            Completed</span
+                          >
+                          <span
+                            v-if="order.Status == 'Cancelled'"
+                            class="badge rounded-pill bg-secondary d-inline"
+                            >Cancelled</span
                           >
                         </div>
                       </div>
@@ -579,7 +935,7 @@
                     <span class="col-md-6 total_price_right text-end"
                       >${{
                         order.Price * order.TotalEstimation +
-                        order.Price * order.TotalEstimation * 0.1
+                        (order.Price * order.TotalEstimation * 10) / 100
                       }}
                     </span>
                   </div>
@@ -588,6 +944,48 @@
                     <span class="col-md-6 order_number_right text-end"
                       >#FO200{{ order.OrderID }}
                     </span>
+                  </div>
+                  <div v-if="order.Status == 'Completed'">
+                    <div class="order_number row">
+                      <span class="col-md-8 order_number_left"
+                        >Add effort(hour)</span
+                      >
+                      <span class="col-md-4 order_number_right text-end"
+                        ><input
+                          type="number"
+                          class="form-control w-100"
+                          v-model="addEffort"
+                          style="padding: 0 5px"
+                          :readonly="
+                            currentAccountInfo.Role == 'A' ||
+                            currentAccountInfo.Role == 'F'
+                          "
+                        />
+                      </span>
+                    </div>
+                    <div>
+                      <p v-if="!isInputAddEffort" class="text-danger">
+                        Please input valid effort
+                      </p>
+                    </div>
+                    <div
+                      v-if="currentAccountInfo.Role == 'C'"
+                      class="order_number row"
+                    >
+                      <span class="col-md-8 order_number_left"> </span>
+                      <span class="col-md-4 order_number_right text-center">
+                        <button
+                          id="btn-sub"
+                          type="submit"
+                          class="btn btn-primary bg-danger mt-1"
+                          style="border: none; padding: 0 5px; font-size: 14px"
+                          @click="checkInputEffort()"
+                        >
+                          Save
+                        </button></span
+                      >
+                      <div class="button text-start"></div>
+                    </div>
                   </div>
                   <hr class="featurette-divider" />
                   <span class="order_detail_head">Track Order</span>
@@ -760,10 +1158,41 @@
                   </p>
                   <p class="modal-title">This process cannot be undone.</p>
                 </div>
+                <div v-if="action == 'DeclineDeliver' || action == 'ReDeliver'">
+                  <form>
+                    <div class="mb-3 text-start">
+                      <label for="message-text" class="col-form-label"
+                        >Message:</label
+                      >
+                      <textarea
+                        class="form-control"
+                        id="message-text"
+                        v-model="deliveryMessage"
+                      ></textarea>
+                    </div>
+                    <p v-if="!isInputMessage" class="text-danger">
+                      <span v-if="action == 'DeclineDeliver'">
+                        Please input decline deliver reason</span
+                      >
+                      <span v-if="action == 'ReDeliver'">
+                        Please input some message for hirer</span
+                      >
+                    </p>
+                    <div
+                      class="mb-3 text-start text-dark"
+                      v-if="action == 'DeclineDeliver'"
+                    >
+                      Note: Please provide reason you decline deliver here.
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
 
-            <div class="modal-footer justify-content-center">
+            <div
+              class="modal-footer justify-content-center"
+              v-if="action == 'Request'"
+            >
               <a
                 type="button"
                 class="btn btn-info waves-effect waves-light text-white"
@@ -791,6 +1220,205 @@
                 >Cancel</a
               >
             </div>
+
+            <div
+              class="modal-footer justify-content-center"
+              v-else-if="action == 'Deliver'"
+            >
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="
+                  deliverOrder(),
+                    (isshowConfirmSendRequestModal =
+                      !isshowConfirmSendRequestModal)
+                "
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="
+                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
+                "
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
+            <div
+              class="modal-footer justify-content-center"
+              v-else-if="action == 'ApproveDeliver'"
+            >
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="
+                  (isshowConfirmSendRequestModal =
+                    !isshowConfirmSendRequestModal),
+                    approveDeliver()
+                "
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="
+                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
+                "
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
+            <div
+              class="modal-footer justify-content-center"
+              v-else-if="action == 'DeclineDeliver'"
+            >
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="declineDeliver()"
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="
+                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
+                "
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
+            <div
+              class="modal-footer justify-content-center"
+              v-else-if="action == 'ReDeliver'"
+            >
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="deliverAgain()"
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="
+                  isshowConfirmSendRequestModal = !isshowConfirmSendRequestModal
+                "
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="commonModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-light">
+            <h5 class="modal-title" id="exampleModalLabel">Deliver Order</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3 text-start">
+                <label for="recipient-name" class="col-form-label"
+                  >Product Name:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="deliveryName"
+                />
+                <p v-if="!isdeliveryName" class="text-danger">
+                  Please input product name
+                </p>
+              </div>
+              <!-- <div class="mb-3 text-start">
+                <label for="message-text" class="col-form-label"
+                  >Message:</label
+                >
+                <textarea class="form-control" id="message-text"></textarea>
+              </div> -->
+              <div class="mb-3 text-start text-dark">
+                Note: Please check your delivery before send.
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="deliverProduct()"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="completeModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-info text-light">
+            <h5 class="modal-title" id="exampleModalLabel">Complete Order</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div>
+                <p class="modal-title">Do you really want to add effort?</p>
+                <p class="modal-title">This process cannot be undone.</p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-info text-light"
+              @click="addEffortAfterOrderCompleted()"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>
@@ -805,11 +1433,18 @@ var moment = require("moment");
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import VueJwtDecode from "vue-jwt-decode";
-
+import HeaderAdmin from "../components/HeaderAdmin.vue";
+import HeaderSell from "../components/HeaderSeller.vue";
+import StarRating from "vue-star-rating";
+import Review from "../components/Review.vue";
 export default {
   name: "OrderDetailView",
   components: {
     Header,
+    HeaderAdmin,
+    HeaderSell,
+    StarRating,
+    Review,
   },
   data() {
     return {
@@ -835,15 +1470,26 @@ export default {
       isUploadFile: false,
       messageDanger: "",
       checkInputFile: false,
+      deliveries: [],
+      deliveryName: "",
+      isdeliveryName: true,
+      action: "",
+      isInputActualAfford: true,
+      actualAfford: 1,
+      isInputAddEffort: true,
+      addEffort: 1,
+      rating: 0,
+      feedBack: "",
+      notInputRating: false,
+      reviews: [],
+      isInputMessage: true,
+      selectedDeliverID: "",
+      deliveryMessage: "",
     };
   },
   async created() {
     await this.onUpdateAccountInfo();
-    const responseOrder = await axios.get(
-      "/orders/details/" + this.$route.params.id
-    );
-    const order = responseOrder.data[0];
-    this.order = order;
+    await this.getOrderByID();
     // if (
     //   this.user.userId != this.order.CustomerID &&
     //   this.user.userId != this.order.FreelancerID &&
@@ -851,11 +1497,26 @@ export default {
     // ) {
     //   this.$router.push("/");
     // }
+    await this.getReviewByOrderID();
   },
   methods: {
+    async getOrderByID() {
+      await axios
+        .get("/orders/details/" + this.$route.params.id)
+        .then((response) => {
+          const order = response.data[0];
+          this.order = order;
+          this.addEffort = this.order.AddEffort;
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        });
+    },
     async addChangeRequirement(JobDescription, addRequirement, OrderRequestID) {
       var newRequirement = JobDescription + " " + addRequirement;
-      if(addRequirement==''){
+      if (addRequirement == "") {
         return;
       }
       const data = await axios
@@ -875,7 +1536,6 @@ export default {
           console.error("Error here:", error);
           toast.warn("Failed!", { autoClose: 2000 });
         });
-      
     },
     checkRequestForm() {
       if (this.requestTitle != "" && this.requestDescription == "") {
@@ -900,16 +1560,18 @@ export default {
       userId,
       extendDay
     ) {
-      const data = await axios.post("/changerequest/createChangeRequest", {
-        changeRequest: {
-          CreateByID: userId,
-          Request_Title: requestTitle,
-          Request_Description: requestDescription,
-          requestType: requestType,
-          OrderID: OrderID,
-          ExtendDay: parseInt(extendDay),
-        },
-      }).then((response) => {
+      const data = await axios
+        .post("/changerequest/createChangeRequest", {
+          changeRequest: {
+            CreateByID: userId,
+            Request_Title: requestTitle,
+            Request_Description: requestDescription,
+            requestType: requestType,
+            OrderID: OrderID,
+            ExtendDay: parseInt(extendDay),
+          },
+        })
+        .then((response) => {
           toast.success("Send Request Successfully!", {
             theme: "colored",
             autoClose: 2000,
@@ -921,7 +1583,6 @@ export default {
           console.error("Error here:", error);
           toast.warn("Failed!", { autoClose: 2000 });
         });
-
     },
     async uploadFiles() {
       // this.files = this.$refs.myFiles.files
@@ -965,7 +1626,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-        await  axios
+          await axios
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -979,7 +1640,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await  axios
+          await axios
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -993,9 +1654,245 @@ export default {
               }
             );
         } else {
-          this.currentAccountInfo = {Email: decoded.email, Role: decoded.role};
-
+          this.currentAccountInfo = {
+            Email: decoded.email,
+            Role: decoded.role,
+          };
         }
+      }
+    },
+
+    async getDeliveryByOrderID() {
+      await axios
+        .get("/delivery/getDeliveryByOrderId", {
+          params: {
+            id: this.order.OrderID,
+          },
+        })
+        .then((response) => {
+          const delivery = response.data.delivery;
+
+          this.deliveries = delivery;
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        });
+    },
+    async deliverProduct() {
+      if (!this.deliveryName) {
+        this.isdeliveryName = false;
+      } else {
+        $("#commonModal").modal("hide");
+        await axios
+          .post("/delivery/createDelivery", {
+            Delivery: {
+              DeliveryName: this.deliveryName,
+              OrderID: this.order.OrderID,
+              PlanEndDate: this.order.EndAt,
+            },
+          })
+          .then((response) => {
+            toast.success("Send Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => this.getDeliveryByOrderID(),
+            });
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error here:", error);
+            toast.warn("Failed!", { autoClose: 2000 });
+          });
+      }
+    },
+
+    async deliverOrder() {
+      const data = await axios
+        .put("/orders/updateStatus", {
+          status: "Delivered",
+          orderID: this.order.OrderID,
+        })
+        .then((response) => {
+          toast.success("Deliver Order Successfully!", {
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Deliver Order Failed!", { autoClose: 2000 });
+        });
+    },
+    async checkInputEffort() {
+      const inputValue = parseInt(this.addEffort);
+
+      if (isNaN(inputValue) || !/^-?\d+$/.test(this.addEffort)) {
+        // Display an error message or handle the invalid input as needed
+        // Optionally reset the input to a valid value
+        this.isInputAddEffort = false;
+        return;
+      } else {
+        this.isInputAddEffort = true;
+        $("#completeModal").modal("show");
+      }
+    },
+
+    async addEffortAfterOrderCompleted() {
+      if (!this.actualAfford) {
+        this.isInputActualAfford = false;
+      } else {
+        $("#completeModal").modal("hide");
+        await axios
+          .put("/orders/addOrderEffort", {
+            addEffort: this.addEffort,
+            orderID: this.order.OrderID,
+          })
+          .then((response) => {
+            toast.success("Add Order Effort Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error here:", error);
+            toast.warn("Add Order Effort Failed!", { autoClose: 2000 });
+          });
+      }
+    },
+    setRating(rating) {
+      this.rating = rating;
+    },
+
+    async sendReview() {
+      var review = {
+        ReviewerID: this.order.CustomerID,
+        ReceiverID: this.order.FreelancerID,
+        Rating_Score: this.rating,
+        Comment: this.feedBack,
+        OrderID: this.order.OrderID,
+      };
+
+      if (this.rating == 0 || !this.feedBack) {
+        this.notInputRating = true;
+      } else {
+        await axios
+          .post("/review/createReview", {
+            Review: review,
+          })
+          .then((response) => {
+            toast.success("Send Review Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error here:", error);
+            toast.warn("Send Review Failed!", { autoClose: 2000 });
+          });
+      }
+    },
+
+    async getReviewByOrderID() {
+      await axios
+        .get("/review/getReviewByOrderId", {
+          params: {
+            id: this.order.OrderID,
+          },
+        })
+        .then((response) => {
+          const review = response.data.review;
+          if(review)
+          this.reviews = review;
+          else this.reviews =[];
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        });
+    },
+    async approveDeliver() {
+      await axios
+        .put("/delivery/approveDelivery", {
+          status: "Accept",
+          deliverID: this.selectedDeliverID,
+        })
+        .then((response) => {
+          toast.success("Approve Delivery Successfully!", {
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => {
+              this.getDeliveryByOrderID();
+              this.getOrderByID();
+            },
+          });
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
+        });
+    },
+    async declineDeliver() {
+      if (!this.deliveryMessage) {
+        this.isInputMessage = false;
+        return;
+      } else {
+        this.isshowConfirmSendRequestModal =
+          !this.isshowConfirmSendRequestModal;
+        await axios
+          .put("/delivery/declineDelivery", {
+            status: "Reject",
+            deliverID: this.selectedDeliverID,
+            declineReason: this.deliveryMessage,
+          })
+          .then((response) => {
+            toast.success("Decline Delivery Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => this.getDeliveryByOrderID(),
+            });
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error here:", error);
+            toast.warn("Failed!", { autoClose: 2000 });
+          });
+      }
+    },
+    async deliverAgain() {
+      if (!this.deliveryMessage) {
+        this.isInputMessage = false;
+        return;
+      } else {
+        this.isshowConfirmSendRequestModal =
+          !this.isshowConfirmSendRequestModal;
+        await axios
+        .put("/delivery/deliverAgain", {
+          status: "Delivered",
+          deliverID: this.selectedDeliverID,
+          deliveryMessage: this.deliveryMessage
+        })
+        .then((response) => {
+          toast.success("Deliver Again Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => this.getDeliveryByOrderID(),
+            });
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Deliver Again Failed!", { autoClose: 2000 });
+        });
       }
     },
   },
@@ -1131,7 +2028,9 @@ export default {
   color: #ff1212;
 }
 
-.order_detail_page .order_detail_title h5 {
+.order_detail_page .order_detail_title h5,
+.product_delivery h5,
+.common_title {
   line-height: 130%;
   font-size: 22px;
   color: #404145;
@@ -1269,5 +2168,60 @@ export default {
 .order_detail_information .formbold-form-input:focus {
   border-color: #05041a;
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.order_table .table th,
+.order_request_table .table th {
+  padding: 10px;
+}
+
+.table .th_gig {
+  width: 30%;
+}
+
+.table .th_user {
+  width: 20%;
+}
+
+.table .th_user span {
+  margin-left: 20px;
+}
+
+.order_table .table th {
+  font-weight: 600;
+  color: #a8a7a7;
+  font-size: 13px;
+  background-color: #f9f9f9;
+}
+
+.scrollable-row {
+  /* max-width: 0px;
+  overflow-x: auto;
+  white-space: nowrap; */
+  max-height: 50px; 
+  overflow-y: auto; 
+}
+
+.product_delivery_end {
+  background-color: #dc3545;
+  color: white;
+}
+
+.product_delivery {
+  cursor: pointer;
+}
+.request_status {
+  font-size: 40px;
+  margin: 2px 2px 3px 0;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 10px;
+}
+
+.feedback_infomation {
+  color: #9f9fa0;
+}
+.decline_button {
+  border: 1px solid #0dcaf0;
 }
 </style>

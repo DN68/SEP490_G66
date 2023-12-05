@@ -28,7 +28,7 @@ Order.createOrder = function (order, result) {
 };
 
 Order.getOrderById = function (id, result) {
-  connectDb.query("SELECT o.*, ro.JobDescription, ro.TotalEstimation, ro.StartFrom, ro.EndAt, g.Price, g.Gig_IMG, g.Title, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM `Order` o INNER JOIN OrderRequest ro ON ro.OrderRequestID = o.OrderRequestID INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE OrderID = ?", [id], function (err, res) {
+  connectDb.query("SELECT o.*, ro.JobDescription, ro.TotalEstimation, ro.StartFrom, ro.EndAt, g.Price, g.Gig_IMG, g.Title, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, c.CustomerID, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture, f.FreelancerID FROM `Order` o INNER JOIN OrderRequest ro ON ro.OrderRequestID = o.OrderRequestID INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE OrderID = ?", [id], function (err, res) {
     if (err) {
       result(err, null);
     }
@@ -125,4 +125,33 @@ Order.deliverOrder = function (deliverFile,orderID, result) {
    });
  
  };
+
+ Order.addOrderEffort = function (addEffort,orderID, result) {
+  connectDb.query("UPDATE `Order` SET `AddEffort` = ? WHERE `Order`.`OrderID` = ?", [addEffort,orderID], function (err, res) {
+     if (err) {
+ 
+       result(err,null);
+     }
+     else {
+ 
+       result(null,res);
+     }
+   });
+ 
+ };
+
+ Order.changeOrderToCompleted = function (result) {
+  connectDb.query("UPDATE `Order` SET `Status` = 'Completed' WHERE `Order`.`OrderID` IN ( SELECT * FROM ( SELECT o.OrderID FROM `Order` o INNER JOIN Delivery d ON o.OrderID = d.OrderID GROUP BY o.OrderID HAVING COUNT(d.DeliveryID) = COUNT(CASE WHEN d.Status = 'Accept' THEN 1 END) ) AS OrderHasCompleted )", function (err, res) {
+     if (err) {
+ 
+       result(err,null);
+     }
+     else {
+ 
+       result(null,res);
+     }
+   });
+ 
+ };
+
 module.exports = Order;

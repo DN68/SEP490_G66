@@ -137,7 +137,7 @@
           </router-link>
         </div>
       </div>
-      <div class="order_table">
+      <div class="gig_table">
         <table class="table align-middle mb-0 bg-white">
           <thead class="bg-light">
             <tr style="border-bottom: 2px solid #dcd8d8">
@@ -150,7 +150,6 @@
               <th class="th_creationDate">CREATION DATE</th>
               <th class="th_deliveryDays">DELEVERY DAY</th>
               <th class="th_status">STATUS</th>
-              <th class="th_numberPage">NUMBER OF PAGE</th>
               <th class="th_price">PRICE</th>
               <th class="th_actions">ACTIONS</th>
             </tr>
@@ -262,15 +261,6 @@
                   <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                     coding -->
-                    {{ gig.Numberpage }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_gigs">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                    coding -->
                     {{ gig.Price }}
                   </p>
                 </div>
@@ -320,7 +310,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Change Order Status</h5>
+                  <h5 class="modal-title">Change Gig Status</h5>
                   <button
                     type="button"
                     class="btn-close"
@@ -495,29 +485,32 @@ export default {
     },
   },
   async created() {
-    await axios
-      .get("/accounts/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.account = res.data.account;
-          if (this.account.role != "A") {
-            this.$router.push("/");
-          }
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
-    if (localStorage.getItem("token") === null) {
+    console.log(localStorage.getItem("token"));
+    if (localStorage.getItem("token") == null) {
       this.$router.push("/login");
+    } else {
+      await axios
+        .get("/accounts/info", {
+          headers: { token: localStorage.getItem("token") },
+        })
+        .then(
+          (res) => {
+            this.account = res.data.account;
+            if (this.account.Role != "A") {
+              this.$router.push("/");
+            }
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
     }
-    const responseAccountInfor = await axios.get("/accounts/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const accountInfor = responseAccountInfor.data.account;
-    this.account = accountInfor;
+
+    // const responseAccountInfor = await axios.get("/accounts/info", {
+    //   headers: { token: localStorage.getItem("token") },
+    // });
+    // const accountInfor = responseAccountInfor.data.account;
+    // this.account = accountInfor;
     // console.log(this.account.accountId);
     const responseData = await axios.get("/gigs/index", {
       params: {
@@ -632,7 +625,7 @@ export default {
   text-align: left;
   font-weight: 600;
 }
-.order_table .table th {
+.gig_table .table th {
   padding: 10px;
 }
 .table .th_user,
@@ -657,9 +650,12 @@ export default {
 .td_gig {
   text-align: left;
 }
-.order_table .table th {
+.gig_table .table th {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
+}
+.align-items-center{
+  justify-content: center;
 }
 </style>

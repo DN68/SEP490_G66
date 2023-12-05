@@ -10,18 +10,22 @@ class SkillController {
         });
     }
 
-    getAllFreelancerWithSkillScore = function (req, res) {
+    getFreelancerWithSkillScore = function (req, res) {
         var pageQuery = req.query;
         var childSkills = pageQuery.childSkills;
         console.log(childSkills);
         var ParentSkillID =childSkills[0].ParentSkillID; 
         var queryBy ='';
+        var user = pageQuery.user;
+        if (!childSkills||!user) {
+            return res.status(400).send('Invalid or missing order data');
+          }
         for ( let cs of childSkills) {
             queryBy += " , MAX(CASE WHEN s.Skill_Name = '"+cs.Skill_Name+ "' THEN f.Score END) AS '" +cs.Skill_Name+"'";
         } 
         console.log(queryBy);
                  
-        Skill.getAllFreelancerWithSkillScore(queryBy,ParentSkillID,function (err, skills) {
+        Skill.getFreelancerWithSkillScore(queryBy,ParentSkillID,user,function (err, skills) {
             if (err) { res.send(err); }
             else {
                 res.json(skills);
@@ -32,11 +36,13 @@ class SkillController {
 
     getSkillWithMajorID = function (req, res) {
         var id = req.params.id;
+        if (!id) {
+            return res.status(400).send('Invalid or missing order data');
+          }
         Skill.getSkillWithMajorID(id,function (err, skills) {
-            if (err) { res.send(err); }
+            if (err) { res.status(500).send(err); }
             else {
-                res.json(skills);
-
+                res.send(skills.length > 0 ? skills : 'Skill not exist');
             }
         });
     }
@@ -46,6 +52,9 @@ class SkillController {
         var listUpdate = pageQuery.listUpdate;
         console.log("🚀 ~ file: SkillController.js:46 ~ SkillController ~ listUpdate:", listUpdate)
         var updateQuery ="";
+        if (!listUpdate) {
+            return res.status(400).send('Invalid or missing order data');
+          }
         for ( let lu of listUpdate) {
             updateQuery += " WHEN FreelancerID = "+lu.FreelancerID+ " AND SkillID = "+lu.SkillID+" THEN "+lu.Score;
         } 
@@ -53,9 +62,9 @@ class SkillController {
             if (err) { res.send(err); }
             else {
                 if (result.affectedRows == 0) {
-                res.json("Failed");
+                res.json("Save Freelancer Score Failed");
                 } 
-                res.json("Successfully");         
+                res.json("Save Freelancer Score Successfully");         
             }
         });
     }

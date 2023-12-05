@@ -32,8 +32,8 @@ OrderRequest.createOrderRequest = function (orderRequest, result) {
 
 OrderRequest.getOrderRequestWithPagingAndFilter = function (userId,userRole,status,limit, offset, orderRequest, pagination) {
  
-  var sqlForCustomer ="SELECT r.*, c.First_Name, c.Last_Name, c.Profile_Picture FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID WHERE r.CustomerID = "+userId+" AND r.Status LIKE ? ORDER BY r.OrderRequestID ASC LIMIT ? OFFSET ?";
-  var sqlForFreelancer = "SELECT r.*, c.First_Name, c.Last_Name, c.Profile_Picture FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID INNER JOIN Gig g ON g.GigID = r.GigID WHERE g.FreelancerID = "+userId+" AND r.Status LIKE ? ORDER BY r.OrderRequestID ASC LIMIT ? OFFSET ?";
+  var sqlForCustomer ="SELECT r.*, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID INNER JOIN Gig g ON g.GigID = r.GigID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE r.CustomerID = "+userId+" AND r.Status LIKE ? ORDER BY r.OrderRequestID ASC LIMIT ? OFFSET ?";
+  var sqlForFreelancer = "SELECT r.*, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID INNER JOIN Gig g ON g.GigID = r.GigID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE g.FreelancerID = "+userId+" AND r.Status LIKE ? ORDER BY r.OrderRequestID ASC LIMIT ? OFFSET ?";
   var sql;
   var sqlCountForCustomer="SELECT COUNT(*) AS count FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID WHERE r.CustomerID = "+userId+" AND r.Status LIKE ?";
   var sqlCountForFreelancer="SELECT COUNT(*) AS count FROM `OrderRequest` r INNER JOIN Customer c ON r.CustomerID = c.CustomerID INNER JOIN Gig g ON g.GigID = r.GigID WHERE g.FreelancerID = "+userId+" AND r.Status LIKE ?";
@@ -109,6 +109,16 @@ OrderRequest.updateOrderRequestNote = function (Note,OrderRequestID, result) {
     });
   };
 
+  OrderRequest.getOrderRequestById = function (id, result) {
+    connectDb.query("SELECT ro.OrderRequestID, ro.Status, ro.Note, ro.JobDescription, ro.TotalEstimation, ro.StartFrom, ro.EndAt, g.Price, g.Gig_IMG, g.Title, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM OrderRequest ro INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE OrderRequestID = ?", [id], function (err, res) {
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res);
+      }
+    });
+  };
 
 
 module.exports = OrderRequest;

@@ -22,7 +22,7 @@
                 }"
               ></i
             ></span>
-            <span> Personal Information</span>
+            <span> Account Setup</span>
             <i class="bi bi-chevron-right"></i>
           </div>
           <div class="col-sm-3 become_header_item" :class="{ active: isstep2 }">
@@ -37,7 +37,7 @@
               ></i
             ></span>
 
-            <span> Account Setup</span>
+            <span> Personal Information</span>
             <i class="bi bi-chevron-right"></i>
           </div>
           <div class="col-sm-3 become_header_item" :class="{ active: isstep3 }">
@@ -60,142 +60,211 @@
           certifications and experience.</span
         >
       </div>
-      <div v-if="isstep1">
-        <div class="line-info">
-          <div class="left">
-            <span>Full Name* </span>
-          </div>
-          <div class="right">
-            <input type="text" placeholder="First Name" />
-            <input class="ms-2" placeholder="Last Name" type="text" />
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left">
-            <span>Your Email </span>
-          </div>
-          <div class="right">
-            <input type="text" style="width: 40%" />
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left text-start">
-            <span>Phone </span>
-          </div>
-          <div class="right">
-            <input type="text" style="width: 40%" />
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left">
-            <span>Description </span>
-          </div>
-          <div class="right">
-            <textarea
-              name=""
-              id=""
-              cols="48"
-              rows="5"
-              style="width: 60%; margin-left: 20%"
-              placeholder="  Share a bit about your work experience,cool project you've completed"
-            ></textarea>
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left">
-            <span>Language </span>
-          </div>
-          <div class="right">
-            <div class="dropdown" style="margin-left: -11%">
-              <button
-                type="button"
-                data-bs-toggle="dropdown"
-                style="
-                  border: 1px #ccc solid;
-                  background-color: #fff;
-                  padding-top: 10px;
-                  padding-bottom: 10px;
-                  width: 300px;
-                "
-              >
-                <span style="float: left"> Vietnamese </span>
-                <i
-                  class="fa-solid fa-chevron-down"
-                  style="float: right; align-self: center"
-                ></i>
-              </button>
-              <ul class="dropdown-menu">
-                <li class="dropdown-item" href="#">Vietnamese</li>
-                <li class="dropdown-item" href="#">English</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div v-if="isstep2">
-        <div class="line-info">
-          <div class="left">
-            <span>User Name </span>
-          </div>
-          <div class="right">
-            <input type="text" style="width: 40%" />
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left text-start">
-            <span>Password </span>
-          </div>
-          <div class="right">
-            <input type="text" style="width: 40%" />
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left text-start">
-            <span>Confirm Password </span>
-          </div>
-          <div class="right">
-            <input type="text" style="width: 40%" />
-          </div>
-        </div>
+      <div v-if="isstep1">
+        {{ message }}
+        <table class="inputForm">
+          <tr>
+            <td class="line-info"><span>Username </span></td>
+            <td>
+              <input
+                class="inputField"
+                type="text"
+                v-model="username"
+                @change="isUsernameExist"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Your Email </span></td>
+            <td>
+              <input
+                class="inputField"
+                type="text"
+                v-model="email"
+                @change="isEmailExist"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Password </span></td>
+            <td>
+              <input class="inputField" type="password" v-model="password" />
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Confirm Password </span></td>
+            <td>
+              <input
+                class="inputField"
+                type="password"
+                v-model="repeatPassword"
+              />
+            </td>
+          </tr>
+        </table>
       </div>
       <div v-if="isstep3">
-        <div class="line-info">
-          <div class="left">
-            <span>CV Title </span>
-          </div>
-          <div class="right">
-            <input type="text" v-model="cvTitle" style="width: 40%" />
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left">
-            <span>Upload CV </span>
-          </div>
-          <div class="right">
-            <input type="file" ref="fileCV" accept=".pdf" />
-            (.pdf only)
-          </div>
-        </div>
-        <div class="line-info">
-          <div class="left">
-            <span>Description </span>
-          </div>
-          <div class="right">
-            <textarea
-              name=""
-              id=""
-              cols="48"
-              rows="5"
-              style="width: 60%; margin-left: 20%"
-              placeholder="  Share a bit about your work experience,cool project you've completed"
-              v-model="cvDescription"
-            ></textarea>
-          </div>
-        </div>
+        <table class="inputForm">
+          <tr>
+            <td class="line-info"><span>CV Title </span></td>
+            <td><input class="inputField" type="text" v-model="cvTitle" /></td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Upload CV </span></td>
+            <td>
+              <input
+                style="width: 85%"
+                type="file"
+                ref="fileCV"
+                accept=".pdf"
+              />
+              (.pdf only)
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Description </span></td>
+            <td>
+              <textarea
+                name=""
+                id=""
+                cols="48"
+                rows="5"
+                style="width: 100%"
+                placeholder="  Share a bit about your work experience,cool project you've completed"
+                v-model="cvDescription"
+              ></textarea>
+            </td>
+          </tr>
+        </table>
       </div>
-      <div class="button" v-if="isstep3">
+      <div v-if="isstep2">
+        {{ message }}
+        <table class="inputForm">
+          <tr>
+            <td class="line-info"><span>Full Name</span></td>
+            <td>
+              <input
+                type="text"
+                placeholder="First Name"
+                v-model="firstName"
+                style="width: 48.5%"
+              />
+              <input
+                class="ms-2"
+                placeholder="Last Name"
+                v-model="lastName"
+                type="text"
+                style="width: 50%"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Phone </span></td>
+            <td>
+              <input type="text" class="inputField" v-model="phoneNo" />
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Address </span></td>
+            <td>
+              <input type="text" class="inputField" v-model="location" />
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Profile Picture </span></td>
+            <td>
+              <input
+                style="width: 80%"
+                type="file"
+                ref="fileImage"
+                accept=".jpeg, .jpg, .png"
+                @change="updateFileImage"
+              />
+              (.jpeg, .jpg, .png)
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Description </span></td>
+            <td>
+              <textarea
+                name=""
+                id=""
+                cols="48"
+                rows="5"
+                style="width: 100%"
+                v-model="description"
+                placeholder="  Share a bit about your work experience,cool project you've completed"
+              ></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Category </span></td>
+            <td>
+              <select
+                v-model="mainCategory"
+                class="form-select lefthalf"
+                aria-label="Default select example"
+              >
+                <option :value="-1">Select a category</option>
+                <option
+                  v-for="category in categories"
+                  :key="category.CategoryID"
+                  :value="category.CategoryID"
+                >
+                  {{ category.Category_Name }}
+                </option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="line-info"><span>Language </span></td>
+            <td>
+              <div class="dropdown">
+                <button
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  style="
+                    border: 1px #ccc solid;
+                    background-color: #fff;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    width: 100%;
+                  "
+                >
+                  <span style="float: left"> Vietnamese </span>
+                  <i
+                    class="fa-solid fa-chevron-down"
+                    style="float: right; align-self: center"
+                  ></i>
+                </button>
+                <ul class="dropdown-menu">
+                  <li class="dropdown-item" href="#">Vietnamese</li>
+                  <li class="dropdown-item" href="#">English</li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="button">
         <button
+          v-if="!isstep1"
+          id="btn-sub"
+          type="submit"
+          class="btn btn-primary bg-primary"
+          style="
+            border: none;
+            width: 100px;
+            margin-top: 40px;
+            margin-right: 20px;
+          "
+          @click="changeStep(currentStep - 1)"
+        >
+          Back
+        </button>
+        <button
+          v-if="isstep3"
           id="btn-sub"
           type="submit"
           class="btn btn-primary bg-danger"
@@ -204,19 +273,81 @@
         >
           Save
         </button>
-      </div>
-      <div class="button" v-else>
         <button
+          v-if="isstep1"
+          type="button"
+          class="btn btn-danger"
+          style="border: none; width: 100px; margin-top: 40px"
+          :disabled="!checkInputStep1"
+          @click="
+            showModal();
+            sendvalidationEmail();
+          "
+        >
+          Continue
+        </button>
+        <button
+          v-if="isstep2"
           id="btn-sub"
           type="submit"
           class="btn btn-primary bg-danger"
           style="border: none; width: 100px; margin-top: 40px"
+          :disabled="!checkInputStep2"
           @click="changeStep(currentStep + 1)"
         >
           Continue
         </button>
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          ref="myModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Verify Your Email
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <!-- <p>This is the content of the modal.</p> -->
+                Verification code:
+                <input type="password" maxlength="6" v-model="inputCode" />
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="
+                    startCountdown();
+                    sendvalidationEmail();
+                  "
+                  :disabled="countingDown"
+                >
+                  {{ buttonText }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  @click="verifyEmail()"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <button @click="openPdfPage">See PDF</button>
+      <button v-if="isstep3" @click="openPdfPage">See PDF</button>
       <!-- <embed :src="blobUrl" type="application/pdf" width="100%" height="900px"> -->
     </div>
     <div class="footer">
@@ -227,7 +358,6 @@
 
 <script>
 import Footer from "../components/Footer.vue";
-
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -239,43 +369,309 @@ export default {
   },
   data() {
     return {
+      //registration step
       isstep1: true,
       isstep2: false,
       isstep3: false,
       currentStep: 1,
       completedStep1: false,
       completedStep2: false,
+      //CV
       cvTitle: "",
-      // fileCV: '',
+      fileCV: "",
       cvDescription: "",
       blobUrl: "",
-      CV_Uploads: "AnhLTHE153286.pdf",
-      account: {}
+      CV_Uploads:
+        "undefined_Report3_Software-Requirement-Specification (5).pdf",
+      //popup
+      modal: null,
+      buttonText: "Resend",
+      countingDown: false,
+      countdownInterval: null,
+      countdownSeconds: 10,
+      //user input info
+      account: {},
+      categories: [],
+      username: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      description: "",
+      phoneNo: "",
+      password: "",
+      repeatPassword: "",
+      message: "",
+      emailExist: false,
+      usernameExist: false,
+      location: "",
+      role: "F",
+      mainCategory: -1,
+      freelancer: {},
+      fileImage: null,
+      //email verification
+      verificationCode: "",
+      inputCode: "123456",
     };
   },
+  computed: {
+    //  A valid username should start with an alphabet so, [A-Za-z].
+    //  All other characters can be alphabets, numbers or an underscore so, [A-Za-z0-9_].
+    isValidUsername() {
+      return /[A-Za-z][A-Za-z0-9_]{7,29}$/.test(this.username);
+    }, //Email format
+    isValidEmail() {
+      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.email);
+    },
+    //Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+    isValidPassword() {
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        this.password
+      );
+    },
+    checkInputStep1() {
+      //input validation here
+      if (!this.username) {
+        this.message = "You must enter username";
+        return false;
+      }
+      if (!this.isValidUsername) {
+        this.message =
+          "Username must start with an alphabet and has at least 8 characters";
+        return false;
+      }
+      console.log(this.usernameExist);
+      if (this.usernameExist) {
+        this.message = "Username exist";
+        return false;
+      }
+      if (!this.email) {
+        this.message = "You must enter Email";
+        return false;
+      }
+      if (!this.isValidEmail) {
+        this.message = "Wrong email format";
+        return false;
+      }
+      if (this.emailExist) {
+        this.message = "Email exist";
+        return false;
+      }
+      if (!this.password) {
+        this.message = "You must enter password";
+        return false;
+      }
+      if (!this.isValidPassword) {
+        this.message =
+          "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
+        return false;
+      }
+      if (!this.repeatPassword) {
+        this.message = "You must enter repeat password";
+        return false;
+      }
+      if (this.password != this.repeatPassword) {
+        this.message = "Wrong password confirmation";
+        return false;
+      }
+      return true;
+    },
+    checkInputStep2() {
+      //input validation here
+
+      if (!this.firstName) {
+        this.message = "You must enter your first name";
+        return false;
+      }
+      if (!this.lastName) {
+        this.message = "You must enter your last name";
+        return false;
+      }
+      if (!this.phoneNo) {
+        this.message = "You must enter your phone number";
+        return false;
+      }
+      if (!this.location) {
+        this.message = "You must enter your address";
+        return false;
+      }
+      if (!this.description) {
+        this.message = "You must enter your description (at least 150 letters)";
+        return false;
+      }
+      if (this.mainCategory == -1) {
+        this.message = "You must choose your specialization";
+        return false;
+      }
+      return true;
+    },
+  },
   methods: {
+    isEmailExist() {
+      axios.get(`/accounts/${this.email}/checkEmail`).then(
+        (res) => {
+          console.log(res.data);
+          if (res.data) {
+            this.emailExist = true;
+          } else {
+            this.emailExist = false;
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+    },
+    isUsernameExist() {
+      console.log(this.username);
+      axios.get(`/accounts/${this.username}/checkUsername`).then(
+        (res) => {
+          if (res.data) {
+            this.usernameExist = true;
+          } else {
+            this.usernameExist = false;
+          }
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+    },
+    sendvalidationEmail() {
+      axios
+        .post("/accounts/create/confirm", {
+          email: this.email,
+          username: this.username,
+          password: this.password,
+          // role: this.role,
+        })
+        .then(
+          (res) => {
+            // console.log("Added successfully");
+            console.log(res.data.code);
+            this.verificationCode = res.data.code;
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    },
+    showModal() {
+      this.modal.show();
+    },
+    startCountdown() {
+      if (!this.countingDown) {
+        this.countingDown = true;
+
+        this.countdownInterval = setInterval(() => {
+          this.countdownSeconds--;
+
+          if (this.countdownSeconds === 0) {
+            clearInterval(this.countdownInterval);
+            this.countingDown = false;
+            this.countdownSeconds = 10;
+            this.buttonText = "Resend";
+          } else {
+            this.buttonText = `Resend (${this.countdownSeconds}s)`;
+          }
+        }, 1000);
+      }
+    },
+    verifyEmail() {
+      if (this.inputCode == this.verificationCode) {
+        this.changeStep(this.currentStep + 1);
+      }
+    },
     changeStep(step) {
       // Implement your logic to change steps based on the parameter
+      this.modal.hide();
       if (step == 2) {
         this.isstep2 = true;
         this.isstep1 = false;
         this.isstep3 = false;
         this.currentStep = 2;
         this.completedStep1 = true;
+        this.completedStep2 = false;
       } else if (step == 3) {
         this.isstep2 = false;
         this.isstep1 = false;
         this.isstep3 = true;
         this.currentStep = 3;
         this.completedStep2 = true;
+        this.completedStep1 = true;
       } else {
         this.isstep2 = false;
         this.isstep1 = true;
         this.isstep3 = false;
         this.currentStep = 1;
+        this.completedStep2 = false;
+        this.completedStep1 = false;
       }
     },
     async saveFreelancer() {
+      //save freelancer account info
+      const FormData = this.processImageFile()
+      console.log(FormData)
+
+
+      axios
+        .post("/accounts/create", {
+          email: this.email,
+          username: this.username,
+          password: this.password,
+          role: this.role,
+        })
+        .then(
+          (res) => {
+            console.log("Added account successfully");
+            console.log(res.data.account);
+            this.account = res.data.account;
+            //add new freelancer with newly created account ID
+             FormData.append("accountID", this.account.AccountID);
+             FormData.append("firstName", this.firstName);
+             FormData.append("lastName", this.lastName);
+             FormData.append("phoneNo", this.phoneNo);
+             FormData.append("location", this.location);
+             FormData.append("description", this.description);
+             FormData.append("mainCategoryID", this.mainCategory);
+
+
+             FormData.append("profilePicture", "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg");
+
+            
+            axios
+              .post("/freelancers/create", FormData)
+              // .post("/freelancers/create", {
+              //   accountID: this.account.AccountID,
+              //   firstName: this.firstName,
+              //   lastName: this.lastName,
+              //   profilePicture:
+              //     "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
+              //   phoneNo: this.phoneNo,
+              //   location: this.location,
+              //   description: this.description,
+              //   mainCategoryID: this.mainCategory,
+              // })
+              .then(
+                (res) => {
+                  console.log(res.data);
+                  this.message =
+                    "Info added successfully. Returning to homepage";
+                  console.log(res.data.freelancer.FreelancerID);
+                  this.freelancer = res.data.freelancer.FreelancerID;
+                  this.saveCV();
+                },
+                (err) => {
+                  console.log(err.response);
+                }
+              );
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    },
+    saveCV() {
+      //Save CV pdf file
       const fileInput = this.$refs.fileCV;
       console.log(
         "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
@@ -285,7 +681,9 @@ export default {
       if (fileInput.files.length > 0) {
         const formData = new FormData();
         formData.append("file", fileInput.files[0]);
+        formData.append("FreelancerID", this.freelancer);
         console.log(formData);
+        console.log(this.freelancer);
         axios
           .post("/cv/createCV", formData)
           .then((response) => {
@@ -293,69 +691,104 @@ export default {
             console.log("File uploaded successfully", response);
             console.log(response);
             console.log(response.data);
+            console.log(this.freelancer);
+            this.CV_Uploads = response.data;
+
+            //Add CV in DB
+            axios
+              .post("/cv/saveCV", {
+                FreelancerID: this.freelancer,
+                Title: this.cvTitle,
+                Description: this.cvDescription,
+                CV_Upload: response.data,
+              })
+              .then(
+                (res) => {
+                  console.log(res.data);
+                },
+                (err) => {
+                  console.log(err.response);
+                }
+              );
+
+            //message
             toast.success("Upload CV Successfully!", {
               theme: "colored",
               autoClose: 2000,
-              onClose: () => location.reload(),
+              onClose: () => location.replace("/sendmessage"),
             });
           })
           .catch((error) => {
             // Handle the error
             console.error("Error uploading file", error);
-            toast.warn("Upload CV Faild!", { autoClose: 2000 });
+            toast.warn("Upload CV Failed!", { autoClose: 2000 });
           });
       } else {
         // Handle case when no file is selected
         console.warn("Please select a file to upload");
       }
     },
-    async openPdfPage() {
-      const apiUrl = "/cv/" + this.CV_Uploads;
-      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
-      console.log(resData);
-      const blob = new Blob([resData.data], { type: "application/pdf" });
-
-      // Create a URL for the Blob
-      const blobUrl = URL.createObjectURL(blob);
-      this.blobUrl = blobUrl;
-      // Open a new window or tab and display the PDF
-      const pdfWindow = window.open();
-      pdfWindow.document.write(`
-      <html>
-      <head>
-      <title>CV Viewer</title>
-      </head>
-      <body>
-      <embed src="${blobUrl}" type="application/pdf" width="100%" height="100%">
-      </body>
-      </html>
-              `);
-      pdfWindow.onbeforeunload = function () {
-        URL.revokeObjectURL(blobUrl);
-      };
+    updateFileImage(){
+      this.fileImage = this.$refs.fileImage
     },
-  mounted() {
-    if(this.$route.query.data){
-      this.account = JSON.parse(decodeURIComponent(this.$route.query.data))
-      axios
-      .post("/accounts/create", {
-        email: this.account.email,
-        username: this.account.username,
-        password: this.account.password,
-        role: this.account.role
-      })
-      .then(
-        (res) => {
-          console.log(res.data);
-          // console.log("Added successfully");
-        },
-        (err) => {
-          console.log(err.response);
-        }
+    processImageFile() {
+      //Save CV pdf file
+      const fileImageInput = this.fileImage;
+      console.log(fileImageInput);
+      console.log(
+        "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
+        fileImageInput.files
       );
-    }
+      console.log("🚀 ~ ", this.cvTitle + "   " + this.cvDescription);
+      //if there is image chosen
+      if (fileImageInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append("file", fileImageInput.files[0]);
+       
+        console.log(formData);
+        console.log(this.freelancer);
+        return formData;
+      } else {
+        // Handle case when no file is selected
+        console.warn("Please select a file to upload");
+        return null;
+      }
+    },
+    // async openPdfPage() {
+    //   const apiUrl = "/cv/" + this.CV_Uploads;
+    //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+    //   console.log(resData);
+    //   const blob = new Blob([resData.data], { type: "application/pdf" });
+
+    //   // Create a URL for the Blob
+    //   const blobUrl = URL.createObjectURL(blob);
+    //   this.blobUrl = blobUrl;
+    //   console.log(this.blobUrl);
+
+    //   // Open a new window or tab and display the PDF
+    //   const pdfWindow = window.open();
+    //   pdfWindow.document.write(`
+    //   <html>
+    //   <head>
+    //   <title>CV Viewer</title>
+    //   </head>
+    //   <body>
+    //   <embed src="${this.blobUrl}" type="application/pdf" width="100%" height="100%">
+    //   </body>
+    //   </html>
+    //           `);
+    //   pdfWindow.onbeforeunload = function () {
+    //     URL.revokeObjectURL(this.blobUrl);
+    //   };
+    // },
   },
-  }
+  mounted() {
+    axios.get("/categories/get").then((res) => {
+      this.categories = res.data;
+      // console.log(this.categories)
+    }),
+      (this.modal = new bootstrap.Modal(this.$refs.myModal));
+  },
 };
 </script>
 
@@ -400,5 +833,17 @@ export default {
 
 .become .active span {
   color: #d73436;
+}
+.inputForm {
+  width: 100%;
+}
+.inputForm td {
+  padding: 10px;
+}
+.inputForm tr td select {
+  border: 1px solid;
+}
+.inputField {
+  width: 100%;
 }
 </style>
