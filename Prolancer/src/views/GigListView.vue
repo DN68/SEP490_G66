@@ -159,7 +159,7 @@
                 @click="isshowListBuget = !isshowListBuget"
                 style="display: flex; align-items: center"
               >
-                <p class="textDefault">Rate</p>
+                <p class="textDefault">Price</p>
                 <i class="bi bi-chevron-down"></i>
               </div>
               <ul

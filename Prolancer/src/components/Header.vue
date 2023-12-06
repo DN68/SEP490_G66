@@ -71,7 +71,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="#"
+                href="/chat"
                 ><i class="bi bi-chat"></i
                 ><span class="small">Messaging</span></a
               >
