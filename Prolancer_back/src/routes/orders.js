@@ -3,8 +3,7 @@ const router = express.Router();
 const OrderController = require('../controllers/OrderController');
 
 
-router.post('/deliverOrder',
-    OrderController.deliverOrder
+
 
 router.put('/addOrderEffort',
             OrderController.addOrderEffort
