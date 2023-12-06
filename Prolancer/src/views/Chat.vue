@@ -8,6 +8,7 @@
       :username="currentAccountInfo.Username"
       :secret="currentAccountInfo.AccountID"
       :timezoneOffset="7"
+      style="background-color:#fff"
     />
     </div>
   </div>
@@ -147,5 +148,6 @@ export default {
 .ce-their-message {
   text-align: left !important;
 }
+
 
 </style>
