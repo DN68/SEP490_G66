@@ -2,14 +2,11 @@ const express = require('express');
 const router = express.Router();
 const OrderController = require('../controllers/OrderController');
 
-router.put('/addOrderEfford',
-            OrderController.addOrderEfford
+router.put('/addOrderEffort',
+            OrderController.addOrderEffort
 
 );
-router.post('/deliverOrder',
-            OrderController.deliverOrder
 
-);
 router.put('/updateOrderExtendDay',
             OrderController.updateOrderExtendDay
 

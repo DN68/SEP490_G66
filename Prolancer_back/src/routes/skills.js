@@ -11,7 +11,7 @@ SkillController.getSkillWithMajorID
 
 );
 router.get('/getSkillScore', 
-SkillController.getAllFreelancerWithSkillScore
+SkillController.getFreelancerWithSkillScore
 
 );
 router.get('/getMajorSkill', 

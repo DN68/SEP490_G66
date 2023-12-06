@@ -9,7 +9,8 @@
       </div>
       <div class="container" :class="{ 'col-md-9 ms-0': currentAccountInfo.Role == 'A' }">
         <div class="manage_title row">
-          <div class="col-md-5"><h3>Manage Skills Score</h3></div>
+          <div class="col-md-5"><h3>Manage Skills Score</h3></div>  
+
           <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
               <input
@@ -66,9 +67,21 @@
                 {{ skill.Skill_Name }}
               </h6>
             </router-link>
-          </div>
+          </div>  
+          <div class="col-md-2 major_skill_item ms-auto">
+            <button
+              id="btn-sub"
+              type="submit"
+              class="btn btn-primary bg-danger float-right"
+              style="border: none; width: 80px;"
+              @click="exportToExcel"
+               
+            >
+              Export
+            </button>
+          </div>       
           <!-- <div class="col-md-2 status_item"><h6>New</h6></div> -->
-        </div>
+        </div >
         <div class="skill_table">
           <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light position-sticky top-0">
@@ -226,7 +239,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-
+import * as XLSX from 'xlsx';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -399,6 +412,14 @@ export default {
         }
       }
     },
+    exportToExcel() {
+      const modifiedData = this.skillscores.map(({ Profile_Picture, ...rest }) => rest);
+      const ws = XLSX.utils.json_to_sheet(modifiedData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'SkillScore.xlsx');
+    },
+
   },
 };
 </script>

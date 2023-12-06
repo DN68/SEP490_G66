@@ -24,7 +24,8 @@ Freelancer.getFreelancerInfo = function (accountID, results) {
 
 
 Freelancer.getAllFreelancersWithPaging = function (status, search, limit, offset, account, pagination) {
-  var sql = "Select a.*, f.*, c.Category_Name, c.Description AS CategoryDescription, cv.* from Freelancer f INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE";
+  console.log(status)
+  var sql = "Select a.*, f.*, c.Category_Name, c.Description AS CategoryDescription, c.Status AS CategoryStatus, cv.CV_Upload, cv.Status AS cvStatus from Freelancer f INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Freelancer f INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE";
   
   console.log("sql: ", sql);

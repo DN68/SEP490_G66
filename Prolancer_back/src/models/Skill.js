@@ -22,7 +22,7 @@ Skill.getAllMajorSkill = function (result) {
     });
 };
 
-Skill.getAllFreelancerWithSkillScore  = function (queryBy,ParentSkillID,user,result) {
+Skill.getFreelancerWithSkillScore  = function (queryBy,ParentSkillID,user,result) {
     var sql='';
     var sqlForAdmin = "SELECT f.FreelancerID, fr.First_Name, fr.Last_Name, fr.Profile_Picture " +
     queryBy +

@@ -6,37 +6,27 @@
       <div class="container">
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Order Request</h3></div>
-          <!-- <div class="col-md-3 search_bar" >
+          <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
               <input
                 type="search"
                 class="form-control order_search"
-                placeholder="Search Order History ..."
+                placeholder="Search Order Request ..."
                 aria-label="Search"
                 aria-describedby="search-addon"
-                v-model="searchOrder"
+                v-model="search"
               />
 
-              <router-link
-                :to="{
-                  path: '/manageorder',
-                  query: {
-                    search: searchOrder,
-                    user: user,
-                    status: status,
-                  },
-                }"
-                class="text-decoration-none"
-              >
+              
                 <span
                   class="input-group-text border-0 icon_search"
                   id="search-addon"
                 >
                   <i class="fas fa-search"></i>
                 </span>
-              </router-link>
+              
             </div>
-          </div> -->
+          </div>
         </div>
         <div class="major_head row">
           <div
@@ -172,7 +162,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="(orderRequest, index) in orderRequests" :key="index">
+              <tr v-for="(orderRequest, index) in filterOrderRequest" :key="index">
                 <td>
                   <router-link :to="'/vieworderrequestdetail/'+orderRequest.OrderRequestID" class="text-decoration-none text-dark">
                   {{ orderRequest.OrderRequestID }}
@@ -210,7 +200,7 @@
                   </div>
                 </td>
                 <td>
-                  {{ orderRequest.TotalEstimation }}
+                  {{ orderRequest.TotalEstimation }} hour
                 </td>
                 <td>
                   {{
@@ -312,10 +302,10 @@
               </tr>
             </tbody>
           </table>
-          <div v-if="orderRequests.length == 0" class="text-center">
+          <div v-if="orderRequests.length == 0 || filterOrderRequest.length == 0" class="text-center">
             <h5>Not Found</h5>
           </div>
-          <div class="pagination" v-if="orderRequests.length > 0">
+          <div class="pagination" v-if="orderRequests.length > 0 &&filterOrderRequest.length > 0">
             <router-link
               v-if="pagination.page - 1 == 0"
               class="page-number"
@@ -409,7 +399,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="modal-body" v-if="action == 'Cancel'">
+                  <div class="modal-body" v-else-if="action == 'Cancel'">
                     <div class="row">
                       <div>
                         <p class="modal-title">
@@ -553,6 +543,7 @@ export default {
       selectedReason:
         "I currently have a full workload and am unable to take on additional projects at this time.",
       account: {},
+      search:""
     };
   },
   async created() {
@@ -602,7 +593,7 @@ export default {
               order: { OrderRequestID: orderRequestID },
             });
             if (responseStep2) {
-              toast.success("Successfully!", {
+              toast.success("Accept Order Request Successfully!", {
                 theme: "colored",
                 autoClose: 2000,
                 onClose: () => location.reload(),
@@ -625,7 +616,7 @@ export default {
           );
           if (responseStep1) {
            
-              toast.success("Successfully!", {
+              toast.success("Decline Order Request Successfully!", {
                 theme: "colored",
                 autoClose: 2000,
                 onClose: () => location.reload(),
@@ -703,6 +694,50 @@ export default {
       }
     },
   },
+  computed: { 
+    filterOrderRequest: function () {
+      console.log("filter Order Request computed is called");
+
+      if (this.search != "") {
+        if ((this.currentAccountInfo.Role == "F")) {
+
+          var filterOrderRequest = this.orderRequests.filter((order) => {
+            // Add your filtering logic here based on search and sortBy
+            // For example, let's assume you want to filter by gig name
+            return (
+              order.CustomerFirstName.toLowerCase().includes(
+                this.search.toLowerCase()
+              ) ||
+              order.CustomerLastName.toLowerCase().includes(
+                this.search.toLowerCase()
+              )
+            );
+          });
+        }else if(this.currentAccountInfo.Role == "C"){
+          console.log("Customer");
+          var filterOrderRequest = this.orderRequests.filter((order) => {
+            // Add your filtering logic here based on search and sortBy
+            // For example, let's assume you want to filter by gig name
+            return (
+              order.FreelancerFirstName.toLowerCase().includes(
+                this.search.toLowerCase()
+              ) ||
+              order.FreelancerLastName.toLowerCase().includes(
+                this.search.toLowerCase()
+              )
+            );
+          });
+        }
+
+        console.log("Search By " + this.search);
+        return filterOrderRequest;
+      } else {
+        console.log("Not  serch");
+        return this.orderRequests;
+      }
+    },
+  }
+  
 };
 </script>
       

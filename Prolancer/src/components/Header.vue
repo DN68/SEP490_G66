@@ -76,15 +76,7 @@
                 ><span class="small">Messaging</span></a
               >
             </li>
-            <li class="nav-item" v-if="currentAccountInfo">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="#"
-                ><i class="bi bi-heart"></i>
-                <span class="small">Favourite</span></a
-              >
-            </li>
+            
 
             <!-- <li class="nav-item" v-if="account && account.isFreelancer != 1">
               <a

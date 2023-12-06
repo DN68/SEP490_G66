@@ -9,6 +9,9 @@ class OrderController {
   createOrder = function (req, res) {
     const data = req.body;
     var order = (data.order)
+    if (!order) {
+      return res.status(400).send('Invalid or missing data');
+    }
 
     Order.createOrder(order, function (err, result) {
 
@@ -17,12 +20,8 @@ class OrderController {
       }
       else {
         return res.status(500).send('Create Order Failed' + err);
-
       }
-
-
     })
-
   }
 
   getOrderById = function (req, res) {
@@ -46,9 +45,9 @@ class OrderController {
     var pageQuery = req.query;
     var page;
     var search = '';
-    var status = 'Active';
+    var status = '';
     var userId = '';
-    var userRole = '';
+    var user = '';
     console.log(pageQuery);
     if (pageQuery.page != null) {
       page = pageQuery.page;
@@ -61,17 +60,20 @@ class OrderController {
       search = pageQuery.search;
     }
     status = pageQuery.status;
-    userRole = pageQuery.user.Role;
-    if (userRole == 'C') {
-      userId = pageQuery.user.CustomerID;
-    } else if(userRole == 'F'){
-      userId = pageQuery.user.FreelancerID;
+    user = pageQuery.user;
+    if (!status||!user) {
+      return res.status(400).send('Invalid or missing data');
     }
-    console.log('67', status, page, userId, userRole, search);
+    if (user.Role == 'C') {
+      userId = user.CustomerID;
+    } else if(user.Role == 'F'){
+      userId = user.FreelancerID;
+    }
+    console.log('67', status, page, userId, user.Role, search);
     const offset = (page - 1) * limit;
     let order, totalRows;
     const fetchData = new Promise((resolve, reject) => {
-      Order.getOrderWithPagingAndSearching(userId, userRole, status, search, limit, offset, function (err, orderData) {
+      Order.getOrderWithPagingAndSearching(userId, user.Role, status, search, limit, offset, function (err, orderData) {
         if (err) {
 
           reject(err);
@@ -158,83 +160,23 @@ class OrderController {
     })
   }
 
-  deliverOrder = function (req, res) {
-    let deliverFile;
-    var orderID = req.body.orderID;
-
-
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).json({ error: 'No files were uploaded.' });
-    }
-
-    deliverFile = req.files.file;
-    console.log("🚀 ~ file: OrderController.js:280 ~ OrderController ~ sampleFile:", deliverFile)
-
-
-    // const uploadPath = '../Prolancer/public/delivery' + deliverFile.name;
-    const newFileName = `${orderID}_${deliverFile.name}`;
-    const commonPath = path.join('uploads', 'delivery', newFileName);
-
-    console.log("🚀 ~ file: OrderController.js:284 ~ OrderController ~ uploadPath:", commonPath)
-    const uploadPath = path.join(__dirname, '..', '..', commonPath);
-    console.log("🚀 ~ file: OrderController.js:289 ~ OrderController ~ uploadPath:", uploadPath)
-    if (fs.existsSync(uploadPath)) {
-      // Delete the existing file
-      console.log("Run Here")
-      fsp.unlink(uploadPath)
-        .then(() => {
-          console.log('Existing file deleted successfully');
-          continueWithFileUpload();
-        })
-        .catch((unlinkError) => {
-          console.error('Error deleting existing file:', unlinkError);
-          return res.status(500).json({ error: 'Error deleting existing file.' });
-        });
-    } else {
-      continueWithFileUpload();
-
-    }
-
-    function continueWithFileUpload() {
-      deliverFile.mv(uploadPath, (err) => {
-        if (err) {
-          return res.status(500).json({ error: 'Error uploading file.' });
-        }
-        const filePath = commonPath.replace(/\\/g, '/');
-        console.log("🚀 ~ file: OrderController.js:318 ~ OrderController ~ deliverFile.mv ~ filePath:", filePath);
-
-        Order.deliverOrder(filePath, orderID, function (err, result) {
-          if (err)
-            return res.status(500).send(err);
-          else {
-            console.log("File uploaded successfully Run Here")
-            if (result.affectedRows == 0) {
-              return res.send({ message: 'File uploaded Failed' });
-
-            }
-            res.json({ message: 'File uploaded successfully' });
-
-          }
-
-        })
-      });
-    }
-  }
-
-  addOrderEfford = function (req, res) {
+  addOrderEffort = function (req, res) {
     const data = req.body;
     var orderID = data.orderID;
-    var addEfford = parseInt(data.addEfford);
+    var addEffort = parseInt(data.addEffort);
+    if (!orderID||!addEffort) {
+      return res.status(400).send('Invalid or missing data');
+    }
 
-    Order.addOrderEfford(addEfford, orderID, function (err, result) {
+    Order.addOrderEffort(addEffort, orderID, function (err, result) {
       if (err)
         res.status(500).send(err);
       else {
         if (result.affectedRows == 0) {
-          res.send({ message: 'Add Order Efford Failed' });
+          res.send({ message: 'Add Order Effort Failed' });
 
         }
-        res.send({ message: 'Add Order Efford Success' });
+        res.send({ message: 'Add Order Effort Success' });
       }
 
     })
