@@ -72,7 +72,7 @@
                 placeholder="Enter username"
                 v-model="username"
                 @change="isUsernameExist()"
-                ref="usernameInput"
+                ref="username"
               />
               <div>
                 <p class="errmessage" style="color: red">
@@ -90,7 +90,7 @@
                 placeholder="Enter Email"
                 v-model="email"
                 @change="isEmailExist()"
-                ref="emailInput"
+                ref="email"
               />
               <div>
                 <p class="errmessage" style="color: red">
@@ -107,7 +107,7 @@
                 type="password"
                 placeholder="Enter password"
                 v-model="password"
-                ref="passwordInput"
+                ref="password"
               />
               <div>
                 <p class="errmessage" style="color: red">
@@ -124,7 +124,7 @@
                 type="password"
                 placeholder="Re-enter username"
                 v-model="repeatPassword"
-                ref="repeatPasswordInput"
+                ref="repeatPassword"
               />
               <div>
                 <p class="errmessage" style="color: red">
@@ -139,7 +139,17 @@
         <table class="inputForm">
           <tr>
             <td class="line-info"><span>CV Title </span></td>
-            <td><input class="inputField" type="text" v-model="cvTitle" /></td>
+            <td>
+              <input
+                class="inputField"
+                type="text"
+                v-model="cvTitle"
+                ref="cvTitle"
+              />
+              <p class="errmessage" style="color: red">
+                {{ validationErrors.cvTitle }}
+              </p>
+            </td>
           </tr>
           <tr>
             <td class="line-info"><span>Upload CV </span></td>
@@ -151,6 +161,9 @@
                 accept=".pdf"
               />
               (.pdf only)
+              <p class="errmessage" style="color: red">
+                {{ validationErrors.fileCV }}
+              </p>
             </td>
           </tr>
           <tr>
@@ -164,7 +177,13 @@
                 style="width: 100%"
                 placeholder="  Share a bit about your work experience,cool project you've completed"
                 v-model="cvDescription"
+                ref="cvDescription"
               ></textarea>
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.cvDescription }}
+                </p>
+              </div>
             </td>
           </tr>
         </table>
@@ -179,10 +198,10 @@
                 placeholder="First Name"
                 v-model="firstName"
                 style="width: 50%"
-                ref="firstNameInput"
+                ref="firstName"
               />
               <div>
-                <p class="errmessage" style="color: red; text-align: center;">
+                <p class="errmessage" style="color: red; text-align: center">
                   {{ validationErrors.firstName }}
                 </p>
               </div>
@@ -192,10 +211,10 @@
                 v-model="lastName"
                 type="text"
                 style="width: 50%"
-                ref="lastNameInput"
+                ref="lastName"
               />
               <div>
-                <p class="errmessage" style="color: red; text-align: center;">
+                <p class="errmessage" style="color: red; text-align: center">
                   {{ validationErrors.lastName }}
                 </p>
               </div>
@@ -209,7 +228,7 @@
                 class="inputField"
                 v-model="phoneNo"
                 placeholder="Enter your phone number"
-                ref="phoneNoInput"
+                ref="phoneNo"
               />
               <div>
                 <p class="errmessage" style="color: red">
@@ -226,7 +245,7 @@
                 class="inputField"
                 v-model="location"
                 placeholder="Enter your address"
-                ref="locationInput"
+                ref="location"
               />
               <div>
                 <p class="errmessage" style="color: red">
@@ -258,7 +277,7 @@
                 rows="5"
                 style="width: 100%"
                 v-model="description"
-                ref="descriptionInput"
+                ref="description"
                 placeholder="  Share a bit about your work experience,cool project you've completed"
               ></textarea>
               <div>
@@ -275,7 +294,7 @@
                 v-model="mainCategory"
                 class="form-select lefthalf"
                 aria-label="Default select example"
-                ref="mainCategoryInput"
+                ref="mainCategory"
               >
                 <option :value="-1">Select a category</option>
                 <option
@@ -498,6 +517,9 @@ export default {
         location: "",
         description: "",
         mainCategory: "",
+        cvTitle: "",
+        fileCV: "",
+        cvDescription: "",
       },
     };
   },
@@ -571,6 +593,26 @@ export default {
         return false;
       }
     },
+    checkInputStep3() {
+      var errCount = 0;
+      //input validation here
+      if (!this.validateField("cvTitle")) {
+        errCount++;
+      }
+      if (!this.validateFile("fileCV")) {
+        errCount++;
+      }
+      if (!this.validateField("cvDescription")) {
+        errCount++;
+      }
+
+      //if no error -> true
+      if (errCount == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     //Validation for single input field
@@ -621,7 +663,7 @@ export default {
         this.setBorderColor(fieldName, false);
         return false;
       }
-      
+
       //if field input OK
       this.validationErrors[fieldName] = "";
       this.setBorderColor(fieldName, true);
@@ -631,7 +673,24 @@ export default {
     // validate select input
     validateOption(fieldName) {
       if (fieldName == "mainCategory" && this.mainCategory == -1) {
-        this.validationErrors[fieldName] = `You must choose your specialization`;
+        this.validationErrors[
+          fieldName
+        ] = `You must choose your specialization`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      //if field input OK
+      this.validationErrors[fieldName] = "";
+      this.setBorderColor(fieldName, true);
+      return true;
+    },
+
+    // validate file input
+    validateFile(fieldName) {
+      const fileInput = this.$refs[fieldName];
+      if (fileInput.files.length <= 0) {
+        this.validationErrors[fieldName] = `You must import your CV`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -645,9 +704,9 @@ export default {
     //Set border color
     setBorderColor(fieldName, value) {
       if (value == true) {
-        this.$refs[`${fieldName}Input`].style.borderColor = "initial";
+        this.$refs[`${fieldName}`].style.borderColor = "initial";
       } else {
-        this.$refs[`${fieldName}Input`].style.borderColor = "red";
+        this.$refs[`${fieldName}`].style.borderColor = "red";
       }
     },
 
@@ -743,8 +802,8 @@ export default {
     },
 
     //go to step 3 from step 2
-    toStep3(){
-      if(this.checkInputStep2){
+    toStep3() {
+      if (this.checkInputStep2) {
         this.changeStep(this.currentStep + 1);
       }
     },
@@ -779,67 +838,70 @@ export default {
 
     //Save freelancer information
     async saveFreelancer() {
-      //save freelancer account info
-      const FormData = this.processImageFile();
-      console.log(FormData);
+      console.log(this.checkInputStep3)
+      if (this.checkInputStep3) {
+        //save freelancer account info
+        const FormData = this.processImageFile();
+        console.log(FormData);
 
-      axios
-        .post("/accounts/create", {
-          email: this.email,
-          username: this.username,
-          password: this.password,
-          role: this.role,
-        })
-        .then(
-          (res) => {
-            console.log("Added account successfully");
-            console.log(res.data.account);
-            this.account = res.data.account;
-            //add new freelancer with newly created account ID
-            FormData.append("accountID", this.account.AccountID);
-            FormData.append("firstName", this.firstName);
-            FormData.append("lastName", this.lastName);
-            FormData.append("phoneNo", this.phoneNo);
-            FormData.append("location", this.location);
-            FormData.append("description", this.description);
-            FormData.append("mainCategoryID", this.mainCategory);
+        axios
+          .post("/accounts/create", {
+            email: this.email,
+            username: this.username,
+            password: this.password,
+            role: this.role,
+          })
+          .then(
+            (res) => {
+              console.log("Added account successfully");
+              console.log(res.data.account);
+              this.account = res.data.account;
+              //add new freelancer with newly created account ID
+              FormData.append("accountID", this.account.AccountID);
+              FormData.append("firstName", this.firstName);
+              FormData.append("lastName", this.lastName);
+              FormData.append("phoneNo", this.phoneNo);
+              FormData.append("location", this.location);
+              FormData.append("description", this.description);
+              FormData.append("mainCategoryID", this.mainCategory);
 
-            FormData.append(
-              "profilePicture",
-              "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
-            );
-
-            axios
-              .post("/freelancers/create", FormData)
-              // .post("/freelancers/create", {
-              //   accountID: this.account.AccountID,
-              //   firstName: this.firstName,
-              //   lastName: this.lastName,
-              //   profilePicture:
-              //     "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
-              //   phoneNo: this.phoneNo,
-              //   location: this.location,
-              //   description: this.description,
-              //   mainCategoryID: this.mainCategory,
-              // })
-              .then(
-                (res) => {
-                  console.log(res.data);
-                  this.message =
-                    "Info added successfully. Returning to homepage";
-                  console.log(res.data.freelancer.FreelancerID);
-                  this.freelancer = res.data.freelancer.FreelancerID;
-                  this.saveCV();
-                },
-                (err) => {
-                  console.log(err.response);
-                }
+              FormData.append(
+                "profilePicture",
+                "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
               );
-          },
-          (err) => {
-            console.log(err.response);
-          }
-        );
+
+              axios
+                .post("/freelancers/create", FormData)
+                // .post("/freelancers/create", {
+                //   accountID: this.account.AccountID,
+                //   firstName: this.firstName,
+                //   lastName: this.lastName,
+                //   profilePicture:
+                //     "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
+                //   phoneNo: this.phoneNo,
+                //   location: this.location,
+                //   description: this.description,
+                //   mainCategoryID: this.mainCategory,
+                // })
+                .then(
+                  (res) => {
+                    console.log(res.data);
+                    this.message =
+                      "Info added successfully. Returning to homepage";
+                    console.log(res.data.freelancer.FreelancerID);
+                    this.freelancer = res.data.freelancer.FreelancerID;
+                    this.saveCV();
+                  },
+                  (err) => {
+                    console.log(err.response);
+                  }
+                );
+            },
+            (err) => {
+              console.log(err.response);
+            }
+          );
+      }
     },
     saveCV() {
       //Save CV pdf file
