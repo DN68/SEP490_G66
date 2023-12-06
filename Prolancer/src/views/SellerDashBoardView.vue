@@ -29,7 +29,7 @@
             >
               <span style="font-weight: 400; font-size: 20px">Inbox</span>
               <router-link
-                to="#"
+                to="/chat"
                 style="text-decoration: none; float: right; font-size: 20px"
                 >View All</router-link
               >

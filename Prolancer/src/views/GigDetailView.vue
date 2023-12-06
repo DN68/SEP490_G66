@@ -207,7 +207,9 @@
                     class="co-white bg-co-black btn_seller_contact"
                     type="button"
                   >
+                  <router-link :to="'/chat'" class="text-decoration-none text-dark"> 
                     Contact me
+                  </router-link>
                   </button>
                 </div>
               </div>
