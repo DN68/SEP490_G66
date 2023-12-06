@@ -65,12 +65,13 @@
           Find important messages, tips, and links to helpful resources here:
         </p>
         <div class="abc">
+          <ChartGig class="mb-5"></ChartGig>
           <div class="activeorder mb-5">
             <span>Active orders - 0</span>
             <span>Completed Orders - 0</span>
             <span>Cancel Orders - 0</span>
           </div>
-          <router-link to="#" style="text-decoration: none; color: black">
+          <router-link to="/uppro" style="text-decoration: none; color: black">
             <div class="adddevlang mb-5">
               <span>Add your dev language to get buyers</span>
               <p style="font-weight: 300; font-size: 15px">
@@ -103,6 +104,7 @@ import Footer from "../components/Footer.vue";
 import SideBar from "../components/Sidebarprf.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
+import ChartGig from "../components/chartgigsuccess.vue";
 
 export default {
   name: "App",
@@ -110,14 +112,17 @@ export default {
     Headerseller,
     Footer,
     SideBar,
+    ChartGig,
   },
   data() {
     return {
       freelancer: {},
+      chartData: [],
     };
   },
   async mounted() {
-    console.log(localStorage.getItem("token"));
+    // this.fetchData();
+    // console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token") == null) {
       this.$router.push("/login");
     } else {
@@ -133,7 +138,7 @@ export default {
             }
           },
           (err) => {
-            console.log(err.response);
+            // console.log(err.response);
           }
         );
     }
@@ -148,9 +153,10 @@ export default {
         },
         (err) => {
           this.$router.push("/");
-          console.log(err.response);
+          // console.log(err.response);
         }
       );
+    
   },
   methods: {
     // async showAvatar(imgName){
@@ -166,6 +172,15 @@ export default {
     //   console.log(avatarElement)
     //   avatarElement.src = blobUrl
     // }
+    // fetchData() {
+    //   this.$axios.get('/orderrequest/getGigTitle')
+    //     .then(response => {
+    //       this.chartData = response.data;
+    //     })
+    //     .catch(error => {
+    //       console.error('Error fetching data:', error);
+    //     });
+    // },
   },
 };
 </script>

@@ -162,6 +162,22 @@ class OrderRequestController {
         })
       }
 
+
+      chartgig = function (req, res) {  
+        const data = req.query;
+        var FreelancerID = data.FreelancerID;
+        console.log(FreelancerID)
+
+        OrderRequest.chartgig(FreelancerID, function (err, result) {
+          if (err)
+            return res.send(err);
+          else {
+            
+            return res.send(result);
+          }
+        });
+        }
+    
       getOrderRequestById = function (req, res) {
         var id = req.params.id;
     

@@ -108,7 +108,19 @@ OrderRequest.updateOrderRequestNote = function (Note,OrderRequestID, result) {
       }
     });
   };
+  OrderRequest.chartgig = function(FreelancerID,result){
+  var sqlGetTitleGigChart="SELECT g.Title,COUNT(*) AS NUMBERGIG FROM OrderRequest od INNER JOIN `Order` o on od.OrderRequestID= o.OrderRequestID INNER JOIN Gig g on od.GigID = g.GigID where g.FreelancerID= ? group by g.Title "
+  connectDb.query(sqlGetTitleGigChart, [ FreelancerID ], function (err, res) {
+    if (err) {
+  
+      result(err,null);
+    }
+    else {
 
+      result(null,res);
+    }
+  });
+  }
   OrderRequest.getOrderRequestById = function (id, result) {
     connectDb.query("SELECT ro.OrderRequestID, ro.Status, ro.Note, ro.JobDescription, ro.TotalEstimation, ro.StartFrom, ro.EndAt, g.Price, g.Gig_IMG, g.Title, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM OrderRequest ro INNER JOIN Gig g ON g.GigID = ro.GigID INNER JOIN Customer c ON c.CustomerID = ro.CustomerID INNER JOIN Freelancer f ON f.FreelancerID = g.FreelancerID WHERE OrderRequestID = ?", [id], function (err, res) {
       if (err) {

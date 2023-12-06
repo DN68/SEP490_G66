@@ -4,26 +4,36 @@
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
       <div class="position-sticky">
         <div class="list-group list-group-flush mx-3 mt-4">
-          
-          
-          <router-link to="/managegigad" v-on:click="ChangeActive"
+          <router-link
+            to="/managegigad"
+            v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
-            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            id="btn-gig"
+            ><i class="bi bi-stack me-3"></i>
             <span>Gig Management</span>
           </router-link>
-          <router-link to="/manageorder" v-on:click="ChangeActive"
+          <router-link
+            to="/manageorder"
+            v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
-            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            id="btn-gig"
+            ><i class="bi bi-stack me-3"></i>
             <span>Order Management</span>
           </router-link>
-          <router-link to="/manageSkill" v-on:click="ChangeActive"
+          <router-link
+            to="/manageSkill"
+            v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
-            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            id="btn-gig"
+            ><i class="bi bi-stack me-3"></i>
             <span>Skill Test Management</span>
           </router-link>
-          <router-link to="/manageinterview" v-on:click="ChangeActive"
+          <router-link
+            to="/manageinterview"
+            v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
-            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            id="btn-gig"
+            ><i class="bi bi-stack me-3"></i>
             <span>Interview Management</span>
           </router-link>
 
@@ -51,7 +61,6 @@
         </div>
       </div>
     </nav>
-    
   </header>
   <!--Main Navigation-->
 
@@ -59,9 +68,14 @@
 </template>
 
 <script>
-export default {
-  
-};
+export default {};
+$(document).ready(function () {
+  //jquery for toggle sub menus
+  $(".sub-btn").click(function () {
+    $(this).next(".sub-menu").slideToggle();
+    $(this).find(".dropdown").toggleClass("rotate");
+  });
+});
 </script>
 
 <style>
@@ -110,5 +124,17 @@ export default {
 .list-group-item.active {
   background-color: #fe5c5d;
   border: none;
+}
+.side-bar .menu .item {
+  position: relative;
+  cursor: pointer;
+}
+
+a {
+  padding-left: 80px;
+}
+.unset-border {
+  border-right: unset;
+  border-left: unset;
 }
 </style>
