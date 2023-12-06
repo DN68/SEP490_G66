@@ -6,7 +6,6 @@ const cors = require("cors")
 const fileUpload = require('express-fileupload');
 app.use(fileUpload({
 }));
-app.use(cors())
 
 app.use(bodyParser.json());
 

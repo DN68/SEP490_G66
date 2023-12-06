@@ -333,6 +333,23 @@ const routes = [
 
   },
   {
+    path: '/chartearning',
+    name: 'chartearning',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../components/chartearning.vue')
+
+  },{
+    path: '/chartgig',
+    name: 'chartgig',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../components/chartgigsuccess.vue')
+
+  },
+  {
     path: '/vieworderrequestdetail/:id',
     name: 'vieworderrequestdetail',
     // route level code-splitting
@@ -348,6 +365,23 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Chat.vue')
+  },
+  {
+    path: '/error',
+    name: 'error',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ErrorPageView.vue')
+
+  },
+  {
+    path: '/earning',
+    name: 'earning',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Earnings.vue')
 
   }
 ]
