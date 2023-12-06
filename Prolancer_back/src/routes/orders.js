@@ -3,37 +3,31 @@ const router = express.Router();
 const OrderController = require('../controllers/OrderController');
 
 router.put('/addOrderEfford',
-            OrderController.addOrderEfford
+    OrderController.addOrderEfford
 
 );
 router.post('/deliverOrder',
-            OrderController.deliverOrder
+    OrderController.deliverOrder
 
 );
 router.put('/updateOrderExtendDay',
-            OrderController.updateOrderExtendDay
+    OrderController.updateOrderExtendDay
 
 );
-
-
 router.post('/createOrder',
-            OrderController.createOrder
+    OrderController.createOrder
 
 );
-
-
 router.get('/index',
-            OrderController.getOrderWithPagingAndSearching
+    OrderController.getOrderWithPagingAndSearching
 
 );
 router.put('/updateStatus',
-            OrderController.changeOrderStatus
+    OrderController.changeOrderStatus
 
 );
-
 router.get('/details/:id',
-OrderController.getOrderById
-
-
+    OrderController.getOrderById
 );
+
 module.exports = router;

@@ -62,7 +62,6 @@
       </div>
 
       <div v-if="isstep1">
-        {{ message }}
         <table class="inputForm">
           <tr>
             <td class="line-info"><span>Username </span></td>
@@ -70,9 +69,16 @@
               <input
                 class="inputField"
                 type="text"
+                placeholder="Enter username"
                 v-model="username"
-                @change="isUsernameExist"
+                @change="isUsernameExist()"
+                ref="usernameInput"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.username }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -81,15 +87,33 @@
               <input
                 class="inputField"
                 type="text"
+                placeholder="Enter Email"
                 v-model="email"
-                @change="isEmailExist"
+                @change="isEmailExist()"
+                ref="emailInput"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.email }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
             <td class="line-info"><span>Password </span></td>
             <td>
-              <input class="inputField" type="password" v-model="password" />
+              <input
+                class="inputField"
+                type="password"
+                placeholder="Enter password"
+                v-model="password"
+                ref="passwordInput"
+              />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.password }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -98,8 +122,15 @@
               <input
                 class="inputField"
                 type="password"
+                placeholder="Re-enter username"
                 v-model="repeatPassword"
+                ref="repeatPasswordInput"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.repeatPassword }}
+                </p>
+              </div>
             </td>
           </tr>
         </table>
@@ -139,7 +170,6 @@
         </table>
       </div>
       <div v-if="isstep2">
-        {{ message }}
         <table class="inputForm">
           <tr>
             <td class="line-info"><span>Full Name</span></td>
@@ -148,27 +178,61 @@
                 type="text"
                 placeholder="First Name"
                 v-model="firstName"
-                style="width: 48.5%"
+                style="width: 50%"
+                ref="firstNameInput"
               />
+              <div>
+                <p class="errmessage" style="color: red; text-align: center;">
+                  {{ validationErrors.firstName }}
+                </p>
+              </div>
               <input
                 class="ms-2"
                 placeholder="Last Name"
                 v-model="lastName"
                 type="text"
                 style="width: 50%"
+                ref="lastNameInput"
               />
+              <div>
+                <p class="errmessage" style="color: red; text-align: center;">
+                  {{ validationErrors.lastName }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
             <td class="line-info"><span>Phone </span></td>
             <td>
-              <input type="text" class="inputField" v-model="phoneNo" />
+              <input
+                type="text"
+                class="inputField"
+                v-model="phoneNo"
+                placeholder="Enter your phone number"
+                ref="phoneNoInput"
+              />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.phoneNo }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
             <td class="line-info"><span>Address </span></td>
             <td>
-              <input type="text" class="inputField" v-model="location" />
+              <input
+                type="text"
+                class="inputField"
+                v-model="location"
+                placeholder="Enter your address"
+                ref="locationInput"
+              />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.location }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -194,8 +258,14 @@
                 rows="5"
                 style="width: 100%"
                 v-model="description"
+                ref="descriptionInput"
                 placeholder="  Share a bit about your work experience,cool project you've completed"
               ></textarea>
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.description }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -205,6 +275,7 @@
                 v-model="mainCategory"
                 class="form-select lefthalf"
                 aria-label="Default select example"
+                ref="mainCategoryInput"
               >
                 <option :value="-1">Select a category</option>
                 <option
@@ -215,6 +286,11 @@
                   {{ category.Category_Name }}
                 </option>
               </select>
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.mainCategory }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -278,11 +354,7 @@
           type="button"
           class="btn btn-danger"
           style="border: none; width: 100px; margin-top: 40px"
-          :disabled="!checkInputStep1"
-          @click="
-            showModal();
-            sendvalidationEmail();
-          "
+          @click="emailConfirmation()"
         >
           Continue
         </button>
@@ -292,8 +364,7 @@
           type="submit"
           class="btn btn-primary bg-danger"
           style="border: none; width: 100px; margin-top: 40px"
-          :disabled="!checkInputStep2"
-          @click="changeStep(currentStep + 1)"
+          @click="toStep3()"
         >
           Continue
         </button>
@@ -411,6 +482,23 @@ export default {
       //email verification
       verificationCode: "",
       inputCode: "123456",
+      //input validation messaage
+      validationErrors: {
+        //Step 1 validation
+        username: "",
+        email: "",
+        password: "",
+        repeatPassword: "",
+        firstName: "",
+        lastName: "",
+        //Step 2 validation
+        firstName: "",
+        lastName: "",
+        phoneNo: "",
+        location: "",
+        description: "",
+        mainCategory: "",
+      },
     };
   },
   computed: {
@@ -428,84 +516,142 @@ export default {
         this.password
       );
     },
+
     checkInputStep1() {
+      var errCount = 0;
       //input validation here
-      if (!this.username) {
-        this.message = "You must enter username";
+      if (!this.validateField("username")) {
+        errCount++;
+      }
+      if (!this.validateField("email")) {
+        errCount++;
+      }
+      if (!this.validateField("password")) {
+        errCount++;
+      }
+      if (!this.validateField("repeatPassword")) {
+        errCount++;
+      }
+
+      //if no error -> true
+      if (errCount == 0) {
+        return true;
+      } else {
         return false;
       }
-      if (!this.isValidUsername) {
-        this.message =
-          "Username must start with an alphabet and has at least 8 characters";
-        return false;
-      }
-      console.log(this.usernameExist);
-      if (this.usernameExist) {
-        this.message = "Username exist";
-        return false;
-      }
-      if (!this.email) {
-        this.message = "You must enter Email";
-        return false;
-      }
-      if (!this.isValidEmail) {
-        this.message = "Wrong email format";
-        return false;
-      }
-      if (this.emailExist) {
-        this.message = "Email exist";
-        return false;
-      }
-      if (!this.password) {
-        this.message = "You must enter password";
-        return false;
-      }
-      if (!this.isValidPassword) {
-        this.message =
-          "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
-        return false;
-      }
-      if (!this.repeatPassword) {
-        this.message = "You must enter repeat password";
-        return false;
-      }
-      if (this.password != this.repeatPassword) {
-        this.message = "Wrong password confirmation";
-        return false;
-      }
-      return true;
     },
     checkInputStep2() {
-      //input validation here
+      var errCount = 0;
 
-      if (!this.firstName) {
-        this.message = "You must enter your first name";
+      //input validation here
+      if (!this.validateField("firstName")) {
+        errCount++;
+      }
+      if (!this.validateField("lastName")) {
+        errCount++;
+      }
+      if (!this.validateField("phoneNo")) {
+        errCount++;
+      }
+      if (!this.validateField("location")) {
+        errCount++;
+      }
+      if (!this.validateField("description")) {
+        // this.message = "You must enter your description (at least 150 letters)";
+        errCount++;
+      }
+      if (!this.validateOption("mainCategory")) {
+        errCount++;
+      }
+
+      //if no error -> true
+      if (errCount == 0) {
+        return true;
+      } else {
         return false;
       }
-      if (!this.lastName) {
-        this.message = "You must enter your last name";
-        return false;
-      }
-      if (!this.phoneNo) {
-        this.message = "You must enter your phone number";
-        return false;
-      }
-      if (!this.location) {
-        this.message = "You must enter your address";
-        return false;
-      }
-      if (!this.description) {
-        this.message = "You must enter your description (at least 150 letters)";
-        return false;
-      }
-      if (this.mainCategory == -1) {
-        this.message = "You must choose your specialization";
-        return false;
-      }
-      return true;
     },
   },
   methods: {
+    //Validation for single input field
+    validateField(fieldName) {
+      const value = this[fieldName].trim();
+
+      if (value === "") {
+        this.validationErrors[fieldName] = `This field cannot be empty.`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+      // Username validation
+      if (fieldName == "username" && !this.isValidUsername) {
+        this.validationErrors[fieldName] = `Wrong username format`;
+        return false;
+      }
+      if (fieldName == "username" && this.usernameExist) {
+        this.validationErrors[fieldName] = `This user name is already exist`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      // Email validation
+      if (fieldName == "email" && !this.isValidEmail) {
+        this.validationErrors[fieldName] = `Wrong email format`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+      if (fieldName == "email" && this.emailExist) {
+        this.validationErrors[fieldName] = `This email is already exist`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      // Password validation
+      if (fieldName == "password" && !this.isValidPassword) {
+        this.validationErrors[fieldName] = `Wrong password format`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      // Confirm password validation
+      if (
+        fieldName == "repeatPassword" &&
+        this.repeatPassword != this.password
+      ) {
+        this.validationErrors[fieldName] = `Wrong password confirmation`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+      
+      //if field input OK
+      this.validationErrors[fieldName] = "";
+      this.setBorderColor(fieldName, true);
+      return true;
+    },
+
+    // validate select input
+    validateOption(fieldName) {
+      if (fieldName == "mainCategory" && this.mainCategory == -1) {
+        this.validationErrors[fieldName] = `You must choose your specialization`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      //if field input OK
+      this.validationErrors[fieldName] = "";
+      this.setBorderColor(fieldName, true);
+      return true;
+    },
+
+    //Set border color
+    setBorderColor(fieldName, value) {
+      if (value == true) {
+        this.$refs[`${fieldName}Input`].style.borderColor = "initial";
+      } else {
+        this.$refs[`${fieldName}Input`].style.borderColor = "red";
+      }
+    },
+
+    //Check if email already exist
     isEmailExist() {
       axios.get(`/accounts/${this.email}/checkEmail`).then(
         (res) => {
@@ -521,6 +667,8 @@ export default {
         }
       );
     },
+
+    //Check if username already exist
     isUsernameExist() {
       console.log(this.username);
       axios.get(`/accounts/${this.username}/checkUsername`).then(
@@ -536,6 +684,16 @@ export default {
         }
       );
     },
+
+    //Send validation code to mail & show verification popup
+    emailConfirmation() {
+      if (this.checkInputStep1) {
+        this.showModal();
+        this.sendvalidationEmail();
+      }
+    },
+
+    //Send validation code to mail
     sendvalidationEmail() {
       axios
         .post("/accounts/create/confirm", {
@@ -555,6 +713,8 @@ export default {
           }
         );
     },
+
+    //Show verification popup
     showModal() {
       this.modal.show();
     },
@@ -581,6 +741,15 @@ export default {
         this.changeStep(this.currentStep + 1);
       }
     },
+
+    //go to step 3 from step 2
+    toStep3(){
+      if(this.checkInputStep2){
+        this.changeStep(this.currentStep + 1);
+      }
+    },
+
+    //Go to next step
     changeStep(step) {
       // Implement your logic to change steps based on the parameter
       this.modal.hide();
@@ -607,11 +776,12 @@ export default {
         this.completedStep1 = false;
       }
     },
+
+    //Save freelancer information
     async saveFreelancer() {
       //save freelancer account info
-      const FormData = this.processImageFile()
-      console.log(FormData)
-
+      const FormData = this.processImageFile();
+      console.log(FormData);
 
       axios
         .post("/accounts/create", {
@@ -626,18 +796,19 @@ export default {
             console.log(res.data.account);
             this.account = res.data.account;
             //add new freelancer with newly created account ID
-             FormData.append("accountID", this.account.AccountID);
-             FormData.append("firstName", this.firstName);
-             FormData.append("lastName", this.lastName);
-             FormData.append("phoneNo", this.phoneNo);
-             FormData.append("location", this.location);
-             FormData.append("description", this.description);
-             FormData.append("mainCategoryID", this.mainCategory);
+            FormData.append("accountID", this.account.AccountID);
+            FormData.append("firstName", this.firstName);
+            FormData.append("lastName", this.lastName);
+            FormData.append("phoneNo", this.phoneNo);
+            FormData.append("location", this.location);
+            FormData.append("description", this.description);
+            FormData.append("mainCategoryID", this.mainCategory);
 
+            FormData.append(
+              "profilePicture",
+              "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
+            );
 
-             FormData.append("profilePicture", "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg");
-
-            
             axios
               .post("/freelancers/create", FormData)
               // .post("/freelancers/create", {
@@ -728,8 +899,8 @@ export default {
         console.warn("Please select a file to upload");
       }
     },
-    updateFileImage(){
-      this.fileImage = this.$refs.fileImage
+    updateFileImage() {
+      this.fileImage = this.$refs.fileImage;
     },
     processImageFile() {
       //Save CV pdf file
@@ -744,7 +915,7 @@ export default {
       if (fileImageInput.files.length > 0) {
         const formData = new FormData();
         formData.append("file", fileImageInput.files[0]);
-       
+
         console.log(formData);
         console.log(this.freelancer);
         return formData;
@@ -845,5 +1016,10 @@ export default {
 }
 .inputField {
   width: 100%;
+}
+.errmessage {
+  color: red;
+  text-align: left;
+  font-size: 14px;
 }
 </style>

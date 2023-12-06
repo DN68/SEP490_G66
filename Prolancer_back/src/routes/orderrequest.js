@@ -5,7 +5,6 @@ const OrderRequestController = require('../controllers/OrderRequestController');
 router.get('/details/:id',
 OrderRequestController.getOrderRequestById
 
-
 );
 router.put('/updateOrderRequestJobDescription', 
 OrderRequestController.updateOrderRequestJobDescription
