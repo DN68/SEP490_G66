@@ -1,6 +1,7 @@
 <template>
   <div class="view_order_detail">
-    <Header></Header>
+    <Header v-if="currentAccountInfo.Role == 'C'"></Header>
+    <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
     <div class="container">
       <div class="row">
         <div class="order_status row">
@@ -311,11 +312,12 @@ var moment = require("moment");
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import VueJwtDecode from "vue-jwt-decode";
+import HeaderSell from "../components/HeaderSeller.vue";
 
 export default {
   name: "OrderDetailView",
   components: {
-    Header,
+    Header,HeaderSell
   },
   data() {
     return {
@@ -324,7 +326,7 @@ export default {
       isdelivery: false,
       order: {},
       moment: moment,
-     
+      currentAccountInfo: []
     };
   },
   async created() {

@@ -9,8 +9,7 @@
       </div>
       <div
         class="container"
-        :class="{ 'col-md-9': currentAccountInfo.Role == 'A' }"
-        :style="{ 'margin-left: 0;': currentAccountInfo.Role == 'A'}"
+        :class="{ 'col-md-9 ms-0': currentAccountInfo.Role == 'A' }"
       >
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Change Request</h3></div>
@@ -109,12 +108,12 @@
             <thead class="bg-light">
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th class="w-10">ON ORDER ID</th>
-                <th style="width: 20%">CREATE BY</th>
+                <th style="width: 10%" v-if="currentAccountInfo.Role=='A'">CREATE BY</th>
                 <!-- <th v-for="childSkill in childSkills" :key="childSkill.SkillID">
                       {{ childSkill.Skill_Name }}
                     </th> -->
-                <th class="w-25">TITLE</th>
-                <th>NOTE</th>
+                <th style="width: 20%">TITLE</th>
+                <th class="w-25">NOTE</th>
 
                 <th>CREATE ON</th>
                 <th v-if="requestType == 'Extend'">EXTEND</th>
@@ -131,7 +130,7 @@
                 <td>
                   {{ changeRequest.OrderID }}
                 </td>
-                <td>
+                <td v-if="currentAccountInfo.Role=='A'">
                   {{ changeRequest.Username }}
                   <!-- <img
                     :src="orderRequest.Profile_Picture"
@@ -141,13 +140,14 @@
                   />
                   {{ orderRequest.First_Name + " " + orderRequest.Last_Name }} -->
                 </td>
-                <td>
-                  <div class="JobDescription">
+                <td >
+                  <div class="scrollable-row ">
                     {{ changeRequest.Request_Title }}
                   </div>
                 </td>
-                <td>
-                  {{ changeRequest.Request_Description }}
+                <td >
+                  <div class="scrollable-row">
+                  {{ changeRequest.Request_Description }}</div>
                 </td>
                 <td>
                   {{
@@ -443,7 +443,6 @@ export default {
           params: {
             page: currentPage,
             user: this.currentAccountInfo,
-            status: this.status,
             requestType: this.requestType,
           },
         })
@@ -754,4 +753,11 @@ export default {
   -webkit-box-orient: vertical;
   display: -webkit-box;
 }
+.scrollable-row {
+
+  max-height: 50px; 
+  overflow-y: auto; 
+  white-space: pre-line; 
+}
+
 </style>
