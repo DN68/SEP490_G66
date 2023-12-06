@@ -19,7 +19,7 @@
                   </div>
                   <div class="thumb-content">
                     <div class="row userRow">
-                      <div class="col-md-7">
+                      <div class="col-md-10">
                         <img
                           :src="gig.Profile_Picture"
                           class="rounded-circle"
@@ -34,9 +34,9 @@
                           >{{gig.First_Name+' '+gig.Last_Name}}</span
                         >
                       </div>
-                      <div class="col-md-5">
+                      <!-- <div class="col-md-5">
                         <h3 class="userLevel">{{ gig.Delivery_Day}} day(s)</h3>
-                      </div>
+                      </div> -->
                     </div>
 
                     <h3 class="gigDescription">

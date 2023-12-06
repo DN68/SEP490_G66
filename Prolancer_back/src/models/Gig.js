@@ -94,7 +94,7 @@ Gig.getFreelancerGigWithPagingAndSearching = function (status, freelancerId, sea
 };
 
 Gig.getGigById = function (id, result) {
-  connectDb.query("Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID Where GigID = ?", [id], function (err, res) {
+  connectDb.query("Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription, AVG(Rating_Score) as Rating, cv.CV_Upload from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN CV cv ON f.FreelancerID = cv.FreelancerID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID Where GigID = ? GROUP BY g.GigID, rv.ReceiverID", [id], function (err, res) {
     if (err) {
       result(null, err);
     }

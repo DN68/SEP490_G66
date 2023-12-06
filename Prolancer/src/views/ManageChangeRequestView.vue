@@ -13,6 +13,11 @@
       >
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Change Request</h3></div>
+          <div class="text-start">
+          <router-link :to="'/manageOrder'"> 
+        <i class="fa-solid fa-arrow-left-long text-danger " style="cursor: pointer;"></i>
+        </router-link>
+        </div>
           <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
               <input

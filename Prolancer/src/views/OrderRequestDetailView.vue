@@ -18,7 +18,11 @@
             <h6>Details</h6>
           </div>
         </div>
-
+        <div class="text-start">
+          <router-link :to="'/manageOrderRequest'"> 
+        <i class="fa-solid fa-arrow-left-long text-danger " style="cursor: pointer;"></i>
+        </router-link>
+        </div>
         <div class="order_detail_page row">
           <div
             class="col-md-8 order_detail_information pb-4 step1"
