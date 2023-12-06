@@ -19,17 +19,7 @@
             >
               Welcome to Prolancer
             </p>
-            <div
-              class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start"
-            >
-              <p class="lead fw-normal mb-0 me-3">Log in with</p>
-              <button
-                type="button"
-                class="btn bg-danger bg-gradient text-light mx-1"
-              >
-                <i class="fa-brands fa-google"></i>
-              </button>
-            </div>
+            
 
             <div class="divider d-flex align-items-center my-4">
               <p class="text-center fw-bold mx-3 mb-0">Or</p>

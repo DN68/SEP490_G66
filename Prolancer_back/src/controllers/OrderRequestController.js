@@ -159,7 +159,8 @@ class OrderRequestController {
       chartgig = function (req, res) {  
         const data = req.query;
         var FreelancerID = data.FreelancerID;
-        console.log(data)
+        console.log(FreelancerID)
+
         OrderRequest.chartgig(FreelancerID, function (err, result) {
           if (err)
             return res.send(err);

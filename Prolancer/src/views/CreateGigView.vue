@@ -25,6 +25,7 @@
             rows="3"
             v-model="title"
             required
+            maxlength="100"
           ></textarea>
         </div>
       </div>
@@ -69,7 +70,7 @@
         </div>
         <div class="right">
           <div class="choice" style="display: flex; flex-direction: row">
-            <div class="numpage">
+            <div class="numpage" style="display:none">
               <label for="">Number of page</label>
               <select
                 class="form-select third"
@@ -77,7 +78,7 @@
                 v-model="numOfPage"
                 required
               >
-                <option value="">Select number of page</option>
+                <option value="" dis>Select number of page</option>
                 <option value="less than 3">less than 3</option>
                 <option value="3-5">3-5</option>
                 <option value="more than 5">more than 5</option>

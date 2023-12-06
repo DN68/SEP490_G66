@@ -1,42 +1,55 @@
 <template>
-  <Doughnut
-    id="my-chart-id"
-    :options="chartOptions"
-    :data="chartData"
-  />
+  <div>
+    <canvas ref="chart"></canvas>
+  </div>
 </template>
 
 <script>
-import { Doughnut } from 'vue-chartjs'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-
-ChartJS.register(ArcElement, Tooltip, Legend)
-
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import axios from "axios";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default {
-  name: 'BarChart',
-  components: { Doughnut },
-  methods: {
-    randomColor(id) {
-      const r = () => Math.floor(256 * Math.random());
-
-      return this.colorCache[id] || (this.colorCache[id] = `rgb(${r()}, ${r()}, ${r()})`);
-    }
+  props: ['data'],
+  mounted() {
+    this.renderChart();
   },
-  data() {
-    return {
-      chartData: {
-        labels: [ 'January', 'February', 'March','August' ],
-        datasets: [ { 
-          data: [40, 20, 12],
-          backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-          } ]
-      },
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    }
-  }
-}
+  methods: {
+    renderChart() {
+      const ctx = this.$refs.chart.getContext('2d');
+      const labels = this.data.map(item => item.label);
+      const values = this.data.map(item => item.value);
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Chart Data',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+              data: values,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    },
+  },
+};
 </script>
+
+<style scoped>
+canvas {
+  max-width: 600px;
+  margin: 0 auto;
+}
+</style>
