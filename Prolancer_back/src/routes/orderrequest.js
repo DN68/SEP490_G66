@@ -5,7 +5,6 @@ const OrderRequestController = require('../controllers/OrderRequestController');
 router.get('/details/:id',
 OrderRequestController.getOrderRequestById
 
-
 );
 router.put('/updateOrderRequestJobDescription', 
 OrderRequestController.updateOrderRequestJobDescription
@@ -27,6 +26,9 @@ router.post('/createOrderRequest',
 OrderRequestController.createOrderRequest
 
 );
+router.get('/getGigTitle', 
+OrderRequestController.chartgig
 
+);
 
 module.exports = router;

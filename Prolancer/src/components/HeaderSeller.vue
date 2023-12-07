@@ -51,7 +51,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="#"
+                href="/earning"
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
