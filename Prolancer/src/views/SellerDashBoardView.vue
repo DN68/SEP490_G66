@@ -185,7 +185,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 html {
   position: relative;
 }

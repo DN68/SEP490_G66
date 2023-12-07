@@ -1,55 +1,137 @@
 <template>
-  <div>
+  <div class="mt-5">
     <canvas ref="chart"></canvas>
   </div>
 </template>
 
 <script>
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import axios from "axios";
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { Chart, registerables } from 'chart.js';
+import axios from 'axios';
+import VueJwtDecode from 'vue-jwt-decode';
+
+// Register necessary modules
+Chart.register(...registerables);
 
 export default {
-  props: ['data'],
-  mounted() {
-    this.renderChart();
+  data() {
+    return {
+      currentAccountInfo: {},
+      chartData: [],
+    };
+  },
+  async created() {
+    await this.onUpdateAccountInfo();
+    try {
+      // Replace '/orders/getchartearning' with the actual API endpoint
+      const response = await axios.get('/orders/getchartearning', {
+        params: {
+          FreelancerID: this.currentAccountInfo.FreelancerID,
+        },
+      });
+      this.chartData = response.data;
+      console.log(this.chartData);
+
+      if (this.chartData && this.chartData.length > 0) {
+        this.renderChart();
+      } else {
+        console.error('No data available');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   },
   methods: {
+    generateRandomColor() {
+      return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    },
     renderChart() {
       const ctx = this.$refs.chart.getContext('2d');
-      const labels = this.data.map(item => item.label);
-      const values = this.data.map(item => item.value);
+      const labels = this.chartData.map(item => item.MONTH);
+      const values = this.chartData.map(item => item.Price);
+
+      const randomColor = this.generateRandomColor();
 
       new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: labels,
           datasets: [
             {
-              label: 'Chart Data',
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 1,
+              label: 'Earnings',
               data: values,
+              backgroundColor: randomColor,
+              borderColor: randomColor,
+              borderWidth: 1,
+              fill: false,
             },
           ],
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           scales: {
+            x: {
+              beginAtZero: true,
+              
+            
+            },
             y: {
               beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return '$' + value.toFixed(2); // Set the unit here, e.g., '$'
+                },
+              },
             },
           },
         },
       });
+    },
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem('token');
+      if (!token) {
+        this.$router.push('/login');
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        if (decoded.role === 'F') {
+          await axios
+            .get('/freelancers/info', {
+              headers: { token: localStorage.getItem('token') },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.freelancer;
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else if (decoded.role === 'C') {
+          await axios
+            .get('/customers/info', {
+              headers: { token: localStorage.getItem('token') },
+            })
+            .then(
+              (res) => {
+                this.currentAccountInfo = res.data.customer;
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else {
+          this.currentAccountInfo = { Email: decoded.email, Role: decoded.role };
+        }
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-canvas {
-  max-width: 600px;
-  margin: 0 auto;
-}
+  canvas {
+    max-width: 3000px;
+    height:500px;
+    margin:0 100px;
+  }
 </style>
