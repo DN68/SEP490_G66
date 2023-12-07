@@ -265,6 +265,9 @@
                 @change="updateFileImage"
               />
               (.jpeg, .jpg, .png)
+              <p class="errmessage" style="color: red">
+                {{ validationErrors.fileImage }}
+              </p>
             </td>
           </tr>
           <tr>
@@ -437,7 +440,6 @@
           </div>
         </div>
       </div>
-      <button v-if="isstep3" @click="openPdfPage">See PDF</button>
       <!-- <embed :src="blobUrl" type="application/pdf" width="100%" height="900px"> -->
     </div>
     <div class="footer">
@@ -578,6 +580,9 @@ export default {
       if (!this.validateField("location")) {
         errCount++;
       }
+      if (!this.validateFile("fileImage")) {
+        errCount++;
+      }
       if (!this.validateField("description")) {
         // this.message = "You must enter your description (at least 150 letters)";
         errCount++;
@@ -627,6 +632,7 @@ export default {
       // Username validation
       if (fieldName == "username" && !this.isValidUsername) {
         this.validationErrors[fieldName] = `Wrong username format`;
+        this.setBorderColor(fieldName, false);
         return false;
       }
       if (fieldName == "username" && this.usernameExist) {
@@ -690,15 +696,15 @@ export default {
     validateFile(fieldName) {
       const fileInput = this.$refs[fieldName];
       if (fileInput.files.length <= 0) {
-        this.validationErrors[fieldName] = `You must import your CV`;
+        this.validationErrors[fieldName] = `You must import file here`;
         this.setBorderColor(fieldName, false);
         return false;
+      } else {
+        //if field input OK
+        this.validationErrors[fieldName] = "";
+        this.setBorderColor(fieldName, true);
+        return true;
       }
-
-      //if field input OK
-      this.validationErrors[fieldName] = "";
-      this.setBorderColor(fieldName, true);
-      return true;
     },
 
     //Set border color
@@ -838,7 +844,7 @@ export default {
 
     //Save freelancer information
     async saveFreelancer() {
-      console.log(this.checkInputStep3)
+      console.log(this.checkInputStep3);
       if (this.checkInputStep3) {
         //save freelancer account info
         const FormData = this.processImageFile();
@@ -1083,5 +1089,8 @@ export default {
   color: red;
   text-align: left;
   font-size: 14px;
+}
+input[type="file"] {
+  border: 2px solid white;
 }
 </style>

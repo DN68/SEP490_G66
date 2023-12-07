@@ -277,6 +277,9 @@
                   @change="updateFileImage"
                 />
                 (.jpeg, .jpg, .png)
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.fileImage }}
+                </p>
               </td>
             </tr>
           </table>
@@ -480,6 +483,7 @@ export default {
       message: "",
       emailExist: false,
       usernameExist: false,
+      fileImage: null,
       location: "",
       role: "C",
       companyName: "",
@@ -502,6 +506,8 @@ export default {
         phoneNo: "",
         location: "",
         description: "",
+        fileImage: "",
+        //step 3 validation
         companyName: "",
         companyAddress: "",
         taxCode: "",
@@ -549,6 +555,7 @@ export default {
     },
     checkInputStep2() {
       var errCount = 0;
+      console.log(this.validateFile("fileImage"));
 
       //input validation here
       if (!this.validateField("firstName")) {
@@ -563,6 +570,11 @@ export default {
       if (!this.validateField("location")) {
         errCount++;
       }
+      if (!this.validateFile("fileImage")) {
+        errCount++;
+      }
+
+      console.log(errCount)
 
       //if no error -> true
       if (errCount == 0) {
@@ -607,6 +619,7 @@ export default {
       // Username validation
       if (fieldName == "username" && !this.isValidUsername) {
         this.validationErrors[fieldName] = `Wrong username format`;
+        this.setBorderColor(fieldName, false);
         return false;
       }
       if (fieldName == "username" && this.usernameExist) {
@@ -644,6 +657,22 @@ export default {
         return false;
       }
 
+      //if field input OK
+      this.validationErrors[fieldName] = "";
+      this.setBorderColor(fieldName, true);
+      return true;
+    },
+
+    //validate input type file
+    validateFile(fieldName) {
+      const fileInput = this.$refs[fieldName];
+      console.log(fileInput.files.length);
+      console.log(fileInput.files);
+      if (fileInput.files.length <= 0) {
+        this.validationErrors[fieldName] = `You must import file here`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
       //if field input OK
       this.validationErrors[fieldName] = "";
       this.setBorderColor(fieldName, true);
@@ -743,8 +772,14 @@ export default {
         this.changeStep(this.currentStep + 1);
       }
     },
+
+    updateFileImage() {
+      this.fileImage = this.$refs.fileImage;
+    },
+
     //go to step 3 from step 2
     toStep3() {
+      console.log(this.checkInputStep2)
       if (this.checkInputStep2) {
         this.changeStep(this.currentStep + 1);
       }
@@ -813,7 +848,7 @@ export default {
                     toast.success("Account registered successfully", {
                       theme: "colored",
                       autoClose: 2000,
-                      onClose: () => location.replace("/sendmessage"),
+                      // onClose: () => location.replace("/sendmessage"),
                     });
                   },
                   (err) => {
@@ -887,5 +922,8 @@ export default {
 }
 .inputField {
   width: 100%;
+}
+input[type="file"] {
+  border: 2px solid white;
 }
 </style>
