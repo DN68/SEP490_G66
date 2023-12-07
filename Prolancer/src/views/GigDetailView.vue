@@ -77,6 +77,13 @@
                       <a>
                         <h1>{{ gig.First_Name + " " + gig.Last_Name }}</h1></a
                       >
+                      <div class="">
+                        <span style="font-size: 14px; color: #74767e;">@</span>
+                        <span
+                          style="text-align: left; color: #74767e"
+                          >{{gig.Username}}</span
+                        >
+                      </div>
                     </div>
                     <div class="user_contact col-md-8">
                       <button class="btn_contract" @click="showCV(gig.CV_Upload)">View CV</button>
@@ -167,8 +174,11 @@
                                   d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"
                                 ></path>
                                 <path d="M9 4H7v5h5V7H9V4z"></path></svg></span
-                            ><b class="delivery"
-                              >{{ gig.Delivery_Day }} Day Delivery</b
+                            >
+                            <!-- <b class="delivery"
+                              >{{ gig.Delivery_Day }} Day Delivery</b -->
+                              <b class="delivery"
+                              >On Active</b
                             >
                           </div>
                         </div>

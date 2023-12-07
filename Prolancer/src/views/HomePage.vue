@@ -3,6 +3,8 @@
     class="container"
     style="height: auto; max-width: -webkit-fill-available"
   >
+    <ChatAuth></ChatAuth>
+
     <header class="row">
       <Header></Header>
     </header>
@@ -174,6 +176,7 @@ import GigList from "../components/GigList.vue";
 import NavCategory from "../components/NavCategory.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
+import ChatAuth from "../components/ChatAuth.vue";
 
 export default {
   name: "HomePage",
@@ -182,7 +185,7 @@ export default {
     Footer,
     GigCarousel,
     GigList,
-    NavCategory,
+    NavCategory,ChatAuth
     // ProductCarouselSuggest,
   },
   data() {

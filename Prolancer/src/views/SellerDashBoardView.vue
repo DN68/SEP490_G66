@@ -95,6 +95,7 @@
     <div class="footer">
       <Footer></Footer>
     </div>
+    <ChatAuth></ChatAuth>
   </div>
 </template>
 
@@ -105,6 +106,7 @@ import SideBar from "../components/Sidebarprf.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 import ChartGig from "../components/chartgigsuccess.vue";
+import ChatAuth from "../components/ChatAuth.vue";
 
 export default {
   name: "App",
@@ -112,7 +114,7 @@ export default {
     Headerseller,
     Footer,
     SideBar,
-    ChartGig,
+    ChartGig,ChatAuth
   },
   data() {
     return {
