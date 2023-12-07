@@ -848,7 +848,7 @@ export default {
                     toast.success("Account registered successfully", {
                       theme: "colored",
                       autoClose: 2000,
-                      // onClose: () => location.replace("/sendmessage"),
+                      onClose: () => location.replace("/sendmessage"),
                     });
                   },
                   (err) => {
