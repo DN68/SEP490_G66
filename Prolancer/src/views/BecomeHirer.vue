@@ -59,7 +59,6 @@
       </div>
 
       <div v-if="isstep1">
-        {{ message }}
         <table class="inputForm">
           <tr>
             <td class="line-info"><span>Username </span></td>
@@ -67,9 +66,16 @@
               <input
                 class="inputField"
                 type="text"
+                placeholder="Enter username"
                 v-model="username"
-                @change="isUsernameExist"
+                @change="isUsernameExist()"
+                ref="username"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.username }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -78,15 +84,33 @@
               <input
                 class="inputField"
                 type="text"
+                placeholder="Enter Email"
                 v-model="email"
-                @change="isEmailExist"
+                @change="isEmailExist()"
+                ref="email"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.email }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
             <td class="line-info"><span>Password </span></td>
             <td>
-              <input class="inputField" type="password" v-model="password" />
+              <input
+                class="inputField"
+                type="password"
+                placeholder="Enter password"
+                v-model="password"
+                ref="password"
+              />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.password }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -95,8 +119,15 @@
               <input
                 class="inputField"
                 type="password"
+                placeholder="Re-enter username"
                 v-model="repeatPassword"
+                ref="repeatPassword"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.repeatPassword }}
+                </p>
+              </div>
             </td>
           </tr>
         </table>
@@ -139,27 +170,61 @@
                 type="text"
                 placeholder="First Name"
                 v-model="firstName"
-                style="width: 48.5%"
+                style="width: 50%"
+                ref="firstName"
               />
+              <div>
+                <p class="errmessage" style="color: red; text-align: center">
+                  {{ validationErrors.firstName }}
+                </p>
+              </div>
               <input
                 class="ms-2"
                 placeholder="Last Name"
                 v-model="lastName"
                 type="text"
                 style="width: 50%"
+                ref="lastName"
               />
+              <div>
+                <p class="errmessage" style="color: red; text-align: center">
+                  {{ validationErrors.lastName }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
             <td class="line-info"><span>Phone </span></td>
             <td>
-              <input type="text" class="inputField" v-model="phoneNo" />
+              <input
+                type="text"
+                class="inputField"
+                v-model="phoneNo"
+                placeholder="Enter your phone number"
+                ref="phoneNo"
+              />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.phoneNo }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
             <td class="line-info"><span>Address </span></td>
             <td>
-              <input type="text" class="inputField" v-model="location" />
+              <input
+                type="text"
+                class="inputField"
+                v-model="location"
+                placeholder="Enter your address"
+                ref="location"
+              />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.location }}
+                </p>
+              </div>
             </td>
           </tr>
           <tr>
@@ -170,22 +235,9 @@
                 type="file"
                 ref="fileImage"
                 accept=".jpeg, .jpg, .png"
+                @change="updateFileImage"
               />
               (.jpeg, .jpg, .png)
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Description </span></td>
-            <td>
-              <textarea
-                name=""
-                id=""
-                cols="48"
-                rows="5"
-                style="width: 100%"
-                v-model="description"
-                placeholder="  Share a bit about your work experience,cool project you've completed"
-              ></textarea>
             </td>
           </tr>
         </table>
@@ -221,11 +273,7 @@
           type="button"
           class="btn btn-danger"
           style="border: none; width: 100px; margin-top: 40px"
-          :disabled="!checkInputStep1"
-          @click="
-            showModal();
-            sendvalidationEmail();
-          "
+          @click="emailConfirmation()"
         >
           Continue
         </button>
@@ -235,8 +283,7 @@
           type="submit"
           class="btn btn-primary bg-danger"
           style="border: none; width: 100px; margin-top: 40px"
-          :disabled="!checkInputStep2"
-          @click="changeStep(currentStep + 1)"
+          @click="toStep3()"
         >
           Continue
         </button>
@@ -290,10 +337,60 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        ref="myModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Verify Your Email
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <!-- <p>This is the content of the modal.</p> -->
+              Verification code:
+              <input type="password" maxlength="6" v-model="inputCode" />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="
+                  startCountdown();
+                  sendvalidationEmail();
+                "
+                :disabled="countingDown"
+              >
+                {{ buttonText }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="verifyEmail()"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="footer">
-      <Footer></Footer>
-    </div>
+  </div>
+  <div class="footer">
+    <Footer></Footer>
   </div>
 </template>
   
@@ -351,6 +448,24 @@ export default {
       //email verification
       verificationCode: "",
       inputCode: "123456",
+      validationErrors: {
+        //Step 1 validation
+        username: "",
+        email: "",
+        password: "",
+        repeatPassword: "",
+        firstName: "",
+        lastName: "",
+        //Step 2 validation
+        firstName: "",
+        lastName: "",
+        phoneNo: "",
+        location: "",
+        description: "",
+        cvTitle: "",
+        fileCV: "",
+        cvDescription: "",
+      },
     };
   },
   computed: {
@@ -368,80 +483,140 @@ export default {
         this.password
       );
     },
+
     checkInputStep1() {
+      var errCount = 0;
       //input validation here
-      if (!this.username) {
-        this.message = "You must enter username";
+      if (!this.validateField("username")) {
+        errCount++;
+      }
+      if (!this.validateField("email")) {
+        errCount++;
+      }
+      if (!this.validateField("password")) {
+        errCount++;
+      }
+      if (!this.validateField("repeatPassword")) {
+        errCount++;
+      }
+
+      //if no error -> true
+      if (errCount == 0) {
+        return true;
+      } else {
         return false;
       }
-      if (!this.isValidUsername) {
-        this.message =
-          "Username must start with an alphabet and has at least 8 characters";
-        return false;
-      }
-      console.log(this.usernameExist);
-      if (this.usernameExist) {
-        this.message = "Username exist";
-        return false;
-      }
-      if (!this.email) {
-        this.message = "You must enter Email";
-        return false;
-      }
-      if (!this.isValidEmail) {
-        this.message = "Wrong email format";
-        return false;
-      }
-      if (this.emailExist) {
-        this.message = "Email exist";
-        return false;
-      }
-      if (!this.password) {
-        this.message = "You must enter password";
-        return false;
-      }
-      if (!this.isValidPassword) {
-        this.message =
-          "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
-        return false;
-      }
-      if (!this.repeatPassword) {
-        this.message = "You must enter repeat password";
-        return false;
-      }
-      if (this.password != this.repeatPassword) {
-        this.message = "Wrong password confirmation";
-        return false;
-      }
-      return true;
     },
     checkInputStep2() {
-      //input validation here
+      var errCount = 0;
 
-      if (!this.firstName) {
-        this.message = "You must enter your first name";
+      //input validation here
+      if (!this.validateField("firstName")) {
+        errCount++;
+      }
+      if (!this.validateField("lastName")) {
+        errCount++;
+      }
+      if (!this.validateField("phoneNo")) {
+        errCount++;
+      }
+      if (!this.validateField("location")) {
+        errCount++;
+      }
+      
+
+      //if no error -> true
+      if (errCount == 0) {
+        return true;
+      } else {
         return false;
       }
-      if (!this.lastName) {
-        this.message = "You must enter your last name";
+    },
+    checkInputStep3() {
+      var errCount = 0;
+      //input validation here
+      if (!this.validateField("cvTitle")) {
+        errCount++;
+      }
+      if (!this.validateFile("fileCV")) {
+        errCount++;
+      }
+      if (!this.validateField("cvDescription")) {
+        errCount++;
+      }
+
+      //if no error -> true
+      if (errCount == 0) {
+        return true;
+      } else {
         return false;
       }
-      if (!this.phoneNo) {
-        this.message = "You must enter your phone number";
-        return false;
-      }
-      if (!this.location) {
-        this.message = "You must enter your address";
-        return false;
-      }
-      if (!this.description) {
-        this.message = "You must enter your description (at least 150 letters)";
-        return false;
-      }
-      return true;
     },
   },
   methods: {
+    validateField(fieldName) {
+      const value = this[fieldName].trim();
+
+      if (value === "") {
+        this.validationErrors[fieldName] = `This field cannot be empty.`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+      // Username validation
+      if (fieldName == "username" && !this.isValidUsername) {
+        this.validationErrors[fieldName] = `Wrong username format`;
+        return false;
+      }
+      if (fieldName == "username" && this.usernameExist) {
+        this.validationErrors[fieldName] = `This user name is already exist`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      // Email validation
+      if (fieldName == "email" && !this.isValidEmail) {
+        this.validationErrors[fieldName] = `Wrong email format`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+      if (fieldName == "email" && this.emailExist) {
+        this.validationErrors[fieldName] = `This email is already exist`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      // Password validation
+      if (fieldName == "password" && !this.isValidPassword) {
+        this.validationErrors[fieldName] = `Wrong password format`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      // Confirm password validation
+      if (
+        fieldName == "repeatPassword" &&
+        this.repeatPassword != this.password
+      ) {
+        this.validationErrors[fieldName] = `Wrong password confirmation`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      //if field input OK
+      this.validationErrors[fieldName] = "";
+      this.setBorderColor(fieldName, true);
+      return true;
+    },
+
+    //Set border color
+    setBorderColor(fieldName, value) {
+      if (value == true) {
+        this.$refs[`${fieldName}`].style.borderColor = "initial";
+      } else {
+        this.$refs[`${fieldName}`].style.borderColor = "red";
+      }
+    },
+
     isEmailExist() {
       axios.get(`/accounts/${this.email}/checkEmail`).then(
         (res) => {
@@ -457,6 +632,7 @@ export default {
         }
       );
     },
+
     isUsernameExist() {
       console.log(this.username);
       axios.get(`/accounts/${this.username}/checkUsername`).then(
@@ -471,6 +647,17 @@ export default {
           console.log(err.response);
         }
       );
+    },
+
+    //Send validation code to mail & show verification popup
+    emailConfirmation() {
+      if (this.checkInputStep1) {
+        this.showModal();
+        this.sendvalidationEmail();
+      }
+    },
+    showModal() {
+      this.modal.show();
     },
     sendvalidationEmail() {
       axios
@@ -490,9 +677,6 @@ export default {
             console.log(err.response);
           }
         );
-    },
-    showModal() {
-      this.modal.show();
     },
     startCountdown() {
       if (!this.countingDown) {
@@ -514,6 +698,12 @@ export default {
     },
     verifyEmail() {
       if (this.inputCode == this.verificationCode) {
+        this.changeStep(this.currentStep + 1);
+      }
+    },
+    //go to step 3 from step 2
+    toStep3() {
+      if (this.checkInputStep2) {
         this.changeStep(this.currentStep + 1);
       }
     },
