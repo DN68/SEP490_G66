@@ -1,292 +1,382 @@
 <template>
-  <div class="become">
-    <div class="header">
-      <router-link to="/">
-        <img
-          class="imgbecome"
-          src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
-          alt=""
-        />
-      </router-link>
-    </div>
-    <div class="container-become">
-      <article class="col-sm-12">
-        <div class="row become_header">
-          <div class="col-sm-3 become_header_item" :class="{ active: isstep1 }">
-            <span
-              ><i
-                class="bi fs-5"
-                :class="{
-                  'bi-check-circle-fill': completedStep1,
-                  'bi-1-circle-fill': isstep1,
-                }"
-              ></i
-            ></span>
-            <span> Account Setup</span>
-            <i class="bi bi-chevron-right"></i>
-          </div>
-          <div class="col-sm-3 become_header_item" :class="{ active: isstep2 }">
-            <span v-if="isstep2"><i class="bi bi-2-circle-fill fs-5"></i></span>
-            <span v-else
-              ><i
-                class="bi fs-5"
-                :class="{
-                  'bi-check-circle-fill': completedStep2,
-                  'bi-2-circle': !completedStep2,
-                }"
-              ></i
-            ></span>
+  <div>
+    <div class="become">
+      <div class="header">
+        <router-link to="/">
+          <img
+            class="imgbecome"
+            src="../assets/image/386858860_6484307888364663_6310575723905631009_n-removebg-preview.png"
+            alt=""
+          />
+        </router-link>
+      </div>
+      <div class="container-become">
+        <article class="col-sm-12">
+          <div class="row become_header">
+            <div
+              class="col-sm-3 become_header_item"
+              :class="{ active: isstep1 }"
+            >
+              <span
+                ><i
+                  class="bi fs-5"
+                  :class="{
+                    'bi-check-circle-fill': completedStep1,
+                    'bi-1-circle-fill': isstep1,
+                  }"
+                ></i
+              ></span>
+              <span> Account Setup</span>
+              <i class="bi bi-chevron-right"></i>
+            </div>
+            <div
+              class="col-sm-3 become_header_item"
+              :class="{ active: isstep2 }"
+            >
+              <span v-if="isstep2"
+                ><i class="bi bi-2-circle-fill fs-5"></i
+              ></span>
+              <span v-else
+                ><i
+                  class="bi fs-5"
+                  :class="{
+                    'bi-check-circle-fill': completedStep2,
+                    'bi-2-circle': !completedStep2,
+                  }"
+                ></i
+              ></span>
 
-            <span> Personal Information</span>
-            <i class="bi bi-chevron-right"></i>
+              <span> Personal Information</span>
+              <i class="bi bi-chevron-right"></i>
+            </div>
+            <div
+              class="col-sm-3 become_header_item"
+              :class="{ active: isstep3 }"
+            >
+              <span v-if="isstep3"
+                ><i class="bi bi-3-circle-fill fs-5"></i
+              ></span>
+              <span v-else><i class="bi bi-3-circle fs-5"></i></span>
+              <span> Company Info</span>
+            </div>
           </div>
-          <div class="col-sm-3 become_header_item" :class="{ active: isstep3 }">
-            <span v-if="isstep3"><i class="bi bi-3-circle-fill fs-5"></i></span>
-            <span v-else><i class="bi bi-3-circle fs-5"></i></span>
-            <span> Company Info</span>
+        </article>
+        <div
+          style="
+            text-align: start;
+            border-bottom: 1px #ccc solid;
+            padding-bottom: 35px;
+          "
+        >
+          <h1>Your Information</h1>
+          <span>Tell us a bit about yourself and your company.</span>
+        </div>
+
+        <div v-if="isstep1">
+          <table class="inputForm">
+            <tr>
+              <td class="line-info"><span>Username </span></td>
+              <td>
+                <input
+                  class="inputField"
+                  type="text"
+                  placeholder="Enter username"
+                  v-model="username"
+                  @change="isUsernameExist()"
+                  ref="username"
+                />
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.username }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Your Email </span></td>
+              <td>
+                <input
+                  class="inputField"
+                  type="text"
+                  placeholder="Enter Email"
+                  v-model="email"
+                  @change="isEmailExist()"
+                  ref="email"
+                />
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.email }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Password </span></td>
+              <td>
+                <input
+                  class="inputField"
+                  type="password"
+                  placeholder="Enter password"
+                  v-model="password"
+                  ref="password"
+                />
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.password }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Confirm Password </span></td>
+              <td>
+                <input
+                  class="inputField"
+                  type="password"
+                  placeholder="Re-enter username"
+                  v-model="repeatPassword"
+                  ref="repeatPassword"
+                />
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.repeatPassword }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div v-if="isstep3">
+          <table class="inputForm">
+            <tr>
+              <td class="line-info"><span>Company Name</span></td>
+              <td>
+                <input
+                  class="inputField"
+                  type="text"
+                  v-model="companyName"
+                  ref="companyName"
+                />
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.companyName }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Company Address </span></td>
+              <td>
+                <textarea
+                  name=""
+                  id=""
+                  cols="48"
+                  rows="5"
+                  style="width: 100%"
+                  placeholder="  Share a bit about you"
+                  v-model="companyAddress"
+                  ref="companyAddress"
+                ></textarea>
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.companyAddress }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Tax Code</span></td>
+              <td>
+                <input
+                  class="inputField"
+                  type="text"
+                  v-model="taxCode"
+                  ref="taxCode"
+                />
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.taxCode }}
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div v-if="isstep2">
+          <table class="inputForm">
+            <tr>
+              <td class="line-info"><span>Full Name</span></td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  v-model="firstName"
+                  style="width: 50%"
+                  ref="firstName"
+                />
+                <div>
+                  <p class="errmessage" style="color: red; text-align: center">
+                    {{ validationErrors.firstName }}
+                  </p>
+                </div>
+                <input
+                  class="ms-2"
+                  placeholder="Last Name"
+                  v-model="lastName"
+                  type="text"
+                  style="width: 50%"
+                  ref="lastName"
+                />
+                <div>
+                  <p class="errmessage" style="color: red; text-align: center">
+                    {{ validationErrors.lastName }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Phone </span></td>
+              <td>
+                <input
+                  type="text"
+                  class="inputField"
+                  v-model="phoneNo"
+                  placeholder="Enter your phone number"
+                  ref="phoneNo"
+                />
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.phoneNo }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Address </span></td>
+              <td>
+                <input
+                  type="text"
+                  class="inputField"
+                  v-model="location"
+                  placeholder="Enter your address"
+                  ref="location"
+                />
+                <div>
+                  <p class="errmessage" style="color: red">
+                    {{ validationErrors.location }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="line-info"><span>Profile Picture </span></td>
+              <td>
+                <input
+                  style="width: 80%"
+                  type="file"
+                  ref="fileImage"
+                  accept=".jpeg, .jpg, .png"
+                  @change="updateFileImage"
+                />
+                (.jpeg, .jpg, .png)
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="button">
+          <button
+            v-if="!isstep1"
+            id="btn-sub"
+            type="submit"
+            class="btn btn-primary bg-primary"
+            style="
+              border: none;
+              width: 100px;
+              margin-top: 40px;
+              margin-right: 20px;
+            "
+            @click="changeStep(currentStep - 1)"
+          >
+            Back
+          </button>
+          <button
+            v-if="isstep3"
+            id="btn-sub"
+            type="submit"
+            class="btn btn-primary bg-danger"
+            style="border: none; width: 100px; margin-top: 40px"
+            @click="saveHirer()"
+          >
+            Save
+          </button>
+          <button
+            v-if="isstep1"
+            type="button"
+            class="btn btn-danger"
+            style="border: none; width: 100px; margin-top: 40px"
+            @click="emailConfirmation()"
+          >
+            Continue
+          </button>
+          <button
+            v-if="isstep2"
+            id="btn-sub"
+            type="submit"
+            class="btn btn-primary bg-danger"
+            style="border: none; width: 100px; margin-top: 40px"
+            @click="toStep3()"
+          >
+            Continue
+          </button>
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            ref="myModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Verify Your Email
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <!-- <p>This is the content of the modal.</p> -->
+                  Verification code:
+                  <input type="password" maxlength="6" v-model="inputCode" />
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="
+                      startCountdown();
+                      sendvalidationEmail();
+                    "
+                    :disabled="countingDown"
+                  >
+                    {{ buttonText }}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="verifyEmail()"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </article>
-      <div
-        style="
-          text-align: start;
-          border-bottom: 1px #ccc solid;
-          padding-bottom: 35px;
-        "
-      >
-        <h1>Your Information</h1>
-        <span>Tell us a bit about yourself and your company.</span>
-      </div>
 
-      <div v-if="isstep1">
-        <table class="inputForm">
-          <tr>
-            <td class="line-info"><span>Username </span></td>
-            <td>
-              <input
-                class="inputField"
-                type="text"
-                placeholder="Enter username"
-                v-model="username"
-                @change="isUsernameExist()"
-                ref="username"
-              />
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.username }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Your Email </span></td>
-            <td>
-              <input
-                class="inputField"
-                type="text"
-                placeholder="Enter Email"
-                v-model="email"
-                @change="isEmailExist()"
-                ref="email"
-              />
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.email }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Password </span></td>
-            <td>
-              <input
-                class="inputField"
-                type="password"
-                placeholder="Enter password"
-                v-model="password"
-                ref="password"
-              />
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.password }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Confirm Password </span></td>
-            <td>
-              <input
-                class="inputField"
-                type="password"
-                placeholder="Re-enter username"
-                v-model="repeatPassword"
-                ref="repeatPassword"
-              />
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.repeatPassword }}
-                </p>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div v-if="isstep3">
-        <table class="inputForm">
-          <tr>
-            <td class="line-info"><span>Company Name</span></td>
-            <td>
-              <input class="inputField" type="text" v-model="companyName" />
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Company Address </span></td>
-            <td>
-              <textarea
-                name=""
-                id=""
-                cols="48"
-                rows="5"
-                style="width: 100%"
-                placeholder="  Share a bit about you"
-                v-model="companyAddress"
-              ></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Tax Code</span></td>
-            <td><input class="inputField" type="text" v-model="taxCode" /></td>
-          </tr>
-        </table>
-      </div>
-      <div v-if="isstep2">
-        {{ message }}
-        <table class="inputForm">
-          <tr>
-            <td class="line-info"><span>Full Name</span></td>
-            <td>
-              <input
-                type="text"
-                placeholder="First Name"
-                v-model="firstName"
-                style="width: 50%"
-                ref="firstName"
-              />
-              <div>
-                <p class="errmessage" style="color: red; text-align: center">
-                  {{ validationErrors.firstName }}
-                </p>
-              </div>
-              <input
-                class="ms-2"
-                placeholder="Last Name"
-                v-model="lastName"
-                type="text"
-                style="width: 50%"
-                ref="lastName"
-              />
-              <div>
-                <p class="errmessage" style="color: red; text-align: center">
-                  {{ validationErrors.lastName }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Phone </span></td>
-            <td>
-              <input
-                type="text"
-                class="inputField"
-                v-model="phoneNo"
-                placeholder="Enter your phone number"
-                ref="phoneNo"
-              />
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.phoneNo }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Address </span></td>
-            <td>
-              <input
-                type="text"
-                class="inputField"
-                v-model="location"
-                placeholder="Enter your address"
-                ref="location"
-              />
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.location }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Profile Picture </span></td>
-            <td>
-              <input
-                style="width: 80%"
-                type="file"
-                ref="fileImage"
-                accept=".jpeg, .jpg, .png"
-                @change="updateFileImage"
-              />
-              (.jpeg, .jpg, .png)
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="button">
-        <button
-          v-if="!isstep1"
-          id="btn-sub"
-          type="submit"
-          class="btn btn-primary bg-primary"
-          style="
-            border: none;
-            width: 100px;
-            margin-top: 40px;
-            margin-right: 20px;
-          "
-          @click="changeStep(currentStep - 1)"
-        >
-          Back
-        </button>
-        <button
-          v-if="isstep3"
-          id="btn-sub"
-          type="submit"
-          class="btn btn-primary bg-danger"
-          style="border: none; width: 100px; margin-top: 40px"
-          @click="saveHirer()"
-        >
-          Save
-        </button>
-        <button
-          v-if="isstep1"
-          type="button"
-          class="btn btn-danger"
-          style="border: none; width: 100px; margin-top: 40px"
-          @click="emailConfirmation()"
-        >
-          Continue
-        </button>
-        <button
-          v-if="isstep2"
-          id="btn-sub"
-          type="submit"
-          class="btn btn-primary bg-danger"
-          style="border: none; width: 100px; margin-top: 40px"
-          @click="toStep3()"
-        >
-          Continue
-        </button>
         <!-- Modal -->
         <div
           class="modal fade"
@@ -337,60 +427,10 @@
           </div>
         </div>
       </div>
-
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        ref="myModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                Verify Your Email
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <!-- <p>This is the content of the modal.</p> -->
-              Verification code:
-              <input type="password" maxlength="6" v-model="inputCode" />
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                @click="
-                  startCountdown();
-                  sendvalidationEmail();
-                "
-                :disabled="countingDown"
-              >
-                {{ buttonText }}
-              </button>
-              <button
-                type="button"
-                class="btn btn-danger"
-                @click="verifyEmail()"
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="footer">
-    <Footer></Footer>
+    <div class="footer">
+      <Footer></Footer>
+    </div>
   </div>
 </template>
   
@@ -462,9 +502,9 @@ export default {
         phoneNo: "",
         location: "",
         description: "",
-        cvTitle: "",
-        fileCV: "",
-        cvDescription: "",
+        companyName: "",
+        companyAddress: "",
+        taxCode: "",
       },
     };
   },
@@ -523,7 +563,6 @@ export default {
       if (!this.validateField("location")) {
         errCount++;
       }
-      
 
       //if no error -> true
       if (errCount == 0) {
@@ -535,13 +574,16 @@ export default {
     checkInputStep3() {
       var errCount = 0;
       //input validation here
-      if (!this.validateField("cvTitle")) {
+      if (!this.validateField("companyName")) {
         errCount++;
       }
-      if (!this.validateFile("fileCV")) {
+      // if (!this.validateFile("fileCV")) {
+      //   errCount++;
+      // }
+      if (!this.validateField("companyAddress")) {
         errCount++;
       }
-      if (!this.validateField("cvDescription")) {
+      if (!this.validateField("taxCode")) {
         errCount++;
       }
 
@@ -734,53 +776,56 @@ export default {
       }
     },
     async saveHirer() {
-      //save freelancer account info
-      axios
-        .post("/accounts/create", {
-          email: this.email,
-          username: this.username,
-          password: this.password,
-          role: this.role,
-        })
-        .then(
-          (res) => {
-            console.log("Added account successfully");
-            console.log(res.data.account);
-            this.account = res.data.account;
-            //add new freelancer with newly created account ID
-            axios
-              .post("/customers/create", {
-                accountID: this.account.AccountID,
-                firstName: this.firstName,
-                lastName: this.lastName,
-                profilePicture:
-                  "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
-                // location: this.location,
-                phoneNo: this.phoneNo,
-                location: this.location,
-                description: this.description,
-                companyName: this.companyName,
-                companyAddress: this.companyAddress,
-                taxCode: this.taxCode,
-              })
-              .then(
-                (res) => {
-                  //message
-                  toast.success("Account registered successfully", {
-                    theme: "colored",
-                    autoClose: 2000,
-                    onClose: () => location.replace("/sendmessage"),
-                  });
-                },
-                (err) => {
-                  console.log(err.response);
-                }
-              );
-          },
-          (err) => {
-            console.log(err.response);
-          }
-        );
+      if (this.checkInputStep3) {
+        //save freelancer account info
+        axios
+          .post("/accounts/create", {
+            email: this.email,
+            username: this.username,
+            password: this.password,
+            role: this.role,
+          })
+          .then(
+            (res) => {
+              console.log("Added account successfully");
+              console.log(res.data.account);
+              this.account = res.data.account;
+              //add new freelancer with newly created account ID
+              axios
+                .post("/customers/create", {
+                  accountID: this.account.AccountID,
+                  firstName: this.firstName,
+                  lastName: this.lastName,
+                  profilePicture:
+                    "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
+                  // location: this.location,
+                  phoneNo: this.phoneNo,
+                  location: this.location,
+                  description: this.description,
+                  companyName: this.companyName,
+                  companyAddress: this.companyAddress,
+                  taxCode: this.taxCode,
+                })
+                .then(
+                  (res) => {
+                    console.log(res.data);
+                    //message
+                    toast.success("Account registered successfully", {
+                      theme: "colored",
+                      autoClose: 2000,
+                      onClose: () => location.replace("/sendmessage"),
+                    });
+                  },
+                  (err) => {
+                    console.log(err.response);
+                  }
+                );
+            },
+            (err) => {
+              console.log(err.response);
+            }
+          );
+      }
     },
   },
   mounted() {
