@@ -28,5 +28,8 @@ router.put('/updateStatus',
 router.get('/details/:id',
     OrderController.getOrderById
 );
+router.get('/getchartearning',
+    OrderController.chartearning
 
+);
 module.exports = router;

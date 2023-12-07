@@ -181,5 +181,19 @@ class OrderController {
 
     })
   }
+  chartearning = function (req, res) {  
+    const data = req.query;
+    var FreelancerID = data.FreelancerID;
+    console.log(FreelancerID)
+
+    Order.chartearning(FreelancerID, function (err, result) {
+      if (err)
+        return res.send(err);
+      else {
+        
+        return res.send(result);
+      }
+    });
+    }
 }
 module.exports = new OrderController;   
