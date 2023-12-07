@@ -173,7 +173,7 @@
                   cols="48"
                   rows="5"
                   style="width: 100%"
-                  placeholder="  Share a bit about you"
+                  placeholder="Write your company address"
                   v-model="companyAddress"
                   ref="companyAddress"
                 ></textarea>
