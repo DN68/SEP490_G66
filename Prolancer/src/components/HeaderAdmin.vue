@@ -239,7 +239,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .navbar-scroll .nav-link,
 .navbar-scroll .navbar-toggler-icon,
 .navbar-scroll .navbar-brand {

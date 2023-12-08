@@ -91,4 +91,16 @@ Skill.updateManySkillScore  = function (updateQuery,result) {
     });
 };
 
+Skill.getSkillScoreByFreelancerID = function (id,result) {
+
+    
+    connectDb.query("SELECT * FROM `FreelancerSkill` fs INNER JOIN Skill s ON fs.SkillID = s.SkillID WHERE fs.FreelancerID = ?", [id], function (err, res) {
+        if (err) {
+            result(err, null);
+        }
+        else {
+            result(null, res);
+        }
+    });
+};
 module.exports = Skill;

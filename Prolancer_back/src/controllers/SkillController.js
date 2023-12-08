@@ -69,6 +69,23 @@ class SkillController {
         });
     }
 
+    getSkillScoreByFreelancerID = function (req, res) {
+        var id = req.params.id;
+    
+        if (!id) {
+          return res.status(400).send('Invalid or missing data');
+        }
+        Skill.getSkillScoreByFreelancerID(id, function (err, skillScore) {
+          if (err)
+            res.status(500).send(err);
+          else {
+            res.send(skillScore.length > 0 ? skillScore : 'Freelancer not exist');
+    
+          }
+        });
+    
+      };
+
 }
 
 module.exports = new SkillController;

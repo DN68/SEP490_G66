@@ -147,7 +147,8 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
+
 .text-reset{
   text-decoration: none;
 }

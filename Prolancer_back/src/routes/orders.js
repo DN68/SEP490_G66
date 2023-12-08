@@ -3,13 +3,10 @@ const router = express.Router();
 const OrderController = require('../controllers/OrderController');
 
 
-router.post('/deliverOrder',
-    OrderController.deliverOrder
 
 router.put('/addOrderEffort',
             OrderController.addOrderEffort
 );
-
 
 router.put('/updateOrderExtendDay',
     OrderController.updateOrderExtendDay
@@ -30,5 +27,8 @@ router.put('/updateStatus',
 router.get('/details/:id',
     OrderController.getOrderById
 );
+router.get('/getchartearning',
+    OrderController.chartearning
 
+);
 module.exports = router;

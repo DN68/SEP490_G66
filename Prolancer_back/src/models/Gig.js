@@ -28,7 +28,7 @@ Gig.getAll = function (result) {
 
 Gig.getGigWithFilterAndPagingAndSearching = function (status,filterByCategory, sqlFilterByTitle, sqlFilterByPrice, search, limit, offset, gig, pagination) {
   var sql2 = "Select g.*, u.First_Name, u.Last_Name, u.Profile_Picture, u.Location, u.Description as UserDescription from Gig g INNER JOIN User u ON g.FreelancerID = u.UserID WHERE";
-  var sql ="Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription , AVG(Rating_Score) as Rating, c.Category_Name from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Category c ON c.CategoryID = g.CategoryID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID WHERE";
+  var sql ="Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription , AVG(Rating_Score) as Rating, c.Category_Name, a.Username from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN Category c ON c.CategoryID = g.CategoryID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID WHERE";
   var sqlCount = "Select COUNT(*) AS count from Gig WHERE";
 
   console.log("sql: ", sql);
@@ -94,9 +94,9 @@ Gig.getFreelancerGigWithPagingAndSearching = function (status, freelancerId, sea
 };
 
 Gig.getGigById = function (id, result) {
-  connectDb.query("Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID Where GigID = ?", [id], function (err, res) {
+  connectDb.query("Select g.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as UserDescription, AVG(Rating_Score) as Rating, cv.CV_Upload, a.Username from Gig g INNER JOIN Freelancer f ON g.FreelancerID = f.FreelancerID INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON f.FreelancerID = cv.FreelancerID LEFT JOIN Review rv ON f.FreelancerID = rv.ReceiverID Where GigID = ? GROUP BY g.GigID, rv.ReceiverID", [id], function (err, res) {
     if (err) {
-      result(null, err);
+      result(err, null);
     }
     else {
       result(null, res);

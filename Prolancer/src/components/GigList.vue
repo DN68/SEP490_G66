@@ -9,7 +9,7 @@
               <router-link :to="'/gigdetail/'+ gig.GigID" style="text-decoration: none;">
 
                 <div class="thumb-wrapper">
-                  <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                  <!-- <span class="wish-icon"><i class="fa fa-heart-o"></i></span> -->
                   <div class="img-box">
                     <img
                       :src="gig.Gig_IMG"
@@ -19,7 +19,7 @@
                   </div>
                   <div class="thumb-content">
                     <div class="row userRow">
-                      <div class="col-md-7">
+                      <div class="col-md-10">
                         <img
                           :src="gig.Profile_Picture"
                           class="rounded-circle"
@@ -34,9 +34,16 @@
                           >{{gig.First_Name+' '+gig.Last_Name}}</span
                         >
                       </div>
-                      <div class="col-md-5">
-                        <h3 class="userLevel">{{ gig.Delivery_Day}} day(s)</h3>
+                      <div class="col-md-10">
+                        <span style="font-size: 14px; color: #74767e;">@</span>
+                        <span
+                          style="text-align: left;  color: #74767e;"
+                          >{{gig.Username}}</span
+                        >
                       </div>
+                      <!-- <div class="col-md-5">
+                        <h3 class="userLevel">{{ gig.Delivery_Day}} day(s)</h3>
+                      </div> -->
                     </div>
 
                     <h3 class="gigDescription">

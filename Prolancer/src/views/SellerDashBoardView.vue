@@ -29,7 +29,7 @@
             >
               <span style="font-weight: 400; font-size: 20px">Inbox</span>
               <router-link
-                to="#"
+                to="/chat"
                 style="text-decoration: none; float: right; font-size: 20px"
                 >View All</router-link
               >
@@ -95,6 +95,7 @@
     <div class="footer">
       <Footer></Footer>
     </div>
+    <ChatAuth></ChatAuth>
   </div>
 </template>
 
@@ -105,6 +106,7 @@ import SideBar from "../components/Sidebarprf.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 import ChartGig from "../components/chartgigsuccess.vue";
+import ChatAuth from "../components/ChatAuth.vue";
 
 export default {
   name: "App",
@@ -112,7 +114,7 @@ export default {
     Headerseller,
     Footer,
     SideBar,
-    ChartGig,
+    ChartGig,ChatAuth
   },
   data() {
     return {
@@ -185,7 +187,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 html {
   position: relative;
 }
@@ -233,13 +235,13 @@ html {
   margin-bottom: 15px;
 }
 #sidebarMenu > img {
-  width: 20%;
+  width: 30%;
   margin: 20px;
 }
 
 .info-user {
-  margin-top: 45px;
-  margin-left: 55px;
+  margin-top: 0px;
+  margin-left: 0px;
   /* padding-left: 25px;
   border-left: 1px #ccc solid; */
 }

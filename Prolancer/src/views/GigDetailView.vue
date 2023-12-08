@@ -6,7 +6,7 @@
     <header class="row">
       <Header></Header>
     </header>
-    <NavCategory ></NavCategory>
+    <NavCategory></NavCategory>
 
     <div class="container">
       <div class="row">
@@ -60,7 +60,7 @@
                   {{ gig.Title }}
                 </h1>
                 <div style="display: inline">
-                  <i class="fa fa-star"><b class="ratingScore">5.0</b></i>
+                  <i class="fa fa-star"><b class="ratingScore" v-if="gig.Rating">{{ parseFloat(gig.Rating).toFixed(1) }}</b><b class="ratingScore" v-else>#NA</b></i>
                 </div>
               </div>
               <div class="seller_overview row">
@@ -74,14 +74,23 @@
                 <div class="user_information col-md-8">
                   <div class="row">
                     <div class="user_name col-md-4">
-                      <a> <h1>{{ gig.First_Name+' '+gig.Last_Name}}</h1></a>
+                      <a>
+                        <h1>{{ gig.First_Name + " " + gig.Last_Name }}</h1></a
+                      >
+                      <div class="">
+                        <span style="font-size: 14px; color: #74767e;">@</span>
+                        <span
+                          style="text-align: left; color: #74767e"
+                          >{{gig.Username}}</span
+                        >
+                      </div>
                     </div>
                     <div class="user_contact col-md-8">
-                      <button class="btn_contract">Contact me</button>
+                      <button class="btn_contract" @click="showCV(gig.CV_Upload)">View CV</button>
                     </div>
                   </div>
                   <div class="user_other_information">
-                    <span>I am from {{gig.Location}}</span>
+                    <span>I am from {{ gig.Location }}</span>
                   </div>
                 </div>
               </div>
@@ -90,9 +99,8 @@
                   <h5 class="">Something about me</h5>
                 </div>
                 <div class="something_about_me_text">
-                  <span
-                    >
-                    {{gig.UserDescription}}
+                  <span>
+                    {{ gig.UserDescription }}
                   </span>
                 </div>
               </div>
@@ -103,9 +111,7 @@
 
                 <div class="gig_main_information">
                   <div class="gig_category">
-                    <p>
-                      Our's service promote business &amp; increase sales.
-                    </p>
+                    <p>Our's service promote business &amp; increase sales.</p>
                   </div>
                   <div class="gig_descrription">
                     <p>
@@ -113,8 +119,7 @@
                       of ESP: MailChimp, Campaign Monitor, Salesforce, Exact
                       Target, Pardot, Sendgrid, Dotmailer, iContact, Bronto,
                       Marketo, Hubspot, Constant Contact & more... -->
-                    {{ gig.Description }}
-
+                      {{ gig.Description }}
                     </p>
                   </div>
                 </div>
@@ -128,7 +133,7 @@
                             alt="convert your design layout into email template HTML coding"
                             :src="gig.Gig_IMG"
                             class=""
-                            style="height: 174px; width: 290px;"
+                            style="height: 174px; width: 290px"
                           />
                         </figure>
                       </div>
@@ -169,32 +174,38 @@
                                   d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"
                                 ></path>
                                 <path d="M9 4H7v5h5V7H9V4z"></path></svg></span
-                            ><b class="delivery">{{gig.Delivery_Day}} Day Delivery</b>
+                            >
+                            <!-- <b class="delivery"
+                              >{{ gig.Delivery_Day }} Day Delivery</b -->
+                              <b class="delivery"
+                              >On Active</b
+                            >
                           </div>
                         </div>
                       </div>
 
                       <div class="order_price col-md-5">
                         <h3>
-                          <span class="price">US${{gig.Price}}</span>
+                          <span class="price">US${{ gig.Price }}</span>
                         </h3>
                       </div>
-                      <router-link :to="{path:'/createorderdetail',query: {
-                      gigID: gig.GigID}}"> 
-                      <div class="get_order">
-                       
-                        <button
-                          class="co-white bg-co-black order_btn"
-                          type="button"
-                        >
-                       
-                          Get Order Request
-
-                        </button>
-
-                      </div>
-                    </router-link>
-
+                      <router-link
+                        :to="{
+                          path: '/createorderdetail',
+                          query: {
+                            gigID: gig.GigID,
+                          },
+                        }"
+                      >
+                        <div class="get_order">
+                          <button
+                            class="co-white bg-co-black order_btn"
+                            type="button"
+                          >
+                            Get Order Request
+                          </button>
+                        </div>
+                      </router-link>
                     </div>
                     <article></article>
                   </div>
@@ -206,9 +217,33 @@
                     class="co-white bg-co-black btn_seller_contact"
                     type="button"
                   >
+                  <router-link :to="'/chat'" class="text-decoration-none text-dark"> 
                     Contact me
+                  </router-link>
                   </button>
                 </div>
+              </div>
+
+              <div class="table_skill_score">
+                <div style="font-size: 16px; font-weight: 600">
+                  Skill Test Score
+                </div>
+                <table class="table table-bordered mt-1">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Skill</th>
+                      <th scope="col">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(score, index) in freelancerScores" :key="index" >
+                      <th scope="row" v-if="score.Score">{{ index + 1 }}</th>
+                      <td v-if="score.Score">{{ score.Skill_Name }}</td>
+                      <td v-if="score.Score">{{ score.Score }}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </section>
@@ -229,25 +264,82 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import Review from "../components/Review.vue";
 import NavCategory from "../components/NavCategory.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "HomePage",
   components: {
     Header,
     Footer,
-    Review, NavCategory
+    Review,
+    NavCategory,
   },
   data() {
     return {
-       gig: {},
+      gig: {},
+      freelancerScores: []
     };
-  },async created() {
-    const responseGig = await axios.get('/gigs/details/'+ this.$route.params.id);
-    const gig = responseGig.data;
-    this.gig = gig;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log(gig)
-  }
+  },
+  async created() {
+    await axios
+      .get("/gigs/details/" + this.$route.params.id)
+      .then((response) => {
+        const gig = response.data;
+        this.gig = gig;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        console.log(gig);
+      })
+      .catch((error) => {
+        // Handle the error
+        console.error("Error here:", error);
+        toast.warn("Get Freelacn Score Failed!", { autoClose: 2000 });
+      });
+
+      await this.getSkillScoreByFreelancerID(this.gig.FreelancerID);  
+  },
+  methods: {
+    async showCV(cvName) {
+      const apiUrl = "/cv/" + cvName;
+      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+      console.log(resData);
+      const blob = new Blob([resData.data], { type: "application/pdf" });
+
+      // Create a URL for the Blob
+      const blobUrl = URL.createObjectURL(blob);
+      this.blobUrl = blobUrl;
+      console.log(this.blobUrl);
+
+      // Open a new window or tab and display the PDF
+      const pdfWindow = window.open();
+      pdfWindow.document.write(`
+      <html>
+      <head>
+      <title>CV Viewer</title>
+      </head>
+      <body>
+      <embed src="${this.blobUrl}" type="application/pdf" width="100%" height="100%">
+      </body>
+      </html>
+              `);
+      pdfWindow.onbeforeunload = function () {
+        URL.revokeObjectURL(this.blobUrl);
+      };
+    },
+
+    async getSkillScoreByFreelancerID(id) {
+      await axios
+        .get("/skills/getSkillScoreByFreelancerID/" + id)
+        .then((response) => {
+          const freelancerScore = response.data;
+          this.freelancerScores = freelancerScore;
+          console.log(JSON.stringify(this.freelancerScores))
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Get Freelacn Score Failed!", { autoClose: 2000 });
+        });
+    },
+  },
 };
 </script>
     
