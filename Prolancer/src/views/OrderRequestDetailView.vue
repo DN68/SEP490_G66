@@ -47,7 +47,7 @@
                         <span class="ordered_from_left">Ordered from </span>
 
                         <span class="ordered_from_right">{{
-                          order.CustomerFirstName + " " + order.CustomerLastName
+                          order.CompanyName 
                         }}</span>
 
                         <span class="" style="margin: 0 10px"> | </span>
@@ -74,7 +74,7 @@
                     <h5 class="text-end" style="font-size: 20px">
                       ${{
                         order.Price * order.TotalEstimation +
-                        order.Price * order.TotalEstimation * 0.1
+                        order.Price * order.TotalEstimation * 10/100
                       }}
                     </h5>
                   </div>
@@ -136,7 +136,7 @@
                         <th scope="row">SERVICE FEE</th>
                         <th colspan="2"></th>
                         <th class="order_price">
-                          ${{ order.Price * order.TotalEstimation * 0.1 }}
+                          ${{ order.Price * order.TotalEstimation * 10/100 }}
                         </th>
                       </tr>
 
@@ -146,7 +146,7 @@
                         <th class="order_price">
                           ${{
                             order.Price * order.TotalEstimation +
-                            order.Price * order.TotalEstimation * 0.1
+                            order.Price * order.TotalEstimation * 10/100
                           }}
                         </th>
                       </tr>
@@ -225,7 +225,7 @@
                     >
 
                     <span class="col-md-6 ordered_from_right text-end">{{
-                      order.CustomerFirstName + " " + order.CustomerLastName
+                      order.CompanyName + " "
                     }}</span>
                   </div>
                   <div class="delivery_time row">
@@ -245,7 +245,7 @@
                     <span class="col-md-6 total_price_right text-end"
                       >${{
                         order.Price * order.TotalEstimation +
-                        order.Price * order.TotalEstimation * 0.1
+                        order.Price * order.TotalEstimation * 10/100
                       }}
                     </span>
                   </div>

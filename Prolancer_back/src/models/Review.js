@@ -27,7 +27,7 @@ Review.createReview = function (review, result) {
 
 
   Review.getReviewByOrderId = function (id, result) {
-    connectDb.query("SELECT r.*, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture FROM `Review` r INNER JOIN Customer c ON r.ReviewerID = c.CustomerID INNER JOIN Freelancer f ON r.ReceiverID = f.FreelancerID WHERE OrderID = ?", [id], function (err, res) {
+    connectDb.query("SELECT r.*, c.First_Name AS CustomerFirstName, c.Last_Name AS CustomerLastName, c.Profile_Picture AS CustomerProfilePicture, f.First_Name AS FreelancerFirstName, f.Last_Name AS FreelancerLastName, f.Profile_Picture AS FreelancerProfilePicture, c.CompanyName FROM `Review` r INNER JOIN Customer c ON r.ReviewerID = c.CustomerID INNER JOIN Freelancer f ON r.ReceiverID = f.FreelancerID WHERE OrderID = ?", [id], function (err, res) {
       if (err) {
         result(err, null);
       }

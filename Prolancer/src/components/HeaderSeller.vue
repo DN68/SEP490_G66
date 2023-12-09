@@ -104,7 +104,7 @@
                 </li>
                 <li>
                   <router-link class="dropdown-item" to="/manageChangeRequest"
-                    >Change Request</router-link
+                    >Order Change Request</router-link
                   >
                 </li>
                 <li>

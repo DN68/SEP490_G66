@@ -75,30 +75,6 @@
 
           <div
             class="col-md-2 status_item"
-            :class="{ status_item_active: this.status == 'Late' }"
-          >
-            <router-link
-              @click="
-                (this.status = 'Late'),
-                  (selectedPage = '1'),
-                  getOrder(selectedPage)
-              "
-              :to="{
-                path: '#',
-              }"
-              class="text-decoration-none"
-            >
-              <h6>
-                Late<span
-                  v-if="this.status == 'Late'"
-                  class="badge bg-secondary"
-                  >{{ pagination.totalRow }}</span
-                >
-              </h6>
-            </router-link>
-          </div>
-          <div
-            class="col-md-2 status_item"
             :class="{ status_item_active: this.status == 'Delivered' }"
           >
             <router-link
@@ -188,7 +164,7 @@
                   +
                   <span class="visually-hidden">unread messages</span>
                 </span>
-                Change Request
+                Order Change Request
               </h6>
             </router-link>
           </div>
@@ -247,7 +223,7 @@
                     <div class="ms-3">
                       <p class="fw-bold mb-1">
                         {{
-                          order.CustomerFirstName + " " + order.CustomerLastName
+                          order.CompanyName 
                         }}
                       </p>
                     </div>

@@ -12,15 +12,11 @@
       </div>
       <div class="flex-col">
         <div class="reviewer-details">
-          <span class="user_review_name"><b>{{review.CustomerFirstName + ' ' +review.CustomerLastName}}</b></span>
+          <span class="user_review_name"><b>{{review.CompanyName + ' Company'}}</b></span>
           <section><span></span></section>
         </div>
         <div class="review_stars">
           <div style="display: inline">
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
             <i class="fa fa-star"><b class="ratingScore">{{review.Rating_Score}}</b></i>
           </div>
         </div>

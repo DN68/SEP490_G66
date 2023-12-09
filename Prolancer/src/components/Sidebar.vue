@@ -130,9 +130,6 @@ $(document).ready(function () {
   cursor: pointer;
 }
 
-a {
-  padding-left: 80px;
-}
 .unset-border {
   border-right: unset;
   border-left: unset;

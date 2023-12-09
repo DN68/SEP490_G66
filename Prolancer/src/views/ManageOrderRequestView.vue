@@ -176,10 +176,8 @@
                     class="rounded-circle"
                   />
                   {{
-                    orderRequest.CustomerFirstName +
-                    " " +
-                    orderRequest.CustomerLastName
-                  }}
+                          orderRequest.CompanyName 
+                        }}
                 </td>
                 <td v-else>
                   <img
@@ -561,7 +559,7 @@ export default {
         .get("/orderrequest/getOrderRequest", {
           params: {
             page: currentPage,
-            user: user,
+            user: this.currentAccountInfo,
             status: this.status,
           },
         })
@@ -616,7 +614,7 @@ export default {
           );
           if (responseStep1) {
            
-              toast.success("Decline Order Request Successfully!", {
+              toast.success("Cancel Order Request Successfully!", {
                 theme: "colored",
                 autoClose: 2000,
                 onClose: () => location.reload(),
@@ -645,7 +643,7 @@ export default {
             }
           );
           if (responseStep2) {
-            toast.success("Successfully!", {
+            toast.success("Decline Order Request Successfully!", {
               theme: "colored",
               autoClose: 2000,
               onClose: () => location.reload(),
