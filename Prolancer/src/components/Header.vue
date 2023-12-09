@@ -134,7 +134,11 @@
                     >Order request</router-link
                   >
                 </li>
-
+                <li>
+                  <router-link class="dropdown-item" to="/manageChangeRequest"
+                    >Order Change Request</router-link
+                  >
+                </li>
                 <li>
                   <router-link class="dropdown-item" to="/logout"
                     >Logout</router-link

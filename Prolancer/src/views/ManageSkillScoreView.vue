@@ -4,12 +4,18 @@
     <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
     <HeaderAdmin v-else></HeaderAdmin>
     <div :class="{ row: currentAccountInfo.Role == 'A' }">
-      <div v-if="currentAccountInfo.Role == 'A'" :class="{ 'col-md-2': currentAccountInfo.Role == 'A' }">
+      <div
+        v-if="currentAccountInfo.Role == 'A'"
+        :class="{ 'col-md-2': currentAccountInfo.Role == 'A' }"
+      >
         <Sidebar></Sidebar>
       </div>
-      <div class="container" :class="{ 'col-md-9 ms-0': currentAccountInfo.Role == 'A' }">
+      <div
+        class="container"
+        :class="{ 'col-md-9 ms-0': currentAccountInfo.Role == 'A' }"
+      >
         <div class="manage_title row">
-          <div class="col-md-5"><h3>Manage Skills Score</h3></div>  
+          <div class="col-md-5"><h3>Manage Skills Score</h3></div>
 
           <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
@@ -67,21 +73,20 @@
                 {{ skill.Skill_Name }}
               </h6>
             </router-link>
-          </div>  
+          </div>
           <div class="col-md-2 major_skill_item ms-auto">
             <button
               id="btn-sub"
               type="submit"
               class="btn btn-primary bg-danger float-right"
-              style="border: none; width: 80px;"
+              style="border: none; width: 80px"
               @click="exportToExcel"
-               
             >
               Export
             </button>
-          </div>       
+          </div>
           <!-- <div class="col-md-2 status_item"><h6>New</h6></div> -->
-        </div >
+        </div>
         <div class="skill_table">
           <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light position-sticky top-0">
@@ -92,12 +97,12 @@
                 <th v-for="childSkill in childSkills" :key="childSkill.SkillID">
                   {{ childSkill.Skill_Name }}
                 </th>
-                
+
                 <!-- <th>Action</th> -->
               </tr>
             </thead>
-            
-            <tbody >
+
+            <tbody>
               <tr v-for="(skillScore, index) in skillscores" :key="index">
                 <td>F5-000{{ skillScore.FreelancerID }}</td>
                 <td>
@@ -116,10 +121,10 @@
                 >
                   <!-- {{ skillScore[childSkill.Skill_Name] }} -->
                   <input
-                    type="text"
+                    type="number"
                     class="ms-3"
                     style="width: 40px; border: none; text-align: center"
-                    v-model="skillScore[childSkill.Skill_Name]"                   
+                    v-model="skillScore[childSkill.Skill_Name]"
                     min="1"
                     max="10"
                     @input="
@@ -129,101 +134,93 @@
                         skillScore.FreelancerID
                       )
                     "
-                    :readonly="currentAccountInfo.Role!='A'"
-                  />                
+                    :readonly="currentAccountInfo.Role != 'A'"
+                  />
                 </td>
-              
               </tr>
             </tbody>
           </table>
           <!-- <div v-if="orders.length == 0" class="text-center">
             <h5>Order Not Found</h5>
           </div> -->
-          
         </div>
-        <div class="button text-start" v-if="currentAccountInfo.Role=='A'">
-            <button
-              id="btn-sub"
-              type="submit"
-              class="btn btn-primary bg-danger"
-              style="border: none; width: 80px; margin-top: 40px"
-              @click="
-                listUpdate.length >= 1 && isError==false
-                  ? ((isshowConfirmRequestModal = !isshowConfirmRequestModal),
-                    (messageModal = 'save these change?'))
-                  : alertMessage()
-              "
-            >
-              Save
-            </button>
-          </div>
-          <div class="confirm_request">
-            <div
-              class="modal fade show"
-              style="
-                display: block;
-                background-color: #000000ad;
-                padding-top: 10%;
-              "
-              v-if="isshowConfirmRequestModal"
-            >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div
-                    class="modal-header text-end"
-                    style="background-color: #33b5e5; color: white"
-                  >
-                    <h5 class="modal-title" style="text-align: center">
-                      Are you sure?
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      @click="
-                        isshowConfirmRequestModal = !isshowConfirmRequestModal
-                      "
-                      aria-label="Close"
-                      style="color: white"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row">
-                      <div>
-                        <p class="modal-title">
-                          Do you really want to {{ messageModal }}
-                        </p>
-                        <p class="modal-title">
-                          This process cannot be undone.
-                        </p>
-                      </div>
+        <div class="button text-start" v-if="currentAccountInfo.Role == 'A'">
+          <button
+            id="btn-sub"
+            type="submit"
+            class="btn btn-primary bg-danger"
+            style="border: none; width: 80px; margin-top: 40px"
+            @click="
+              validDataInput()
+            "
+          >
+            Save
+          </button>
+        </div>
+        <div class="confirm_request">
+          <div
+            class="modal fade show"
+            style="
+              display: block;
+              background-color: #000000ad;
+              padding-top: 10%;
+            "
+            v-if="isshowConfirmRequestModal"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div
+                  class="modal-header text-end"
+                  style="background-color: #33b5e5; color: white"
+                >
+                  <h5 class="modal-title" style="text-align: center">
+                    Are you sure?
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    @click="
+                      isshowConfirmRequestModal = !isshowConfirmRequestModal
+                    "
+                    aria-label="Close"
+                    style="color: white"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div>
+                      <p class="modal-title">
+                        Do you really want to {{ messageModal }}
+                      </p>
+                      <p class="modal-title">This process cannot be undone.</p>
                     </div>
                   </div>
+                </div>
 
-                  <div class="modal-footer justify-content-center">
-                    <a
-                      type="button"
-                      class="btn btn-info waves-effect waves-light text-white"
-                      @click="
-                        updateChange(),
-                          (isshowConfirmRequestModal =
-                            !isshowConfirmRequestModal)
-                      "
-                      >Save</a
-                    >
-                    <a
-                      type="button"
-                      class="btn btn-outline-info waves-effect"
-                      @click="
-                        isshowConfirmRequestModal = !isshowConfirmRequestModal
-                      "
-                      data-dismiss="modal"
-                      >Cancel</a
-                    >
-                  </div>
+                <div class="modal-footer justify-content-center">
+                  <a
+                    type="button"
+                    class="btn btn-info waves-effect waves-light text-white"
+                    @click="
+                      updateChange(),
+                        (isshowConfirmRequestModal = !isshowConfirmRequestModal)
+                    "
+                    >Save</a
+                  >
+                  <a
+                    type="button"
+                    class="btn btn-outline-info waves-effect"
+                    @click="
+                      isshowConfirmRequestModal = !isshowConfirmRequestModal
+                    "
+                    data-dismiss="modal"
+                    >Cancel</a
+                  >
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -239,7 +236,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -264,7 +261,7 @@ export default {
       childSkills: [],
       listUpdate: [],
       messageModal: "",
-      isError: false
+      isError: false,
     };
   },
   async created() {
@@ -287,7 +284,7 @@ export default {
     const responseSkillScore = await axios.get("/skills/getSkillScore", {
       params: {
         childSkills: this.childSkills,
-        user: this.currentAccountInfo
+        user: this.currentAccountInfo,
       },
     });
     const skillScore = responseSkillScore.data;
@@ -300,16 +297,16 @@ export default {
       // this.listUpdate.push(objectUpdate);
       // console.log(this.listUpdate)
 
-      const inputValue = parseFloat(changeValue, 10);
+      // const inputValue = parseFloat(changeValue, 10);
 
-      if (isNaN(inputValue) || inputValue < 1 || inputValue > 10) {
-        // Display an error message or handle the invalid input as needed
-        alert("Please enter a value between 1 and 10.");
-        // Optionally reset the input to a valid value
-        this.isError = true;
-        return;
-      }
-      this.isError = false;
+      // if (isNaN(inputValue) || inputValue < 1 || inputValue > 10) {
+      //   // Display an error message or handle the invalid input as needed
+      //   alert("Please enter a value between 1 and 10.");
+      //   // Optionally reset the input to a valid value
+      //   this.isError = true;
+      //   return;
+      // }
+      // this.isError = false;
       // Check if the entry already exists in listUpdate
       const existingEntryIndex = this.listUpdate.findIndex(
         (entry) =>
@@ -318,13 +315,13 @@ export default {
 
       if (existingEntryIndex !== -1) {
         // Update the existing entry
-        this.listUpdate[existingEntryIndex].Score = inputValue;
+        this.listUpdate[existingEntryIndex].Score = changeValue;
       } else {
         // Add a new entry if it doesn't exist
         var objectUpdate = {
           FreelancerID: FreelancerID,
           SkillID: skillID,
-          Score: inputValue,
+          Score: changeValue,
         };
         this.listUpdate.push(objectUpdate);
       }
@@ -340,7 +337,7 @@ export default {
       const responseSkillScore = await axios.get("/skills/getSkillScore", {
         params: {
           childSkills: this.childSkills,
-          user: this.currentAccountInfo
+          user: this.currentAccountInfo,
         },
       });
       const skillScore = responseSkillScore.data;
@@ -348,7 +345,9 @@ export default {
     },
 
     alertMessage() {
-      alert("It seem like nothing change or invalid data input check your input value!");
+      alert(
+        "It seem like nothing change or invalid data input check your input value!"
+      );
     },
     async updateChange() {
       await axios
@@ -379,7 +378,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-        await  axios
+          await axios
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -393,7 +392,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await  axios
+          await axios
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -407,19 +406,46 @@ export default {
               }
             );
         } else {
-          this.currentAccountInfo = {Email: decoded.email, Role: decoded.role};
-
+          this.currentAccountInfo = {
+            Email: decoded.email,
+            Role: decoded.role,
+          };
         }
       }
     },
     exportToExcel() {
-      const modifiedData = this.skillscores.map(({ Profile_Picture, ...rest }) => rest);
+      const modifiedData = this.skillscores.map(
+        ({ Profile_Picture, ...rest }) => rest
+      );
       const ws = XLSX.utils.json_to_sheet(modifiedData);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-      XLSX.writeFile(wb, 'SkillScore.xlsx');
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      XLSX.writeFile(wb, "SkillScore.xlsx");
     },
+    validDataInput() {
+      if (this.listUpdate.length > 0) {
+        for (let list of this.listUpdate) {
+          const inputValue = parseFloat(list.Score, 10);
 
+          if (isNaN(inputValue) || inputValue < 1 || inputValue > 10) {
+            // Display an error message or handle the invalid input as needed
+            // Optionally reset the input to a valid value
+            this.isError = true;
+            alert(
+              "It seem like nothing change or invalid data input check your input value!"
+            );
+            return;
+          }
+        }
+        this.isshowConfirmRequestModal = !this.isshowConfirmRequestModal;
+        this.messageModal = "save these change?";
+      } else {
+        this.isError = true;
+        alert(
+          "It seem like nothing change or invalid data input check your input value!"
+        );
+      }
+    },
   },
 };
 </script>
@@ -521,9 +547,8 @@ export default {
   background-color: #f9f9f9;
 }
 
-
 .skill_table {
- max-height: 400px;
- overflow: auto;
+  max-height: 400px;
+  overflow: auto;
 }
 </style>
