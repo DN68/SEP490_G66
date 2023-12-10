@@ -41,7 +41,7 @@ export default {
   margin-left: 2%;
 
 }
-#navCategory .dropdown-menu::before {
+/* #navCategory .dropdown-menu::before {
   content: "";
   height: 10px;
   left: 0;
@@ -50,7 +50,7 @@ export default {
   position: absolute;
   background-color: transparent;
   transform: translateY(-1400%);
-}
+} */
 
 @media screen and (max-width: 990px) {
   #navCategory {

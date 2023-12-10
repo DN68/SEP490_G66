@@ -14,12 +14,12 @@
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Change Request</h3></div>
           <div class="text-start" v-if="currentAccountInfo.Role != 'A'">
-            <router-link :to="'/manageOrder'">
+            <!-- <router-link :to="'/manageOrder'">
               <i
                 class="fa-solid fa-arrow-left-long text-danger"
                 style="cursor: pointer"
               ></i>
-            </router-link>
+            </router-link> -->
           </div>
           <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
@@ -138,7 +138,14 @@
             <tbody>
               <tr v-for="(changeRequest, index) in changeRequests" :key="index">
                 <td>
+                  <router-link
+                    :to="{
+                      path: '/vieworderdetail/' + changeRequest.OrderID,
+                    }"
+                    class="text-decoration-none text-dark"
+                  >
                   {{ changeRequest.OrderID }}
+                </router-link>
                 </td>
                 <td v-if="currentAccountInfo.Role == 'A'">
                   {{ changeRequest.Username }}
