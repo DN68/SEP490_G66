@@ -60,9 +60,7 @@
           </div>
         </div>
         <div class="text-start">
-          <router-link :to="'/manageOrder'"> 
-        <i class="fa-solid fa-arrow-left-long text-danger " style="cursor: pointer;"></i>
-        </router-link>
+        <i  class="fa-solid fa-arrow-left-long text-danger " @click="goBack()" style="cursor: pointer;"></i>
         </div>
         <div class="order_detail_page row">
           <div
@@ -1900,6 +1898,9 @@ export default {
           toast.warn("Deliver Again Failed!", { autoClose: 2000 });
         });
       }
+    },
+    goBack() {
+      this.$router.back();
     },
   },
 };
