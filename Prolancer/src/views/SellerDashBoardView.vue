@@ -22,7 +22,6 @@
               class="first"
               style="
                 padding: 15px;
-                border-bottom: 1px #ccc solid;
                 margin-left: 10px;
                 margin-right: 10px;
               "
@@ -34,25 +33,7 @@
                 >View All</router-link
               >
             </div>
-            <div
-              class="chatdetail"
-              style="
-                padding: 15px;
-                border-bottom: 1px #ccc solid;
-                margin-left: 10px;
-                margin-right: 10px;
-              "
-            >
-              <img
-                style="width: 15%; border-radius: 40%"
-                src="../assets/image/large_1588936738888.png"
-                alt=""
-              />
-              <div class="right" style="float: right; width: 75%">
-                <span class="">Duy Nguyen</span> <br />
-                <span style="font-weight: 400">The key to your success</span>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -254,4 +235,14 @@ html {
   text-align: start;
   line-height: 1.6;
 }
+.dropdown-menu::before {
+  content: "";
+  height: 10px;
+  left: 0;
+  right: 0;
+  top: 90%;
+  position: absolute;
+  background-color: transparent;
+  transform: translateY(-2200%);
+} 
 </style>

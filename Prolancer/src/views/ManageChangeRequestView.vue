@@ -13,11 +13,14 @@
       >
         <div class="manage_title row">
           <div class="col-md-4"><h3>Manage Change Request</h3></div>
-          <div class="text-start">
-          <router-link :to="'/manageOrder'"> 
-        <i class="fa-solid fa-arrow-left-long text-danger " style="cursor: pointer;"></i>
-        </router-link>
-        </div>
+          <div class="text-start" v-if="currentAccountInfo.Role != 'A'">
+            <!-- <router-link :to="'/manageOrder'">
+              <i
+                class="fa-solid fa-arrow-left-long text-danger"
+                style="cursor: pointer"
+              ></i>
+            </router-link> -->
+          </div>
           <!-- <div class="col-md-3 search_bar" >
             <div class="input-group rounded">
               <input
@@ -113,7 +116,9 @@
             <thead class="bg-light">
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th class="w-10">ON ORDER ID</th>
-                <th style="width: 10%" v-if="currentAccountInfo.Role=='A'">CREATE BY</th>
+                <th style="width: 10%" v-if="currentAccountInfo.Role == 'A'">
+                  CREATE BY
+                </th>
                 <!-- <th v-for="childSkill in childSkills" :key="childSkill.SkillID">
                       {{ childSkill.Skill_Name }}
                     </th> -->
@@ -133,9 +138,16 @@
             <tbody>
               <tr v-for="(changeRequest, index) in changeRequests" :key="index">
                 <td>
+                  <router-link
+                    :to="{
+                      path: '/vieworderdetail/' + changeRequest.OrderID,
+                    }"
+                    class="text-decoration-none text-dark"
+                  >
                   {{ changeRequest.OrderID }}
+                </router-link>
                 </td>
-                <td v-if="currentAccountInfo.Role=='A'">
+                <td v-if="currentAccountInfo.Role == 'A'">
                   {{ changeRequest.Username }}
                   <!-- <img
                     :src="orderRequest.Profile_Picture"
@@ -145,14 +157,15 @@
                   />
                   {{ orderRequest.First_Name + " " + orderRequest.Last_Name }} -->
                 </td>
-                <td >
-                  <div class="scrollable-row ">
+                <td>
+                  <div class="scrollable-row">
                     {{ changeRequest.Request_Title }}
                   </div>
                 </td>
-                <td >
+                <td>
                   <div class="scrollable-row">
-                  {{ changeRequest.Request_Description }}</div>
+                    {{ changeRequest.Request_Description }}
+                  </div>
                 </td>
                 <td>
                   {{
@@ -221,8 +234,7 @@
                             (isshowConfirmRequestModal =
                               !isshowConfirmRequestModal),
                             (action = 'Accept'),
-                            (changeRequestObj =
-                              changeRequest)
+                            (changeRequestObj = changeRequest)
                         "
                         >Accept</span
                       >
@@ -235,8 +247,7 @@
                             (isshowConfirmRequestModal =
                               !isshowConfirmRequestModal),
                             (action = 'Reject'),
-                            (changeRequestObj =
-                              changeRequest)
+                            (changeRequestObj = changeRequest)
                         "
                         >Decline</span
                       >
@@ -273,7 +284,6 @@
                     </div>
                   </div>
                   <div v-else></div>
-
                 </td>
               </tr>
             </tbody>
@@ -378,7 +388,7 @@
                   type="button"
                   class="btn btn-info waves-effect waves-light text-white"
                   @click="
-                    updateChangeRequestStatus(action, changeRequestObj),
+                    processingRequest(action, changeRequestObj),
                       (isshowConfirmRequestModal = !isshowConfirmRequestModal)
                   "
                   >Save</a
@@ -475,22 +485,10 @@ export default {
             }
           );
           toast.success("Successfully!", {
-                theme: "colored",
-                autoClose: 2000,
-                onClose: () => location.reload(),
-              });
-          // if (responseStep1) {
-          //   const responseStep2 = await axios.post("/orders/createOrder", {
-          //     order: { OrderRequestID: orderRequestID },
-          //   });
-          //   if (responseStep2) {
-          //     toast.success("Successfully!", {
-          //       theme: "colored",
-          //       autoClose: 2000,
-          //       onClose: () => location.reload(),
-          //     });
-          //   }
-          // }
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
         } catch (error) {
           // Handle the error
           console.error("Error here:", error);
@@ -506,26 +504,10 @@ export default {
             }
           );
           toast.success("Successfully!", {
-                theme: "colored",
-                autoClose: 2000,
-                onClose: () => location.reload(),
-              });
-          // if (responseStep1) {
-          //   const responseStep2 = await axios.put(
-          //     "/orderrequest/updateOrderRequestNote",
-          //     {
-          //       OrderRequestID: orderRequestID,
-          //       Note: selectedReason,
-          //     }
-          //   );
-          //   if (responseStep2) {
-          //     toast.success("Successfully!", {
-          //       theme: "colored",
-          //       autoClose: 2000,
-          //       onClose: () => location.reload(),
-          //     });
-          //   }
-          // }
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
         } catch (error) {
           // Handle the error
           console.error("Error here:", error);
@@ -578,70 +560,101 @@ export default {
       }
     },
 
-    async acceptRequest(selectedRequest) {
-      if (selectedRequest.Request_Type == "Cancel") {
-        const changeOrderStatusRes = await axios.put("/orders/updateStatus", {
-          status: "Cancelled",
-          orderID: selectedRequest.OrderID,
-        });
-        if (changeOrderStatusRes.data.message == "Change Status Success") {
-          const changeOrderRequestStatusRes = await axios.put(
-            "/orders/updateOrderRequestStatus",
-            {
-              status: "Accept",
-              orderRequestID: selectedRequest.OrderRequestID,
-            }
-          );
+    async processingRequest(action, selectedRequest) {
+      if (action == "Accept") {
+        try {
+          if (selectedRequest.Request_Type == "Cancel") {
+            const changeOrderStatusRes = await axios.put(
+              "/orders/updateStatus",
+              {
+                status: "Cancelled",
+                orderID: selectedRequest.OrderID,
+              }
+            );
+            if (changeOrderStatusRes.data.message == "Change Status Success") {
+              const changeOrderRequestStatusRes = await axios.put(
+                "/changerequest/changeChangeRequestStatus",
+                {
+                  status: "Accept",
+                  changeRequestID: selectedRequest.ChangeRequestID,
+                }
+              );
 
-          if (
-            changeOrderRequestStatusRes.data.message ==
-            "Change Order Request Status Success"
-          ) {
-            toast.success("Accept Request Status Successfully!", {
-              theme: "colored",
-              autoClose: 2000,
-              onClose: () => location.reload(),
-            });
+              if (
+                changeOrderRequestStatusRes.data.message ==
+                "Change Request Status Success"
+              ) {
+                toast.success("Accept Order Change Successfully!", {
+                  theme: "colored",
+                  autoClose: 2000,
+                  onClose: () => location.reload(),
+                });
+              } else {
+                toast.warn("Accept Order Change Failed!", { autoClose: 2000 });
+              }
+            } else {
+              toast.warn("Accept Order Change Failed!!", { autoClose: 2000 });
+            }
           } else {
-            toast.warn("Accept Request Status Faild!", { autoClose: 2000 });
+            // alert("Extend :" + selectedRequest.Request_Extend_Day);
+            const updateOrderExtendDayRes = await axios.put(
+              "/orders/updateOrderExtendDay",
+              {
+                extendDay: selectedRequest.Request_Extend_Day,
+                orderID: selectedRequest.OrderID,
+              }
+            );
+            if (
+              updateOrderExtendDayRes.data.message ==
+              "Update Extend Day Success"
+            ) {
+              const changeOrderRequestStatusRes = await axios.put(
+                "/changerequest/changeChangeRequestStatus",
+                {
+                  status: "Accept",
+                  changeRequestID: selectedRequest.ChangeRequestID,
+                }
+              );
+
+              if (
+                changeOrderRequestStatusRes.data.message ==
+                "Change Request Status Success"
+              ) {
+                toast.success("Accept Order Change Successfully!", {
+                  theme: "colored",
+                  autoClose: 2000,
+                  onClose: () => location.reload(),
+                });
+              } else {
+                toast.warn("Accept Order Change Failed!", { autoClose: 2000 });
+              }
+            } else {
+              toast.warn("Accept Order Change Failed!", { autoClose: 2000 });
+            }
           }
-        } else {
-          toast.warn("Request Faild!", { autoClose: 2000 });
+        } catch (error) {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Accept Order Change Failed!", { autoClose: 2000 });
         }
       } else {
-        alert("Extend :" + selectedRequest.Request_Action);
-        const updateOrderExtendDayRes = await axios.put(
-          "/orders/updateOrderExtendDay",
-          {
-            extendDay: selectedRequest.Request_Action,
-            orderID: selectedRequest.OrderID,
-          }
-        );
-        if (
-          updateOrderExtendDayRes.data.message == "Update Extend Day Success"
-        ) {
-          const changeOrderRequestStatusRes = await axios.put(
-            "/orders/updateOrderRequestStatus",
+        try {
+          const responseStep1 = await axios.put(
+            "/changerequest/changeChangeRequestStatus",
             {
-              status: "Accept",
-              orderRequestID: selectedRequest.OrderRequestID,
+              status: "Reject",
+              changeRequestID: selectedRequest.ChangeRequestID,
             }
           );
-
-          if (
-            changeOrderRequestStatusRes.data.message ==
-            "Change Order Request Status Success"
-          ) {
-            toast.success("Accept Request Status Successfully!", {
-              theme: "colored",
-              autoClose: 2000,
-              onClose: () => location.reload(),
-            });
-          } else {
-            toast.warn("Accept Request Status Faild!", { autoClose: 2000 });
-          }
-        } else {
-          toast.warn("Request Faild!", { autoClose: 2000 });
+          toast.success("Decline Order Change Successfully!", {
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
+        } catch (error) {
+          // Handle the error
+          console.error("Error here:", error);
+          toast.warn("Failed!", { autoClose: 2000 });
         }
       }
     },
@@ -759,10 +772,8 @@ export default {
   display: -webkit-box;
 }
 .scrollable-row {
-
-  max-height: 50px; 
-  overflow-y: auto; 
-  white-space: pre-line; 
+  max-height: 50px;
+  overflow-y: auto;
+  white-space: pre-line;
 }
-
 </style>

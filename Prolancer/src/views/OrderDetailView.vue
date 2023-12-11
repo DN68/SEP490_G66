@@ -56,13 +56,11 @@
             "
             :class="{ status_item_active: isChangeRequest }"
           >
-            <h6>Change Request</h6>
+            <h6>Order Change</h6>
           </div>
         </div>
         <div class="text-start">
-          <router-link :to="'/manageOrder'"> 
-        <i class="fa-solid fa-arrow-left-long text-danger " style="cursor: pointer;"></i>
-        </router-link>
+        <i  class="fa-solid fa-arrow-left-long text-danger " @click="goBack()" style="cursor: pointer;"></i>
         </div>
         <div class="order_detail_page row">
           <div
@@ -88,7 +86,7 @@
                         <span class="ordered_from_left">Ordered from </span>
 
                         <span class="ordered_from_right">{{
-                          order.CustomerFirstName + " " + order.CustomerLastName
+                          order.CompanyName
                         }}</span>
 
                         <span class="" style="margin: 0 10px"> | </span>
@@ -763,7 +761,7 @@
                     Arial, sans-serif;
                 "
               >
-                <span>Create Change Request</span>
+                <span>Create Order Change</span>
               </h3>
               <form>
                 <div class="formbold-input-group">
@@ -809,16 +807,17 @@
                 </div>
 
                 <div class="formbold-input-group">
-                  <label for="email" class="formbold-form-label">
+                  <label for="requestTitle" class="formbold-form-label">
                     Title Request</label
                   >
                   <input
-                    type="email"
+                    type="text"
                     name="lastname"
-                    id="email"
+                    id="requestTitle"
                     placeholder="Type here ..."
                     class="formbold-form-input"
                     v-model="requestTitle"
+                    maxlength="100"
                     required
                   />
                   <p class="text-danger" v-if="notInputRequestTitle">
@@ -836,6 +835,7 @@
                     placeholder="By describing the most important facts, we can quickly resolve your request."
                     class="formbold-form-input"
                     v-model="requestDescription"
+                    maxlength="200"
                     required
                   ></textarea>
                   <p class="text-danger" v-if="notInputRequestDescription">
@@ -919,7 +919,7 @@
                     >
 
                     <span class="col-md-6 ordered_from_right text-end">{{
-                      order.CustomerFirstName + " " + order.CustomerLastName
+                      order.CompanyName + " "
                     }}</span>
                   </div>
                   <div class="delivery_time row">
@@ -1898,6 +1898,9 @@ export default {
           toast.warn("Deliver Again Failed!", { autoClose: 2000 });
         });
       }
+    },
+    goBack() {
+      this.$router.back();
     },
   },
 };
