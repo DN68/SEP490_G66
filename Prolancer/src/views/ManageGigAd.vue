@@ -655,7 +655,7 @@ export default {
   color: #a8a7a7;
   font-size: 13px;
 }
-.align-items-center{
+.container-managigad .align-items-center{
   justify-content: center;
 }
 </style>

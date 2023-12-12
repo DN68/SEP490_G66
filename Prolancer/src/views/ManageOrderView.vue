@@ -419,9 +419,9 @@
                   class="text-center py-2"
                 >
                   <option class="" value="Active">
-                    <span>In Progress</span>
+                    <span>Active</span>
                   </option>
-                  <option class="" value="Late"><span>Late</span></option>
+                  <!-- <option class="" value="Late"><span>Late</span></option> -->
                   <option class="" value="Delivered">
                     <span>Delivered</span>
                   </option>
