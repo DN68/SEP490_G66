@@ -231,11 +231,32 @@
               </td>
               <td class="td_actions">
                 <i
+                  v-if="status == 'Ongoing'"
                   @click="
                     (isshowModal = !isshowModal),
-                      (slectedInterviewID = interview.InterviewID)
+                      (slectedInterview = interview)
                   "
                   class="bi bi-gear-fill"
+                ></i>
+                &nbsp;
+                <i
+                  v-if="status == 'Pending'"
+                  @click="
+                    (isShowInfoModal = !isShowInfoModal),
+                      (selectedInterviewID = interview.InterviewID),
+                      (newScheduledDate = interview.ScheduledDate),
+                      (newLocation = interview.Location)
+                  "
+                  class="bi bi-pencil-fill"
+                ></i>
+                &nbsp;
+                <i
+                  v-if="interview.Status == 'Pending'"
+                  @click="
+                    (isshowConfirmRequestModal = !isshowConfirmRequestModal),
+                      (slectedInterview = interview)
+                  "
+                  class="bi bi-envelope-fill"
                 ></i>
               </td>
 
@@ -293,16 +314,28 @@
                       style="margin-bottom: 15px"
                       class="text-center py-2"
                     >
-                      <option class="" value="Pending">
+                      <!-- <option v-if="interview.Status == ''" class="" value="Pending">
                         <span>Pending</span>
-                      </option>
-                      <option class="" value="Ongoing">
+                      </option> -->
+                      <option
+                        class=""
+                        v-if="status == 'Pending'"
+                        value="Ongoing"
+                      >
                         <span>Ongoing</span>
                       </option>
-                      <option class="" value="Failed">
+                      <option
+                        class=""
+                        v-if="status == 'Ongoing'"
+                        value="Failed"
+                      >
                         <span>Failed</span>
                       </option>
-                      <option class="" value="Passed">
+                      <option
+                        class=""
+                        v-if="status == 'Ongoing'"
+                        value="Passed"
+                      >
                         <span>Passed</span>
                       </option>
                     </select>
@@ -320,12 +353,149 @@
                     type="button"
                     class="btn btn-primary"
                     @click="
-                      changeInterviewStatus(selectedStatus, slectedInterviewID),
+                      changeInterviewStatus(selectedStatus, slectedInterview),
                         (isshowModal = !isshowModal)
                     "
                   >
                     Save
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="modal fade show"
+            style="
+              display: block;
+              background-color: #000000ad;
+              padding-top: 10%;
+            "
+            v-if="isShowInfoModal"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Interview Info</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    @click="isShowInfoModal = !isShowInfoModal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row" style="padding-left: 25px">
+                    <div>
+                      <table class="freelancerInfoForm">
+                        <tr>
+                          <td class="line-info"><span>Scheduled date</span></td>
+                          <td>
+                            <input
+                              class="formInput"
+                              type="date"
+                              v-model="newScheduledDate"
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="line-info"><span>Venue</span></td>
+                          <td>
+                            <input
+                              class="formInput"
+                              type="text"
+                              v-model="newLocation"
+                            />
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="isShowInfoModal = !isShowInfoModal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="
+                      isShowInfoModal = !isShowInfoModal;
+                      updateInterview(selectedInterviewID);
+                    "
+                  >
+                    Update schedule
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="confirm_request">
+          <div
+            class="modal fade show"
+            style="
+              display: block;
+              background-color: #000000ad;
+              padding-top: 10%;
+            "
+            v-if="isshowConfirmRequestModal"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div
+                  class="modal-header text-end"
+                  style="background-color: #33b5e5; color: white"
+                >
+                  <h5 class="modal-title" style="text-align: center">
+                    Are you sure?
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    @click="
+                      isshowConfirmRequestModal = !isshowConfirmRequestModal
+                    "
+                    aria-label="Close"
+                    style="color: white"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div>
+                      <p class="modal-title">
+                        Do you really want to confirm this interview schedult?
+                      </p>
+                      <p class="modal-title">This process cannot be undone.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                  <a
+                    type="button"
+                    class="btn btn-info waves-effect waves-light text-white"
+                    @click="
+                      sendInterviewInfo(slectedInterview),
+                        (isshowConfirmRequestModal = !isshowConfirmRequestModal)
+                    "
+                    >Save</a
+                  >
+                  <a
+                    type="button"
+                    class="btn btn-outline-info waves-effect"
+                    @click="
+                      isshowConfirmRequestModal = !isshowConfirmRequestModal
+                    "
+                    data-dismiss="modal"
+                    >Cancel</a
+                  >
                 </div>
               </div>
             </div>
@@ -414,6 +584,7 @@ export default {
   data() {
     return {
       account: {},
+      freelancer: {},
       interviews: [],
       pagination: [],
       moment: moment,
@@ -423,6 +594,10 @@ export default {
       status: "Pending",
       isshowModal: false,
       selectedStatus: "Pending",
+      isShowInfoModal: false,
+      newScheduledDate: "",
+      newLocation: "",
+      isshowConfirmRequestModal: false,
     };
   },
   methods: {
@@ -430,20 +605,97 @@ export default {
     getFormattedDate(date) {
       return moment(date).format("YYYY-MM-DD");
     },
-    async changeInterviewStatus(status, interviewID) {
+    async changeInterviewStatus(status, interview) {
       const data = await axios.put("/interviews/updateStatus", {
         status: status,
-        interviewID: interviewID,
+        interviewID: interview.InterviewID,
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
+        if(status == "Passed"){
+          //if interview passed --> change acc status to "Active"
+          this.changeFreelancerAccountStatus(interview.CreateByID)
+        }
         toast.success("Change interview Status Successfully!", {
+          theme: "colored",
+          autoClose: 2000,
+          // onClose: () => location.reload(),
+        });
+      } else {
+        toast.warn("Change interview Status Failed!", { autoClose: 2000 });
+      }
+    },
+    async updateInterview(selectedInterviewID) {
+      console.log(selectedInterviewID);
+      const data = await axios.put("/interviews/update", {
+        date: this.newScheduledDate,
+        location: this.newLocation,
+        id: selectedInterviewID,
+      });
+      console.log(data);
+      if (data.data.message == "Interview updated successfully") {
+        toast.success("Change interview Schedule Successfully!", {
           theme: "colored",
           autoClose: 2000,
           onClose: () => location.reload(),
         });
       } else {
-        toast.warn("Change interview Status Failed!", { autoClose: 2000 });
+        toast.warn("Change interview Schedule Failed!", { autoClose: 2000 });
+      }
+    },
+    async sendInterviewInfo(interview) {
+      console.log(interview);
+      await axios
+        .put("/interviews/sendSchedule", {
+          freelancerID: interview.CreateByID,
+          location: interview.Location,
+          scheduledDate: interview.ScheduledDate,
+        })
+        .then(
+          (res) => {
+            this.changeInterviewStatus("Ongoing", interview);
+            toast.success("Send interview Schedule Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          },
+          (err) => {
+            toast.warn("Change interview Schedule Failed!", {
+              autoClose: 2000,
+            });
+          }
+        );
+    },
+    changeFreelancerAccountStatus(freelancerID){
+      axios
+        .get(`/freelancers/${freelancerID}/info`)
+        .then(
+          (res) => {
+            console.log(res.data)
+            this.changeAccountStatus("Active", res.data.AccountID)
+          },
+          (err) => {
+            toast.warn("Change interview Schedule Failed!", {
+              autoClose: 2000,
+            });
+          }
+        );
+    },
+    async changeAccountStatus(status, accountID) {
+      const data = await axios.put("/accounts/updateStatus", {
+        status: status,
+        accountID: accountID,
+      });
+      // console.log(data);
+      if (data.data.message == "Change Status Success") {
+        toast.success("Change account Status Successfully!", {
+          theme: "colored",
+          autoClose: 2000,
+          onClose: () => location.reload(),
+        });
+      } else {
+        toast.warn("Change account Status Failed!", { autoClose: 2000 });
       }
     },
   },
@@ -613,5 +865,14 @@ export default {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
+}
+.freelancerInfoForm {
+  width: 100%;
+}
+.line-info {
+  text-align: left;
+}
+.formInput {
+  width: 100%;
 }
 </style>

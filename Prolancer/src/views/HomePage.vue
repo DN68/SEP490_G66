@@ -127,7 +127,7 @@
                       href=""
                       class="carousel-link text-display-4"
                       ><span>Software Development</span></a
-                    >&nbsp;eller
+                    >&nbsp;
                   </h4>
                 </div>
                 <GigList :listGigs="gigs"></GigList>
@@ -208,6 +208,7 @@ export default {
               })
               .then(
                 (res) => {
+                  console.log(res.data)
                   //if account has freelancer info, go to dashboard
                   if(res.data.freelancer){
                     this.$router.push("/seldash");

@@ -9,5 +9,14 @@ router.get('/index',
 router.put('/updateStatus',
     interviewController.changeInterviewStatus
 )
+router.post('/create',
+    interviewController.createInterview
+)
+router.put('/update',
+    interviewController.changeInterviewInfo
+)
+router.put('/sendSchedule',
+    interviewController.sendInterviewSchedule
+)
 
 module.exports = router;

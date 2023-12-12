@@ -12,7 +12,7 @@ var Interview = function (Interview) {
 
 
 Interview.getAllInterviewsWithPaging = function (status, limit, offset, interview, pagination) {
-    var sql = "Select i.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location, f.Description as FreelancerDescription from Interview i INNER JOIN Freelancer f ON i.CreateByID = f.FreelancerID WHERE";
+    var sql = "Select i.*, f.First_Name, f.Last_Name, f.Profile_Picture, f.Location AS 'freelancerAddress', f.Description as FreelancerDescription from Interview i INNER JOIN Freelancer f ON i.CreateByID = f.FreelancerID WHERE";
     var sqlCount = "Select COUNT(*) AS count from Interview WHERE";
     
     console.log("sql: ", sql);
@@ -52,4 +52,27 @@ Interview.getAllInterviewsWithPaging = function (status, limit, offset, intervie
       }
     })  
   }
+
+  Interview.createInterview = function(data, result){
+    connectDb.query("INSERT INTO Interview SET ?", [data], function(err, res){
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res);
+      }
+    }) 
+  }
+
+  Interview.updateInterviewInfo = function(date, location, id, result){
+    connectDb.query("UPDATE Interview SET ScheduledDate = ?, Location = ? WHERE InterviewID = ?", [date, location, id], function(err, res){
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res);
+      }
+    }) 
+  }
+
 module.exports = Interview;

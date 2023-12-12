@@ -315,7 +315,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td class="line-info"><span>Language </span></td>
             <td>
               <div class="dropdown">
@@ -342,7 +342,7 @@
                 </ul>
               </div>
             </td>
-          </tr>
+          </tr> -->
         </table>
       </div>
       <div class="button">

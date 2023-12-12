@@ -31,6 +31,16 @@
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 href="/manageorder"
+                v-if="freelancer.Status === 'Active'"
+                ><span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Orders</span
+                ></a
+              >
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                @click="showModal()"
+                v-else-if="freelancer.Status === 'Pending'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
                 ></a
@@ -41,6 +51,17 @@
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 href="/managegigsel"
+                v-if="freelancer.Status === 'Active'"
+              >
+                <span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Gigs</span
+                ></a
+              >
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                @click="showModal()"
+                v-if="freelancer.Status === 'Pending'"
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
@@ -52,6 +73,17 @@
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 href="/earning"
+                v-if="freelancer.Status === 'Active'"
+              >
+                <span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Earnings</span
+                ></a
+              >
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                v-if="freelancer.Status === 'Pending'"
+                @click="showModal()"
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
@@ -126,6 +158,41 @@
       </div>
       <!-- Container wrapper -->
     </nav>
+    <div
+      class="modal fade"
+      ref="myModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Access Restricted
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>You have to interview to perform this task</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="createInterview()"
+            >
+              Setup interview now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="header">
       <!-- Sidebar -->
       <nav
@@ -193,9 +260,12 @@ export default {
     return {
       freelancer: {},
       isShow: false,
+      modal: null,
     };
   },
+
   mounted() {
+    this.modal = new bootstrap.Modal(this.$refs.myModal);
     //user is not authorized
     if (localStorage.getItem("token") === null) {
       this.freelancer = null;
@@ -207,7 +277,7 @@ export default {
         .then(
           (res) => {
             this.freelancer = res.data.freelancer;
-            console.log(res.data)
+            console.log(res.data);
             // this.showAvatar(res.data.freelancer.Profile_Picture);
           },
           (err) => {
@@ -216,23 +286,29 @@ export default {
         );
     }
   },
-  // methods:{
-  //   async showAvatar(imgName){
-  //     const apiUrl = "/freelancers/image/" + imgName;
-  //     console.log(apiUrl)
-  //     const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
-  //     console.log(resData);
-  //     const blob = new Blob([resData.data], { type: "application/png" });
-
-  //     // Create a URL for the Blob
-  //     const blobUrl = URL.createObjectURL(blob);
-
-  //     //set src for image element
-  //     const avatarElement = this.$refs.profileImage;
-  //     console.log(avatarElement)
-  //     avatarElement.src = blobUrl
-  //   }
-  // }
+  methods: {
+    showModal() {
+      this.modal.show();
+    },
+    createInterview() {
+      axios
+        .post("/interviews/create", {
+          CreateByID: this.freelancer.FreelancerID,
+          ScheduledDate: "",
+          Location: "",
+          Description: "" ,
+          Status: 'Pending'
+        })
+        .then(
+          (res) => {
+            console.log("created");
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    },
+  },
 };
 </script>
 

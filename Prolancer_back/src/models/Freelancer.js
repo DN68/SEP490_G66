@@ -21,6 +21,18 @@ Freelancer.getFreelancerInfo = function (accountID, results) {
     })
 }
 
+Freelancer.getFreelancerById = function (freelancerID, results) {
+  connectDb.query("SELECT f.*, a.*, c.Category_Name, cv.CV_Upload FROM Freelancer f INNER JOIN Account a ON f.AccountID = a.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID  INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE f.FreelancerID = ?",
+    [freelancerID], (err, res) => {
+      if (err) {
+        results(null, err);
+      }
+      else {
+        results(null, res);
+      }
+    })
+}
+
 
 
 Freelancer.getAllFreelancersWithPaging = function (status, search, limit, offset, account, pagination) {
@@ -83,6 +95,18 @@ Freelancer.createFreelancer = function (accountID, firstName, lastName, profileP
 Freelancer.getFreelancerByAccountID = function (accountId, results) {
   connectDb.query("SELECT * FROM Freelancer WHERE AccountID = ?",
       [accountId], function (err, res) {
+          if (err) {
+              results(null, err);
+          }
+          else {
+              results(null, res);
+          }
+      })
+}
+
+Freelancer.getFreelancerByID = function (freelancerId, results) {
+  connectDb.query("SELECT * FROM Freelancer f  INNER JOIN Account a ON a.AccountID = f.AccountID WHERE f.FreelancerID = ?",
+      [freelancerId], function (err, res) {
           if (err) {
               results(null, err);
           }

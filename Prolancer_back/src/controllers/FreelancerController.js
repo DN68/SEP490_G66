@@ -19,7 +19,7 @@ class FreelancerController {
                 })
             }
             const accountID = decoded.accountID
-            console.log(accountID)
+            console.log("ACcountID: " + accountID)
             Freelancer.getFreelancerInfo(accountID, function (err, results) {
                 if (err) {
                     return console.log(err)
@@ -175,6 +175,20 @@ class FreelancerController {
             })
         }
     }
+
+
+    getFreelancerByID = function (req, res) {
+        const freelancerID = req.params.freelancerID
+        Freelancer.getFreelancerByID(freelancerID, function (err, results) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send(results[0]);
+            }
+        });
+    }
+
 
     getAvatarImage = function (req, res) {
         var imgName = req.params.imgName;
