@@ -41,6 +41,7 @@
                   src="../assets/image/logo2.png"
                   class="rounded-circle"
                   height="30"
+                  width="30"
                   alt=""
                   loading="lazy"
                 />

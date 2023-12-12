@@ -32,7 +32,7 @@
           >
             <h6>Job Description</h6>
           </div>
-          <div
+          <div v-if="currentAccountInfo.Role != 'A'"
             class="col-md-2 status_item"
             @click="
               (isdetail = false),

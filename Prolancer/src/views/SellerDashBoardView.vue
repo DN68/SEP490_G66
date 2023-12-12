@@ -46,22 +46,25 @@
           Find important messages, tips, and links to helpful resources here:
         </p>
         <div class="abc">
-          <ChartGig class="mb-5"></ChartGig>
-          <div class="activeorder mb-5">
+          <h4>Statistics Chart</h4>
+          <div class="me-10" style="margin-right: 200px;">
+          <ChartGig class="mb-5 "></ChartGig>
+        </div>
+          <!-- <div class="activeorder mb-5">
             <span>Active orders - 0</span>
             <span>Completed Orders - 0</span>
             <span>Cancel Orders - 0</span>
-          </div>
+          </div> -->
           <router-link to="/uppro" style="text-decoration: none; color: black">
             <div class="adddevlang mb-5">
-              <span>Add your dev language to get buyers</span>
+              <span>Update your profile to get buyers</span>
               <p style="font-weight: 300; font-size: 15px">
-                Fiverr search results will include dev languages soon, so make
+                Prolancer search results will include dev languages soon, so make
                 sure to add all of yours under your profile skills.
               </p>
             </div>
           </router-link>
-          <router-link to="#" style="text-decoration: none; color: black">
+          <!-- <router-link to="#" style="text-decoration: none; color: black">
             <div class="inbox">
               <span>Set up inbox auto replies</span>
               <p style="font-weight: 300; font-size: 15px">
@@ -69,13 +72,13 @@
                 message.
               </p>
             </div>
-          </router-link>
+          </router-link> -->
         </div>
       </div>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <Footer></Footer>
-    </div>
+    </div> -->
     <ChatAuth></ChatAuth>
   </div>
 </template>
@@ -243,6 +246,9 @@ html {
   top: 90%;
   position: absolute;
   background-color: transparent;
-  transform: translateY(-2200%);
+  transform: translateY(-1900%);
 } 
+.sel .dropdown-menu{
+  top: 40px;
+}
 </style>
