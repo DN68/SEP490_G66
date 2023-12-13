@@ -206,6 +206,7 @@
               <td class="line-info"><span>Full Name</span></td>
               <td>
                 <input
+                  class="name"
                   type="text"
                   placeholder="First Name"
                   v-model="firstName"
@@ -218,7 +219,7 @@
                   </p>
                 </div>
                 <input
-                  class="ms-2"
+                  class="name"
                   placeholder="Last Name"
                   v-model="lastName"
                   type="text"
@@ -579,7 +580,7 @@ export default {
         errCount++;
       }
 
-      console.log(errCount)
+      console.log(errCount);
 
       //if no error -> true
       if (errCount == 0) {
@@ -623,7 +624,9 @@ export default {
       }
       // Username validation
       if (fieldName == "username" && !this.isValidUsername) {
-        this.validationErrors[fieldName] = `Username must start with an alphabet character. Total length must be 8 to 30 characters including letters, numbers, or underscores.`;
+        this.validationErrors[
+          fieldName
+        ] = `Username must start with an alphabet character. Total length must be 8 to 30 characters including letters, numbers, or underscores.`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -647,7 +650,9 @@ export default {
 
       // Password validation
       if (fieldName == "password" && !this.isValidPassword) {
-        this.validationErrors[fieldName] = `Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character`;
+        this.validationErrors[
+          fieldName
+        ] = `Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -781,6 +786,11 @@ export default {
     verifyEmail() {
       if (this.inputCode == this.verificationCode) {
         this.changeStep(this.currentStep + 1);
+      } else {
+        toast.error("Verification failed", {
+          theme: "colored",
+          autoClose: 2000,
+        });
       }
     },
 
@@ -790,7 +800,7 @@ export default {
 
     //go to step 3 from step 2
     toStep3() {
-      console.log(this.checkInputStep2)
+      console.log(this.checkInputStep2);
       if (this.checkInputStep2) {
         this.changeStep(this.currentStep + 1);
       }
@@ -936,5 +946,9 @@ export default {
 }
 input[type="file"] {
   border: 2px solid white;
+}
+.name{
+  width: 50%;
+  margin-right: 50%;
 }
 </style>

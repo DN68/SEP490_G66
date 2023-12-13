@@ -195,6 +195,7 @@
             <td>
               <input
                 type="text"
+                class="name"
                 placeholder="First Name"
                 v-model="firstName"
                 style="width: 50%"
@@ -206,7 +207,7 @@
                 </p>
               </div>
               <input
-                class="ms-2"
+                class="name"
                 placeholder="Last Name"
                 v-model="lastName"
                 type="text"
@@ -636,7 +637,9 @@ export default {
       }
       // Username validation
       if (fieldName == "username" && !this.isValidUsername) {
-        this.validationErrors[fieldName] = `Username must start with an alphabet character. Total length must be 8 to 30 characters including letters, numbers, or underscores.`;
+        this.validationErrors[
+          fieldName
+        ] = `Username must start with an alphabet character. Total length must be 8 to 30 characters including letters, numbers, or underscores.`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -660,7 +663,9 @@ export default {
 
       // Password validation
       if (fieldName == "password" && !this.isValidPassword) {
-        this.validationErrors[fieldName] = `Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character`;
+        this.validationErrors[
+          fieldName
+        ] = `Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -815,6 +820,11 @@ export default {
     verifyEmail() {
       if (this.inputCode == this.verificationCode) {
         this.changeStep(this.currentStep + 1);
+      } else {
+        toast.error("Verification failed", {
+          theme: "colored",
+          autoClose: 2000,
+        });
       }
     },
 
@@ -1104,5 +1114,9 @@ export default {
 }
 input[type="file"] {
   border: 2px solid white;
+}
+.name {
+  width: 50%;
+  margin-right: 50%;
 }
 </style>
