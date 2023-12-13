@@ -871,10 +871,10 @@ export default {
               FormData.append("description", this.description);
               FormData.append("mainCategoryID", this.mainCategory);
 
-              FormData.append(
-                "profilePicture",
-                "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
-              );
+              // FormData.append(
+              //   "profilePicture",
+              //   "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
+              // );
 
               axios
                 .post("/freelancers/create", FormData)
@@ -954,7 +954,7 @@ export default {
             toast.success("Upload CV Successfully!", {
               theme: "colored",
               autoClose: 2000,
-              onClose: () => location.replace("/sendmessage"),
+              // onClose: () => location.replace("/sendmessage"),
             });
           })
           .catch((error) => {
@@ -969,6 +969,7 @@ export default {
     },
     updateFileImage() {
       this.fileImage = this.$refs.fileImage;
+      console.log(this.fileImage)
     },
     processImageFile() {
       //Save CV pdf file

@@ -141,16 +141,61 @@ class FreelancerController {
     };
 
     freelancerRegister = function (req, res) {
+        console.log(req.files)
         const accountID = req.body.accountID;
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
-        const profilePicture = req.body.profilePicture;
+        // const profilePicture = req.body.profilePicture;
+        var profilePicture;
         const location = req.body.location;
         const description = req.body.description;
         const phoneNo = req.body.phoneNo;
         const mainCategoryID = req.body.mainCategoryID
 
+
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({ error: 'No files were uploaded.' });
+        }
+
+        let imgFile = req.files.file;
+
+        const newFileName = `ACC${accountID}_${imgFile.name}`;
+        const commonPath = path.join('uploads', 'images', 'avatar', newFileName);
+        const uploadPath = path.join(__dirname, '..', '..', commonPath);
+
+        if (fs.existsSync(uploadPath)) {
+            fsp.unlink(uploadPath)
+                .then(() => {
+                    console.log('Existing file deleted successfully');
+                    continueWithFileUpload();
+                })
+                .catch((unlinkError) => {
+                    console.error('Error deleting existing file:', unlinkError);
+                    return res.status(500).json({ error: 'Error deleting existing file.' });
+                });
+        } else {
+            continueWithFileUpload();
+        }
+
         createFreelancer();
+
+
+        function continueWithFileUpload() {
+            imgFile.mv(uploadPath, (err) => {
+              if (err) {
+                return res.status(500).json({ error: 'Error uploading file.' });
+              }
+        
+              // Construct the URL based on your server's address and the path to the uploaded file
+              const serverUrl = 'http://localhost:3000'; // Replace with your server's actual URL
+              const fileUrl = `${serverUrl}/${commonPath.replace(/\\/g, '/')}`;
+        
+              console.log(fileUrl);
+              profilePicture = fileUrl
+            //   return res.status(200).json({ imageUrl: fileUrl });
+            });
+          }
+
 
         //Create freelancer
         function createFreelancer() {

@@ -280,7 +280,7 @@
           </tbody>
         </table>
         <div v-if="interviews.length == 0" class="text-center">
-          <h5>interview Not Found</h5>
+          <h5>Interview Not Found</h5>
         </div>
 
         <div>
@@ -470,7 +470,7 @@
                   <div class="row">
                     <div>
                       <p class="modal-title">
-                        Do you really want to confirm this interview schedult?
+                        Do you really want to confirm this interview schedule?
                       </p>
                       <p class="modal-title">This process cannot be undone.</p>
                     </div>
