@@ -134,7 +134,7 @@
           </span>
         </div>
         <div class="right">
-          <div
+          <!-- <div
             class="img-gig"
             style="
               padding-top: 40px;
@@ -147,7 +147,16 @@
               >Drag & drop a Photo or
               <span style="color: blue">Browse</span></span
             >
-          </div>
+          </div> -->
+          <textarea
+            name=""
+            id=""
+            cols="60"
+            rows="3"
+            v-model="image"
+            required
+            maxlength="500"
+          ></textarea>
         </div>
       </div>
       <div class="button">

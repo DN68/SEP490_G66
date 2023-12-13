@@ -233,8 +233,7 @@
                 <i
                   v-if="status == 'Ongoing'"
                   @click="
-                    (isshowModal = !isshowModal),
-                      (slectedInterview = interview)
+                    (isshowModal = !isshowModal), (slectedInterview = interview)
                   "
                   class="bi bi-gear-fill"
                 ></i>
@@ -612,11 +611,11 @@ export default {
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        if(status == "Passed"){
+        if (status == "Passed") {
           //if interview passed --> change acc status to "Active"
-          this.changeFreelancerAccountStatus(interview.CreateByID)
+          this.changeFreelancerAccountStatus(interview.CreateByID);
         }
-        toast.success("Change interview Status Successfully!", {
+        toast.success("Change Interview Status Successfully!", {
           theme: "colored",
           autoClose: 2000,
           // onClose: () => location.reload(),
@@ -634,7 +633,7 @@ export default {
       });
       console.log(data);
       if (data.data.message == "Interview updated successfully") {
-        toast.success("Change interview Schedule Successfully!", {
+        toast.success("Update interview Schedule Successfully!", {
           theme: "colored",
           autoClose: 2000,
           onClose: () => location.reload(),
@@ -654,6 +653,8 @@ export default {
         .then(
           (res) => {
             this.changeInterviewStatus("Ongoing", interview);
+            this.addFreelancerSkillScore(interview.CreateByID);
+
             toast.success("Send interview Schedule Successfully!", {
               theme: "colored",
               autoClose: 2000,
@@ -667,20 +668,18 @@ export default {
           }
         );
     },
-    changeFreelancerAccountStatus(freelancerID){
-      axios
-        .get(`/freelancers/${freelancerID}/info`)
-        .then(
-          (res) => {
-            console.log(res.data)
-            this.changeAccountStatus("Active", res.data.AccountID)
-          },
-          (err) => {
-            toast.warn("Change interview Schedule Failed!", {
-              autoClose: 2000,
-            });
-          }
-        );
+    changeFreelancerAccountStatus(freelancerID) {
+      axios.get(`/freelancers/${freelancerID}/info`).then(
+        (res) => {
+          console.log(res.data);
+          this.changeAccountStatus("Active", res.data.AccountID);
+        },
+        (err) => {
+          toast.warn("Change interview Schedule Failed!", {
+            autoClose: 2000,
+          });
+        }
+      );
     },
     async changeAccountStatus(status, accountID) {
       const data = await axios.put("/accounts/updateStatus", {
@@ -689,7 +688,7 @@ export default {
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        toast.success("Change account Status Successfully!", {
+        toast.success("Change Account Status Successfully!", {
           theme: "colored",
           autoClose: 2000,
           onClose: () => location.reload(),
@@ -697,6 +696,27 @@ export default {
       } else {
         toast.warn("Change account Status Failed!", { autoClose: 2000 });
       }
+    },
+    addFreelancerSkillScore(freelancerId) {
+      console.log(freelancerId)
+      axios
+        .post("/skills/add", {
+          FreelancerID: freelancerId,
+        })
+        .then((res) => {
+          toast.success("Freelancer skills score added Successfully!", {
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
+        }, (err) => {
+          console.log(err.response)
+          toast.warn("Freelancer skills score already added", {
+            theme: "colored",
+            autoClose: 2000,
+            onClose: () => location.reload(),
+          });
+        });
     },
   },
   async created() {

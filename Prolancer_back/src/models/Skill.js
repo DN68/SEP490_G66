@@ -11,7 +11,7 @@ var Skill = function (skill) {
 };
 Skill.getAllMajorSkill = function (result) {
 
-    
+
     connectDb.query("SELECT * FROM `Skill` WHERE ParentSkillID IS NULL", function (err, res) {
         if (err) {
             result(err, null);
@@ -22,31 +22,31 @@ Skill.getAllMajorSkill = function (result) {
     });
 };
 
-Skill.getFreelancerWithSkillScore  = function (queryBy,ParentSkillID,user,result) {
-    var sql='';
+Skill.getFreelancerWithSkillScore = function (queryBy, ParentSkillID, user, result) {
+    var sql = '';
     var sqlForAdmin = "SELECT f.FreelancerID, fr.First_Name, fr.Last_Name, fr.Profile_Picture " +
-    queryBy +
-    " FROM FreelancerSkill f " +
-    "INNER JOIN Skill s ON f.SkillID = s.SkillID " +
-    "INNER JOIN Freelancer fr ON f.FreelancerID = fr.FreelancerID " +
-    "WHERE s.ParentSkillID = "+ParentSkillID +
-    " GROUP BY f.FreelancerID";
+        queryBy +
+        " FROM FreelancerSkill f " +
+        "INNER JOIN Skill s ON f.SkillID = s.SkillID " +
+        "INNER JOIN Freelancer fr ON f.FreelancerID = fr.FreelancerID " +
+        "WHERE s.ParentSkillID = " + ParentSkillID +
+        " GROUP BY f.FreelancerID";
 
     var sqlForFreelancer = "SELECT f.FreelancerID, fr.First_Name, fr.Last_Name, fr.Profile_Picture " +
-    queryBy +
-    " FROM FreelancerSkill f " +
-    "INNER JOIN Skill s ON f.SkillID = s.SkillID " +
-    "INNER JOIN Freelancer fr ON f.FreelancerID = fr.FreelancerID " +
-    "WHERE s.ParentSkillID = "+ParentSkillID +
-    " AND f.FreelancerID = "+user.FreelancerID+
-    " GROUP BY f.FreelancerID";
+        queryBy +
+        " FROM FreelancerSkill f " +
+        "INNER JOIN Skill s ON f.SkillID = s.SkillID " +
+        "INNER JOIN Freelancer fr ON f.FreelancerID = fr.FreelancerID " +
+        "WHERE s.ParentSkillID = " + ParentSkillID +
+        " AND f.FreelancerID = " + user.FreelancerID +
+        " GROUP BY f.FreelancerID";
 
-    if(user.Role=='A'){
-        sql=sqlForAdmin;
-    }else{
-        sql=sqlForFreelancer;
+    if (user.Role == 'A') {
+        sql = sqlForAdmin;
+    } else {
+        sql = sqlForFreelancer;
     }
-    
+
     connectDb.query(sql, function (err, res) {
         if (err) {
             result(err, null);
@@ -57,11 +57,11 @@ Skill.getFreelancerWithSkillScore  = function (queryBy,ParentSkillID,user,result
     });
 };
 
-Skill.getSkillWithMajorID  = function (id,result) {
+Skill.getSkillWithMajorID = function (id, result) {
 
     var sql = "SELECT * FROM `Skill` WHERE ParentSkillID = ?";
 
-    
+
     connectDb.query(sql, [id], function (err, res) {
         if (err) {
             result(err, null);
@@ -72,15 +72,15 @@ Skill.getSkillWithMajorID  = function (id,result) {
     });
 };
 
-Skill.updateManySkillScore  = function (updateQuery,result) {
+Skill.updateManySkillScore = function (updateQuery, result) {
 
     var sql = "UPDATE FreelancerSkill " +
-    "SET Score = CASE" +
-    updateQuery+
-    " ELSE Score END";
+        "SET Score = CASE" +
+        updateQuery +
+        " ELSE Score END";
 
     console.log("🚀 ~ file: Skill.js:64 ~ sql:", sql)
-    
+
     connectDb.query(sql, function (err, res) {
         if (err) {
             result(err, null);
@@ -91,10 +91,33 @@ Skill.updateManySkillScore  = function (updateQuery,result) {
     });
 };
 
-Skill.getSkillScoreByFreelancerID = function (id,result) {
+Skill.getSkillScoreByFreelancerID = function (id, result) {
 
-    
+
     connectDb.query("SELECT * FROM `FreelancerSkill` fs INNER JOIN Skill s ON fs.SkillID = s.SkillID WHERE fs.FreelancerID = ?", [id], function (err, res) {
+        if (err) {
+            result(err, null);
+        }
+        else {
+            result(null, res);
+        }
+    });
+};
+
+Skill.addManySkillScore = function (id, result) {
+    const freelancerID = id;
+    const skillIDs = [5, 6, 7, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+
+    let sqlQuery = `INSERT INTO FreelancerSkill (FreelancerID, SkillID) VALUES`;
+
+    for (const skillID of skillIDs) {
+        sqlQuery += ` (${freelancerID}, ${skillID}),`;
+    }
+
+    // Remove the trailing (extra) comma at the end of query
+    sqlQuery = sqlQuery.slice(0, -1);
+
+    connectDb.query(sqlQuery, function (err, res) {
         if (err) {
             result(err, null);
         }
