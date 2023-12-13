@@ -106,7 +106,7 @@ Skill.getSkillScoreByFreelancerID = function (id, result) {
 
 Skill.addManySkillScore = function (id, result) {
     const freelancerID = id;
-    const skillIDs = [5, 6, 7, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+    const skillIDs = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
     let sqlQuery = `INSERT INTO FreelancerSkill (FreelancerID, SkillID) VALUES`;
 
