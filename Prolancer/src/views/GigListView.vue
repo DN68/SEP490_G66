@@ -365,7 +365,7 @@ import GigList from "../components/GigList.vue";
 import vClickOutside from "click-outside-vue3";
 import NavCategory from "../components/NavCategory.vue";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   /* eslint-disable */
   name: "HomePage",
@@ -431,7 +431,7 @@ export default {
       console.log("Filter By Progaming L " + this.selectedLanguages);
       console.log("Filter By Database " + this.selectedDatabases);
       this.sortBy = "None";
-      const responseWithFilter = await axios
+      const responseWithFilter = await api
         .get("/gigs/index", {
           params: {
             page: currentPage,

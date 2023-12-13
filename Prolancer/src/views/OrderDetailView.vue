@@ -1441,6 +1441,7 @@ import HeaderAdmin from "../components/HeaderAdmin.vue";
 import HeaderSell from "../components/HeaderSeller.vue";
 import StarRating from "vue-star-rating";
 import Review from "../components/Review.vue";
+import api from '../../api';
 export default {
   name: "OrderDetailView",
   components: {
@@ -1505,7 +1506,7 @@ export default {
   },
   methods: {
     async getOrderByID() {
-      await axios
+      await api
         .get("/orders/details/" + this.$route.params.id)
         .then((response) => {
           const order = response.data[0];
@@ -1523,7 +1524,7 @@ export default {
       if (addRequirement == "") {
         return;
       }
-      const data = await axios
+      const data = await api
         .put("/orderrequest/updateOrderRequestJobDescription", {
           newJobDescription: newRequirement,
           OrderRequestID: OrderRequestID,
@@ -1564,7 +1565,7 @@ export default {
       userId,
       extendDay
     ) {
-      const data = await axios
+      const data = await api
         .post("/changerequest/createChangeRequest", {
           changeRequest: {
             CreateByID: userId,
@@ -1597,7 +1598,7 @@ export default {
         formData.append("file", fileInput.files[0]);
         formData.append("orderID", this.order.OrderID);
         console.log(formData);
-        axios
+        api
           .post("/orders/deliverOrder", formData)
           .then((response) => {
             // Handle the successful upload response
@@ -1630,7 +1631,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -1644,7 +1645,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -1667,7 +1668,7 @@ export default {
     },
 
     async getDeliveryByOrderID() {
-      await axios
+      await api
         .get("/delivery/getDeliveryByOrderId", {
           params: {
             id: this.order.OrderID,
@@ -1689,7 +1690,7 @@ export default {
         this.isdeliveryName = false;
       } else {
         $("#commonModal").modal("hide");
-        await axios
+        await api
           .post("/delivery/createDelivery", {
             Delivery: {
               DeliveryName: this.deliveryName,
@@ -1713,7 +1714,7 @@ export default {
     },
 
     async deliverOrder() {
-      const data = await axios
+      const data = await api
         .put("/orders/updateStatus", {
           status: "Delivered",
           orderID: this.order.OrderID,
@@ -1750,7 +1751,7 @@ export default {
         this.isInputActualAfford = false;
       } else {
         $("#completeModal").modal("hide");
-        await axios
+        await api
           .put("/orders/addOrderEffort", {
             addEffort: this.addEffort,
             orderID: this.order.OrderID,
@@ -1785,7 +1786,7 @@ export default {
       if (this.rating == 0 || !this.feedBack) {
         this.notInputRating = true;
       } else {
-        await axios
+        await api
           .post("/review/createReview", {
             Review: review,
           })
@@ -1805,7 +1806,7 @@ export default {
     },
 
     async getReviewByOrderID() {
-      await axios
+      await api
         .get("/review/getReviewByOrderId", {
           params: {
             id: this.order.OrderID,
@@ -1824,7 +1825,7 @@ export default {
         });
     },
     async approveDeliver() {
-      await axios
+      await api
         .put("/delivery/approveDelivery", {
           status: "Accept",
           deliverID: this.selectedDeliverID,
@@ -1852,7 +1853,7 @@ export default {
       } else {
         this.isshowConfirmSendRequestModal =
           !this.isshowConfirmSendRequestModal;
-        await axios
+        await api
           .put("/delivery/declineDelivery", {
             status: "Reject",
             deliverID: this.selectedDeliverID,
@@ -1879,7 +1880,7 @@ export default {
       } else {
         this.isshowConfirmSendRequestModal =
           !this.isshowConfirmSendRequestModal;
-        await axios
+        await api
         .put("/delivery/deliverAgain", {
           status: "Delivered",
           deliverID: this.selectedDeliverID,

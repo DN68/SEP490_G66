@@ -203,7 +203,7 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   props: ["searchText"],
   data() {
@@ -217,7 +217,7 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.account = null;
     } else {
-      axios
+      api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })

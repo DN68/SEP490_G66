@@ -91,7 +91,7 @@ import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 import ChartGig from "../components/chartgigsuccess.vue";
 import ChatAuth from "../components/ChatAuth.vue";
-
+import api from '../../api';
 export default {
   name: "App",
   components: {
@@ -112,7 +112,7 @@ export default {
     if (localStorage.getItem("token") == null) {
       this.$router.push("/login");
     } else {
-      await axios
+      await api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -128,7 +128,7 @@ export default {
           }
         );
     }
-    await axios
+    await api
       .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -148,7 +148,7 @@ export default {
     // async showAvatar(imgName){
     //   const apiUrl = "/freelancers/image/" + imgName;
     //   console.log(apiUrl)
-    //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+    //   const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
     //   console.log(resData);
     //   const blob = new Blob([resData.data], { type: "application/png" });
     //   // Create a URL for the Blob
@@ -159,7 +159,7 @@ export default {
     //   avatarElement.src = blobUrl
     // }
     // fetchData() {
-    //   this.$axios.get('/orderrequest/getGigTitle')
+    //   this.$api.get('/orderrequest/getGigTitle')
     //     .then(response => {
     //       this.chartData = response.data;
     //     })

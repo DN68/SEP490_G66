@@ -438,7 +438,7 @@ import HeaderSeller from "../components/HeaderSeller.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -467,7 +467,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeGigStatus(status, gigID) {
-      const data = await axios.put("/gigs/updateStatus", {
+      const data = await api.put("/gigs/updateStatus", {
         status: status,
         gigID: gigID,
       });
@@ -484,7 +484,7 @@ export default {
     },
   },
   async created() {
-    await axios
+    await api
       .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -503,13 +503,13 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     }
-    const responseAccountInfor = await axios.get("/freelancers/info", {
+    const responseAccountInfor = await api.get("/freelancers/info", {
       headers: { token: localStorage.getItem("token") },
     });
     const freelancerInfor = responseAccountInfor.data.freelancer;
     this.freelancer = freelancerInfor;
     console.log(this.freelancer.FreelancerID);
-    const responseData = await axios.get("/gigs/index/freelancer", {
+    const responseData = await api.get("/gigs/index/freelancer", {
       params: {
         page: this.selectedPage,
         search: this.searchGig,
@@ -524,7 +524,7 @@ export default {
     this.pagination = paging;
     console.log(this.pagination.totalRow);
     // console.log(this.status)
-    // const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
+    // const responseOrderReqData = await api.get("/orders/getOrderRequest", {
     //   params: {
     //     user: this.user,
     //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
@@ -536,7 +536,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/gigs/index/freelancer", {
+    const responseDateWithPage = await api.get("/gigs/index/freelancer", {
       params: {
         page: this.selectedPage,
         search: this.searchGig,

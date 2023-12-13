@@ -214,7 +214,7 @@ import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -235,7 +235,7 @@ export default {
     };
   },
   async created() {
-    await axios
+    await api
       .get("/users/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -255,13 +255,13 @@ export default {
   //   if (localStorage.getItem("token") === null) {
   //     this.$router.push("/login");
   //   }
-  //   const responseUserInfor = await axios.get("/users/info", {
+  //   const responseUserInfor = await api.get("/users/info", {
   //     headers: { token: localStorage.getItem("token") },
   //   });
   //   const userInfor = responseUserInfor.data.user;
   //   this.user = userInfor;
   //   console.log(this.user.userId);
-  //   const responseData = await axios.get("/orders/index", {
+  //   const responseData = await api.get("/orders/index", {
   //     params: {
   //       page: this.selectedPage,
   //       search: this.searchOrder,
@@ -277,7 +277,7 @@ export default {
   // },
   // async beforeRouteUpdate() {
   //   console.log("Run Here");
-  //   const responseDateWithPage = await axios.get("/orders/index", {
+  //   const responseDateWithPage = await api.get("/orders/index", {
   //     params: {
   //       page: this.selectedPage,
   //       search: this.searchOrder,

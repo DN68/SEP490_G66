@@ -471,7 +471,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -507,7 +507,7 @@ export default {
 
   methods: {
     async getOrder(user, currentPage) {
-      const responseData = await axios
+      const responseData = await api
         .get("/orders/index", {
           params: {
             page: currentPage,
@@ -529,7 +529,7 @@ export default {
         });
     },
     async changeOrderStatus(status, orderID) {
-      const data = await axios.put("/orders/updateStatus", {
+      const data = await api.put("/orders/updateStatus", {
         status: status,
         orderID: orderID,
       });
@@ -553,7 +553,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -567,7 +567,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })

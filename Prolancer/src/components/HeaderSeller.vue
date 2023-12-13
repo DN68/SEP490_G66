@@ -187,7 +187,7 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -200,7 +200,7 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.freelancer = null;
     } else {
-      axios
+      api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -220,7 +220,7 @@ export default {
   //   async showAvatar(imgName){
   //     const apiUrl = "/freelancers/image/" + imgName;
   //     console.log(apiUrl)
-  //     const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+  //     const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
   //     console.log(resData);
   //     const blob = new Blob([resData.data], { type: "application/png" });
 

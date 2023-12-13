@@ -442,7 +442,7 @@ import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 export default {
   name: "",
   components: {
@@ -689,7 +689,7 @@ export default {
     },
 
     isEmailExist() {
-      axios.get(`/accounts/${this.email}/checkEmail`).then(
+      api.get(`/accounts/${this.email}/checkEmail`).then(
         (res) => {
           console.log(res.data);
           if (res.data) {
@@ -706,7 +706,7 @@ export default {
 
     isUsernameExist() {
       console.log(this.username);
-      axios.get(`/accounts/${this.username}/checkUsername`).then(
+      api.get(`/accounts/${this.username}/checkUsername`).then(
         (res) => {
           if (res.data) {
             this.usernameExist = true;
@@ -731,7 +731,7 @@ export default {
       this.modal.show();
     },
     sendvalidationEmail() {
-      axios
+      api
         .post("/accounts/create/confirm", {
           email: this.email,
           username: this.username,
@@ -813,7 +813,7 @@ export default {
     async saveHirer() {
       if (this.checkInputStep3) {
         //save freelancer account info
-        axios
+        api
           .post("/accounts/create", {
             email: this.email,
             username: this.username,
@@ -826,7 +826,7 @@ export default {
               console.log(res.data.account);
               this.account = res.data.account;
               //add new freelancer with newly created account ID
-              axios
+              api
                 .post("/customers/create", {
                   accountID: this.account.AccountID,
                   firstName: this.firstName,

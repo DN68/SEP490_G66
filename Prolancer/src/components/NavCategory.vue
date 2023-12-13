@@ -15,6 +15,7 @@
 
 <script>
 import axios from "axios";
+import api from '../../api';
 export default {
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
   },
   async created() {
     
-    const responseCategory = await axios.get("/categories/get");
+    const responseCategory = await api.get("/categories/get");
     const categories = responseCategory.data;
     this.listCategories = categories;
 

@@ -453,7 +453,7 @@ import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 export default {
   name: "",
   components: {
@@ -718,7 +718,7 @@ export default {
 
     //Check if email already exist
     isEmailExist() {
-      axios.get(`/accounts/${this.email}/checkEmail`).then(
+      api.get(`/accounts/${this.email}/checkEmail`).then(
         (res) => {
           console.log(res.data);
           if (res.data) {
@@ -736,7 +736,7 @@ export default {
     //Check if username already exist
     isUsernameExist() {
       console.log(this.username);
-      axios.get(`/accounts/${this.username}/checkUsername`).then(
+      api.get(`/accounts/${this.username}/checkUsername`).then(
         (res) => {
           if (res.data) {
             this.usernameExist = true;
@@ -760,7 +760,7 @@ export default {
 
     //Send validation code to mail
     sendvalidationEmail() {
-      axios
+      api
         .post("/accounts/create/confirm", {
           email: this.email,
           username: this.username,
@@ -850,7 +850,7 @@ export default {
         const FormData = this.processImageFile();
         console.log(FormData);
 
-        axios
+        api
           .post("/accounts/create", {
             email: this.email,
             username: this.username,
@@ -876,7 +876,7 @@ export default {
                 "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
               );
 
-              axios
+              api
                 .post("/freelancers/create", FormData)
                 // .post("/freelancers/create", {
                 //   accountID: this.account.AccountID,
@@ -923,7 +923,7 @@ export default {
         formData.append("FreelancerID", this.freelancer);
         console.log(formData);
         console.log(this.freelancer);
-        axios
+        api
           .post("/cv/createCV", formData)
           .then((response) => {
             // Handle the successful upload response
@@ -934,7 +934,7 @@ export default {
             this.CV_Uploads = response.data;
 
             //Add CV in DB
-            axios
+            api
               .post("/cv/saveCV", {
                 FreelancerID: this.freelancer,
                 Title: this.cvTitle,
@@ -995,7 +995,7 @@ export default {
     },
     // async openPdfPage() {
     //   const apiUrl = "/cv/" + this.CV_Uploads;
-    //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+    //   const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
     //   console.log(resData);
     //   const blob = new Blob([resData.data], { type: "application/pdf" });
 
@@ -1022,7 +1022,7 @@ export default {
     // },
   },
   mounted() {
-    axios.get("/categories/get").then((res) => {
+    api.get("/categories/get").then((res) => {
       this.categories = res.data;
       // console.log(this.categories)
     }),

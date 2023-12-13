@@ -212,8 +212,8 @@ export default {
     }
   },
   mounted() {
-    axios
-      .get("http://localhost:3000/user/info", {
+    api
+      .get("/user/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(

@@ -514,7 +514,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -555,7 +555,7 @@ export default {
   methods: {
     async getOrderRequest(user, currentPage) {
       console.log("Here : " + JSON.stringify(user));
-      const responseData = await axios
+      const responseData = await api
         .get("/orderrequest/getOrderRequest", {
           params: {
             page: currentPage,
@@ -579,7 +579,7 @@ export default {
     async updateOrderRequestStatus(status, orderRequestID, selectedReason) {
       if (status == "Accept") {
         try {
-          const responseStep1 = await axios.put(
+          const responseStep1 = await api.put(
             "/orderrequest/changeOrderRequestStatus",
             {
               status: status,
@@ -587,7 +587,7 @@ export default {
             }
           );
           if (responseStep1) {
-            const responseStep2 = await axios.post("/orders/createOrder", {
+            const responseStep2 = await api.post("/orders/createOrder", {
               order: { OrderRequestID: orderRequestID },
             });
             if (responseStep2) {
@@ -605,7 +605,7 @@ export default {
         }
       } else if (status == "Cancel") {
         try {
-          const responseStep1 = await axios.put(
+          const responseStep1 = await api.put(
             "/orderrequest/changeOrderRequestStatus",
             {
               status: 'Cancelled',
@@ -627,7 +627,7 @@ export default {
           toast.warn("Failed!", { autoClose: 2000 });
         }
       } else {
-        const responseStep1 = await axios.put(
+        const responseStep1 = await api.put(
           "/orderrequest/changeOrderRequestStatus",
           {
             status: status,
@@ -635,7 +635,7 @@ export default {
           }
         );
         if (responseStep1) {
-          const responseStep2 = await axios.put(
+          const responseStep2 = await api.put(
             "/orderrequest/updateOrderRequestNote",
             {
               OrderRequestID: orderRequestID,
@@ -661,7 +661,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded.role);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -675,7 +675,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })

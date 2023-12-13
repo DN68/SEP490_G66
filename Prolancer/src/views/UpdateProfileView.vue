@@ -314,7 +314,7 @@ import VueJwtDecode from "vue-jwt-decode";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 export default {
   name: "App",
   components: {
@@ -346,7 +346,7 @@ export default {
       let decoded = VueJwtDecode.decode(token);
       console.log(decoded.role);
       if (decoded.role === "F") {
-        axios
+        api
           .get("/freelancers/info", {
             headers: { token: localStorage.getItem("token") },
           })
@@ -361,7 +361,7 @@ export default {
             }
           );
       } else if (decoded.role === "C") {
-        axios
+        api
           .get("/customers/info", {
             headers: { token: localStorage.getItem("token") },
           })
@@ -375,7 +375,7 @@ export default {
             }
           );
       } else if (decoded.role === "A"){
-        axios
+        api
           .get("/accounts/info", {
             headers: { token: localStorage.getItem("token") },
           })
@@ -400,7 +400,7 @@ export default {
   //     let decoded = VueJwtDecode.decode(token);
   //     console.log(decoded.role);
   //     if (decoded.role === "F") {
-  //       axios
+  //       api
   //         .get("/freelancers/info", {
   //           headers: { token: localStorage.getItem("token") },
   //         })
@@ -415,7 +415,7 @@ export default {
   //           }
   //         );
   //     } else if (decoded.role === "C") {
-  //       axios
+  //       api
   //         .get("/customers/info", {
   //           headers: { token: localStorage.getItem("token") },
   //         })
@@ -434,7 +434,7 @@ export default {
   methods: {
     async showCV(cvName) {
       const apiUrl = "/cv/" + cvName;
-      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+      const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
       console.log(resData);
       const blob = new Blob([resData.data], { type: "application/pdf" });
 
@@ -462,7 +462,7 @@ export default {
     updateProfile() {
       // console.log(this.user)
       if (this.currentAccountInfo.Role == "F") {
-        axios
+        api
           .put(
             `/freelancers/info/${this.currentAccountInfo.AccountID}/update`,
             {
@@ -500,7 +500,7 @@ export default {
             }
           );
       } else if (this.currentAccountInfo.Role == "C") {
-        axios
+        api
           .put(`/customers/info/${this.currentAccountInfo.AccountID}/update`, {
             First_Name: this.currentAccountInfo.First_Name,
             Last_Name: this.currentAccountInfo.Last_Name,
@@ -545,7 +545,7 @@ export default {
         formData.append("FreelancerID", this.currentAccountInfo.FreelancerID);
         formData.append("CV_Upload", this.currentAccountInfo.CV_Upload);
         console.log(formData);
-        axios
+        api
           .post("/cv/updateCV", formData)
           .then((response) => {
             // Handle the successful upload response

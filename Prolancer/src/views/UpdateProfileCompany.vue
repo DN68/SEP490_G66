@@ -176,7 +176,7 @@ import HeaderAdmin from "../components/HeaderAdmin.vue";
 import Footer from "../components/Footer.vue";
 
 import axios from "axios"
-
+import api from '../../api';
 
 export default {
   name: "App",
@@ -198,7 +198,7 @@ export default {
     }
   },
   mounted(){
-    axios
+    api
       .get("/users/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -214,7 +214,7 @@ export default {
   methods:{
     updateProfile(){
       // console.log(this.user)
-      axios.put(`users/${this.user.email}/info/update`, {
+      api.put(`users/${this.user.email}/info/update`, {
         //add more fields here
         Username: this.user.username,
         First_Name: this.user.firstName,

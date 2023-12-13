@@ -60,7 +60,7 @@
 
 <script>
 import axios from "axios";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     resetPassword() {
-      axios
+      api
         .post("/accounts/forgotPassword", {
           email: this.email,
         })

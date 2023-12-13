@@ -265,6 +265,7 @@ import Footer from "../components/Footer.vue";
 import Review from "../components/Review.vue";
 import NavCategory from "../components/NavCategory.vue";
 import axios from "axios";
+import api from '../../api';
 export default {
   name: "HomePage",
   components: {
@@ -280,7 +281,7 @@ export default {
     };
   },
   async created() {
-    await axios
+    await api
       .get("/gigs/details/" + this.$route.params.id)
       .then((response) => {
         const gig = response.data;
@@ -299,7 +300,7 @@ export default {
   methods: {
     async showCV(cvName) {
       const apiUrl = "/cv/" + cvName;
-      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+      const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
       console.log(resData);
       const blob = new Blob([resData.data], { type: "application/pdf" });
 
@@ -326,7 +327,7 @@ export default {
     },
 
     async getSkillScoreByFreelancerID(id) {
-      await axios
+      await api
         .get("/skills/getSkillScoreByFreelancerID/" + id)
         .then((response) => {
           const freelancerScore = response.data;
