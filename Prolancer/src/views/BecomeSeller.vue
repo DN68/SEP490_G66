@@ -540,6 +540,11 @@ export default {
         this.password
       );
     },
+    isValidPhoneNumber() {
+      return /^(03[2-9]|05[2689]|07[06-9]|08[1-9]|09\d)\d{7}$/.test(
+        this.phoneNo
+      );
+    },
 
     checkInputStep1() {
       var errCount = 0;
@@ -666,6 +671,12 @@ export default {
         this.repeatPassword != this.password
       ) {
         this.validationErrors[fieldName] = `Wrong password confirmation`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      if (fieldName == "phoneNo" && !this.isValidPhoneNumber) {
+        this.validationErrors[fieldName] = `Invalid phone number`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -969,7 +980,7 @@ export default {
     },
     updateFileImage() {
       this.fileImage = this.$refs.fileImage;
-      console.log(this.fileImage)
+      console.log(this.fileImage);
     },
     processImageFile() {
       //Save CV pdf file
