@@ -623,7 +623,7 @@ export default {
       }
       // Username validation
       if (fieldName == "username" && !this.isValidUsername) {
-        this.validationErrors[fieldName] = `Wrong username format`;
+        this.validationErrors[fieldName] = `Username must start with an alphabet character. Total length must be 8 to 30 characters including letters, numbers, or underscores.`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -647,7 +647,7 @@ export default {
 
       // Password validation
       if (fieldName == "password" && !this.isValidPassword) {
-        this.validationErrors[fieldName] = `Wrong password format`;
+        this.validationErrors[fieldName] = `Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character`;
         this.setBorderColor(fieldName, false);
         return false;
       }

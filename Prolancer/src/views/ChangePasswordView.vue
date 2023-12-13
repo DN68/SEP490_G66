@@ -178,7 +178,7 @@ export default {
       if (fieldName == "newPassword" && !this.isValidPassword) {
         this.validationErrors[
           fieldName
-        ] = `"Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and no special character"`;
+        ] = `"Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character"`;
         this.setBorderColor(fieldName, false);
         return false;
       }

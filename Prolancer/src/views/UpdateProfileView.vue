@@ -181,6 +181,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.CompanyName"
+                readonly
               />
               <label
                 class="form-label mt-5"
@@ -193,6 +194,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.CompanyAddress"
+                readonly
               />
               <label
                 class="form-label mt-5"
@@ -205,6 +207,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.TaxCode"
+                readonly
               />
             </div>
 
