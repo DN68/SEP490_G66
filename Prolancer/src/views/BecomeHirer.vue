@@ -431,9 +431,7 @@
         </div>
       </div>
     </div>
-    <div class="footer">
-      <Footer></Footer>
-    </div>
+    
   </div>
 </template>
   
@@ -443,6 +441,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import api from '../../api';
+import * as bootstrap from 'bootstrap';
 export default {
   name: "",
   components: {
