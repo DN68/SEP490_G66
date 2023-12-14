@@ -229,10 +229,10 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
   
-}
+} */
 .Sidebarudpf {
   float: left;
   width: 17%;

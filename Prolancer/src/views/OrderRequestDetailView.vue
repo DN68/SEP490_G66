@@ -438,7 +438,7 @@ export default {
   color: #f31e1e;
 }
 
-.package-content {
+.order_detail_tab .package-content {
   margin-left: 20%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   border: 1px solid #dadbdd;

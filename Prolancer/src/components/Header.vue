@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light " style="z-index: 1000;">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
@@ -13,7 +13,7 @@
             loading="lazy"
         /></a>
         <!-- Search form -->
-        <form class="input-group" style="width: 700px" action="/giglist">
+        <form class="input-group" style="width: 700px" action="giglist">
           <input
             type="search"
             class="form-control"
@@ -62,7 +62,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/manageorder"
+                href="manageorder"
                 ><i class="bi bi-box-seam"></i
                 ><span class="small">Orders</span></a
               >
@@ -71,7 +71,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/chat"
+                href="chat"
                 ><i class="bi bi-chat"></i
                 ><span class="small">Messaging</span></a
               >

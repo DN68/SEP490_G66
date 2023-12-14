@@ -5,7 +5,7 @@
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
@@ -20,7 +20,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/seldash"
+                href="'/seldash'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Dashboard</span
                 ></a
@@ -30,7 +30,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/manageorder"
+                href="'/manageorder'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
                 ></a
@@ -40,7 +40,7 @@
               <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/managegigsel"
+                href="managegigsel"
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span

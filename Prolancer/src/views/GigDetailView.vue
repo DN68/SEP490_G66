@@ -150,7 +150,7 @@
             </div>
             <div class="col-md-5 order_tab">
               <div class="packages-tabs single">
-                <div class="">
+                <div >
                   <div class="package-content">
                     <div class="order_default row">
                       <div class="col-md-7 order_title">
@@ -345,22 +345,7 @@ export default {
 </script>
     
     <style>
-.dropdown-menu {
-  width: 300px;
-  position: fixed;
-  margin-top: 8px;
-  margin-left: 5%;
-}
-.dropdown-menu::before {
-  content: "";
-  height: 10px;
-  left: 0;
-  right: 0;
-  top: 100%;
-  position: absolute;
-  background-color: transparent;
-  transform: translateY(-1400%);
-}
+
 
 @media screen and (max-width: 990px) {
   #navCategory {

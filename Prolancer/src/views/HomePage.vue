@@ -129,7 +129,7 @@
                       href=""
                       class="carousel-link text-display-4"
                       ><span>Software Development</span></a
-                    >&nbsp;eller
+                    >&nbsp;
                   </h4>
                 </div>
                 <GigList :listGigs="gigs"></GigList>

@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top customer_header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top admin_header">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
@@ -111,7 +111,6 @@
                 <li>
                   <a class="dropdown-item" href="/change">Change password</a>
                 </li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="/logout">Logout</a></li>
               </ul>
             </li>

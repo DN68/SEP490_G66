@@ -242,9 +242,9 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
 
 .footer {
   width: 100%;

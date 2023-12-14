@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav id="navCategory" class="navbar navbar-inverse nav_header">
+    <nav id="navCategory" class="navbar navbar-inverse nav_category">
       <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto " v-for="ca in listCategories" :key="ca.CategoryID">
         <!-- Links -->
         <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ ca.CategoryID">
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style>
-.nav_header .navbar .dropdown-menu {
+.nav_category .navbar .dropdown-menu {
   width: 300px;
   position: fixed;
   margin-top: 8px;

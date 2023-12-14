@@ -238,7 +238,7 @@ html {
   text-align: start;
   line-height: 1.6;
 }
-.dropdown-menu::before {
+.sel .dropdown-menu::before {
   content: "";
   height: 10px;
   left: 0;
