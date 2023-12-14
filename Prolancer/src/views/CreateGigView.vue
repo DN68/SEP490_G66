@@ -207,7 +207,7 @@ export default {
           Title: this.title,
           Description: this.description,
           Gig_IMG: this.image,
-          Numberpage: this.numOfPage,
+   
           CategoryID: this.category,
           Price: this.price,
           Delivery_Day: this.dayDeliveries,
