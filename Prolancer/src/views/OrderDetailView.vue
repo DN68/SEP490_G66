@@ -598,8 +598,8 @@
                           order.Status != 'Completed'
                         "
                         class="float-end product_delivery_end px-2 rounded-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#commonModal"
+                        @click="isshowAddProductModal=!isshowAddProductModal"
+
                       >
                         <i
                           class="bi bi-plus-circle"
@@ -982,7 +982,7 @@
                           id="btn-sub"
                           type="submit"
                           class="btn btn-primary bg-danger mt-1"
-                          style="border: none; padding: 0 5px; font-size: 14px"
+                          style="border: none; padding: 0 5px; font-size: 14px; width: 50px;"
                           @click="checkInputEffort()"
                         >
                           Save
@@ -1319,11 +1319,10 @@
     </div>
 
     <div
-      class="modal fade"
-      id="commonModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
+    class="modal fade show"
+        style="display: block; background-color: #000000ad; padding-top: 10%"
+        v-if="isshowAddProductModal" 
+
     >
       <div class="modal-dialog">
         <div class="modal-content">
@@ -1332,7 +1331,7 @@
             <button
               type="button"
               class="btn-close"
-              data-bs-dismiss="modal"
+              @click="isshowAddProductModal=!isshowAddProductModal"
               aria-label="Close"
             ></button>
           </div>
@@ -1366,7 +1365,7 @@
             <button
               type="button"
               class="btn btn-secondary"
-              data-bs-dismiss="modal"
+              @click="isshowAddProductModal=!isshowAddProductModal"
             >
               Close
             </button>
@@ -1430,7 +1429,7 @@
   </div>
 </template>
 
-<script>
+<script >
 import Header from "../components/Header.vue";
 import axios from "axios";
 var moment = require("moment");
@@ -1442,6 +1441,8 @@ import HeaderSell from "../components/HeaderSeller.vue";
 import StarRating from "vue-star-rating";
 import Review from "../components/Review.vue";
 import api from '../../api';
+import 'bootstrap';
+
 export default {
   name: "OrderDetailView",
   components: {
@@ -1490,6 +1491,7 @@ export default {
       isInputMessage: true,
       selectedDeliverID: "",
       deliveryMessage: "",
+      isshowAddProductModal: false
     };
   },
   async created() {
@@ -1689,7 +1691,8 @@ export default {
       if (!this.deliveryName) {
         this.isdeliveryName = false;
       } else {
-        $("#commonModal").modal("hide");
+        this.isshowAddProductModal=false;
+
         await api
           .post("/delivery/createDelivery", {
             Delivery: {
