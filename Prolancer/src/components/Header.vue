@@ -13,7 +13,7 @@
             loading="lazy"
         /></a>
         <!-- Search form -->
-        <form class="input-group" style="width: 700px" action="../giglist">
+        <form class="input-group" style="width: 700px" action="/giglist">
           <input
             type="search"
             class="form-control"

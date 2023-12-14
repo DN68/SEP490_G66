@@ -41,7 +41,7 @@
                   <a
                     class=""
                     target="_self"
-                    href="/categories/programming-tech?source=gig_category_link"
+                    href="#"
                     >Programming & Tech</a
                   >
                 </div>
