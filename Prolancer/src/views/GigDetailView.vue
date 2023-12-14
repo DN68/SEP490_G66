@@ -150,7 +150,7 @@
             </div>
             <div class="col-md-5 order_tab">
               <div class="packages-tabs single">
-                <div class="">
+                <div >
                   <div class="package-content">
                     <div class="order_default row">
                       <div class="col-md-7 order_title">
@@ -265,6 +265,7 @@ import Footer from "../components/Footer.vue";
 import Review from "../components/Review.vue";
 import NavCategory from "../components/NavCategory.vue";
 import axios from "axios";
+import api from '../../api';
 export default {
   name: "HomePage",
   components: {
@@ -280,7 +281,7 @@ export default {
     };
   },
   async created() {
-    await axios
+    await api
       .get("/gigs/details/" + this.$route.params.id)
       .then((response) => {
         const gig = response.data;
@@ -299,7 +300,7 @@ export default {
   methods: {
     async showCV(cvName) {
       const apiUrl = "/cv/" + cvName;
-      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+      const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
       console.log(resData);
       const blob = new Blob([resData.data], { type: "application/pdf" });
 
@@ -326,7 +327,7 @@ export default {
     },
 
     async getSkillScoreByFreelancerID(id) {
-      await axios
+      await api
         .get("/skills/getSkillScoreByFreelancerID/" + id)
         .then((response) => {
           const freelancerScore = response.data;
@@ -344,22 +345,7 @@ export default {
 </script>
     
     <style>
-.dropdown-menu {
-  width: 300px;
-  position: fixed;
-  margin-top: 8px;
-  margin-left: 5%;
-}
-.dropdown-menu::before {
-  content: "";
-  height: 10px;
-  left: 0;
-  right: 0;
-  top: 100%;
-  position: absolute;
-  background-color: transparent;
-  transform: translateY(-1400%);
-}
+
 
 @media screen and (max-width: 990px) {
   #navCategory {

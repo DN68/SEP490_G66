@@ -315,7 +315,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import VueJwtDecode from "vue-jwt-decode";
 import HeaderSell from "../components/HeaderSeller.vue";
-
+import api from '../../api';
 export default {
   name: "OrderDetailView",
   components: {
@@ -333,7 +333,7 @@ export default {
   },
   async created() {
     await this.onUpdateAccountInfo();
-    const responseOrder = await axios.get(
+    const responseOrder = await api.get(
       "/orderrequest/details/" + this.$route.params.id
     ).then((response) => {
             const order = response.data[0];
@@ -363,7 +363,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -377,7 +377,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -438,7 +438,7 @@ export default {
   color: #f31e1e;
 }
 
-.package-content {
+.order_detail_tab .package-content {
   margin-left: 20%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   border: 1px solid #dadbdd;

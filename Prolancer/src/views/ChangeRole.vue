@@ -3,7 +3,7 @@
 <script>
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -12,14 +12,14 @@ export default {
   },
   async mounted() {
     const decoded = VueJwtDecode.decode(localStorage.getItem("token"));
-    await axios
+    await api
       .put("/users/roleChange", {
         role: this.$route.params.role,
         email: decoded.email,
       })
       .then(
         (res) => {
-          axios
+          api
             .get("/users/info", {
               headers: { token: localStorage.getItem("token") },
             })

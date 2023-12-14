@@ -402,7 +402,7 @@ import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -431,7 +431,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeInterviewStatus(status, interviewID) {
-      const data = await axios.put("/interviews/updateStatus", {
+      const data = await api.put("/interviews/updateStatus", {
         status: status,
         interviewID: interviewID,
       });
@@ -448,7 +448,7 @@ export default {
     },
   },
   async created() {
-    await axios
+    await api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -466,13 +466,13 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     }
-    // const responseAccountInfor = await axios.get("/accounts/info", {
+    // const responseAccountInfor = await api.get("/accounts/info", {
     //   headers: { token: localStorage.getItem("token") },
     // });
     // const accountInfor = responseAccountInfor.data.account;
     // this.account = accountInfor;
     // console.log(this.account.accountID);
-    const responseData = await axios.get("/interviews/index", {
+    const responseData = await api.get("/interviews/index", {
       params: {
         page: this.selectedPage,
         status: this.status,
@@ -485,7 +485,7 @@ export default {
     this.pagination = paging;
     console.log(this.pagination.totalRow);
     // console.log(this.status)
-    // const responseInterviewReqData = await axios.get("/orders/getInterviewRequest", {
+    // const responseInterviewReqData = await api.get("/orders/getInterviewRequest", {
     //   params: {
     //     user: this.user,
     //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
@@ -497,7 +497,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/interviews/index", {
+    const responseDateWithPage = await api.get("/interviews/index", {
       params: {
         page: this.selectedPage,
         // search: this.searchInterview,

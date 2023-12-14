@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="change_password">
     <div class="header">
       <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
       <HeaderSeller v-if="role == 'F'"></HeaderSeller>
@@ -62,7 +62,7 @@ import HeaderAdmin from "../components/HeaderAdmin.vue";
 import HeaderSeller from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   name: "App",
   components: {
@@ -88,7 +88,7 @@ export default {
     }
   },
   mounted() {
-    axios
+    api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -144,7 +144,7 @@ export default {
       console.log(this.account)
       if (this.checkInput) {
         // console.log("Wrong password confirm");
-        axios
+        api
           .put(`/accounts/${this.account.Email}/changepw`, {
             inputOldPassword: this.inputOldPassword,
             oldPassword: this.account.Password,
@@ -168,9 +168,10 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
+.change_password{background-color: #ededed;}
 .sidebar {
   float: left;
   width: 17%;

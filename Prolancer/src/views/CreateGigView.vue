@@ -178,7 +178,7 @@ import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 
 export default {
   name: "App",
@@ -202,7 +202,7 @@ export default {
   },
   methods: {
     createGig() {
-      axios
+      api
         .post("/gigs/create", {
           Title: this.title,
           Description: this.description,
@@ -233,11 +233,11 @@ export default {
     },
   },
   mounted() {
-    axios.get("/categories/get").then((res) => {
+    api.get("/categories/get").then((res) => {
       this.categories = res.data;
       // console.log(res.data);
     }),
-      axios
+    api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -254,9 +254,9 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
 
 .footer {
   width: 100%;

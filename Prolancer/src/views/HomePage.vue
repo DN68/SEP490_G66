@@ -127,7 +127,7 @@
                       href=""
                       class="carousel-link text-display-4"
                       ><span>Software Development</span></a
-                    >&nbsp;eller
+                    >&nbsp;
                   </h4>
                 </div>
                 <GigList :listGigs="gigs"></GigList>
@@ -174,7 +174,8 @@ import GigList from "../components/GigList.vue";
 import NavCategory from "../components/NavCategory.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
-
+import ChatAuth from "../components/ChatAuth.vue";
+import api from '../../api';
 export default {
   name: "HomePage",
   components: {
@@ -193,7 +194,7 @@ export default {
     };
   },
   async created() {
-    await axios
+    await api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -202,7 +203,7 @@ export default {
           this.account = res.data.account;
           //Freelancer route
           if (this.account.Role == "F") {
-            axios
+            api
               .get("/freelancers/info", {
                 headers: { token: localStorage.getItem("token") },
               })
@@ -226,7 +227,7 @@ export default {
           }
           //Customer route
           else if (this.account.Role == "C") {
-            axios
+            api
               .get("/customers/info", {
                 headers: { token: localStorage.getItem("token") },
               })
@@ -252,7 +253,7 @@ export default {
         }
       );
 
-    const responseGig = await axios.get("/gigs/index", {
+    const responseGig = await api.get("/gigs/index", {
       params: {
         status: "Active",
       },

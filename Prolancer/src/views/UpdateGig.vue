@@ -148,7 +148,7 @@ import Headers from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   name: "App",
   components: {
@@ -171,7 +171,7 @@ export default {
     };
   },
   created() {
-    axios
+    api
       .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -189,7 +189,7 @@ export default {
   },
   methods: {
     updateGig() {
-      axios
+      api
         .put(`/gigs/${this.$route.params.GigID}/update`, {
           Title: this.gig.Title,
           Description: this.gig.Description,
@@ -212,7 +212,7 @@ export default {
     },
   },
   mounted() {
-    axios.get(`/gigs/details/${this.$route.params.GigID}`).then(
+    api.get(`/gigs/details/${this.$route.params.GigID}`).then(
       (res) => {
         this.gig = res.data;
         console.log(this.gig);
@@ -221,11 +221,11 @@ export default {
         console.log(err.response);
       }
     );
-    axios.get("/categories/get").then((res) => {
+    api.get("/categories/get").then((res) => {
       this.categories = res.data;
       // console.log(res.data);
     }),
-      axios
+      api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -242,9 +242,9 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
 
 .footer {
   width: 100%;

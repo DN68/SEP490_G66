@@ -540,7 +540,7 @@ import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -571,7 +571,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeAccountStatus(status, accountID) {
-      const data = await axios.put("/accounts/updateStatus", {
+      const data = await api.put("/accounts/updateStatus", {
         status: status,
         accountID: accountID,
       });
@@ -588,7 +588,7 @@ export default {
     },
     async showCV(cvName) {
       const apiUrl = "/cv/" + cvName;
-      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+      const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
       console.log(resData);
       const blob = new Blob([resData.data], { type: "application/pdf" });
 
@@ -616,7 +616,7 @@ export default {
   },
   async created() {
     //Admin role permission
-    await axios
+    await api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -634,13 +634,13 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/login");
     }
-    // const responseAccountInfor = await axios.get("/accounts/info", {
+    // const responseAccountInfor = await api.get("/accounts/info", {
     //   headers: { token: localStorage.getItem("token") },
     // });
     // const accountInfor = responseAccountInfor.data.account;
     // this.account = accountInfor;
     // console.log(this.account.accountID);
-    const responseData = await axios.get("/freelancers/index", {
+    const responseData = await api.get("/freelancers/index", {
       params: {
         page: this.selectedPage,
         status: this.status,
@@ -666,7 +666,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/freelancers/index", {
+    const responseDateWithPage = await api.get("/freelancers/index", {
       params: {
         page: this.selectedPage,
         search: this.searchFreelancer,

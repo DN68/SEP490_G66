@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top seller_header">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
@@ -17,46 +17,46 @@
           <!-- Left links -->
           <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
-              <a
+              <!-- <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/seldash"
+                href="'/seldash'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Dashboard</span
                 ></a
-              >
+              > -->
+              <router-link class="nav-link d-flex flex-column text-center" to="/seldash"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Dashboard</span
+                >
+              </router-link>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="/manageorder"
-                ><span class="small" style="font-size: 20px; margin-left: 25px"
+              <router-link class="nav-link d-flex flex-column text-center" to="/manageorder"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="/managegigsel"
-              >
-                <span class="small" style="font-size: 20px; margin-left: 25px"
+             
+              <router-link class="nav-link d-flex flex-column text-center" to="/managegigsel"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="/earning"
-              >
-                <span class="small" style="font-size: 20px; margin-left: 25px"
+              
+              <router-link class="nav-link d-flex flex-column text-center" to="/earning"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item dropdown" style="margin-left: 130%">
               <a
@@ -126,59 +126,7 @@
       </div>
       <!-- Container wrapper -->
     </nav>
-    <div class="header">
-      <!-- Sidebar -->
-      <nav
-        style="display: none; padding-top: 140px"
-        id="sidebarMenuNomarl"
-        :class="{ selected: isShow }"
-        class="sidebar collapse bg-white"
-      >
-        <div class="position-sticky">
-          <div class="list-group list-group-flush mx-3 mt-4">
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple active"
-              aria-current="true"
-            >
-              <i class="bi bi-house-door-fill me-3"></i><span>HomePage</span>
-            </a>
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-            >
-              <i class="bi bi-stack me-3"></i>
-              <span>Manage Orders</span>
-            </a>
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="bi bi-box-seam-fill me-3"></i>
-              <span>Favourite List</span></a
-            >
-
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="bi bi-mortarboard-fill me-3"></i
-              ><span>My Profile</span></a
-            >
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="fas fa-calendar fa-fw me-3"></i
-              ><span>Change Password</span></a
-            >
-
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
-            >
-          </div>
-        </div>
-      </nav>
-    </div>
+    
   </div>
 
   <!-- Navbar -->
@@ -187,7 +135,7 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -200,7 +148,7 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.freelancer = null;
     } else {
-      axios
+      api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -220,7 +168,7 @@ export default {
   //   async showAvatar(imgName){
   //     const apiUrl = "/freelancers/image/" + imgName;
   //     console.log(apiUrl)
-  //     const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+  //     const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
   //     console.log(resData);
   //     const blob = new Blob([resData.data], { type: "application/png" });
 
