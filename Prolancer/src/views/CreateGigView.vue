@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="create_gig">
 
   <div class="header">
     <Headers></Headers>
@@ -263,7 +263,7 @@ export default {
   bottom: 0;
   z-index: 600;
 }
-#content {
+.create_gig #content {
   background-color: #ccc;
   padding-top: 2%;
   padding-bottom: 2%;

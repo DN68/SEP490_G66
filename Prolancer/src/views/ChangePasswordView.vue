@@ -176,7 +176,7 @@ export default {
   float: left;
   width: 17%;
 }
-#content {
+.change_password #content {
   float: right;
   width: 70%;
   padding-top: 10%;

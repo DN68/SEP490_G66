@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="update_gig">
     <div class="header">
       <Headers></Headers>
     </div>
@@ -251,7 +251,7 @@ export default {
   bottom: 0;
   z-index: 600;
 }
-#content {
+.update_gig #content {
   background-color: #ccc;
   padding-top: 2%;
   padding-bottom: 2%;
