@@ -91,7 +91,7 @@
     </div>
   </div> -->
     <div id="content" class="">
-      <div class="container-profile">
+      <div class="container-profile list-group">
         <div class="form-profile">
           <div class="field">
             <label
@@ -274,7 +274,10 @@
                   accept=".pdf"
                 />
                 (.pdf only)
-                <button @click="showCV(currentAccountInfo.CV_Upload)">
+               
+              </div>
+              <div>
+                <button type="button" class="btn btn-success" @click="showCV(currentAccountInfo.CV_Upload)">
                   View CV
                 </button>
               </div>
@@ -570,9 +573,9 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
 .Sidebarudpf {
   float: left;
   width: 17%;
@@ -606,7 +609,8 @@ html {
   border: 1px #ccc solid;
   padding: 35px;
   background-color: #fff;
-  height: 1400px;
+  height: 1100px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
 }
 #btn-sub {
   display: block;

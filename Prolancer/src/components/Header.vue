@@ -13,7 +13,7 @@
             loading="lazy"
         /></a>
         <!-- Search form -->
-        <form class="input-group" style="width: 700px" action="giglist">
+        <form class="input-group" style="width: 700px" action="../giglist">
           <input
             type="search"
             class="form-control"
@@ -59,22 +59,18 @@
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-account-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
             <li class="nav-item" v-if="currentAccountInfo">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="manageorder"
-                ><i class="bi bi-box-seam"></i
-                ><span class="small">Orders</span></a
-              >
+              <router-link class="nav-link d-flex flex-column text-center" to="/manageOrder"
+                    >
+                    <i class="bi bi-box-seam"></i
+                ><span class="small">Orders</span>
+              </router-link>
             </li>
             <li class="nav-item" v-if="currentAccountInfo">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="chat"
-                ><i class="bi bi-chat"></i
-                ><span class="small">Messaging</span></a
-              >
+              <router-link class="nav-link d-flex flex-column text-center" to="/chat"
+                    >
+              <i class="bi bi-chat"></i
+                ><span class="small">Messaging</span>
+              </router-link>
             </li>
             
 

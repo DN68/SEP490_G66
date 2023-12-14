@@ -3,11 +3,14 @@
     <nav id="navCategory" class="navbar navbar-inverse nav_category">
       <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto " v-for="ca in listCategories" :key="ca.CategoryID">
         <!-- Links -->
-        <a class="dropdown-item dropdown-item1" :href="'/giglist/?filterBy1='+ ca.CategoryID">
+          <router-link
+          :to="{ path: '/giglist', query: { filterBy1: ca.CategoryID } }"
+           class="dropdown-item dropdown-item1"
+           >
         <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn=ca.CategoryID" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn==ca.CategoryID }">{{ca.Category_Name}}</span></h6>
-        <!-- <ul class="dropdown-menu" aria-labelledby="navbarDropdown" @mouseover="isHovered=!isHovered" @mouseout="isHovered=!isHovered"> -->
-         </a>
-        <!-- </ul> -->
+
+          </router-link>
+
       </div>
     </nav>
   </div>
@@ -68,7 +71,7 @@ export default {
   line-height: 15px !important;
   position: relative;
 }
-.nav_header .navCategory .isHovered{
+.nav_category  .navCategory .isHovered{
   padding-bottom: 8px;
     border-bottom: 3px solid #f31e1e;
 }

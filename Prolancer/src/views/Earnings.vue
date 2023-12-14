@@ -143,7 +143,6 @@ html {
   background-color: #fff;
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
 }
 .inbox-content {
   border: 1px #ccc solid;

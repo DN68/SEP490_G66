@@ -204,7 +204,7 @@ html {
   display: flex;
   flex-direction: column;
 }
-#sidebarMenu {
+.sel #sidebarMenu {
   border: 1px #ccc solid;
   background-color: #fff;
   display: flex;
@@ -218,7 +218,7 @@ html {
   flex-direction: column;
   margin-bottom: 15px;
 }
-#sidebarMenu > img {
+.sel #sidebarMenu > img {
   width: 30%;
   margin: 20px;
 }

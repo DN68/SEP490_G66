@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top seller_header">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
@@ -17,46 +17,46 @@
           <!-- Left links -->
           <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
-              <a
+              <!-- <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 href="'/seldash'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Dashboard</span
                 ></a
-              >
+              > -->
+              <router-link class="nav-link d-flex flex-column text-center" to="/seldash"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Dashboard</span
+                >
+              </router-link>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="'/manageorder'"
-                ><span class="small" style="font-size: 20px; margin-left: 25px"
+              <router-link class="nav-link d-flex flex-column text-center" to="/manageorder"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="managegigsel"
-              >
-                <span class="small" style="font-size: 20px; margin-left: 25px"
+             
+              <router-link class="nav-link d-flex flex-column text-center" to="/managegigsel"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="/earning"
-              >
-                <span class="small" style="font-size: 20px; margin-left: 25px"
+              
+              <router-link class="nav-link d-flex flex-column text-center" to="/earning"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item dropdown" style="margin-left: 130%">
               <a

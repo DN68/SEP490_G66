@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="change_password">
     <div class="header">
       <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
       <HeaderSeller v-if="role == 'F'"></HeaderSeller>
@@ -168,9 +168,10 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
+.change_password{background-color: #ededed;}
 .sidebar {
   float: left;
   width: 17%;
