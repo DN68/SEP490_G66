@@ -35,20 +35,6 @@
             </router-link>
           </div>
         </div>
-        <!-- <div class="col-md-2">
-            <router-link to="/manageaccount/freelancer/freelancer" style="text-decoration: none">
-              <h6
-                style="
-                  color: #fff;
-                  border: 1px #ccc solid;
-                  background-color: red;
-                  line-height: 35px;
-                "
-              >
-                Manage Freelancers
-              </h6>
-            </router-link>
-          </div> -->
       </div>
       <div class="account_status row">
         <div
@@ -102,31 +88,6 @@
             </h6>
           </router-link>
         </div>
-
-        <!-- <div
-            class="col-md-2 status_item"
-            :class="{ status_item_active: this.status == 'Finished' }"
-          >
-            <router-link
-              @click="(this.status = 'Finished'), (selectedPage = '1')"
-              :to="{
-                path: '/manageaccount/freelancer',
-                query: {
-                  page: 1,
-                  status: 'Finished',
-                },
-              }"
-              class="text-decoration-none"
-            >
-              <h6>
-                Finished<span
-                  v-if="this.status == 'Finished'"
-                  class="badge bg-secondary"
-                  >{{ pagination.totalRow }}</span
-                >
-              </h6>
-            </router-link>
-          </div> -->
         <div
           class="col-md-2 status_item"
           :class="{ status_item_active: this.status == 'Blocked' }"
@@ -234,6 +195,7 @@
               </td>
               <td class="td_actions">
                 <i
+                  v-if="status != 'Pending'"
                   @click="
                     (isshowModal = !isshowModal),
                       (slectedAccountID = freelancer.AccountID)
@@ -249,23 +211,6 @@
                   class="bi bi-eye-fill"
                 ></i>
               </td>
-
-              <!-- <div class="dropdown">
-                        <button
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          style="border: none; width: 35px"
-                        >
-                          ...
-                        </button>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="#">Pending</a></li>
-                          <li><a class="dropdown-item" href="#">Pause</a></li>
-                          <li><a class="dropdown-item" href="#">Delete</a></li>
-                          <li><a class="dropdown-item" href="#">Block</a></li>
-                          <li><a class="dropdown-item" href="#">Unblock</a></li>
-                        </ul>
-                      </div> -->
             </tr>
           </tbody>
         </table>
@@ -310,9 +255,6 @@
                       <option class="" value="Blocked">
                         <span>Blocked</span>
                       </option>
-                      <!-- <option class="" value="Finished">
-                          <span>Finished</span>
-                        </option> -->
                     </select>
                   </div>
                 </div>
@@ -404,12 +346,6 @@
                           <td class="line-info"><span>Description: </span></td>
                           <td>
                             {{ selectedFreelancer.Description }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="line-info"><span>Category: </span></td>
-                          <td>
-                            {{ selectedFreelancer.Category_Name }}
                           </td>
                         </tr>
                         <!-- <tr>
@@ -624,7 +560,7 @@ export default {
         (res) => {
           this.account = res.data.account;
           if (this.account.Role != "A") {
-            this.$router.push("/");
+            this.$router.push("/error");
           }
         },
         (err) => {
@@ -632,7 +568,7 @@ export default {
         }
       );
     if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
+      this.$router.push("/error");
     }
     // const responseAccountInfor = await api.get("/accounts/info", {
     //   headers: { token: localStorage.getItem("token") },
@@ -805,5 +741,21 @@ export default {
 .freelancerInfoForm td {
   text-align: right;
   padding-right: 25px;
+}
+.account_table {
+  max-height: 70vh;
+  overflow-y: scroll;  
+}
+
+.account_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.account_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.account_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>

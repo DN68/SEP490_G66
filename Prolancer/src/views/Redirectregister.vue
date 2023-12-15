@@ -32,7 +32,7 @@
                           width:90%
                         "
                       >
-                        Become a Seller
+                        Register as Freelancer
                       </router-link>
                     </div>
                       

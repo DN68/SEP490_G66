@@ -525,7 +525,7 @@ export default {
         .catch((error) => {
           // Handle the error
           console.error("Error here:", error);
-          toast.warn("Failed!", { autoClose: 2000 });
+          // toast.warn("Failed!", { autoClose: 2000 });
         });
     },
     async changeOrderStatus(status, orderID) {
@@ -548,7 +548,7 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        this.$router.push("/error");
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
@@ -560,7 +560,10 @@ export default {
             .then(
               (res) => {
                 this.currentAccountInfo = res.data.freelancer;
-                console.log(this.currentAccountInfo);
+                // console.log(this.currentAccountInfo);
+                if(this.currentAccountInfo.Status != 'Active'){
+                  this.$router.push('/seldash')
+                }
               },
               (err) => {
                 console.log(err.response);
@@ -761,5 +764,8 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   display: -webkit-box;
+}
+a{
+  padding-left: 0px
 }
 </style>

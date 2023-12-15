@@ -12,9 +12,6 @@
             alt=""
             loading="lazy"
         /></a>
-       
-
-       
 
         <!-- Collapsible wrapper -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -27,7 +24,7 @@
             <!-- <li class="nav-item">
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-user-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
-           
+
             <li class="nav-item dropdown" style="" v-if="account">
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
@@ -51,11 +48,6 @@
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <router-link class="dropdown-item" to="/uppro"
-                    >My Profile</router-link
-                  >
-                </li>
-                <li>
                   <router-link class="dropdown-item" to="/change"
                     >Change password</router-link
                   >
@@ -65,7 +57,6 @@
                     >Logout</router-link
                   >
                 </li>
-                
               </ul>
             </li>
 

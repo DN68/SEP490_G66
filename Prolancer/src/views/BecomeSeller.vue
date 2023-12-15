@@ -195,18 +195,19 @@
             <td>
               <input
                 type="text"
+                class="name"
                 placeholder="First Name"
                 v-model="firstName"
                 style="width: 50%"
                 ref="firstName"
               />
               <div>
-                <p class="errmessage" style="color: red; text-align: center">
+                <p class="errmessage" style="color: red">
                   {{ validationErrors.firstName }}
                 </p>
               </div>
               <input
-                class="ms-2"
+                class="name"
                 placeholder="Last Name"
                 v-model="lastName"
                 type="text"
@@ -214,7 +215,7 @@
                 ref="lastName"
               />
               <div>
-                <p class="errmessage" style="color: red; text-align: center">
+                <p class="errmessage" style="color: red">
                   {{ validationErrors.lastName }}
                 </p>
               </div>
@@ -254,7 +255,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td class="line-info"><span>Profile Picture </span></td>
             <td>
               <input
@@ -269,7 +270,7 @@
                 {{ validationErrors.fileImage }}
               </p>
             </td>
-          </tr>
+          </tr> -->
           <tr>
             <td class="line-info"><span>Description </span></td>
             <td>
@@ -290,32 +291,7 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <td class="line-info"><span>Category </span></td>
-            <td>
-              <select
-                v-model="mainCategory"
-                class="form-select lefthalf"
-                aria-label="Default select example"
-                ref="mainCategory"
-              >
-                <option :value="-1">Select a category</option>
-                <option
-                  v-for="category in categories"
-                  :key="category.CategoryID"
-                  :value="category.CategoryID"
-                >
-                  {{ category.Category_Name }}
-                </option>
-              </select>
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.mainCategory }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
+          <!-- <tr>
             <td class="line-info"><span>Language </span></td>
             <td>
               <div class="dropdown">
@@ -342,7 +318,7 @@
                 </ul>
               </div>
             </td>
-          </tr>
+          </tr> -->
         </table>
       </div>
       <div class="button">
@@ -496,7 +472,6 @@ export default {
       usernameExist: false,
       location: "",
       role: "F",
-      mainCategory: -1,
       freelancer: {},
       fileImage: null,
       //email verification
@@ -517,7 +492,6 @@ export default {
         phoneNo: "",
         location: "",
         description: "",
-        mainCategory: "",
         cvTitle: "",
         fileCV: "",
         cvDescription: "",
@@ -537,6 +511,11 @@ export default {
     isValidPassword() {
       return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
         this.password
+      );
+    },
+    isValidPhoneNumber() {
+      return /^(03[2-9]|05[2689]|07[06-9]|08[1-9]|09\d)\d{7}$/.test(
+        this.phoneNo
       );
     },
 
@@ -579,14 +558,11 @@ export default {
       if (!this.validateField("location")) {
         errCount++;
       }
-      if (!this.validateFile("fileImage")) {
-        errCount++;
-      }
+      // if (!this.validateFile("fileImage")) {
+      //   errCount++;
+      // }
       if (!this.validateField("description")) {
         // this.message = "You must enter your description (at least 150 letters)";
-        errCount++;
-      }
-      if (!this.validateOption("mainCategory")) {
         errCount++;
       }
 
@@ -630,7 +606,9 @@ export default {
       }
       // Username validation
       if (fieldName == "username" && !this.isValidUsername) {
-        this.validationErrors[fieldName] = `Wrong username format`;
+        this.validationErrors[
+          fieldName
+        ] = `Username must start with an alphabet character. Total length must be 8 to 30 characters including letters, numbers, or underscores.`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -654,7 +632,9 @@ export default {
 
       // Password validation
       if (fieldName == "password" && !this.isValidPassword) {
-        this.validationErrors[fieldName] = `Wrong password format`;
+        this.validationErrors[
+          fieldName
+        ] = `Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -669,18 +649,8 @@ export default {
         return false;
       }
 
-      //if field input OK
-      this.validationErrors[fieldName] = "";
-      this.setBorderColor(fieldName, true);
-      return true;
-    },
-
-    // validate select input
-    validateOption(fieldName) {
-      if (fieldName == "mainCategory" && this.mainCategory == -1) {
-        this.validationErrors[
-          fieldName
-        ] = `You must choose your specialization`;
+      if (fieldName == "phoneNo" && !this.isValidPhoneNumber) {
+        this.validationErrors[fieldName] = `Invalid phone number`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -803,6 +773,11 @@ export default {
     verifyEmail() {
       if (this.inputCode == this.verificationCode) {
         this.changeStep(this.currentStep + 1);
+      } else {
+        toast.error("Verification failed", {
+          theme: "colored",
+          autoClose: 2000,
+        });
       }
     },
 
@@ -846,7 +821,6 @@ export default {
       console.log(this.checkInputStep3);
       if (this.checkInputStep3) {
         //save freelancer account info
-        const FormData = this.processImageFile();
         console.log(FormData);
 
         api
@@ -861,56 +835,46 @@ export default {
               console.log("Added account successfully");
               console.log(res.data.account);
               this.account = res.data.account;
-              //add new freelancer with newly created account ID
-              FormData.append("accountID", this.account.AccountID);
-              FormData.append("firstName", this.firstName);
-              FormData.append("lastName", this.lastName);
-              FormData.append("phoneNo", this.phoneNo);
-              FormData.append("location", this.location);
-              FormData.append("description", this.description);
-              FormData.append("mainCategoryID", this.mainCategory);
-
-              FormData.append(
-                "profilePicture",
-                "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
-              );
-
-              api
-                .post("/freelancers/create", FormData)
-                // .post("/freelancers/create", {
-                //   accountID: this.account.AccountID,
-                //   firstName: this.firstName,
-                //   lastName: this.lastName,
-                //   profilePicture:
-                //     "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
-                //   phoneNo: this.phoneNo,
-                //   location: this.location,
-                //   description: this.description,
-                //   mainCategoryID: this.mainCategory,
-                // })
-                .then(
-                  (res) => {
-                    console.log(res.data);
-                    this.message =
-                      "Info added successfully. Returning to homepage";
-                    console.log(res.data.freelancer.FreelancerID);
-                    this.freelancer = res.data.freelancer.FreelancerID;
-                    this.saveCV();
-                  },
-                  (err) => {
-                    console.log(err.response);
-                  }
-                );
+              this.createFreelancer(res.data.account.AccountID)
             },
             (err) => {
               console.log(err.response);
             }
           );
       }
+     
+    },
+    async createFreelancer(accountId){
+      console.log(accountId)
+      await api
+        // .post("/freelancers/create", FormData)
+        .post("/freelancers/create", {
+          accountID: accountId,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          profilePicture:
+            "https://cdn3.iconfinder.com/data/icons/team-management/136/20-512.png",
+          phoneNo: this.phoneNo,
+          location: this.location,
+          description: this.description,
+        })
+        .then(
+          (res) => {
+            console.log(res.data);
+            this.message = "Info added successfully. Returning to homepage";
+            console.log(res.data.freelancer.FreelancerID);
+            this.freelancer = res.data.freelancer.FreelancerID;
+            this.saveCV();
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
     },
     saveCV() {
       //Save CV pdf file
       const fileInput = this.$refs.fileCV;
+      console.log(fileInput);
       console.log(
         "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
         fileInput.files
@@ -966,32 +930,33 @@ export default {
         console.warn("Please select a file to upload");
       }
     },
-    updateFileImage() {
-      this.fileImage = this.$refs.fileImage;
-    },
-    processImageFile() {
-      //Save CV pdf file
-      const fileImageInput = this.fileImage;
-      console.log(fileImageInput);
-      console.log(
-        "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
-        fileImageInput.files
-      );
-      console.log("🚀 ~ ", this.cvTitle + "   " + this.cvDescription);
-      //if there is image chosen
-      if (fileImageInput.files.length > 0) {
-        const formData = new FormData();
-        formData.append("file", fileImageInput.files[0]);
+    // updateFileImage() {
+    //   this.fileImage = this.$refs.fileImage;
+    //   console.log(this.fileImage);
+    // },
+    // processImageFile() {
+    //   //Save CV pdf file
+    //   const fileImageInput = this.fileImage;
+    //   console.log(fileImageInput);
+    //   console.log(
+    //     "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
+    //     fileImageInput.files
+    //   );
+    //   console.log("🚀 ~ ", this.cvTitle + "   " + this.cvDescription);
+    //   //if there is image chosen
+    //   if (fileImageInput.files.length > 0) {
+    //     const formData = new FormData();
+    //     formData.append("file", fileImageInput.files[0]);
 
-        console.log(formData);
-        console.log(this.freelancer);
-        return formData;
-      } else {
-        // Handle case when no file is selected
-        console.warn("Please select a file to upload");
-        return null;
-      }
-    },
+    //     console.log(formData);
+    //     console.log(this.freelancer);
+    //     return formData;
+    //   } else {
+    //     // Handle case when no file is selected
+    //     console.warn("Please select a file to upload");
+    //     return null;
+    //   }
+    // },
     // async openPdfPage() {
     //   const apiUrl = "/cv/" + this.CV_Uploads;
     //   const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
@@ -1091,5 +1056,9 @@ export default {
 }
 input[type="file"] {
   border: 2px solid white;
+}
+.name {
+  width: 50%;
+  margin-right: 50%;
 }
 </style>

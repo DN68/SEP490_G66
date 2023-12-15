@@ -13,32 +13,18 @@ class FreelancerController {
         let token = req.headers.token;
         jwt.verify(token, 'secretkey', (err, decoded) => {
             if (err) {
-                // res.redirect('/login')
                 return res.status(401).json({
                     title: 'unauthorized'
                 })
             }
             const accountID = decoded.accountID
-            console.log(accountID)
+            console.log("ACcountID: " + accountID)
             Freelancer.getFreelancerInfo(accountID, function (err, results) {
                 if (err) {
                     return console.log(err)
                 }
-                console.log(results)
+                console.log(results[0])
                 return res.status(200).json({
-                    title: 'Freelancer grabbed',
-                    //can add more fields
-                    // freelancer: {
-                    //     FreelancerID: results[0].FreelancerID,
-                    //     AccountID: results[0].AccountID,
-                    //     First_Name: results[0].First_Name,
-                    //     Last_Name: results[0].Last_Name,
-                    //     Profile_Picture: results[0].Profile_Picture,
-                    //     Location: results[0].Location,
-                    //     Phoneno: results[0].Phoneno,
-                    //     Description: results[0].Description,
-                    //     MainCategoryID: results[0].MainCategoryID
-                    // }
                     freelancer: results[0]
                 })
             })
@@ -141,6 +127,7 @@ class FreelancerController {
     };
 
     freelancerRegister = function (req, res) {
+        console.log(req.files)
         const accountID = req.body.accountID;
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
@@ -148,13 +135,12 @@ class FreelancerController {
         const location = req.body.location;
         const description = req.body.description;
         const phoneNo = req.body.phoneNo;
-        const mainCategoryID = req.body.mainCategoryID
 
         createFreelancer();
 
         //Create freelancer
         function createFreelancer() {
-            Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, mainCategoryID, function (err, result) {
+            Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, function (err, result) {
                 if (err) {
                     res.send(err);
                 }
@@ -175,6 +161,20 @@ class FreelancerController {
             })
         }
     }
+
+
+    getFreelancerByID = function (req, res) {
+        const freelancerID = req.params.freelancerID
+        Freelancer.getFreelancerByID(freelancerID, function (err, results) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send(results[0]);
+            }
+        });
+    }
+
 
     getAvatarImage = function (req, res) {
         var imgName = req.params.imgName;

@@ -157,7 +157,7 @@ class GigController {
   };
 
   getGigByFreelancer = function (req, res) {
-    const limit = 16;
+    const limit = 4;
     var pageQuery = req.query;
     // console.log("🚀 ~ file: GigController.js:9 ~ GigController ~ pageQuery:", pageQuery)
     var page;
@@ -262,8 +262,7 @@ class GigController {
     const Delivery_Day = req.body.Delivery_Day
     const FreelancerID = req.body.FreelancerID
     const CategoryID = req.body.CategoryID
-    const Numberpage = req.body.Numberpage
-    Gig.createGig(Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, function (err, result) {
+    Gig.createGig(Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, function (err, result) {
       if (err) {
         res.send(err);
       } else {

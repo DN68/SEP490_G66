@@ -33,30 +33,68 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link d-flex flex-column text-center" to="/manageorder"
-                    >
-                    <span class="small" style="font-size: 20px; margin-left: 25px"
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                href="/manageorder"
+                v-if="freelancer && freelancer.Status === 'Active'"
+                ><span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Orders</span
+                ></a
+              >
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                @click="showModal()"
+                v-else-if="freelancer && freelancer.Status === 'Pending'"
+                ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
                 >
-              </router-link>
+            </a>
             </li>
             <li class="nav-item">
-             
-              <router-link class="nav-link d-flex flex-column text-center" to="/managegigsel"
-                    >
-                    <span class="small" style="font-size: 20px; margin-left: 25px"
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                href="/managegigsel"
+                v-if="freelancer && freelancer.Status === 'Active'"
+              >
+                <span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Gigs</span
+                ></a
+              >
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                @click="showModal()"
+                v-if="freelancer && freelancer.Status === 'Pending'"
+              >
+                <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
                 >
-              </router-link>
+            </a>
             </li>
             <li class="nav-item">
-              
-              <router-link class="nav-link d-flex flex-column text-center" to="/earning"
-                    >
-                    <span class="small" style="font-size: 20px; margin-left: 25px"
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                href="/earning"
+                v-if="freelancer && freelancer.Status === 'Active'"
+              >
+                <span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Earnings</span
+                ></a
+              >
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                v-if="freelancer && freelancer.Status === 'Pending'"
+                @click="showModal()"
+              >
+                <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
                 >
-              </router-link>
+            </a>
             </li>
             <li class="nav-item dropdown" style="margin-left: 130%">
               <a
@@ -69,7 +107,7 @@
               >
                 <img
                   ref="profileImage"
-                  :src="freelancer.Profile_Picture"
+                  :src="freelancer && freelancer.Profile_Picture"
                   class="rounded-circle"
                   height="30"
                   width="30"
@@ -87,6 +125,11 @@
                     >My Profile</router-link
                   >
                 </li>
+                <li>
+                  <router-link class="dropdown-item" to="/manageinterviewsel"
+                    >Manage your interviews</router-link
+                  >
+                </li>
                 <!-- <router-link
                 class="dropdown-item"
                 to="/changeRole/C"
@@ -98,17 +141,31 @@
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/manageOrderRequest"
+                  <router-link
+                    class="dropdown-item"
+                    to="/manageOrderRequest"
+                    v-if="freelancer && freelancer.Status != 'Pending'"
                     >Order Request</router-link
                   >
+                  <button class="dropdown-item" @click="showModal()" v-else>
+                    Order Request
+                  </button>
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/manageChangeRequest"
-                    >Order Change Request</router-link
+                  <router-link
+                    class="dropdown-item"
+                    to="/manageChangeRequest"
+                    v-if="freelancer && freelancer.Status != 'Pending'"
+                    >Order change Request</router-link
                   >
+                  <button class="dropdown-item" @click="showModal()" v-else>
+                    Order change Request
+                  </button>
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/manageSkill"
+                  <router-link
+                    class="dropdown-item"
+                    to="/manageSkill"
                     >Skill Test Score</router-link
                   >
                 </li>
@@ -126,7 +183,214 @@
       </div>
       <!-- Container wrapper -->
     </nav>
-    
+    <div
+      class="modal fade"
+      ref="myModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Access Restricted
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>{{ buttonText }}</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="hideModal(), (isShowInfoModal = !isShowInfoModal)"
+            >
+              Make interview request now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header">
+      <!-- Sidebar -->
+      <nav
+        style="display: none; padding-top: 140px"
+        id="sidebarMenuNomarl"
+        :class="{ selected: isShow }"
+        class="sidebar collapse bg-white"
+      >
+        <div class="position-sticky">
+          <div class="list-group list-group-flush mx-3 mt-4">
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple active"
+              aria-current="true"
+            >
+              <i class="bi bi-house-door-fill me-3"></i><span>HomePage</span>
+            </a>
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+            >
+              <i class="bi bi-stack me-3"></i>
+              <span>Manage Orders</span>
+            </a>
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="bi bi-box-seam-fill me-3"></i>
+              <span>Favourite List</span></a
+            >
+
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="bi bi-mortarboard-fill me-3"></i
+              ><span>My Profile</span></a
+            >
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="fas fa-calendar fa-fw me-3"></i
+              ><span>Change Password</span></a
+            >
+
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
+            >
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div>
+      <div
+        class="modal fade show"
+        style="display: block; background-color: #000000ad; padding-top: 10%"
+        v-if="isShowInfoModal"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Interview Description</h5>
+              <button
+                type="button"
+                class="btn-close"
+                @click="isShowInfoModal = !isShowInfoModal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row" style="padding-left: 25px">
+                <div>
+                  <table class="freelancerInfoForm">
+                    <tr>
+                      <td class="line-info"><span>Description</span></td>
+                      <td>
+                        <textarea
+                          class="formInput"
+                          id=""
+                          cols="50"
+                          rows="2"
+                          v-model="description"
+                          placeholder="What skill do you need to interview, your free time,..."
+                          required
+                          maxlength="100"
+                        ></textarea>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="isShowInfoModal = !isShowInfoModal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="
+                  isShowInfoModal = !isShowInfoModal;
+                  isshowConfirmRequestModal = !isshowConfirmRequestModal;
+                  // createInterview();
+                "
+              >
+                Make interview request
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="confirm_request">
+      <div
+        class="modal fade show"
+        style="display: block; background-color: #000000ad; padding-top: 10%"
+        v-if="isshowConfirmRequestModal"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div
+              class="modal-header text-end"
+              style="background-color: #33b5e5; color: white"
+            >
+              <h5 class="modal-title" style="text-align: center">
+                Are you sure?
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                @click="isshowConfirmRequestModal = !isshowConfirmRequestModal"
+                aria-label="Close"
+                style="color: white"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div>
+                  <p class="modal-title">
+                    Do you really want to create this interview request ?
+                  </p>
+                  <p class="modal-title">This process cannot be undone.</p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <a
+                type="button"
+                class="btn btn-info waves-effect waves-light text-white"
+                @click="
+                  createInterview(),
+                    (isshowConfirmRequestModal = !isshowConfirmRequestModal)
+                "
+                >Save</a
+              >
+              <a
+                type="button"
+                class="btn btn-outline-info waves-effect"
+                @click="isshowConfirmRequestModal = !isshowConfirmRequestModal"
+                data-dismiss="modal"
+                >Cancel</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Navbar -->
@@ -135,18 +399,30 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import * as bootstrap from 'bootstrap';
 import api from '../../api';
+var moment = require("moment");
+
 export default {
   data() {
     return {
       freelancer: {},
       isShow: false,
+      modal: null,
+      buttonText: "You have to interview to perform this task",
+      isShowInfoModal: false,
+      isshowConfirmRequestModal: false,
     };
   },
+
   mounted() {
+    this.modal = new bootstrap.Modal(this.$refs.myModal);
     //user is not authorized
     if (localStorage.getItem("token") === null) {
-      this.freelancer = null;
+      // this.freelancer = null;
+      this.$router.push("/error");
     } else {
       api
         .get("/freelancers/info", {
@@ -154,8 +430,11 @@ export default {
         })
         .then(
           (res) => {
+            if (!res.data.freelancer) {
+              this.$router.push("/error");
+            }
             this.freelancer = res.data.freelancer;
-            console.log(res.data)
+            console.log(res.data);
             // this.showAvatar(res.data.freelancer.Profile_Picture);
           },
           (err) => {
@@ -164,23 +443,36 @@ export default {
         );
     }
   },
-  // methods:{
-  //   async showAvatar(imgName){
-  //     const apiUrl = "/freelancers/image/" + imgName;
-  //     console.log(apiUrl)
-  //     const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
-  //     console.log(resData);
-  //     const blob = new Blob([resData.data], { type: "application/png" });
-
-  //     // Create a URL for the Blob
-  //     const blobUrl = URL.createObjectURL(blob);
-
-  //     //set src for image element
-  //     const avatarElement = this.$refs.profileImage;
-  //     console.log(avatarElement)
-  //     avatarElement.src = blobUrl
-  //   }
-  // }
+  methods: {
+    showModal() {
+      this.modal.show();
+    },
+    hideModal() {
+      this.modal.hide();
+    },
+    createInterview() {
+      api
+        .post("/interviews/create", {
+          CreateByID: this.freelancer.FreelancerID,
+          ScheduledDate: moment().format("YYYY-MM-DD"),
+          Location: "",
+          Description: this.description,
+          Status: "Pending",
+        })
+        .then(
+          (res) => {
+            toast.success("Interview Request Created Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
+    },
+  },
 };
 </script>
 
@@ -243,5 +535,8 @@ export default {
 }
 span {
   font-weight: 500;
+}
+.formInput{
+  width: 90%
 }
 </style>

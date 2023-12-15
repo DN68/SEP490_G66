@@ -209,6 +209,7 @@ export default {
               })
               .then(
                 (res) => {
+                  console.log(res.data)
                   //if account has freelancer info, go to dashboard
                   if(res.data.freelancer){
                     this.$router.push("/seldash");
