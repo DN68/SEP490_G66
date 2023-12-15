@@ -109,8 +109,8 @@ export default {
   async mounted() {
     // this.fetchData();
     // console.log(localStorage.getItem("token"));
-    if (localStorage.getItem("token") == null) {
-      this.$router.push("/login");
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/error");
     } else {
       await api
         .get("/accounts/info", {
@@ -120,7 +120,7 @@ export default {
           (res) => {
             this.account = res.data.account;
             if (this.account.Role != "F") {
-              this.$router.push("/");
+              this.$router.push("/error");
             }
           },
           (err) => {
@@ -138,7 +138,7 @@ export default {
           // this.showAvatar(res.data.freelancer.Profile_Picture)
         },
         (err) => {
-          this.$router.push("/");
+          this.$router.push("/error");
           // console.log(err.response);
         }
       );

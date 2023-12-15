@@ -427,6 +427,7 @@ export default {
     },
 
     async getGigWithFilterAndSearch(currentPage) {
+      // console.log(this.$route.query.filterBy1)
       var searchFilterQuery = this.$route.query;
       console.log("Filter By Progaming L " + this.selectedLanguages);
       console.log("Filter By Database " + this.selectedDatabases);

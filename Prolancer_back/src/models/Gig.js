@@ -115,9 +115,9 @@ Gig.getGigByFreelancerId = function (id,status,results) {
   });
 };
 
-Gig.createGig = function (Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage, result) {
-  connectDb.query("INSERT INTO Gig SET Title = ?, Description = ?, Gig_IMG = ?, Price = ?, Delivery_Day = ?, FreelancerID = ?, CategoryID = ?, Numberpage = ?, Creation_Date = CURDATE(), Status = 'Active'",
-    [Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, Numberpage], function (err, res) {
+Gig.createGig = function (Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID, result) {
+  connectDb.query("INSERT INTO Gig SET Title = ?, Description = ?, Gig_IMG = ?, Price = ?, Delivery_Day = ?, FreelancerID = ?, CategoryID = ?, Creation_Date = CURDATE(), Status = 'Active'",
+    [Title, Description, Gig_IMG, Price, Delivery_Day, FreelancerID, CategoryID], function (err, res) {
       if (err) {
         result(null, err);
       }

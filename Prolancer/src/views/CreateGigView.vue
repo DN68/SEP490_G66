@@ -126,7 +126,7 @@
       </div>
       <div class="line" style="text-align: left; margin-top: 35px">
         <div style="float: left; width: 30%">
-          <span style="font-weight: bold">Image</span>
+          <span style="font-weight: bold">Image URL</span>
           <br />
           <span>
             Get noticed by the right buyers with visual examples of your
@@ -134,7 +134,7 @@
           </span>
         </div>
         <div class="right">
-          <div
+          <!-- <div
             class="img-gig"
             style="
               padding-top: 40px;
@@ -147,7 +147,16 @@
               >Drag & drop a Photo or
               <span style="color: blue">Browse</span></span
             >
-          </div>
+          </div> -->
+          <textarea
+            name=""
+            id=""
+            cols="60"
+            rows="3"
+            v-model="image"
+            required
+            maxlength="500"
+          ></textarea>
         </div>
       </div>
       <div class="button">
@@ -178,6 +187,7 @@ import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import VueJwtDecode from "vue-jwt-decode";
 import api from '../../api';
 
 export default {
@@ -201,6 +211,39 @@ export default {
     };
   },
   methods: {
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/error");
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+          await api
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.freelancer = res.data.freelancer;
+                // console.log(this.freelancer);
+                if(this.freelancer.Status != 'Active'){
+                  this.$router.push('/seldash')
+                }
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else {
+          this.currentAccountInfo = {
+            Email: decoded.email,
+            Role: decoded.role,
+          };
+        }
+      }
+    },
     createGig() {
       api
         .post("/gigs/create", {
@@ -224,7 +267,11 @@ export default {
             });
           },
           (err) => {
-            console.log("Added failed");
+            toast.error("Add gig failed", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.replace("/managegigsel"),
+            });
           }
         );
     },
@@ -233,22 +280,12 @@ export default {
     },
   },
   mounted() {
+    this.onUpdateAccountInfo()
     api.get("/categories/get").then((res) => {
       this.categories = res.data;
       // console.log(res.data);
-    }),
-    api
-        .get("/freelancers/info", {
-          headers: { token: localStorage.getItem("token") },
-        })
-        .then(
-          (res) => {
-            this.freelancer = res.data.freelancer;
-          },
-          (err) => {
-            console.log(err.response);
-          }
-        );
+    })
+    
   },
 };
 </script>

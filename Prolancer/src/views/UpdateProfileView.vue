@@ -181,6 +181,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.CompanyName"
+                readonly
               />
               <label
                 class="form-label mt-5"
@@ -193,6 +194,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.CompanyAddress"
+                readonly
               />
               <label
                 class="form-label mt-5"
@@ -205,6 +207,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.TaxCode"
+                readonly
               />
             </div>
 
@@ -245,19 +248,6 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.Description"
-              />
-              <label
-                class="form-label mt-5"
-                style="float: left"
-                for="form3Example3"
-                >Category</label
-              >
-              <input
-                type="text"
-                id="form3Example3"
-                class="form-control form-control-lg"
-                v-model="currentAccountInfo.Category_Name"
-                readonly
               />
               <label
                 class="form-label mt-5"
@@ -604,7 +594,7 @@ export default {
 }
 
 .container-profile {
-  margin: 10px 20% 50px;
+  margin: 10px 20%;
   width: 60%;
   border: 1px #ccc solid;
   padding: 35px;

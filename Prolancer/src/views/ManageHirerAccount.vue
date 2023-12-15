@@ -309,9 +309,6 @@
                       style="margin-bottom: 15px"
                       class="text-center py-2"
                     >
-                      <option class="" value="Pending">
-                        <span>Pending</span>
-                      </option>
                       <option class="" value="Active">
                         <span>Active</span>
                       </option>
@@ -606,7 +603,7 @@ export default {
         (res) => {
           this.account = res.data.account;
           if (this.account.Role != "A") {
-            this.$router.push("/");
+            this.$router.push("/error");
           }
         },
         (err) => {
@@ -614,7 +611,7 @@ export default {
         }
       );
     if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
+      this.$router.push("/error");
     }
     // const responseAccountInfor = await api.get("/accounts/info", {
     //   headers: { token: localStorage.getItem("token") },
@@ -787,5 +784,21 @@ export default {
 .freelancerInfoForm td {
   text-align: right;
   padding-right: 25px;
+}
+.account_table {
+  max-height: 70vh;
+  overflow-y: scroll;  
+}
+
+.account_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.account_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.account_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>
