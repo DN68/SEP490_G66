@@ -59,7 +59,7 @@
 <script>
 import axios from "axios"
 import VueJwtDecode from 'vue-jwt-decode';
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -75,7 +75,7 @@ export default {
       let decoded = VueJwtDecode.decode(token)
       console.log(decoded.role)
       if(decoded.role === "F"){
-        axios
+        api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -89,7 +89,7 @@ export default {
           }
         );
       }else if(decoded.role === "C"){
-        axios
+        api
         .get("/customers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -103,7 +103,7 @@ export default {
           }
         );
       } else if(decoded.role === "A"){
-        axios
+        api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -117,7 +117,7 @@ export default {
           }
         );
       }
-      // axios
+      // api
       //   .get("/accounts/info", {
       //     headers: { token: localStorage.getItem("token") },
       //   })

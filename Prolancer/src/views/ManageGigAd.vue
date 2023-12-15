@@ -439,7 +439,7 @@ import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -468,7 +468,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeGigStatus(status, gigID) {
-      const data = await axios.put("/gigs/updateStatus", {
+      const data = await api.put("/gigs/updateStatus", {
         status: status,
         gigID: gigID,
       });
@@ -487,9 +487,9 @@ export default {
   async created() {
     console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token") == null) {
-      this.$router.push("/login");
+      this.$router.push("/error");
     } else {
-      await axios
+      await api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -497,7 +497,7 @@ export default {
           (res) => {
             this.account = res.data.account;
             if (this.account.Role != "A") {
-              this.$router.push("/");
+              this.$router.push("/error");
             }
           },
           (err) => {
@@ -506,13 +506,13 @@ export default {
         );
     }
 
-    // const responseAccountInfor = await axios.get("/accounts/info", {
+    // const responseAccountInfor = await api.get("/accounts/info", {
     //   headers: { token: localStorage.getItem("token") },
     // });
     // const accountInfor = responseAccountInfor.data.account;
     // this.account = accountInfor;
     // console.log(this.account.accountId);
-    const responseData = await axios.get("/gigs/index", {
+    const responseData = await api.get("/gigs/index", {
       params: {
         page: this.selectedPage,
         search: this.searchGig,
@@ -526,7 +526,7 @@ export default {
     this.pagination = paging;
     console.log(this.pagination.totalRow);
     // console.log(this.status)
-    // const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
+    // const responseOrderReqData = await api.get("/orders/getOrderRequest", {
     //   params: {
     //     user: this.user,
     //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
@@ -538,7 +538,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/gigs/index", {
+    const responseDateWithPage = await api.get("/gigs/index", {
       params: {
         page: this.selectedPage,
         search: this.searchGig,
@@ -657,5 +657,21 @@ export default {
 }
 .container-managigad .align-items-center{
   justify-content: center;
+}
+.gig_table {
+  max-height: 70vh;
+  overflow-y: scroll;  
+}
+
+.gig_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.gig_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.gig_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>

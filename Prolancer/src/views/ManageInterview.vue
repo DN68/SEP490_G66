@@ -89,22 +89,22 @@
 
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Passed' }"
+          :class="{ status_item_active: this.status == 'Finished' }"
         >
           <router-link
-            @click="(this.status = 'Passed'), (selectedPage = '1')"
+            @click="(this.status = 'Finished'), (selectedPage = '1')"
             :to="{
               path: '/manageinterview',
               query: {
                 page: 1,
-                status: 'Passed',
+                status: 'Finished',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Passed<span
-                v-if="this.status == 'Passed'"
+              Finished<span
+                v-if="this.status == 'Finished'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -113,22 +113,22 @@
         </div>
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Failed' }"
+          :class="{ status_item_active: this.status == 'Cancelled' }"
         >
           <router-link
-            @click="(this.status = 'Failed'), (selectedPage = '1')"
+            @click="(this.status = 'Cancelled'), (selectedPage = '1')"
             :to="{
               path: '/manageinterview',
               query: {
                 page: 1,
-                status: 'Failed',
+                status: 'Cancelled',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Failed<span
-                v-if="this.status == 'Failed'"
+              Cancelled<span
+                v-if="this.status == 'Cancelled'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -142,11 +142,16 @@
             <tr style="border-bottom: 2px solid #dcd8d8">
               <th class="th_no">NO.</th>
               <th class="th_Freelancer">CANDIDATE</th>
+              <th class="th_description">DESCRIPTION</th>
               <th class="th_ScheduledDate">DATE</th>
               <th class="th_Location">VENUE</th>
-              <th class="th_description">DESCRIPTION</th>
               <th class="th_status">STATUS</th>
-              <th class="th_actions">ACTIONS</th>
+              <th
+                class="th_actions"
+                v-if="status == 'Pending' || status == 'Ongoing'"
+              >
+                ACTIONS
+              </th>
             </tr>
           </thead>
           <tbody v-if="interviews.length >= 1">
@@ -178,6 +183,13 @@
               <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
+                    {{ interview.Description }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_Interviews">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                       coding -->
                     {{ getFormattedDate(interview.ScheduledDate) }}
@@ -190,15 +202,6 @@
                     <!-- I will convert your design layout into email template HTML
                       coding -->
                     {{ interview.Location }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_Interviews">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                      coding -->
-                    {{ interview.Description }}
                   </p>
                 </div>
               </td>
@@ -218,48 +221,69 @@
                     Ongoing</span
                   >
                   <span
-                    v-if="interview.Status == 'Failed'"
+                    v-if="interview.Status == 'Cancelled'"
                     class="badge rounded-pill bg-danger"
-                    >Failed</span
+                    >Cancelled</span
                   >
                   <span
-                    v-if="interview.Status == 'Passed'"
+                    v-if="interview.Status == 'Finished'"
                     class="badge rounded-pill bg-success"
-                    >Passed</span
+                    >Finished</span
                   >
                 </div>
               </td>
-              <td class="td_actions">
+              <td
+                class="td_actions"
+                v-if="
+                  interview.Status == 'Pending' || interview.Status == 'Ongoing'
+                "
+              >
                 <i
+                  v-if="status == 'Ongoing'"
                   @click="
-                    (isshowModal = !isshowModal),
-                      (slectedInterviewID = interview.InterviewID)
+                    (isshowModal = !isshowModal), (slectedInterview = interview)
                   "
                   class="bi bi-gear-fill"
                 ></i>
+                &nbsp;
+                <i
+                  v-if="status == 'Pending'"
+                  @click="
+                    (isShowInfoModal = !isShowInfoModal),
+                      (selectedInterviewID = interview.InterviewID),
+                      (newScheduledDate = interview.ScheduledDate),
+                      (newLocation = interview.Location)
+                  "
+                  class="bi bi-pencil-fill"
+                ></i>
+                &nbsp;
+                <i
+                  v-if="interview.Status == 'Pending'"
+                  @click="
+                    (action = 'Accept'),
+                      (isshowConfirmRequestModal = !isshowConfirmRequestModal),
+                      (slectedInterview = interview)
+                  "
+                  class="bi bi-check-square-fill"
+                ></i>
+                &nbsp;
+                <i
+                  v-if="
+                    interview.Status == 'Pending'
+                  "
+                  @click="
+                    (action = 'Cancel'),
+                      (isshowConfirmRequestModal = !isshowConfirmRequestModal),
+                      (slectedInterview = interview)
+                  "
+                  class="bi bi-x-square-fill"
+                ></i>
               </td>
-
-              <!-- <div class="dropdown">
-                    <button
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      style="border: none; width: 35px"
-                    >
-                      ...
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Pending</a></li>
-                      <li><a class="dropdown-item" href="#">Pause</a></li>
-                      <li><a class="dropdown-item" href="#">Delete</a></li>
-                      <li><a class="dropdown-item" href="#">Block</a></li>
-                      <li><a class="dropdown-item" href="#">Unblock</a></li>
-                    </ul>
-                  </div> -->
             </tr>
           </tbody>
         </table>
         <div v-if="interviews.length == 0" class="text-center">
-          <h5>interview Not Found</h5>
+          <h5>Interview Not Found</h5>
         </div>
 
         <div>
@@ -293,17 +317,29 @@
                       style="margin-bottom: 15px"
                       class="text-center py-2"
                     >
-                      <option class="" value="Pending">
+                      <!-- <option v-if="interview.Status == ''" class="" value="Pending">
                         <span>Pending</span>
-                      </option>
-                      <option class="" value="Ongoing">
+                      </option> -->
+                      <option
+                        class=""
+                        v-if="status == 'Pending'"
+                        value="Ongoing"
+                      >
                         <span>Ongoing</span>
                       </option>
-                      <option class="" value="Failed">
-                        <span>Failed</span>
+                      <option
+                        class=""
+                        v-if="status == 'Ongoing'"
+                        value="Cancelled"
+                      >
+                        <span>Cancelled</span>
                       </option>
-                      <option class="" value="Passed">
-                        <span>Passed</span>
+                      <option
+                        class=""
+                        v-if="status == 'Ongoing'"
+                        value="Finished"
+                      >
+                        <span>Finished</span>
                       </option>
                     </select>
                   </div>
@@ -320,12 +356,173 @@
                     type="button"
                     class="btn btn-primary"
                     @click="
-                      changeInterviewStatus(selectedStatus, slectedInterviewID),
+                      changeInterviewStatus(selectedStatus, slectedInterview),
                         (isshowModal = !isshowModal)
                     "
                   >
                     Save
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="modal fade show"
+            style="
+              display: block;
+              background-color: #000000ad;
+              padding-top: 10%;
+            "
+            v-if="isShowInfoModal"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Interview Info</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    @click="isShowInfoModal = !isShowInfoModal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row" style="padding-left: 25px">
+                    <div>
+                      <table class="freelancerInfoForm">
+                        <tr>
+                          <td class="line-info"><span>Scheduled date</span></td>
+                          <td>
+                            <!-- <input
+                              class="formInput"
+                              type="datetime"
+                              v-model="newScheduledDate"
+                            /> -->
+                            <VueDatePicker
+                              v-model="newScheduledDate"
+                              class="my-2"
+                              :format="'yyyy-MM-dd, hh:mm a'"
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="line-info"><span>Venue</span></td>
+                          <td>
+                            <input
+                              class="formInput"
+                              type="text"
+                              v-model="newLocation"
+                            />
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="isShowInfoModal = !isShowInfoModal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="
+                      isShowInfoModal = !isShowInfoModal;
+                      updateInterview(selectedInterviewID);
+                    "
+                  >
+                    Update schedule
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="confirm_request">
+          <div
+            class="modal fade show"
+            style="
+              display: block;
+              background-color: #000000ad;
+              padding-top: 10%;
+            "
+            v-if="isshowConfirmRequestModal"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div
+                  class="modal-header text-end"
+                  style="background-color: #33b5e5; color: white"
+                >
+                  <h5 class="modal-title" style="text-align: center">
+                    Are you sure?
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    @click="
+                      isshowConfirmRequestModal = !isshowConfirmRequestModal
+                    "
+                    aria-label="Close"
+                    style="color: white"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row" v-if="action == 'Accept'">
+                    <div>
+                      <p class="modal-title">
+                        Do you really want to confirm this interview schedule?
+                      </p>
+                      <p class="modal-title">This process cannot be undone.</p>
+                    </div>
+                  </div>
+                  <div class="row" v-if="action == 'Cancel'">
+                    <div>
+                      <p class="modal-title">
+                        Do you really want to cancel this interview?
+                      </p>
+                      <p class="modal-title">This process cannot be undone.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                  <a
+                    v-if="action == 'Accept'"
+                    type="button"
+                    class="btn btn-info waves-effect waves-light text-white"
+                    @click="
+                      acceptInterview(slectedInterview),
+                        (isshowConfirmRequestModal = !isshowConfirmRequestModal)
+                    "
+                    >Save</a
+                  >
+                  <a
+                    v-if="action == 'Cancel'"
+                    type="button"
+                    class="btn btn-info waves-effect waves-light text-white"
+                    @click="
+                      cancelInterview(slectedInterview),
+                        (isshowConfirmRequestModal = !isshowConfirmRequestModal)
+                    "
+                    >Save</a
+                  >
+                  <a
+                    type="button"
+                    class="btn btn-outline-info waves-effect"
+                    @click="
+                      isshowConfirmRequestModal = !isshowConfirmRequestModal
+                    "
+                    data-dismiss="modal"
+                    >Cancel</a
+                  >
                 </div>
               </div>
             </div>
@@ -397,12 +594,14 @@
 </template>
     
     <script>
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -410,10 +609,13 @@ export default {
   components: {
     Header,
     Sidebar,
+    name: "OrderDetailPage",
+    VueDatePicker,
   },
   data() {
     return {
       account: {},
+      freelancer: {},
       interviews: [],
       pagination: [],
       moment: moment,
@@ -422,7 +624,11 @@ export default {
       // status: this.$route.query.status,
       status: "Pending",
       isshowModal: false,
-      selectedStatus: "Pending",
+      selectedStatus: "Finished",
+      isShowInfoModal: false,
+      newScheduledDate: "",
+      newLocation: "",
+      isshowConfirmRequestModal: false,
     };
   },
   methods: {
@@ -430,14 +636,18 @@ export default {
     getFormattedDate(date) {
       return moment(date).format("YYYY-MM-DD");
     },
-    async changeInterviewStatus(status, interviewID) {
-      const data = await axios.put("/interviews/updateStatus", {
+    async changeInterviewStatus(status, interview) {
+      const data = await api.put("/interviews/updateStatus", {
         status: status,
-        interviewID: interviewID,
+        interviewID: interview.InterviewID,
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        toast.success("Change interview Status Successfully!", {
+        if (status == "Finished") {
+          //if interview passed --> change acc status to "Active"
+          this.changeFreelancerAccountStatus(interview.CreateByID);
+        }
+        toast.success("Change Interview Status Successfully!", {
           theme: "colored",
           autoClose: 2000,
           onClose: () => location.reload(),
@@ -446,9 +656,111 @@ export default {
         toast.warn("Change interview Status Failed!", { autoClose: 2000 });
       }
     },
+    async updateInterview(selectedInterviewID) {
+      console.log(this.newScheduledDate);
+      const data = await api.put("/interviews/update", {
+        date: this.newScheduledDate,
+        location: this.newLocation,
+        id: selectedInterviewID,
+      });
+      console.log(data);
+      if (data.data.message == "Interview updated successfully") {
+        toast.success("Update interview Schedule Successfully!", {
+          theme: "colored",
+          autoClose: 2000,
+          onClose: () => location.reload(),
+        });
+      } else {
+        toast.warn("Change interview Schedule Failed!", { autoClose: 2000 });
+      }
+    },
+    async cancelInterview(interview) {
+      this.changeInterviewStatus("Cancelled", interview);
+    },
+    async acceptInterview(interview) {
+      console.log(interview);
+      await api
+        .put("/interviews/sendSchedule", {
+          freelancerID: interview.CreateByID,
+          location: interview.Location,
+          scheduledDate: interview.ScheduledDate,
+        })
+        .then(
+          (res) => {
+            this.changeInterviewStatus("Ongoing", interview);
+            this.addFreelancerSkillScore(interview.CreateByID);
+
+            toast.success("Send interview Schedule Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          },
+          (err) => {
+            toast.warn("Change interview Schedule Failed!", {
+              autoClose: 2000,
+            });
+          }
+        );
+    },
+    changeFreelancerAccountStatus(freelancerID) {
+      api.get(`/freelancers/${freelancerID}/info`).then(
+        (res) => {
+          console.log(res.data);
+          this.changeAccountStatus("Active", res.data.AccountID);
+        },
+        (err) => {
+          // toast.warn("Change interview Schedule Failed!", {
+          //   autoClose: 2000,
+          // });
+        }
+      );
+    },
+    async changeAccountStatus(status, accountID) {
+      const data = await api.put("/accounts/updateStatus", {
+        status: status,
+        accountID: accountID,
+      });
+      // console.log(data);
+      if (data.data.message == "Change Status Success") {
+        // toast.success("Change Account Status Successfully!", {
+        //   theme: "colored",
+        //   autoClose: 2000,
+        //   onClose: () => location.reload(),
+        // });
+        console.log("Change Account Status Successfully!")
+      } else {
+        toast.warn("Change account Status Failed!", { autoClose: 2000 });
+      }
+    },
+    addFreelancerSkillScore(freelancerId) {
+      console.log(freelancerId);
+      api
+        .post("/skills/add", {
+          FreelancerID: freelancerId,
+        })
+        .then(
+          (res) => {
+            toast.success("Freelancer skills score added Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          },
+          (err) => {
+            console.log(err.response);
+            // toast.warn("Freelancer skills score already added", {
+            //   theme: "colored",
+            //   autoClose: 2000,
+            //   onClose: () => location.reload(),
+            // });
+            console.log("Freelancer skills score already added")
+          }
+        );
+    },
   },
   async created() {
-    await axios
+    await api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -456,7 +768,7 @@ export default {
         (res) => {
           this.account = res.data.account;
           if (this.account.Role != "A") {
-            this.$router.push("/");
+            this.$router.push("/error");
           }
         },
         (err) => {
@@ -464,15 +776,11 @@ export default {
         }
       );
     if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
+      this.$router.push("/error");
     }
-    // const responseAccountInfor = await axios.get("/accounts/info", {
-    //   headers: { token: localStorage.getItem("token") },
-    // });
-    // const accountInfor = responseAccountInfor.data.account;
-    // this.account = accountInfor;
-    // console.log(this.account.accountID);
-    const responseData = await axios.get("/interviews/index", {
+
+    // Get all interviews by status
+    const responseData = await api.get("/interviews/index", {
       params: {
         page: this.selectedPage,
         status: this.status,
@@ -485,7 +793,7 @@ export default {
     this.pagination = paging;
     console.log(this.pagination.totalRow);
     // console.log(this.status)
-    // const responseInterviewReqData = await axios.get("/orders/getInterviewRequest", {
+    // const responseInterviewReqData = await api.get("/orders/getInterviewRequest", {
     //   params: {
     //     user: this.user,
     //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
@@ -497,7 +805,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/interviews/index", {
+    const responseDateWithPage = await api.get("/interviews/index", {
       params: {
         page: this.selectedPage,
         // search: this.searchInterview,
@@ -613,5 +921,33 @@ export default {
   font-weight: 600;
   color: #a8a7a7;
   font-size: 13px;
+}
+.freelancerInfoForm {
+  width: 100%;
+}
+.line-info {
+  text-align: left;
+}
+.formInput {
+  width: 100%;
+}
+.align-items-center {
+  justify-content: center;
+}
+.interview_table {
+  max-height: 70vh;
+  overflow-y: scroll;  
+}
+
+.interview_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.interview_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.interview_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>

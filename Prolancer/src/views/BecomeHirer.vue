@@ -46,7 +46,7 @@
                 ></i
               ></span>
 
-              <span> Personal Information</span>
+              <span> Legal Representative Information</span>
               <i class="bi bi-chevron-right"></i>
             </div>
             <div
@@ -206,6 +206,7 @@
               <td class="line-info"><span>Full Name</span></td>
               <td>
                 <input
+                  class="name"
                   type="text"
                   placeholder="First Name"
                   v-model="firstName"
@@ -213,12 +214,12 @@
                   ref="firstName"
                 />
                 <div>
-                  <p class="errmessage" style="color: red; text-align: center">
+                  <p class="errmessage" style="color: red">
                     {{ validationErrors.firstName }}
                   </p>
                 </div>
                 <input
-                  class="ms-2"
+                  class="name"
                   placeholder="Last Name"
                   v-model="lastName"
                   type="text"
@@ -226,7 +227,7 @@
                   ref="lastName"
                 />
                 <div>
-                  <p class="errmessage" style="color: red; text-align: center">
+                  <p class="errmessage" style="color: red">
                     {{ validationErrors.lastName }}
                   </p>
                 </div>
@@ -266,7 +267,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
+            <!-- <tr>
               <td class="line-info"><span>Profile Picture </span></td>
               <td>
                 <input
@@ -281,7 +282,7 @@
                   {{ validationErrors.fileImage }}
                 </p>
               </td>
-            </tr>
+            </tr> -->
           </table>
         </div>
         <div class="button">
@@ -431,9 +432,7 @@
         </div>
       </div>
     </div>
-    <div class="footer">
-      <Footer></Footer>
-    </div>
+    
   </div>
 </template>
   
@@ -442,7 +441,8 @@ import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
+import * as bootstrap from 'bootstrap';
 export default {
   name: "",
   components: {
@@ -529,6 +529,11 @@ export default {
         this.password
       );
     },
+    isValidPhoneNumber() {
+      return /^(03[2-9]|05[2689]|07[06-9]|08[1-9]|09\d)\d{7}$/.test(
+        this.phoneNo
+      );
+    },
 
     checkInputStep1() {
       var errCount = 0;
@@ -555,7 +560,6 @@ export default {
     },
     checkInputStep2() {
       var errCount = 0;
-      console.log(this.validateFile("fileImage"));
 
       //input validation here
       if (!this.validateField("firstName")) {
@@ -570,11 +574,11 @@ export default {
       if (!this.validateField("location")) {
         errCount++;
       }
-      if (!this.validateFile("fileImage")) {
-        errCount++;
-      }
+      // if (!this.validateFile("fileImage")) {
+      //   errCount++;
+      // }
 
-      console.log(errCount)
+      console.log(errCount);
 
       //if no error -> true
       if (errCount == 0) {
@@ -618,7 +622,9 @@ export default {
       }
       // Username validation
       if (fieldName == "username" && !this.isValidUsername) {
-        this.validationErrors[fieldName] = `Wrong username format`;
+        this.validationErrors[
+          fieldName
+        ] = `Username must start with an alphabet character. Total length must be 8 to 30 characters including letters, numbers, or underscores.`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -642,7 +648,9 @@ export default {
 
       // Password validation
       if (fieldName == "password" && !this.isValidPassword) {
-        this.validationErrors[fieldName] = `Wrong password format`;
+        this.validationErrors[
+          fieldName
+        ] = `Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -653,6 +661,12 @@ export default {
         this.repeatPassword != this.password
       ) {
         this.validationErrors[fieldName] = `Wrong password confirmation`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      if (fieldName == "phoneNo" && !this.isValidPhoneNumber) {
+        this.validationErrors[fieldName] = `Invalid phone number`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -689,7 +703,7 @@ export default {
     },
 
     isEmailExist() {
-      axios.get(`/accounts/${this.email}/checkEmail`).then(
+      api.get(`/accounts/${this.email}/checkEmail`).then(
         (res) => {
           console.log(res.data);
           if (res.data) {
@@ -706,7 +720,7 @@ export default {
 
     isUsernameExist() {
       console.log(this.username);
-      axios.get(`/accounts/${this.username}/checkUsername`).then(
+      api.get(`/accounts/${this.username}/checkUsername`).then(
         (res) => {
           if (res.data) {
             this.usernameExist = true;
@@ -731,7 +745,7 @@ export default {
       this.modal.show();
     },
     sendvalidationEmail() {
-      axios
+      api
         .post("/accounts/create/confirm", {
           email: this.email,
           username: this.username,
@@ -770,6 +784,11 @@ export default {
     verifyEmail() {
       if (this.inputCode == this.verificationCode) {
         this.changeStep(this.currentStep + 1);
+      } else {
+        toast.error("Verification failed", {
+          theme: "colored",
+          autoClose: 2000,
+        });
       }
     },
 
@@ -779,7 +798,7 @@ export default {
 
     //go to step 3 from step 2
     toStep3() {
-      console.log(this.checkInputStep2)
+      console.log(this.checkInputStep2);
       if (this.checkInputStep2) {
         this.changeStep(this.currentStep + 1);
       }
@@ -813,7 +832,7 @@ export default {
     async saveHirer() {
       if (this.checkInputStep3) {
         //save freelancer account info
-        axios
+        api
           .post("/accounts/create", {
             email: this.email,
             username: this.username,
@@ -826,13 +845,13 @@ export default {
               console.log(res.data.account);
               this.account = res.data.account;
               //add new freelancer with newly created account ID
-              axios
+              api
                 .post("/customers/create", {
                   accountID: this.account.AccountID,
                   firstName: this.firstName,
                   lastName: this.lastName,
                   profilePicture:
-                    "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
+                    "https://cdn2.iconfinder.com/data/icons/office-and-business-round-set-1/64/6-512.png",
                   // location: this.location,
                   phoneNo: this.phoneNo,
                   location: this.location,
@@ -925,5 +944,12 @@ export default {
 }
 input[type="file"] {
   border: 2px solid white;
+}
+.name{
+  width: 50%;
+  margin-right: 50%;
+}
+.errmessage{
+  text-align: left;
 }
 </style>

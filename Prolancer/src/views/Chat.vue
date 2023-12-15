@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100vh">
     <Header v-if="currentAccountInfo.Role == 'C'"></Header>
-    <HeaderSell v-else></HeaderSell>
+    <HeaderSell  v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
     <div v-if="isDataLoaded" style="height: 100vh">
     <PrettyChatWindow
       :projectId="projectId"
@@ -25,6 +25,7 @@ const projectID = process.env.VUE_APP_CHAT_ENGINE_PROJECT_ID;
 const privateKey = process.env.VUE_APP_CHAT_ENGINE_PRIVATE_KEY;
 import Header from "../components/Header.vue";
 import HeaderSell from "../components/HeaderSeller.vue";
+import api from '../../api';
 export default {
   data() {
     return {
@@ -97,7 +98,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -111,7 +112,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })

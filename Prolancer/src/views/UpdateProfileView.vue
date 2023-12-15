@@ -91,7 +91,7 @@
     </div>
   </div> -->
     <div id="content" class="">
-      <div class="container-profile">
+      <div class="container-profile list-group">
         <div class="form-profile">
           <div class="field">
             <label
@@ -181,6 +181,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.CompanyName"
+                readonly
               />
               <label
                 class="form-label mt-5"
@@ -193,6 +194,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.CompanyAddress"
+                readonly
               />
               <label
                 class="form-label mt-5"
@@ -205,6 +207,7 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.TaxCode"
+                readonly
               />
             </div>
 
@@ -250,19 +253,6 @@
                 class="form-label mt-5"
                 style="float: left"
                 for="form3Example3"
-                >Category</label
-              >
-              <input
-                type="text"
-                id="form3Example3"
-                class="form-control form-control-lg"
-                v-model="currentAccountInfo.Category_Name"
-                readonly
-              />
-              <label
-                class="form-label mt-5"
-                style="float: left"
-                for="form3Example3"
                 >CV</label
               >
               <div>
@@ -274,7 +264,10 @@
                   accept=".pdf"
                 />
                 (.pdf only)
-                <button @click="showCV(currentAccountInfo.CV_Upload)">
+               
+              </div>
+              <div>
+                <button type="button" class="btn btn-success" @click="showCV(currentAccountInfo.CV_Upload)">
                   View CV
                 </button>
               </div>
@@ -314,7 +307,7 @@ import VueJwtDecode from "vue-jwt-decode";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 export default {
   name: "App",
   components: {
@@ -346,7 +339,7 @@ export default {
       let decoded = VueJwtDecode.decode(token);
       console.log(decoded.role);
       if (decoded.role === "F") {
-        axios
+        api
           .get("/freelancers/info", {
             headers: { token: localStorage.getItem("token") },
           })
@@ -361,7 +354,7 @@ export default {
             }
           );
       } else if (decoded.role === "C") {
-        axios
+        api
           .get("/customers/info", {
             headers: { token: localStorage.getItem("token") },
           })
@@ -375,7 +368,7 @@ export default {
             }
           );
       } else if (decoded.role === "A"){
-        axios
+        api
           .get("/accounts/info", {
             headers: { token: localStorage.getItem("token") },
           })
@@ -400,7 +393,7 @@ export default {
   //     let decoded = VueJwtDecode.decode(token);
   //     console.log(decoded.role);
   //     if (decoded.role === "F") {
-  //       axios
+  //       api
   //         .get("/freelancers/info", {
   //           headers: { token: localStorage.getItem("token") },
   //         })
@@ -415,7 +408,7 @@ export default {
   //           }
   //         );
   //     } else if (decoded.role === "C") {
-  //       axios
+  //       api
   //         .get("/customers/info", {
   //           headers: { token: localStorage.getItem("token") },
   //         })
@@ -434,7 +427,7 @@ export default {
   methods: {
     async showCV(cvName) {
       const apiUrl = "/cv/" + cvName;
-      const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+      const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
       console.log(resData);
       const blob = new Blob([resData.data], { type: "application/pdf" });
 
@@ -462,7 +455,7 @@ export default {
     updateProfile() {
       // console.log(this.user)
       if (this.currentAccountInfo.Role == "F") {
-        axios
+        api
           .put(
             `/freelancers/info/${this.currentAccountInfo.AccountID}/update`,
             {
@@ -500,7 +493,7 @@ export default {
             }
           );
       } else if (this.currentAccountInfo.Role == "C") {
-        axios
+        api
           .put(`/customers/info/${this.currentAccountInfo.AccountID}/update`, {
             First_Name: this.currentAccountInfo.First_Name,
             Last_Name: this.currentAccountInfo.Last_Name,
@@ -545,7 +538,7 @@ export default {
         formData.append("FreelancerID", this.currentAccountInfo.FreelancerID);
         formData.append("CV_Upload", this.currentAccountInfo.CV_Upload);
         console.log(formData);
-        axios
+        api
           .post("/cv/updateCV", formData)
           .then((response) => {
             // Handle the successful upload response
@@ -570,9 +563,9 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
 .Sidebarudpf {
   float: left;
   width: 17%;
@@ -601,12 +594,13 @@ html {
 }
 
 .container-profile {
-  margin: 10px 20% 50px;
+  margin: 10px 20%;
   width: 60%;
   border: 1px #ccc solid;
   padding: 35px;
   background-color: #fff;
-  height: 1400px;
+  height: 1100px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
 }
 #btn-sub {
   display: block;

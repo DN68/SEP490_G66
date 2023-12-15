@@ -8,25 +8,50 @@
             <div
               id="myCarousel"
               class="carousel slide"
-              data-ride="carousel"
+              data-bs-ride="carousel"
               data-interval="0"
             >
               <!-- Carousel indicators -->
+
               <ol class="carousel-indicators">
                 <li
-                  data-target="#myCarousel"
-                  data-slide-to="0"
+                  data-bs-target="#myCarousel"
+                  data-bs-slide-to="0"
                   class="listCarouse active"
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    margin: 4px px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0, 0, 0, 0.4);
+                  "
                 ></li>
                 <li
                   class="listCarouse"
-                  data-target="#myCarousel"
-                  data-slide-to="1"
+                  data-bs-target="#myCarousel"
+                  data-bs-slide-to="1"
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    margin: 4px px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0, 0, 0, 0.4);
+                  "
                 ></li>
                 <li
                   class="listCarouse"
-                  data-target="#myCarousel"
-                  data-slide-to="2"
+                  data-bs-target="#myCarousel"
+                  data-bs-slide-to="2"
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    margin: 4px px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0, 0, 0, 0.4);
+                  "
                 ></li>
               </ol>
               <!-- Wrapper for carousel items -->
@@ -327,14 +352,24 @@
               <a
                 class="carousel-control-prev"
                 href="#myCarousel"
-                data-slide="prev"
+                data-bs-slide="prev"
+                style="
+                  width: 30px;
+
+                  background-color: red;
+                "
               >
                 <i class="fa fa-angle-left"></i>
               </a>
               <a
                 class="carousel-control-next"
                 href="#myCarousel"
-                data-slide="next"
+                data-bs-slide="next"
+                style="
+                  width: 30px;
+
+                  background-color: red;
+                "
               >
                 <i class="fa fa-angle-right"></i>
               </a>

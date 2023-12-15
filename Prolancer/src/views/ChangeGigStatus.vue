@@ -4,11 +4,11 @@
 
 <script>
 import axios from "axios"
-
+import api from '../../api';
 export default {
     mounted(){
         console.log(this.$route.params.Status)
-        axios.put(`/gigs/${this.$route.params.GigID}/updateStatus`, {
+        api.put(`/gigs/${this.$route.params.GigID}/updateStatus`, {
             Status: this.$route.params.Status
         }).then(
             res => {

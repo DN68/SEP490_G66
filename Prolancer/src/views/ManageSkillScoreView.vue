@@ -237,6 +237,7 @@ import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
 import * as XLSX from "xlsx";
+import api from '../../api';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -268,20 +269,20 @@ export default {
     // if (localStorage.getItem("token") === null) {
     //   this.$router.push("/login");
     // }
-    // const responseUserInfor = await axios.get("/users/info", {
+    // const responseUserInfor = await api.get("/users/info", {
     //   headers: { token: localStorage.getItem("token") },
     // });
     // const userInfor = responseUserInfor.data.user;
     // this.user = userInfor;
     await this.onUpdateAccountInfo();
-    const responseMajorSkill = await axios.get("/skills/getMajorSkill");
+    const responseMajorSkill = await api.get("/skills/getMajorSkill");
     const majorSkill = responseMajorSkill.data;
     this.majorSkills = majorSkill;
 
-    const responseChildSkill = await axios.get("/skills/getSkillChild/1");
+    const responseChildSkill = await api.get("/skills/getSkillChild/1");
     const childSkill = responseChildSkill.data;
     this.childSkills = childSkill;
-    const responseSkillScore = await axios.get("/skills/getSkillScore", {
+    const responseSkillScore = await api.get("/skills/getSkillScore", {
       params: {
         childSkills: this.childSkills,
         user: this.currentAccountInfo,
@@ -329,12 +330,12 @@ export default {
     },
 
     async getFreelancerWithScore(majorSkillID) {
-      const responseChildSkill = await axios.get(
+      const responseChildSkill = await api.get(
         "/skills/getSkillChild/" + majorSkillID
       );
       const childSkill = responseChildSkill.data;
       this.childSkills = childSkill;
-      const responseSkillScore = await axios.get("/skills/getSkillScore", {
+      const responseSkillScore = await api.get("/skills/getSkillScore", {
         params: {
           childSkills: this.childSkills,
           user: this.currentAccountInfo,
@@ -350,7 +351,7 @@ export default {
       );
     },
     async updateChange() {
-      await axios
+      await api
         .put("/skills/updateSkillScore", {
           listUpdate: this.listUpdate,
         })
@@ -373,26 +374,26 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        this.$router.push("/error");
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
             .then(
               (res) => {
                 this.currentAccountInfo = res.data.freelancer;
-                console.log(this.currentAccountInfo);
+                // console.log(this.currentAccountInfo);
               },
               (err) => {
                 console.log(err.response);
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })

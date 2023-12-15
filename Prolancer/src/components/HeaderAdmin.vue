@@ -1,20 +1,17 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top customer_header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top admin_header">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
             alt=""
             loading="lazy"
         /></a>
-       
-
-       
 
         <!-- Collapsible wrapper -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -27,7 +24,7 @@
             <!-- <li class="nav-item">
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-user-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
-           
+
             <li class="nav-item dropdown" style="" v-if="account">
               <a
                 class="nav-link dropdown-toggle d-flex align-items-center"
@@ -51,11 +48,6 @@
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <router-link class="dropdown-item" to="/uppro"
-                    >My Profile</router-link
-                  >
-                </li>
-                <li>
                   <router-link class="dropdown-item" to="/change"
                     >Change password</router-link
                   >
@@ -65,7 +57,6 @@
                     >Logout</router-link
                   >
                 </li>
-                
               </ul>
             </li>
 
@@ -111,7 +102,6 @@
                 <li>
                   <a class="dropdown-item" href="/change">Change password</a>
                 </li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="/logout">Logout</a></li>
               </ul>
             </li>
@@ -203,7 +193,7 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   props: ["searchText"],
   data() {
@@ -217,7 +207,7 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.account = null;
     } else {
-      axios
+      api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })

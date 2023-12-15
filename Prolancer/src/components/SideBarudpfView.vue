@@ -44,7 +44,7 @@
 
 <script>
 import axios from "axios";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted() {
-    axios
+    api
       .get("/users/info", {
         headers: { token: localStorage.getItem("token") },
       })

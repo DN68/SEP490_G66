@@ -187,7 +187,7 @@
 <script>
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -282,7 +282,7 @@ export default {
     async createCustomer() {
       // console.log(this.account) 
       if (this.checkInput) {
-        axios
+        api
           .post("/customers/create", {
             accountID: this.account.accountId,
             firstName: this.firstName,
@@ -310,7 +310,7 @@ export default {
       this.$router.push('/logout')
     },
     isEmailExist() {
-      axios.get(`/users/${this.email}/checkEmail`).then(
+      api.get(`/users/${this.email}/checkEmail`).then(
         (res) => {
           // console.log(res.data);
           if (res.data) {
@@ -325,7 +325,7 @@ export default {
       );
     },
     isUsernameExist() {
-      axios.get(`/users/${this.username}/checkUsername`).then(
+      api.get(`/users/${this.username}/checkUsername`).then(
         (res) => {
           console.log(res.data);
           if (res.data) {
@@ -343,7 +343,7 @@ export default {
   mounted() {
     if (this.$route.query.data) {
       this.account = JSON.parse(decodeURIComponent(this.$route.query.data));
-      axios
+      api
         .post("/accounts/create", {
           email: this.account.email,
           username: this.account.username,

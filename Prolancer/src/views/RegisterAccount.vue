@@ -169,7 +169,7 @@
   
   <script>
   import axios from "axios";
-  
+  import api from '../../api';
   export default {
     data() {
       return {
@@ -274,7 +274,7 @@
             this.role = "C"
         }
         if (this.checkInput) {
-          axios
+          api
             .post("/accounts/create/confirm", {
               email: this.email,
               username: this.username,
@@ -294,7 +294,7 @@
         }
       },
       isEmailExist() {
-        axios.get(`/accounts/${this.email}/checkEmail`).then(
+        api.get(`/accounts/${this.email}/checkEmail`).then(
           (res) => {
             console.log(res.data);
             if (res.data) {
@@ -309,7 +309,7 @@
         );
       },
       isUsernameExist() {
-        axios.get(`/accounts/${this.username}/checkUsername`).then(
+        api.get(`/accounts/${this.username}/checkUsername`).then(
           (res) => {
             console.log(res.data);
             if (res.data) {

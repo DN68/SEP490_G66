@@ -10,8 +10,20 @@ var Freelancer = function (freelancer) {
 
 
 Freelancer.getFreelancerInfo = function (accountID, results) {
-  connectDb.query("SELECT f.*, a.*, c.Category_Name, cv.CV_Upload FROM Freelancer f INNER JOIN Account a ON f.AccountID = a.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID  INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE f.AccountID = ?",
+  connectDb.query("SELECT f.*, a.*, cv.CV_Upload FROM Freelancer f INNER JOIN Account a ON f.AccountID = a.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID WHERE f.AccountID = ?",
     [accountID], (err, res) => {
+      if (err) {
+        results(null, err);
+      }
+      else {
+        results(null, res);
+      }
+    })
+}
+
+Freelancer.getFreelancerById = function (freelancerID, results) {
+  connectDb.query("SELECT f.*, a.*, cv.CV_Upload FROM Freelancer f INNER JOIN Account a ON f.AccountID = a.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID WHERE f.FreelancerID = ?",
+    [freelancerID], (err, res) => {
       if (err) {
         results(null, err);
       }
@@ -25,8 +37,8 @@ Freelancer.getFreelancerInfo = function (accountID, results) {
 
 Freelancer.getAllFreelancersWithPaging = function (status, search, limit, offset, account, pagination) {
   console.log(status)
-  var sql = "Select a.*, f.*, c.Category_Name, c.Description AS CategoryDescription, c.Status AS CategoryStatus, cv.CV_Upload, cv.Status AS cvStatus from Freelancer f INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE";
-  var sqlCount = "Select COUNT(*) AS count from Freelancer f INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID INNER JOIN Category c ON c.CategoryID = f.MainCategoryID WHERE";
+  var sql = "Select a.*, f.*, cv.CV_Upload, cv.Status AS cvStatus from Freelancer f INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID WHERE";
+  var sqlCount = "Select COUNT(*) AS count from Freelancer f INNER JOIN Account a ON a.AccountID = f.AccountID INNER JOIN CV cv ON cv.FreelancerID = f.FreelancerID WHERE";
   
   console.log("sql: ", sql);
   console.log("sqlCount: ", sqlCount);
@@ -68,9 +80,9 @@ Freelancer.updateFreelancerInfo = function (data, accountID, results) {
     })
 }
 
-Freelancer.createFreelancer = function (accountID, firstName, lastName, profilePicture, location, description, phone, mainCategoryID, result) {
-  connectDb.query("INSERT INTO Freelancer SET AccountID = ?,  First_Name = ?, Last_Name = ?, Profile_Picture = ?,  Location = ?, Description = ?, Phoneno = ?, MainCategoryID = ?",
-      [accountID, firstName, lastName, profilePicture, location, description, phone, mainCategoryID], function (err, res) {
+Freelancer.createFreelancer = function (accountID, firstName, lastName, profilePicture, location, description, phone, result) {
+  connectDb.query("INSERT INTO Freelancer SET AccountID = ?,  First_Name = ?, Last_Name = ?, Profile_Picture = ?,  Location = ?, Description = ?, Phoneno = ?",
+      [accountID, firstName, lastName, profilePicture, location, description, phone], function (err, res) {
           if (err) {
               result(null, err);
           }
@@ -83,6 +95,18 @@ Freelancer.createFreelancer = function (accountID, firstName, lastName, profileP
 Freelancer.getFreelancerByAccountID = function (accountId, results) {
   connectDb.query("SELECT * FROM Freelancer WHERE AccountID = ?",
       [accountId], function (err, res) {
+          if (err) {
+              results(null, err);
+          }
+          else {
+              results(null, res);
+          }
+      })
+}
+
+Freelancer.getFreelancerByID = function (freelancerId, results) {
+  connectDb.query("SELECT * FROM Freelancer f  INNER JOIN Account a ON a.AccountID = f.AccountID WHERE f.FreelancerID = ?",
+      [freelancerId], function (err, res) {
           if (err) {
               results(null, err);
           }

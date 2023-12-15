@@ -9,7 +9,7 @@ import { createApp } from 'vue';
 import { Chart, registerables } from 'chart.js';
 import axios from 'axios';
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 // Register necessary modules
 Chart.register(...registerables);
 
@@ -24,7 +24,7 @@ export default {
     await this.onUpdateAccountInfo()
     try {
       // Replace 'your_api_endpoint' with the actual API endpoint
-      const response = await axios.get('/orderrequest/getGigTitle', {
+      const response = await api.get('/orderrequest/getGigTitle', {
         params: {
           FreelancerID: this.currentAccountInfo.FreelancerID,
         },
@@ -43,7 +43,7 @@ export default {
   // async mounted() {
   //   try {
   //     // Replace 'your_api_endpoint' with the actual API endpoint
-  //     const response = await axios.get('/orderrequest/getGigTitle', {
+  //     const response = await api.get('/orderrequest/getGigTitle', {
   //       params: {
   //         FreelancerID: this.currentAccountInfo.FreelancerID,
   //       },
@@ -113,7 +113,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-        await  axios
+        await  api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -127,7 +127,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await  axios
+          await  api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
