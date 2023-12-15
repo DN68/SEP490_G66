@@ -39,14 +39,14 @@
       </div>
       <div
         class="content nonetextalign"
-        style="float: right; width: 70%; margin-top: 2%; margin-bottom: 25%"
+        style="float: right; width: 70%; margin-top: 2%; margin-bottom: 0"
       >
         <h1>Welcome, {{ freelancer.First_Name }}</h1>
         <p style="color: #818181; margin-bottom: 30px">
           Find important messages, tips, and links to helpful resources here:
         </p>
         <div class="abc">
-          <h4>Statistics Chart</h4>
+          <h4>Gigs Statistics Chart</h4>
           <div class="me-10" style="margin-right: 200px;">
           <ChartGig class="mb-5 "></ChartGig>
         </div>
@@ -80,7 +80,9 @@
       <Footer></Footer>
     </div> -->
     <ChatAuth></ChatAuth>
+    
   </div>
+  
 </template>
 
 <script>
@@ -172,16 +174,7 @@ export default {
 </script>
 
 <style >
-html {
-  position: relative;
-}
-.footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  z-index: 600;
-  margin-top: 15px;
-}
+
 .activeorder {
   border: 1px #ccc solid;
   background-color: #fff;
@@ -230,7 +223,7 @@ html {
   border-left: 1px #ccc solid; */
 }
 .sel .info-user h5 {
-  margin: 45px 55px;
+  margin: 45px 5px;
   padding-left: 25px;
   border-left: 1px #ccc solid;
 }

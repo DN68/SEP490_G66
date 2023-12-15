@@ -1,10 +1,10 @@
 <template>
   <div class="change_password">
-    <div class="header">
+    
       <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
       <HeaderSeller v-if="role == 'F'"></HeaderSeller>
       <Headers v-if="role == 'C'"></Headers>
-    </div>
+    
     <div class="sidebar">
       <Sidebar></Sidebar>
     </div>
@@ -249,7 +249,7 @@ export default {
   float: left;
   width: 17%;
 }
-#content {
+.change_password #content {
   float: right;
   width: 70%;
   padding-top: 10%;
@@ -261,13 +261,15 @@ export default {
   margin-top: 3%;
 
   z-index: 600;
+  background-color: #ccc;
+    width: 83%;
 }
 
-.container-change {
+.change_password .container-change {
   margin: 10px 20%;
   width: 60%;
   border: 1px #ccc solid;
-  padding: 35px;
+  /* padding: 35px; */
   background-color: #fff;
 }
 #btn-sub {

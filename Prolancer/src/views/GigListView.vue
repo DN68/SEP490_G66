@@ -366,6 +366,7 @@ import vClickOutside from "click-outside-vue3";
 import NavCategory from "../components/NavCategory.vue";
 import axios from "axios";
 import api from '../../api';
+import VueJwtDecode from "vue-jwt-decode";
 export default {
   /* eslint-disable */
   name: "HomePage",
@@ -471,8 +472,25 @@ export default {
     clearSelectedPrice() {
       this.selectedPriceRange = "";
     },
+
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+          this.$router.push("/error");
+        } else if (decoded.role === "A") {
+          this.$router.push("/error");
+        } 
+      }
+    },
   },
   async created() {
+    this.onUpdateAccountInfo();
     await this.getGigWithFilterAndSearch(1);
   },
 
