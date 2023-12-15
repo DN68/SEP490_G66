@@ -451,7 +451,7 @@ export default {
 };
 </script>
     
-    <style>
+<style scoped>
 .pagination {
   display: inline-block;
   margin: 20px 0;
