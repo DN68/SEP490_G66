@@ -527,4 +527,7 @@ export default {
 span {
   font-weight: 500;
 }
+.formInput{
+  width: 90%
+}
 </style>
