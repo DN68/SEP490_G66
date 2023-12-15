@@ -562,7 +562,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* html {
   background-color: #ededed;
 } */
@@ -578,7 +578,7 @@ export default {
   z-index: 600;
   margin-top: 15px;
 }
-#content {
+.update_profile #content {
   float: right;
   width: 89%;
   padding-top: 2%;

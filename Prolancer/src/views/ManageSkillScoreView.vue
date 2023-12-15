@@ -144,7 +144,7 @@
             <h5>Order Not Found</h5>
           </div> -->
         </div>
-        <div class="button text-start" v-if="currentAccountInfo.Role == 'A'">
+        <div class="button text-start float-start" v-if="currentAccountInfo.Role == 'A'">
           <button
             id="btn-sub"
             type="submit"
