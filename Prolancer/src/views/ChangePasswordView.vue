@@ -167,10 +167,8 @@ export default {
 };
 </script>
 
-<style>
-html {
-  background-color: #ededed;
-}
+<style scoped>
+
 .sidebar {
   float: left;
   width: 17%;
@@ -187,6 +185,8 @@ html {
   margin-top: 3%;
 
   z-index: 600;
+  background-color: #ccc;
+    width: 83%;
 }
 
 .container-change {

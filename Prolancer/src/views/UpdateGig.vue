@@ -137,9 +137,9 @@
         </div>
       </div>
     </div>
-    <div class="footer">
+   <footer class="panel panel-default">
       <Footer></Footer>
-    </div>
+    </footer>
   </div>
 </template>
 
