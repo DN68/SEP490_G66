@@ -176,16 +176,13 @@
       <span ref="message">{{ message }}</span>
     </div>
   </div>
-  <footer class="panel panel-default">
-      <Footer></Footer>
-    </footer>
+ 
 </div>
 
 </template>
 
 <script>
 import Headers from "../components/HeaderSeller.vue";
-import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
@@ -197,7 +194,6 @@ export default {
   name: "App",
   components: {
     Headers,
-    Sidebar,
     Footer,
   },
   data() {
@@ -349,5 +345,8 @@ export default {
 }
 .img-gig:hover {
   border: 1px blue dashed;
+}
+.create_gig textarea{
+  width: 100%;
 }
 </style>

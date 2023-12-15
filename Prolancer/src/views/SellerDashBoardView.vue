@@ -223,7 +223,7 @@ export default {
   border-left: 1px #ccc solid; */
 }
 .sel .info-user h5 {
-  margin: 45px 55px;
+  margin: 45px 5px;
   padding-left: 25px;
   border-left: 1px #ccc solid;
 }

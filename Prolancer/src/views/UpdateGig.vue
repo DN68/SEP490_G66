@@ -133,15 +133,12 @@
         </div>
       </div>
     </div>
-    <div class="footer">
-      <Footer></Footer>
-    </div>
+    
   </div>
 </template>
 
 <script>
 import Headers from "../components/HeaderSeller.vue";
-import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
@@ -153,7 +150,6 @@ export default {
   name: "App",
   components: {
     Headers,
-    Sidebar,
     Footer,
   },
   data() {
@@ -323,5 +319,8 @@ export default {
 }
 .img-gig:hover {
   border: 1px blue dashed;
+}
+.update_gig textarea{
+  width: 100%;
 }
 </style>

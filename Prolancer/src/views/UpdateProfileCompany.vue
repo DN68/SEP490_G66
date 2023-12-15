@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="company_profile">
 
 
   <div class="header">
