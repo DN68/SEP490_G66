@@ -568,7 +568,7 @@ export default {
       searchHirer: "",
       isshowModal: false,
       isShowInfoModal: false,
-      selectedStatus: "Pending",
+      selectedStatus: "Active",
     };
   },
   methods: {

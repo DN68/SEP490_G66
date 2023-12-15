@@ -403,6 +403,8 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import * as bootstrap from 'bootstrap';
 import api from '../../api';
+var moment = require("moment");
+
 export default {
   data() {
     return {
@@ -449,12 +451,12 @@ export default {
       this.modal.hide();
     },
     createInterview() {
-      axios
+      api
         .post("/interviews/create", {
           CreateByID: this.freelancer.FreelancerID,
-          ScheduledDate: "",
+          ScheduledDate: moment().format("YYYY-MM-DD"),
           Location: "",
-          Description: "",
+          Description: this.description,
           Status: "Pending",
         })
         .then(
@@ -462,7 +464,7 @@ export default {
             toast.success("Interview Request Created Successfully!", {
               theme: "colored",
               autoClose: 2000,
-              // onClose: () => location.reload(),
+              onClose: () => location.reload(),
             });
           },
           (err) => {

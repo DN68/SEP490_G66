@@ -835,30 +835,21 @@ export default {
               console.log("Added account successfully");
               console.log(res.data.account);
               this.account = res.data.account;
-              //add new freelancer with newly created account ID
-              // FormData.append("accountID", this.account.AccountID);
-              // FormData.append("firstName", this.firstName);
-              // FormData.append("lastName", this.lastName);
-              // FormData.append("phoneNo", this.phoneNo);
-              // FormData.append("location", this.location);
-              // FormData.append("description", this.description);
-              // FormData.append("mainCategoryID", this.mainCategory);
-
-              // FormData.append(
-              //   "profilePicture",
-              //   "https://static.vecteezy.com/system/resources/previews/013/279/126/non_2x/conceptual-flat-design-icon-of-freelancer-vector.jpg"
-              // );
+              this.createFreelancer(res.data.account.AccountID)
             },
             (err) => {
               console.log(err.response);
             }
           );
       }
-      console.log(this.account.AccountID)
+     
+    },
+    async createFreelancer(accountId){
+      console.log(accountId)
       await api
         // .post("/freelancers/create", FormData)
         .post("/freelancers/create", {
-          accountID: this.account.AccountID,
+          accountID: accountId,
           firstName: this.firstName,
           lastName: this.lastName,
           profilePicture:
