@@ -461,7 +461,7 @@ export default {
         .catch((error) => {
           // Handle the error
           console.error("Error here:", error);
-          toast.warn("Failed!", { autoClose: 2000 });
+          // toast.warn("Failed!", { autoClose: 2000 });
         });
     },
     async updateChangeRequestStatus(action, changeRequestObj) {
@@ -537,7 +537,7 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        this.$router.push("/error");
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
@@ -549,7 +549,10 @@ export default {
             .then(
               (res) => {
                 this.currentAccountInfo = res.data.freelancer;
-                console.log("Freelancer " + this.currentAccountInfo);
+                // console.log("Freelancer " + this.currentAccountInfo);
+                if(this.currentAccountInfo.Status != 'Active'){
+                  this.$router.push('/seldash')
+                }
               },
               (err) => {
                 console.log(err.response);
@@ -603,10 +606,10 @@ export default {
               onClose: () => location.reload(),
             });
           } else {
-            toast.warn("Accept Request Status Faild!", { autoClose: 2000 });
+            toast.warn("Accept Request Status Failed!", { autoClose: 2000 });
           }
         } else {
-          toast.warn("Request Faild!", { autoClose: 2000 });
+          toast.warn("Request Failed!", { autoClose: 2000 });
         }
       } else {
         alert("Extend :" + selectedRequest.Request_Action);

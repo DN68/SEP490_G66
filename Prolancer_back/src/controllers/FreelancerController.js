@@ -13,7 +13,6 @@ class FreelancerController {
         let token = req.headers.token;
         jwt.verify(token, 'secretkey', (err, decoded) => {
             if (err) {
-                // res.redirect('/login')
                 return res.status(401).json({
                     title: 'unauthorized'
                 })
@@ -24,21 +23,8 @@ class FreelancerController {
                 if (err) {
                     return console.log(err)
                 }
-                console.log(results)
+                console.log(results[0])
                 return res.status(200).json({
-                    title: 'Freelancer grabbed',
-                    //can add more fields
-                    // freelancer: {
-                    //     FreelancerID: results[0].FreelancerID,
-                    //     AccountID: results[0].AccountID,
-                    //     First_Name: results[0].First_Name,
-                    //     Last_Name: results[0].Last_Name,
-                    //     Profile_Picture: results[0].Profile_Picture,
-                    //     Location: results[0].Location,
-                    //     Phoneno: results[0].Phoneno,
-                    //     Description: results[0].Description,
-                    //     MainCategoryID: results[0].MainCategoryID
-                    // }
                     freelancer: results[0]
                 })
             })
@@ -149,56 +135,12 @@ class FreelancerController {
         const location = req.body.location;
         const description = req.body.description;
         const phoneNo = req.body.phoneNo;
-        const mainCategoryID = req.body.mainCategoryID
-
-
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({ error: 'No files were uploaded.' });
-        }
-
-        // let imgFile = req.files.file;
-
-        // const newFileName = `ACC${accountID}_${imgFile.name}`;
-        // const commonPath = path.join('uploads', 'images', 'avatar', newFileName);
-        // const uploadPath = path.join(__dirname, '..', '..', commonPath);
-
-        // if (fs.existsSync(uploadPath)) {
-        //     fsp.unlink(uploadPath)
-        //         .then(() => {
-        //             console.log('Existing file deleted successfully');
-        //             continueWithFileUpload();
-        //         })
-        //         .catch((unlinkError) => {
-        //             console.error('Error deleting existing file:', unlinkError);
-        //             return res.status(500).json({ error: 'Error deleting existing file.' });
-        //         });
-        // } else {
-        //     continueWithFileUpload();
-        // }
 
         createFreelancer();
 
-
-        // function continueWithFileUpload() {
-        //     imgFile.mv(uploadPath, (err) => {
-        //       if (err) {
-        //         return res.status(500).json({ error: 'Error uploading file.' });
-        //       }
-        
-        //       // Construct the URL based on your server's address and the path to the uploaded file
-        //       const serverUrl = 'http://localhost:3000'; // Replace with your server's actual URL
-        //       const fileUrl = `${serverUrl}/${commonPath.replace(/\\/g, '/')}`;
-        
-        //       console.log(fileUrl);
-        //       profilePicture = fileUrl
-        //     //   return res.status(200).json({ imageUrl: fileUrl });
-        //     });
-        //   }
-
-
         //Create freelancer
         function createFreelancer() {
-            Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, mainCategoryID, function (err, result) {
+            Freelancer.createFreelancer(accountID, firstName, lastName, profilePicture, location, description, phoneNo, function (err, result) {
                 if (err) {
                     res.send(err);
                 }

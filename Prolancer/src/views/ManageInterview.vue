@@ -142,11 +142,16 @@
             <tr style="border-bottom: 2px solid #dcd8d8">
               <th class="th_no">NO.</th>
               <th class="th_Freelancer">CANDIDATE</th>
+              <th class="th_description">DESCRIPTION</th>
               <th class="th_ScheduledDate">DATE</th>
               <th class="th_Location">VENUE</th>
-              <th class="th_description">DESCRIPTION</th>
               <th class="th_status">STATUS</th>
-              <th class="th_actions">ACTIONS</th>
+              <th
+                class="th_actions"
+                v-if="status == 'Pending' || status == 'Ongoing'"
+              >
+                ACTIONS
+              </th>
             </tr>
           </thead>
           <tbody v-if="interviews.length >= 1">
@@ -178,6 +183,13 @@
               <td class="td_Interviews">
                 <div class="d-flex align-items-center">
                   <p class="fw-normal mb-1">
+                    {{ interview.Description }}
+                  </p>
+                </div>
+              </td>
+              <td class="td_Interviews">
+                <div class="d-flex align-items-center">
+                  <p class="fw-normal mb-1">
                     <!-- I will convert your design layout into email template HTML
                       coding -->
                     {{ getFormattedDate(interview.ScheduledDate) }}
@@ -190,15 +202,6 @@
                     <!-- I will convert your design layout into email template HTML
                       coding -->
                     {{ interview.Location }}
-                  </p>
-                </div>
-              </td>
-              <td class="td_Interviews">
-                <div class="d-flex align-items-center">
-                  <p class="fw-normal mb-1">
-                    <!-- I will convert your design layout into email template HTML
-                      coding -->
-                    {{ interview.Description }}
                   </p>
                 </div>
               </td>
@@ -229,7 +232,12 @@
                   >
                 </div>
               </td>
-              <td class="td_actions">
+              <td
+                class="td_actions"
+                v-if="
+                  interview.Status == 'Pending' || interview.Status == 'Ongoing'
+                "
+              >
                 <i
                   v-if="status == 'Ongoing'"
                   @click="
@@ -252,29 +260,26 @@
                 <i
                   v-if="interview.Status == 'Pending'"
                   @click="
-                    (isshowConfirmRequestModal = !isshowConfirmRequestModal),
+                    (action = 'Accept'),
+                      (isshowConfirmRequestModal = !isshowConfirmRequestModal),
                       (slectedInterview = interview)
                   "
-                  class="bi bi-envelope-fill"
+                  class="bi bi-check-square-fill"
+                ></i>
+                &nbsp;
+                <i
+                  v-if="
+                    interview.Status == 'Pending' ||
+                    interview.Status == 'Ongoing'
+                  "
+                  @click="
+                    (action = 'Cancel'),
+                      (isshowConfirmRequestModal = !isshowConfirmRequestModal),
+                      (slectedInterview = interview)
+                  "
+                  class="bi bi-x-square-fill"
                 ></i>
               </td>
-
-              <!-- <div class="dropdown">
-                    <button
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      style="border: none; width: 35px"
-                    >
-                      ...
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Pending</a></li>
-                      <li><a class="dropdown-item" href="#">Pause</a></li>
-                      <li><a class="dropdown-item" href="#">Delete</a></li>
-                      <li><a class="dropdown-item" href="#">Block</a></li>
-                      <li><a class="dropdown-item" href="#">Unblock</a></li>
-                    </ul>
-                  </div> -->
             </tr>
           </tbody>
         </table>
@@ -391,10 +396,15 @@
                         <tr>
                           <td class="line-info"><span>Scheduled date</span></td>
                           <td>
-                            <input
+                            <!-- <input
                               class="formInput"
-                              type="date"
+                              type="datetime"
                               v-model="newScheduledDate"
+                            /> -->
+                            <VueDatePicker
+                              v-model="newScheduledDate"
+                              class="my-2"
+                              :format="'yyyy-MM-dd, hh:mm a'"
                             />
                           </td>
                         </tr>
@@ -466,10 +476,18 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <div class="row">
+                  <div class="row" v-if="action == 'Accept'">
                     <div>
                       <p class="modal-title">
                         Do you really want to confirm this interview schedule?
+                      </p>
+                      <p class="modal-title">This process cannot be undone.</p>
+                    </div>
+                  </div>
+                  <div class="row" v-if="action == 'Cancel'">
+                    <div>
+                      <p class="modal-title">
+                        Do you really want to cancel this interview?
                       </p>
                       <p class="modal-title">This process cannot be undone.</p>
                     </div>
@@ -478,10 +496,21 @@
 
                 <div class="modal-footer justify-content-center">
                   <a
+                    v-if="action == 'Accept'"
                     type="button"
                     class="btn btn-info waves-effect waves-light text-white"
                     @click="
-                      sendInterviewInfo(slectedInterview),
+                      acceptInterview(slectedInterview),
+                        (isshowConfirmRequestModal = !isshowConfirmRequestModal)
+                    "
+                    >Save</a
+                  >
+                  <a
+                    v-if="action == 'Cancel'"
+                    type="button"
+                    class="btn btn-info waves-effect waves-light text-white"
+                    @click="
+                      cancelInterview(slectedInterview),
                         (isshowConfirmRequestModal = !isshowConfirmRequestModal)
                     "
                     >Save</a
@@ -566,6 +595,8 @@
 </template>
     
     <script>
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import Header from "../components/HeaderAdmin.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
@@ -579,6 +610,8 @@ export default {
   components: {
     Header,
     Sidebar,
+    name: "OrderDetailPage",
+    VueDatePicker,
   },
   data() {
     return {
@@ -618,14 +651,14 @@ export default {
         toast.success("Change Interview Status Successfully!", {
           theme: "colored",
           autoClose: 2000,
-          // onClose: () => location.reload(),
+          onClose: () => location.reload(),
         });
       } else {
         toast.warn("Change interview Status Failed!", { autoClose: 2000 });
       }
     },
     async updateInterview(selectedInterviewID) {
-      console.log(selectedInterviewID);
+      console.log(this.newScheduledDate);
       const data = await axios.put("/interviews/update", {
         date: this.newScheduledDate,
         location: this.newLocation,
@@ -642,7 +675,10 @@ export default {
         toast.warn("Change interview Schedule Failed!", { autoClose: 2000 });
       }
     },
-    async sendInterviewInfo(interview) {
+    async cancelInterview(interview) {
+      this.changeInterviewStatus("Failed", interview);
+    },
+    async acceptInterview(interview) {
       console.log(interview);
       await axios
         .put("/interviews/sendSchedule", {
@@ -675,9 +711,9 @@ export default {
           this.changeAccountStatus("Active", res.data.AccountID);
         },
         (err) => {
-          toast.warn("Change interview Schedule Failed!", {
-            autoClose: 2000,
-          });
+          // toast.warn("Change interview Schedule Failed!", {
+          //   autoClose: 2000,
+          // });
         }
       );
     },
@@ -698,25 +734,28 @@ export default {
       }
     },
     addFreelancerSkillScore(freelancerId) {
-      console.log(freelancerId)
+      console.log(freelancerId);
       axios
         .post("/skills/add", {
           FreelancerID: freelancerId,
         })
-        .then((res) => {
-          toast.success("Freelancer skills score added Successfully!", {
-            theme: "colored",
-            autoClose: 2000,
-            onClose: () => location.reload(),
-          });
-        }, (err) => {
-          console.log(err.response)
-          toast.warn("Freelancer skills score already added", {
-            theme: "colored",
-            autoClose: 2000,
-            onClose: () => location.reload(),
-          });
-        });
+        .then(
+          (res) => {
+            toast.success("Freelancer skills score added Successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          },
+          (err) => {
+            console.log(err.response);
+            toast.warn("Freelancer skills score already added", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.reload(),
+            });
+          }
+        );
     },
   },
   async created() {
@@ -728,7 +767,7 @@ export default {
         (res) => {
           this.account = res.data.account;
           if (this.account.Role != "A") {
-            this.$router.push("/");
+            this.$router.push("/error");
           }
         },
         (err) => {
@@ -736,14 +775,10 @@ export default {
         }
       );
     if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
+      this.$router.push("/error");
     }
-    // const responseAccountInfor = await axios.get("/accounts/info", {
-    //   headers: { token: localStorage.getItem("token") },
-    // });
-    // const accountInfor = responseAccountInfor.data.account;
-    // this.account = accountInfor;
-    // console.log(this.account.accountID);
+
+    // Get all interviews by status
     const responseData = await axios.get("/interviews/index", {
       params: {
         page: this.selectedPage,
@@ -894,5 +929,12 @@ export default {
 }
 .formInput {
   width: 100%;
+}
+.align-items-center {
+  justify-content: center;
+}
+.interview_table {
+  max-height: 70vh;
+  overflow: auto;
 }
 </style>

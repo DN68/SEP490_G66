@@ -214,7 +214,7 @@
                   ref="firstName"
                 />
                 <div>
-                  <p class="errmessage" style="color: red; text-align: center">
+                  <p class="errmessage" style="color: red">
                     {{ validationErrors.firstName }}
                   </p>
                 </div>
@@ -227,7 +227,7 @@
                   ref="lastName"
                 />
                 <div>
-                  <p class="errmessage" style="color: red; text-align: center">
+                  <p class="errmessage" style="color: red">
                     {{ validationErrors.lastName }}
                   </p>
                 </div>
@@ -267,7 +267,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
+            <!-- <tr>
               <td class="line-info"><span>Profile Picture </span></td>
               <td>
                 <input
@@ -282,7 +282,7 @@
                   {{ validationErrors.fileImage }}
                 </p>
               </td>
-            </tr>
+            </tr> -->
           </table>
         </div>
         <div class="button">
@@ -561,7 +561,6 @@ export default {
     },
     checkInputStep2() {
       var errCount = 0;
-      console.log(this.validateFile("fileImage"));
 
       //input validation here
       if (!this.validateField("firstName")) {
@@ -576,9 +575,9 @@ export default {
       if (!this.validateField("location")) {
         errCount++;
       }
-      if (!this.validateFile("fileImage")) {
-        errCount++;
-      }
+      // if (!this.validateFile("fileImage")) {
+      //   errCount++;
+      // }
 
       console.log(errCount);
 
@@ -853,7 +852,7 @@ export default {
                   firstName: this.firstName,
                   lastName: this.lastName,
                   profilePicture:
-                    "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
+                    "https://cdn2.iconfinder.com/data/icons/office-and-business-round-set-1/64/6-512.png",
                   // location: this.location,
                   phoneNo: this.phoneNo,
                   location: this.location,
@@ -950,5 +949,8 @@ input[type="file"] {
 .name{
   width: 50%;
   margin-right: 50%;
+}
+.errmessage{
+  text-align: left;
 }
 </style>

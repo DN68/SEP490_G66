@@ -487,7 +487,7 @@ export default {
   async created() {
     console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token") == null) {
-      this.$router.push("/login");
+      this.$router.push("/error");
     } else {
       await axios
         .get("/accounts/info", {
@@ -497,7 +497,7 @@ export default {
           (res) => {
             this.account = res.data.account;
             if (this.account.Role != "A") {
-              this.$router.push("/");
+              this.$router.push("/error");
             }
           },
           (err) => {
@@ -657,5 +657,9 @@ export default {
 }
 .align-items-center{
   justify-content: center;
+}
+.gig_table {
+    max-height: 70vh;
+    overflow: auto;
 }
 </style>

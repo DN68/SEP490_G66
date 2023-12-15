@@ -157,7 +157,7 @@ class GigController {
   };
 
   getGigByFreelancer = function (req, res) {
-    const limit = 16;
+    const limit = 4;
     var pageQuery = req.query;
     // console.log("🚀 ~ file: GigController.js:9 ~ GigController ~ pageQuery:", pageQuery)
     var page;

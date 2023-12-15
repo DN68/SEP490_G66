@@ -58,19 +58,6 @@
           </div>
           <div class="right">
             <div class="choice" style="display: flex; flex-direction: row">
-              <div class="numpage">
-                <label for="">Number of page</label>
-                <select
-                  class="form-select third"
-                  aria-label="Default select example"
-                  v-model="gig.Numberpage"
-                >
-                  <option value="">Select number of page</option>
-                  <option value="less than 3">less than 3</option>
-                  <option value="3-5">3-5</option>
-                  <option value="more than 5">more than 5</option>
-                </select>
-              </div>
               <div class="daydeli third">
                 <label for="">Day Deliveries</label><br />
                 <input type="number" class="third" v-model="gig.Delivery_Day" />
@@ -157,6 +144,9 @@ import Headers from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
+import VueJwtDecode from "vue-jwt-decode";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   name: "App",
@@ -180,30 +170,48 @@ export default {
     };
   },
   created() {
-    axios
-      .get("/freelancers/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.role = res.data.freelancer.Role;
-          if (this.role != "F") {
-            this.$router.push("/");
-          }
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
+    this.onUpdateAccountInfo()
   },
   methods: {
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/error");
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+          await axios
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.freelancer = res.data.freelancer;
+                // console.log(this.freelancer);
+                if(this.freelancer.Status != 'Active'){
+                  this.$router.push('/seldash')
+                }
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else {
+          this.currentAccountInfo = {
+            Email: decoded.email,
+            Role: decoded.role,
+          };
+        }
+      }
+    },
     updateGig() {
       axios
         .put(`/gigs/${this.$route.params.GigID}/update`, {
           Title: this.gig.Title,
           Description: this.gig.Description,
           Gig_IMG: this.gig.Gig_IMG,
-          Numberpage: this.gig.Numberpage,
           CategoryID: this.gig.CategoryID,
           Price: this.gig.Price,
           Delivery_Day: this.gig.Delivery_Day,
@@ -212,10 +220,18 @@ export default {
         .then(
           (res) => {
             // console.log(res.data);
-            this.$router.push("/managegigsel");
+            toast.success("Gig updated successfully", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.replace("/managegigsel"),
+            });
           },
           (err) => {
-            console.log("Update failed");
+            toast.error("Update gig failed", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.replace("/managegigsel"),
+            });
           }
         );
     },

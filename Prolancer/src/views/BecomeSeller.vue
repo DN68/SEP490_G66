@@ -202,7 +202,7 @@
                 ref="firstName"
               />
               <div>
-                <p class="errmessage" style="color: red; text-align: center">
+                <p class="errmessage" style="color: red">
                   {{ validationErrors.firstName }}
                 </p>
               </div>
@@ -215,7 +215,7 @@
                 ref="lastName"
               />
               <div>
-                <p class="errmessage" style="color: red; text-align: center">
+                <p class="errmessage" style="color: red">
                   {{ validationErrors.lastName }}
                 </p>
               </div>
@@ -255,7 +255,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td class="line-info"><span>Profile Picture </span></td>
             <td>
               <input
@@ -270,7 +270,7 @@
                 {{ validationErrors.fileImage }}
               </p>
             </td>
-          </tr>
+          </tr> -->
           <tr>
             <td class="line-info"><span>Description </span></td>
             <td>
@@ -287,31 +287,6 @@
               <div>
                 <p class="errmessage" style="color: red">
                   {{ validationErrors.description }}
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="line-info"><span>Category </span></td>
-            <td>
-              <select
-                v-model="mainCategory"
-                class="form-select lefthalf"
-                aria-label="Default select example"
-                ref="mainCategory"
-              >
-                <option :value="-1">Select a category</option>
-                <option
-                  v-for="category in categories"
-                  :key="category.CategoryID"
-                  :value="category.CategoryID"
-                >
-                  {{ category.Category_Name }}
-                </option>
-              </select>
-              <div>
-                <p class="errmessage" style="color: red">
-                  {{ validationErrors.mainCategory }}
                 </p>
               </div>
             </td>
@@ -498,7 +473,6 @@ export default {
       usernameExist: false,
       location: "",
       role: "F",
-      mainCategory: -1,
       freelancer: {},
       fileImage: null,
       //email verification
@@ -519,7 +493,6 @@ export default {
         phoneNo: "",
         location: "",
         description: "",
-        mainCategory: "",
         cvTitle: "",
         fileCV: "",
         cvDescription: "",
@@ -586,14 +559,11 @@ export default {
       if (!this.validateField("location")) {
         errCount++;
       }
-      if (!this.validateFile("fileImage")) {
-        errCount++;
-      }
+      // if (!this.validateFile("fileImage")) {
+      //   errCount++;
+      // }
       if (!this.validateField("description")) {
         // this.message = "You must enter your description (at least 150 letters)";
-        errCount++;
-      }
-      if (!this.validateOption("mainCategory")) {
         errCount++;
       }
 
@@ -682,22 +652,6 @@ export default {
 
       if (fieldName == "phoneNo" && !this.isValidPhoneNumber) {
         this.validationErrors[fieldName] = `Invalid phone number`;
-        this.setBorderColor(fieldName, false);
-        return false;
-      }
-
-      //if field input OK
-      this.validationErrors[fieldName] = "";
-      this.setBorderColor(fieldName, true);
-      return true;
-    },
-
-    // validate select input
-    validateOption(fieldName) {
-      if (fieldName == "mainCategory" && this.mainCategory == -1) {
-        this.validationErrors[
-          fieldName
-        ] = `You must choose your specialization`;
         this.setBorderColor(fieldName, false);
         return false;
       }
@@ -868,10 +822,9 @@ export default {
       console.log(this.checkInputStep3);
       if (this.checkInputStep3) {
         //save freelancer account info
-        const FormData = this.processImageFile();
         console.log(FormData);
 
-        axios
+        await axios
           .post("/accounts/create", {
             email: this.email,
             username: this.username,
@@ -884,55 +837,54 @@ export default {
               console.log(res.data.account);
               this.account = res.data.account;
               //add new freelancer with newly created account ID
-              FormData.append("accountID", this.account.AccountID);
-              FormData.append("firstName", this.firstName);
-              FormData.append("lastName", this.lastName);
-              FormData.append("phoneNo", this.phoneNo);
-              FormData.append("location", this.location);
-              FormData.append("description", this.description);
-              FormData.append("mainCategoryID", this.mainCategory);
+              // FormData.append("accountID", this.account.AccountID);
+              // FormData.append("firstName", this.firstName);
+              // FormData.append("lastName", this.lastName);
+              // FormData.append("phoneNo", this.phoneNo);
+              // FormData.append("location", this.location);
+              // FormData.append("description", this.description);
+              // FormData.append("mainCategoryID", this.mainCategory);
 
-              FormData.append(
-                "profilePicture",
-                "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg"
-              );
-
-              axios
-                .post("/freelancers/create", FormData)
-                // .post("/freelancers/create", {
-                //   accountID: this.account.AccountID,
-                //   firstName: this.firstName,
-                //   lastName: this.lastName,
-                //   profilePicture:
-                //     "https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg",
-                //   phoneNo: this.phoneNo,
-                //   location: this.location,
-                //   description: this.description,
-                //   mainCategoryID: this.mainCategory,
-                // })
-                .then(
-                  (res) => {
-                    console.log(res.data);
-                    this.message =
-                      "Info added successfully. Returning to homepage";
-                    console.log(res.data.freelancer.FreelancerID);
-                    this.freelancer = res.data.freelancer.FreelancerID;
-                    this.saveCV();
-                  },
-                  (err) => {
-                    console.log(err.response);
-                  }
-                );
+              // FormData.append(
+              //   "profilePicture",
+              //   "https://static.vecteezy.com/system/resources/previews/013/279/126/non_2x/conceptual-flat-design-icon-of-freelancer-vector.jpg"
+              // );
             },
             (err) => {
               console.log(err.response);
             }
           );
       }
+      console.log(this.account.AccountID)
+      await axios
+        // .post("/freelancers/create", FormData)
+        .post("/freelancers/create", {
+          accountID: this.account.AccountID,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          profilePicture:
+            "https://cdn3.iconfinder.com/data/icons/team-management/136/20-512.png",
+          phoneNo: this.phoneNo,
+          location: this.location,
+          description: this.description,
+        })
+        .then(
+          (res) => {
+            console.log(res.data);
+            this.message = "Info added successfully. Returning to homepage";
+            console.log(res.data.freelancer.FreelancerID);
+            this.freelancer = res.data.freelancer.FreelancerID;
+            this.saveCV();
+          },
+          (err) => {
+            console.log(err.response);
+          }
+        );
     },
     saveCV() {
       //Save CV pdf file
       const fileInput = this.$refs.fileCV;
+      console.log(fileInput);
       console.log(
         "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
         fileInput.files
@@ -975,7 +927,7 @@ export default {
             toast.success("Upload CV Successfully!", {
               theme: "colored",
               autoClose: 2000,
-              onClose: () => location.replace("/sendmessage"),  
+              onClose: () => location.replace("/sendmessage"),
             });
           })
           .catch((error) => {
@@ -988,33 +940,33 @@ export default {
         console.warn("Please select a file to upload");
       }
     },
-    updateFileImage() {
-      this.fileImage = this.$refs.fileImage;
-      console.log(this.fileImage);
-    },
-    processImageFile() {
-      //Save CV pdf file
-      const fileImageInput = this.fileImage;
-      console.log(fileImageInput);
-      console.log(
-        "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
-        fileImageInput.files
-      );
-      console.log("🚀 ~ ", this.cvTitle + "   " + this.cvDescription);
-      //if there is image chosen
-      if (fileImageInput.files.length > 0) {
-        const formData = new FormData();
-        formData.append("file", fileImageInput.files[0]);
+    // updateFileImage() {
+    //   this.fileImage = this.$refs.fileImage;
+    //   console.log(this.fileImage);
+    // },
+    // processImageFile() {
+    //   //Save CV pdf file
+    //   const fileImageInput = this.fileImage;
+    //   console.log(fileImageInput);
+    //   console.log(
+    //     "🚀 ~ file: BecomeSeller.vue:278 ~ saveFreelancer ~ fileCV:",
+    //     fileImageInput.files
+    //   );
+    //   console.log("🚀 ~ ", this.cvTitle + "   " + this.cvDescription);
+    //   //if there is image chosen
+    //   if (fileImageInput.files.length > 0) {
+    //     const formData = new FormData();
+    //     formData.append("file", fileImageInput.files[0]);
 
-        console.log(formData);
-        console.log(this.freelancer);
-        return formData;
-      } else {
-        // Handle case when no file is selected
-        console.warn("Please select a file to upload");
-        return null;
-      }
-    },
+    //     console.log(formData);
+    //     console.log(this.freelancer);
+    //     return formData;
+    //   } else {
+    //     // Handle case when no file is selected
+    //     console.warn("Please select a file to upload");
+    //     return null;
+    //   }
+    // },
     // async openPdfPage() {
     //   const apiUrl = "/cv/" + this.CV_Uploads;
     //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });

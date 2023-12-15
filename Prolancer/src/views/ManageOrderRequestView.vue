@@ -1,7 +1,8 @@
 <template>
   <div>
     <Header v-if="currentAccountInfo.Role == 'C'"></Header>
-    <HeaderSell v-else></HeaderSell>
+    <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
+    <HeaderAdmin v-else></HeaderAdmin>
     <div>
       <div class="container">
         <div class="manage_title row">
@@ -658,7 +659,7 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        this.$router.push("/error");
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded.role);
@@ -670,7 +671,9 @@ export default {
             .then(
               (res) => {
                 this.currentAccountInfo = res.data.freelancer;
-                console.log(this.currentAccountInfo);
+                if(this.currentAccountInfo.Status != "Active"){
+                  this.$router.push('/seldash')
+                }
               },
               (err) => {
                 console.log(err.response);

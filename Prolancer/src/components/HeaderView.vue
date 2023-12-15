@@ -1,105 +1,111 @@
 <template>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <!-- Container wrapper -->
-    <div class="container">
-      <!-- Navbar brand -->
-      <a class="navbar-brand" href="http://localhost:8080/">
-        <img src="../assets/image/logo2.png" height="40" alt="" loading="lazy"
-      /></a>
-      <!-- Search form -->
-      <form class="input-group" style="width: 700px">
-        <input
-          type="search"
-          class="form-control"
-          placeholder="What are you looking for ?"
-          aria-label="Search"
-        />
+  <div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <!-- Container wrapper -->
+      <div class="container">
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="http://localhost:8080/">
+          <img
+            src="../assets/image/logo2.png"
+            height="40"
+            alt=""
+            loading="lazy"
+        /></a>
+        <!-- Search form -->
+        <form class="input-group" style="width: 700px">
+          <input
+            type="search"
+            class="form-control"
+            placeholder="What are you looking for ?"
+            aria-label="Search"
+          />
+          <button
+            id="btn_search"
+            class="btn btn-outline-primary"
+            type="button"
+            data-mdb-ripple-color="dark"
+            style="padding: 0.45rem 1.5rem 0.35rem"
+          >
+            <i class="bi bi-search" style="color: white"></i>
+          </button>
+        </form>
+
+        <!-- Toggle button -->
         <button
-          id="btn_search"
-          class="btn btn-outline-primary"
+          v-on:click="isShow = !isShow"
+          class="navbar-toggler"
           type="button"
-          data-mdb-ripple-color="dark"
-          style="padding: 0.45rem 1.5rem 0.35rem"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          <i class="bi bi-search" style="color: white"></i>
+          <i class="fas fa-bars"></i>
         </button>
-      </form>
 
-      <!-- Toggle button -->
-      <button
-        v-on:click="isShow = !isShow"
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-bars"></i>
-      </button>
-
-      <!-- Collapsible wrapper -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <!-- Left links -->
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <!-- <li class="nav-item">
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Left links -->
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <!-- <li class="nav-item">
           <a class="nav-link active d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-home fa-lg"></i><span class="small">Home</span></a>
         </li> -->
 
-          <!-- <li class="nav-item">
+            <!-- <li class="nav-item">
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-user-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
-          <li class="nav-item">
-            <a
-              class="nav-link d-flex flex-column text-center"
-              aria-current="page"
-              href="#"
-              ><i class="bi bi-box-seam"></i
-              ><span class="small">Orders</span></a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link d-flex flex-column text-center"
-              aria-current="page"
-              href="#"
-              ><i class="bi bi-chat"></i><span class="small">Messaging</span></a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link d-flex flex-column text-center"
-              aria-current="page"
-              href="#"
-              ><i class="bi bi-heart"></i>
-              <span class="small">Favourite</span></a
-            >
-          </li>
-          <li class="nav-item" v-if="!user.email">
-            <!-- <a
+            <li class="nav-item">
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                href="#"
+                ><i class="bi bi-box-seam"></i
+                ><span class="small">Orders</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                href="#"
+                ><i class="bi bi-chat"></i
+                ><span class="small">Messaging</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link d-flex flex-column text-center"
+                aria-current="page"
+                href="#"
+                ><i class="bi bi-heart"></i>
+                <span class="small">Favourite</span></a
+              >
+            </li>
+            <li class="nav-item" v-if="!user.email">
+              <!-- <a
               class="nav-link d-flex flex-column text-center"
               aria-current="page"
               href="#"
               ><i class="bi bi-heart"></i>
               <span class="small">Favourite</span></a
             > -->
-            <router-link
-              to="/login"
-              class="text_decoration:none nav-link d-flex flex-column text-center"
-              aria-current="page"
-              style="margin: 8px 0px 8px 50px"
-            >
-              <i
-                class="fa-solid fa-right-to-bracket"
-                style="color: #7c8088"
-              ></i>
-              <span class="small">Login</span></router-link
-            >
-          </li>
+              <router-link
+                to="/login"
+                class="text_decoration:none nav-link d-flex flex-column text-center"
+                aria-current="page"
+                style="margin: 8px 0px 8px 50px"
+              >
+                <i
+                  class="fa-solid fa-right-to-bracket"
+                  style="color: #7c8088"
+                ></i>
+                <span class="small">Login</span></router-link
+              >
+            </li>
 
-          <!-- <li class="nav-item" style="text-decoration:none">
+            <!-- <li class="nav-item" style="text-decoration:none">
             <router-link to="/login">
             <a
               class="nav-link d-flex flex-column text-center"
@@ -111,87 +117,111 @@
             
           </li> -->
 
-          <li class="nav-item dropdown" style="">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center"
-              href="#"
-              id="navbarDropdownMenuLink"
-              role="button"
-              data-mdb-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                :src="user.image"
-                class="rounded-circle"
-                height="30"
-                alt=""
-                loading="lazy"
-              />
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><router-link class="dropdown-item" to="/updateprofile">My Profile</router-link></li>
-              <li><router-link class="dropdown-item" to="/change">Change password</router-link></li>
-              <li><router-link class="dropdown-item" to="#">Settings</router-link></li>
-              <li><router-link class="dropdown-item" to="/logout">Logout</router-link></li>
-              
-            </ul>
-          </li>
-        </ul>
-        <!-- Left links -->
-      </div>
-      <!-- Collapsible wrapper -->
-    </div>
-    <!-- Container wrapper -->
-  </nav>
-  <div class="header">
- <!-- Sidebar -->
-    <nav
-      style="display: none; padding-top: 140px"
-      id="sidebarMenuNomarl"
-      :class="{ selected: isShow }"
-      class="sidebar collapse bg-white"
-    >
-      <div class="position-sticky">
-        <div class="list-group list-group-flush mx-3 mt-4">
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-2 ripple active"
-            aria-current="true"
-          >
-            <i class="bi bi-house-door-fill me-3"></i><span>HomePage</span>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-2 ripple"
-          >
-            <i class="bi bi-stack me-3"></i>
-            <span>Manage Orders</span>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="bi bi-box-seam-fill me-3"></i>
-            <span>Favourite List</span></a
-          >
-
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="bi bi-mortarboard-fill me-3"></i
-            ><span>My Profile</span></a
-          >
-          <a href="#" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="fas fa-calendar fa-fw me-3"></i
-            ><span>Change Password</span></a
-          >
-
-          <a
-            href="#"
-            @click="Logout"
-            class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
-          >
+            <li class="nav-item dropdown" style="">
+              <a
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  :src="user.image"
+                  class="rounded-circle"
+                  height="30"
+                  alt=""
+                  loading="lazy"
+                />
+              </a>
+              <ul
+                class="dropdown-menu"
+                aria-labelledby="navbarDropdownMenuLink"
+              >
+                <li>
+                  <router-link class="dropdown-item" to="/updateprofile"
+                    >My Profile</router-link
+                  >
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/change"
+                    >Change password</router-link
+                  >
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="#"
+                    >Settings</router-link
+                  >
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/logout"
+                    >Logout</router-link
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <!-- Left links -->
         </div>
+        <!-- Collapsible wrapper -->
       </div>
+      <!-- Container wrapper -->
     </nav>
-  </div>
+    <div class="header">
+      <!-- Sidebar -->
+      <nav
+        style="display: none; padding-top: 140px"
+        id="sidebarMenuNomarl"
+        :class="{ selected: isShow }"
+        class="sidebar collapse bg-white"
+      >
+        <div class="position-sticky">
+          <div class="list-group list-group-flush mx-3 mt-4">
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple active"
+              aria-current="true"
+            >
+              <i class="bi bi-house-door-fill me-3"></i><span>HomePage</span>
+            </a>
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+            >
+              <i class="bi bi-stack me-3"></i>
+              <span>Manage Orders</span>
+            </a>
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="bi bi-box-seam-fill me-3"></i>
+              <span>Favourite List</span></a
+            >
 
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="bi bi-mortarboard-fill me-3"></i
+              ><span>My Profile</span></a
+            >
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="fas fa-calendar fa-fw me-3"></i
+              ><span>Change Password</span></a
+            >
+
+            <a
+              href="#"
+              @click="Logout"
+              class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
+            >
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
   <!-- Navbar -->
 </template>
 
@@ -202,7 +232,7 @@ export default {
   data() {
     return {
       isShow: false,
-      user: {}
+      user: {},
     };
   },
   created() {

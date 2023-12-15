@@ -6,6 +6,9 @@ const interviewController = require('../controllers/InterviewController');
 router.get('/index', 
     interviewController.getInterviewsByStatusAndPaging
 );
+router.get('/index/:freelancerId', 
+    interviewController.getFreelancerInterviewsByStatusAndPaging
+);
 router.put('/updateStatus',
     interviewController.changeInterviewStatus
 )

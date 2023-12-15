@@ -70,6 +70,9 @@ export default {
       .then(
         (res) => {
           this.freelancer = res.data.freelancer;
+          if(this.freelancer.Status != 'Active'){
+            this.$router.push('/seldash')
+          }
           // this.showAvatar(res.data.freelancer.Profile_Picture)
         },
         (err) => {

@@ -207,6 +207,16 @@ const routes = [
   }
   ,
   {
+    path: '/manageinterviewsel',
+    name: 'manageinterviewsel',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ManageInterviewSel.vue')
+
+  }
+  ,
+  {
     path: '/manageaccount/hirer',
     name: 'managehirer',
     // route level code-splitting
@@ -249,15 +259,6 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/test.vue')
-
-  },
-  {
-    path: '/ordermanaad',
-    name: 'ordermanaad',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/OrderManagementAd.vue')
 
   },
   {
@@ -382,7 +383,10 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Earnings.vue')
-
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: { name: 'error' } // Redirect to the 'error' route
   }
 ]
 
