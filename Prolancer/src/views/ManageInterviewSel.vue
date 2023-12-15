@@ -103,22 +103,22 @@
 
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Passed' }"
+          :class="{ status_item_active: this.status == 'Finished' }"
         >
           <router-link
-            @click="(this.status = 'Passed'), (selectedPage = '1')"
+            @click="(this.status = 'Finished'), (selectedPage = '1')"
             :to="{
               path: '/manageinterviewsel',
               query: {
                 page: 1,
-                status: 'Passed',
+                status: 'Finished',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Passed<span
-                v-if="this.status == 'Passed'"
+              Finished<span
+                v-if="this.status == 'Finished'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -127,22 +127,22 @@
         </div>
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Failed' }"
+          :class="{ status_item_active: this.status == 'Cancelled' }"
         >
           <router-link
-            @click="(this.status = 'Failed'), (selectedPage = '1')"
+            @click="(this.status = 'Cancelled'), (selectedPage = '1')"
             :to="{
               path: '/manageinterviewsel',
               query: {
                 page: 1,
-                status: 'Failed',
+                status: 'Cancelled',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Failed<span
-                v-if="this.status == 'Failed'"
+              Cancelled<span
+                v-if="this.status == 'Cancelled'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -216,14 +216,14 @@
                     Ongoing</span
                   >
                   <span
-                    v-if="interview.Status == 'Failed'"
+                    v-if="interview.Status == 'Cancelled'"
                     class="badge rounded-pill bg-danger"
-                    >Failed</span
+                    >Cancelled</span
                   >
                   <span
-                    v-if="interview.Status == 'Passed'"
+                    v-if="interview.Status == 'Finished'"
                     class="badge rounded-pill bg-success"
-                    >Passed</span
+                    >Finished</span
                   >
                 </div>
               </td>
@@ -356,8 +356,7 @@
                   <div class="row" v-if="action == 'Cancel'">
                     <div>
                       <p class="modal-title">
-                        Do you really want to cancel this interview? This will
-                        be considered a failed interview.
+                        Do you really want to cancel this interview? 
                       </p>
                       <p class="modal-title">This process cannot be undone.</p>
                     </div>
@@ -504,7 +503,7 @@ export default {
       api
         .post("/interviews/create", {
           CreateByID: this.freelancer.FreelancerID,
-          ScheduledDate: "",
+          ScheduledDate: moment().format("YYYY-MM-DD"),
           Location: "",
           Description: this.description,
           Status: "Pending",
@@ -533,7 +532,7 @@ export default {
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        if (status == "Passed") {
+        if (status == "Finished") {
           //if interview passed --> change acc status to "Active"
           this.changeFreelancerAccountStatus(interview.CreateByID);
         }
@@ -565,7 +564,7 @@ export default {
       }
     },
     async cancelInterview(interview) {
-      this.changeInterviewStatus("Failed", interview);
+      this.changeInterviewStatus("Cancelled", interview);
     },
   },
   async created() {

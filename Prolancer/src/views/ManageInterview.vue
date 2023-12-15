@@ -89,22 +89,22 @@
 
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Passed' }"
+          :class="{ status_item_active: this.status == 'Finished' }"
         >
           <router-link
-            @click="(this.status = 'Passed'), (selectedPage = '1')"
+            @click="(this.status = 'Finished'), (selectedPage = '1')"
             :to="{
               path: '/manageinterview',
               query: {
                 page: 1,
-                status: 'Passed',
+                status: 'Finished',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Passed<span
-                v-if="this.status == 'Passed'"
+              Finished<span
+                v-if="this.status == 'Finished'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -113,22 +113,22 @@
         </div>
         <div
           class="col-md-2 status_item"
-          :class="{ status_item_active: this.status == 'Failed' }"
+          :class="{ status_item_active: this.status == 'Cancelled' }"
         >
           <router-link
-            @click="(this.status = 'Failed'), (selectedPage = '1')"
+            @click="(this.status = 'Cancelled'), (selectedPage = '1')"
             :to="{
               path: '/manageinterview',
               query: {
                 page: 1,
-                status: 'Failed',
+                status: 'Cancelled',
               },
             }"
             class="text-decoration-none"
           >
             <h6>
-              Failed<span
-                v-if="this.status == 'Failed'"
+              Cancelled<span
+                v-if="this.status == 'Cancelled'"
                 class="badge bg-secondary"
                 >{{ pagination.totalRow }}</span
               >
@@ -221,14 +221,14 @@
                     Ongoing</span
                   >
                   <span
-                    v-if="interview.Status == 'Failed'"
+                    v-if="interview.Status == 'Cancelled'"
                     class="badge rounded-pill bg-danger"
-                    >Failed</span
+                    >Cancelled</span
                   >
                   <span
-                    v-if="interview.Status == 'Passed'"
+                    v-if="interview.Status == 'Finished'"
                     class="badge rounded-pill bg-success"
-                    >Passed</span
+                    >Finished</span
                   >
                 </div>
               </td>
@@ -269,8 +269,7 @@
                 &nbsp;
                 <i
                   v-if="
-                    interview.Status == 'Pending' ||
-                    interview.Status == 'Ongoing'
+                    interview.Status == 'Pending'
                   "
                   @click="
                     (action = 'Cancel'),
@@ -331,16 +330,16 @@
                       <option
                         class=""
                         v-if="status == 'Ongoing'"
-                        value="Failed"
+                        value="Cancelled"
                       >
-                        <span>Failed</span>
+                        <span>Cancelled</span>
                       </option>
                       <option
                         class=""
                         v-if="status == 'Ongoing'"
-                        value="Passed"
+                        value="Finished"
                       >
-                        <span>Passed</span>
+                        <span>Finished</span>
                       </option>
                     </select>
                   </div>
@@ -625,7 +624,7 @@ export default {
       // status: this.$route.query.status,
       status: "Pending",
       isshowModal: false,
-      selectedStatus: "Pending",
+      selectedStatus: "Finished",
       isShowInfoModal: false,
       newScheduledDate: "",
       newLocation: "",
@@ -644,7 +643,7 @@ export default {
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        if (status == "Passed") {
+        if (status == "Finished") {
           //if interview passed --> change acc status to "Active"
           this.changeFreelancerAccountStatus(interview.CreateByID);
         }
@@ -676,7 +675,7 @@ export default {
       }
     },
     async cancelInterview(interview) {
-      this.changeInterviewStatus("Failed", interview);
+      this.changeInterviewStatus("Cancelled", interview);
     },
     async acceptInterview(interview) {
       console.log(interview);
@@ -724,11 +723,12 @@ export default {
       });
       // console.log(data);
       if (data.data.message == "Change Status Success") {
-        toast.success("Change Account Status Successfully!", {
-          theme: "colored",
-          autoClose: 2000,
-          onClose: () => location.reload(),
-        });
+        // toast.success("Change Account Status Successfully!", {
+        //   theme: "colored",
+        //   autoClose: 2000,
+        //   onClose: () => location.reload(),
+        // });
+        console.log("Change Account Status Successfully!")
       } else {
         toast.warn("Change account Status Failed!", { autoClose: 2000 });
       }
@@ -749,11 +749,12 @@ export default {
           },
           (err) => {
             console.log(err.response);
-            toast.warn("Freelancer skills score already added", {
-              theme: "colored",
-              autoClose: 2000,
-              onClose: () => location.reload(),
-            });
+            // toast.warn("Freelancer skills score already added", {
+            //   theme: "colored",
+            //   autoClose: 2000,
+            //   onClose: () => location.reload(),
+            // });
+            console.log("Freelancer skills score already added")
           }
         );
     },

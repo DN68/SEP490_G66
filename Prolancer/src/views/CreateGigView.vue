@@ -45,12 +45,15 @@
             aria-label="Default select example"
           >
             <option :value="-1">Select a category</option>
-            <option
+            <!-- <option
               v-for="category in categories"
               :key="category.id"
               :value="category.CategoryID"
             >
-              {{ category.Category_Name }}
+              <span v-if="category.CategoryID === 1">{{ category.Category_Name }}</span>
+            </option> -->
+            <option value="1">
+              Programming & Tech
             </option>
           </select>
           <!-- <select

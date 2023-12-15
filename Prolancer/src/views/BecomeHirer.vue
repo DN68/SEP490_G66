@@ -46,7 +46,7 @@
                 ></i
               ></span>
 
-              <span> Personal Information</span>
+              <span> Legal Representative Information</span>
               <i class="bi bi-chevron-right"></i>
             </div>
             <div
