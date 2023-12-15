@@ -200,7 +200,6 @@
                   </p>
                 </div>
               </td>
-              
 
               <td class="td_Interviews">
                 <div class="d-flex align-items-center">
@@ -472,7 +471,7 @@ import Headerseller from "../components/HeaderSeller.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from "../../api";
 var moment = require("moment");
 
 export default {
@@ -502,7 +501,7 @@ export default {
   },
   methods: {
     createInterview() {
-      axios
+      api
         .post("/interviews/create", {
           CreateByID: this.freelancer.FreelancerID,
           ScheduledDate: "",
@@ -528,7 +527,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeInterviewStatus(status, interview) {
-      const data = await axios.put("/interviews/updateStatus", {
+      const data = await api.put("/interviews/updateStatus", {
         status: status,
         interviewID: interview.InterviewID,
       });
@@ -549,7 +548,7 @@ export default {
     },
     async updateInterview(selectedInterviewID) {
       console.log(this.newScheduledDate);
-      const data = await axios.put("/interviews/update", {
+      const data = await api.put("/interviews/update", {
         date: this.newScheduledDate,
         location: this.newLocation,
         id: selectedInterviewID,
@@ -570,7 +569,7 @@ export default {
     },
   },
   async created() {
-    await axios
+    await api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -591,7 +590,7 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/error");
     }
-    await axios
+    await api
       .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -609,21 +608,27 @@ export default {
 
     console.log(this.freelancer.FreelancerID);
     // Get all interviews by status
-    const responseData = await axios.get(
-      `/interviews/index/${this.freelancer.FreelancerID}`,
-      {
+    const responseData = await api
+      .get(`/interviews/index/${this.freelancer.FreelancerID}`, {
         params: {
           page: this.selectedPage,
           status: this.status,
         },
-      }
-    );
-    const interviews = responseData.data.interview;
-    console.log(interviews);
-    this.interviews = interviews;
-    const paging = responseData.data.pagination;
-    this.pagination = paging;
-    console.log(this.pagination.totalRow);
+      })
+      .then(
+        (res) => {
+          const interviews = res.data.interview;
+          console.log(interviews);
+          this.interviews = interviews;
+          const paging = res.data.pagination;
+          this.pagination = paging;
+          console.log(this.pagination.totalRow);
+        },
+        (err) => {
+          console.log(err.response);
+        }
+      );
+
     // console.log(this.status)
     // const responseInterviewReqData = await axios.get("/orders/getInterviewRequest", {
     //   params: {
@@ -637,7 +642,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get(
+    const responseDateWithPage = await api.get(
       `/interviews/index/${this.freelancer.FreelancerID}`,
       {
         params: {
@@ -770,15 +775,15 @@ export default {
 }
 .interview_table {
   max-height: 70vh;
-  overflow-y: scroll;  
+  overflow-y: scroll;
 }
 
 .interview_table::-webkit-scrollbar {
-  width: 12px; 
+  width: 12px;
 }
 
 .interview_table::-webkit-scrollbar-thumb {
-  background-color: #888; 
+  background-color: #888;
 }
 
 .interview_table::-webkit-scrollbar-track {

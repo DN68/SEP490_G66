@@ -50,7 +50,7 @@
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
                 >
-              </router-link>
+            </a>
             </li>
             <li class="nav-item">
               <a
@@ -72,7 +72,7 @@
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
                 >
-              </router-link>
+            </a>
             </li>
             <li class="nav-item">
               <a
@@ -94,7 +94,7 @@
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
                 >
-              </router-link>
+            </a>
             </li>
             <li class="nav-item dropdown" style="margin-left: 130%">
               <a
@@ -401,7 +401,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import * as bootstrap from 'bootstrap';
 import api from '../../api';
 export default {
   data() {

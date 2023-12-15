@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100vh">
     <Header v-if="currentAccountInfo.Role == 'C'"></Header>
-    <HeaderSell v-else></HeaderSell>
+    <HeaderSell  v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
     <div v-if="isDataLoaded" style="height: 100vh">
     <PrettyChatWindow
       :projectId="projectId"
