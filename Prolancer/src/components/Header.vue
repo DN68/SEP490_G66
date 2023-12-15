@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light " style="z-index: 1000;">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
@@ -59,22 +59,18 @@
           <a class="nav-link d-flex flex-column text-center" aria-current="page" href="#"><i class="fas fa-account-friends fa-lg"></i><span class="small">My Network</span></a>
         </li> -->
             <li class="nav-item" v-if="currentAccountInfo">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="/manageorder"
-                ><i class="bi bi-box-seam"></i
-                ><span class="small">Orders</span></a
-              >
+              <router-link class="nav-link d-flex flex-column text-center" to="/manageOrder"
+                    >
+                    <i class="bi bi-box-seam"></i
+                ><span class="small">Orders</span>
+              </router-link>
             </li>
             <li class="nav-item" v-if="currentAccountInfo">
-              <a
-                class="nav-link d-flex flex-column text-center"
-                aria-current="page"
-                href="/chat"
-                ><i class="bi bi-chat"></i
-                ><span class="small">Messaging</span></a
-              >
+              <router-link class="nav-link d-flex flex-column text-center" to="/chat"
+                    >
+              <i class="bi bi-chat"></i
+                ><span class="small">Messaging</span>
+              </router-link>
             </li>
             
 
@@ -134,7 +130,11 @@
                     >Order request</router-link
                   >
                 </li>
-
+                <li>
+                  <router-link class="dropdown-item" to="/manageChangeRequest"
+                    >Order Change Request</router-link
+                  >
+                </li>
                 <li>
                   <router-link class="dropdown-item" to="/logout"
                     >Logout</router-link
@@ -278,7 +278,7 @@
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import VueJwtDecode from 'vue-jwt-decode';
-
+import api from '../../api';
 export default {
   props: ["searchText"],
   data() {
@@ -298,7 +298,7 @@ export default {
       let decoded = VueJwtDecode.decode(token)
       console.log(decoded.role)
       if(decoded.role === "F"){
-        axios
+        api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -312,7 +312,7 @@ export default {
           }
         );
       }else if(decoded.role === "C"){
-        axios
+        api
         .get("/customers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -327,7 +327,7 @@ export default {
           }
         );
       }
-      // axios
+      // api
       //   .get("/accounts/info", {
       //     headers: { token: localStorage.getItem("token") },
       //   })

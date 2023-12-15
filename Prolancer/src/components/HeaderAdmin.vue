@@ -1,13 +1,11 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav
-      class="navbar navbar-expand-lg navbar-light bg-light fixed-top customer_header"
-    >
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top admin_header">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
@@ -40,6 +38,7 @@
                   src="../assets/image/logo2.png"
                   class="rounded-circle"
                   height="30"
+                  width="30"
                   alt=""
                   loading="lazy"
                 />
@@ -103,7 +102,6 @@
                 <li>
                   <a class="dropdown-item" href="/change">Change password</a>
                 </li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="/logout">Logout</a></li>
               </ul>
             </li>
@@ -195,7 +193,7 @@
 <script>
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
-
+import api from '../../api';
 export default {
   props: ["searchText"],
   data() {
@@ -209,7 +207,7 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.account = null;
     } else {
-      axios
+      api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })

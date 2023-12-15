@@ -8,25 +8,50 @@
             <div
               id="myCarousel"
               class="carousel slide"
-              data-ride="carousel"
+              data-bs-ride="carousel"
               data-interval="0"
             >
               <!-- Carousel indicators -->
+
               <ol class="carousel-indicators">
                 <li
-                  data-target="#myCarousel"
-                  data-slide-to="0"
+                  data-bs-target="#myCarousel"
+                  data-bs-slide-to="0"
                   class="listCarouse active"
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    margin: 4px px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0, 0, 0, 0.4);
+                  "
                 ></li>
                 <li
                   class="listCarouse"
-                  data-target="#myCarousel"
-                  data-slide-to="1"
+                  data-bs-target="#myCarousel"
+                  data-bs-slide-to="1"
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    margin: 4px px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0, 0, 0, 0.4);
+                  "
                 ></li>
                 <li
                   class="listCarouse"
-                  data-target="#myCarousel"
-                  data-slide-to="2"
+                  data-bs-target="#myCarousel"
+                  data-bs-slide-to="2"
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    margin: 4px px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0, 0, 0, 0.4);
+                  "
                 ></li>
               </ol>
               <!-- Wrapper for carousel items -->
@@ -42,10 +67,10 @@
                         :to="'/gigdetail/' + gig.GigID"
                         style="text-decoration: none"
                       >
-                        <div class="thumb-wrapper" v-if="index<4">
-                          <span class="wish-icon"
+                        <div class="thumb-wrapper" v-if="index < 4">
+                          <!-- <span class="wish-icon"
                             ><i class="fa fa-heart-o"></i
-                          ></span>
+                          ></span> -->
                           <div class="img-box">
                             <img
                               :src="gig.Gig_IMG"
@@ -67,7 +92,18 @@
                                 <span
                                   class="userInfor"
                                   style="text-align: left; color: #222325"
-                                  >{{gig.First_Name+' '+gig.Last_Name}}</span
+                                  >{{
+                                    gig.First_Name + " " + gig.Last_Name
+                                  }}</span
+                                >
+                              </div>
+                              <div class="col-md-10">
+                                <span style="font-size: 14px; color: #74767e"
+                                  >@</span
+                                >
+                                <span
+                                  style="text-align: left; color: #74767e"
+                                  >{{ gig.Username }}</span
                                 >
                               </div>
                               <!-- <div class="col-md-4">
@@ -84,89 +120,11 @@
                                   <li class="list-inline-item">
                                     <div style="display: inline">
                                       <i class="fa fa-star"
-                                        ><b class="ratingScore">{{ gig.Rating?parseFloat(gig.Rating).toFixed(1):'...'}}</b></i
-                                      >
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="orderPrice col-md-3">
-                                <span class="gigPrice"
-                                  >From&nbsp;<span
-                                    >US${{ gig.Price }}</span
-                                  ></span
-                                >
-                              </div>
-                              <div class="getOrder col-md-9">
-                                <a href="#" class="btn btn-primary btnOrder"
-                                  >Get Order</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </router-link>
-                    </div>
-                  </div>
-                </div>
-                <div class="item carousel-item">
-                  <div class="row">
-                    <div
-                      class="col-sm-3 itemList"
-                      v-for="(gig, index) in listGigs" 
-                      :key="index"
-                      
-
-                    >
-                      <router-link
-                        :to="'/gigdetail/' + gig.GigID"
-                        style="text-decoration: none"
-                      >
-                        <div class="thumb-wrapper" v-if="index >=4&&index<8">
-                          <span class="wish-icon"
-                            ><i class="fa fa-heart-o"></i
-                          ></span>
-                          <div class="img-box">
-                            <img
-                              :src="gig.Gig_IMG"
-                              class="img-fluid rounded"
-                              alt="Img"
-                            />
-                          </div>
-                          <div class="thumb-content" >
-                            <div class="row userRow">
-                              <div class="col-md-12">
-                                <img
-                                  :src="gig.Profile_Picture"
-                                  class="rounded-circle"
-                                  height="25"
-                                  alt=""
-                                  loading="lazy"
-                                  style="width: 30px; border: 1px solid"
-                                />
-                                <span
-                                  class="userInfor"
-                                  style="text-align: left; color: #222325"
-                                  >{{gig.First_Name+' '+gig.Last_Name}}</span
-                                >
-                              </div>
-                              <!-- <div class="col-md-4">
-                                <h3 class="userLevel">Level 3</h3>
-                              </div> -->
-                            </div>
-
-                            <h3 class="gigDescription">                           
-                              {{ gig.Title }}
-                            </h3>
-                            <div class="row">
-                              <div class="star-rating">
-                                <ul class="list-inline starRatingUl">
-                                  <li class="list-inline-item">
-                                    <div style="display: inline">
-                                      <i class="fa fa-star"
-                                        ><b class="ratingScore">{{ gig.Rating?parseFloat(gig.Rating).toFixed(1):'...'}}</b></i
+                                        ><b class="ratingScore">{{
+                                          gig.Rating
+                                            ? parseFloat(gig.Rating).toFixed(1)
+                                            : "..."
+                                        }}</b></i
                                       >
                                     </div>
                                   </li>
@@ -204,10 +162,13 @@
                         :to="'/gigdetail/' + gig.GigID"
                         style="text-decoration: none"
                       >
-                        <div class="thumb-wrapper" v-if="index >=8&&index<12">
-                          <span class="wish-icon"
+                        <div
+                          class="thumb-wrapper"
+                          v-if="index >= 4 && index < 8"
+                        >
+                          <!-- <span class="wish-icon"
                             ><i class="fa fa-heart-o"></i
-                          ></span>
+                          ></span> -->
                           <div class="img-box">
                             <img
                               :src="gig.Gig_IMG"
@@ -229,7 +190,18 @@
                                 <span
                                   class="userInfor"
                                   style="text-align: left; color: #222325"
-                                  >{{gig.First_Name+' '+gig.Last_Name}}</span
+                                  >{{
+                                    gig.First_Name + " " + gig.Last_Name
+                                  }}</span
+                                >
+                              </div>
+                              <div class="col-md-10">
+                                <span style="font-size: 14px; color: #74767e"
+                                  >@</span
+                                >
+                                <span
+                                  style="text-align: left; color: #74767e"
+                                  >{{ gig.Username }}</span
                                 >
                               </div>
                               <!-- <div class="col-md-4">
@@ -237,7 +209,7 @@
                               </div> -->
                             </div>
 
-                            <h3 class="gigDescription">                           
+                            <h3 class="gigDescription">
                               {{ gig.Title }}
                             </h3>
                             <div class="row">
@@ -246,7 +218,109 @@
                                   <li class="list-inline-item">
                                     <div style="display: inline">
                                       <i class="fa fa-star"
-                                        ><b class="ratingScore">{{ gig.Rating?parseFloat(gig.Rating).toFixed(1):'...'}}</b></i
+                                        ><b class="ratingScore">{{
+                                          gig.Rating
+                                            ? parseFloat(gig.Rating).toFixed(1)
+                                            : "..."
+                                        }}</b></i
+                                      >
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="orderPrice col-md-3">
+                                <span class="gigPrice"
+                                  >From&nbsp;<span
+                                    >US${{ gig.Price }}</span
+                                  ></span
+                                >
+                              </div>
+                              <div class="getOrder col-md-9">
+                                <a href="#" class="btn btn-primary btnOrder"
+                                  >Get Order</a
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </router-link>
+                    </div>
+                  </div>
+                </div>
+                <div class="item carousel-item">
+                  <div class="row">
+                    <div
+                      class="col-sm-3 itemList"
+                      v-for="(gig, index) in listGigs"
+                      :key="index"
+                    >
+                      <router-link
+                        :to="'/gigdetail/' + gig.GigID"
+                        style="text-decoration: none"
+                      >
+                        <div
+                          class="thumb-wrapper"
+                          v-if="index >= 8 && index < 12"
+                        >
+                          <!-- <span class="wish-icon"
+                            ><i class="fa fa-heart-o"></i
+                          ></span> -->
+                          <div class="img-box">
+                            <img
+                              :src="gig.Gig_IMG"
+                              class="img-fluid rounded"
+                              alt="Img"
+                            />
+                          </div>
+                          <div class="thumb-content">
+                            <div class="row userRow">
+                              <div class="col-md-12">
+                                <img
+                                  :src="gig.Profile_Picture"
+                                  class="rounded-circle"
+                                  height="25"
+                                  alt=""
+                                  loading="lazy"
+                                  style="width: 30px; border: 1px solid"
+                                />
+                                <span
+                                  class="userInfor"
+                                  style="text-align: left; color: #222325"
+                                  >{{
+                                    gig.First_Name + " " + gig.Last_Name
+                                  }}</span
+                                >
+                              </div>
+                              <div class="col-md-10">
+                                <span style="font-size: 14px; color: #74767e"
+                                  >@</span
+                                >
+                                <span
+                                  style="text-align: left; color: #74767e"
+                                  >{{ gig.Username }}</span
+                                >
+                              </div>
+                              <!-- <div class="col-md-4">
+                                <h3 class="userLevel">Level 3</h3>
+                              </div> -->
+                            </div>
+
+                            <h3 class="gigDescription">
+                              {{ gig.Title }}
+                            </h3>
+                            <div class="row">
+                              <div class="star-rating">
+                                <ul class="list-inline starRatingUl">
+                                  <li class="list-inline-item">
+                                    <div style="display: inline">
+                                      <i class="fa fa-star"
+                                        ><b class="ratingScore">{{
+                                          gig.Rating
+                                            ? parseFloat(gig.Rating).toFixed(1)
+                                            : "..."
+                                        }}</b></i
                                       >
                                     </div>
                                   </li>
@@ -278,14 +352,24 @@
               <a
                 class="carousel-control-prev"
                 href="#myCarousel"
-                data-slide="prev"
+                data-bs-slide="prev"
+                style="
+                  width: 30px;
+
+                  background-color: red;
+                "
               >
                 <i class="fa fa-angle-left"></i>
               </a>
               <a
                 class="carousel-control-next"
                 href="#myCarousel"
-                data-slide="next"
+                data-bs-slide="next"
+                style="
+                  width: 30px;
+
+                  background-color: red;
+                "
               >
                 <i class="fa fa-angle-right"></i>
               </a>
@@ -299,10 +383,7 @@
 
 <script>
 export default {
-  props: [
-    'listGigs'
-  ]
-
+  props: ["listGigs"],
 };
 </script>
 

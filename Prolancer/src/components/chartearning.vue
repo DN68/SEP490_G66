@@ -8,7 +8,7 @@
 import { Chart, registerables } from 'chart.js';
 import axios from 'axios';
 import VueJwtDecode from 'vue-jwt-decode';
-
+import api from '../../api';
 // Register necessary modules
 Chart.register(...registerables);
 
@@ -23,7 +23,7 @@ export default {
     await this.onUpdateAccountInfo();
     try {
       // Replace '/orders/getchartearning' with the actual API endpoint
-      const response = await axios.get('/orders/getchartearning', {
+      const response = await api.get('/orders/getchartearning', {
         params: {
           FreelancerID: this.currentAccountInfo.FreelancerID,
         },
@@ -94,7 +94,7 @@ export default {
       } else {
         let decoded = VueJwtDecode.decode(token);
         if (decoded.role === 'F') {
-          await axios
+          await api
             .get('/freelancers/info', {
               headers: { token: localStorage.getItem('token') },
             })
@@ -107,7 +107,7 @@ export default {
               }
             );
         } else if (decoded.role === 'C') {
-          await axios
+          await api
             .get('/customers/info', {
               headers: { token: localStorage.getItem('token') },
             })

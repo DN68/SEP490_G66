@@ -22,7 +22,6 @@
               class="first"
               style="
                 padding: 15px;
-                border-bottom: 1px #ccc solid;
                 margin-left: 10px;
                 margin-right: 10px;
               "
@@ -34,25 +33,7 @@
                 >View All</router-link
               >
             </div>
-            <div
-              class="chatdetail"
-              style="
-                padding: 15px;
-                border-bottom: 1px #ccc solid;
-                margin-left: 10px;
-                margin-right: 10px;
-              "
-            >
-              <img
-                style="width: 15%; border-radius: 40%"
-                src="../assets/image/large_1588936738888.png"
-                alt=""
-              />
-              <div class="right" style="float: right; width: 75%">
-                <span class="">Duy Nguyen</span> <br />
-                <span style="font-weight: 400">The key to your success</span>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -65,22 +46,25 @@
           Find important messages, tips, and links to helpful resources here:
         </p>
         <div class="abc">
-          <ChartGig class="mb-5"></ChartGig>
-          <div class="activeorder mb-5">
+          <h4>Statistics Chart</h4>
+          <div class="me-10" style="margin-right: 200px;">
+          <ChartGig class="mb-5 "></ChartGig>
+        </div>
+          <!-- <div class="activeorder mb-5">
             <span>Active orders - 0</span>
             <span>Completed Orders - 0</span>
             <span>Cancel Orders - 0</span>
-          </div>
+          </div> -->
           <router-link to="/uppro" style="text-decoration: none; color: black">
             <div class="adddevlang mb-5">
-              <span>Add your dev language to get buyers</span>
+              <span>Update your profile to get buyers</span>
               <p style="font-weight: 300; font-size: 15px">
-                Fiverr search results will include dev languages soon, so make
+                Prolancer search results will include dev languages soon, so make
                 sure to add all of yours under your profile skills.
               </p>
             </div>
           </router-link>
-          <router-link to="#" style="text-decoration: none; color: black">
+          <!-- <router-link to="#" style="text-decoration: none; color: black">
             <div class="inbox">
               <span>Set up inbox auto replies</span>
               <p style="font-weight: 300; font-size: 15px">
@@ -88,13 +72,14 @@
                 message.
               </p>
             </div>
-          </router-link>
+          </router-link> -->
         </div>
       </div>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <Footer></Footer>
-    </div>
+    </div> -->
+    <ChatAuth></ChatAuth>
   </div>
 </template>
 
@@ -105,14 +90,15 @@ import SideBar from "../components/Sidebarprf.vue";
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 import ChartGig from "../components/chartgigsuccess.vue";
-
+import ChatAuth from "../components/ChatAuth.vue";
+import api from '../../api';
 export default {
   name: "App",
   components: {
     Headerseller,
     Footer,
     SideBar,
-    ChartGig,
+    ChartGig,ChatAuth
   },
   data() {
     return {
@@ -126,7 +112,7 @@ export default {
     if (localStorage.getItem("token") === null) {
       this.$router.push("/error");
     } else {
-      await axios
+      await api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -142,7 +128,7 @@ export default {
           }
         );
     }
-    await axios
+    await api
       .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -162,7 +148,7 @@ export default {
     // async showAvatar(imgName){
     //   const apiUrl = "/freelancers/image/" + imgName;
     //   console.log(apiUrl)
-    //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+    //   const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
     //   console.log(resData);
     //   const blob = new Blob([resData.data], { type: "application/png" });
     //   // Create a URL for the Blob
@@ -173,7 +159,7 @@ export default {
     //   avatarElement.src = blobUrl
     // }
     // fetchData() {
-    //   this.$axios.get('/orderrequest/getGigTitle')
+    //   this.$api.get('/orderrequest/getGigTitle')
     //     .then(response => {
     //       this.chartData = response.data;
     //     })
@@ -218,7 +204,7 @@ html {
   display: flex;
   flex-direction: column;
 }
-#sidebarMenu {
+.sel #sidebarMenu {
   border: 1px #ccc solid;
   background-color: #fff;
   display: flex;
@@ -232,7 +218,7 @@ html {
   flex-direction: column;
   margin-bottom: 15px;
 }
-#sidebarMenu > img {
+.sel #sidebarMenu > img {
   width: 30%;
   margin: 20px;
 }
@@ -251,5 +237,18 @@ html {
 .nonetextalign {
   text-align: start;
   line-height: 1.6;
+}
+.sel .dropdown-menu::before {
+  content: "";
+  height: 10px;
+  left: 0;
+  right: 0;
+  top: 90%;
+  position: absolute;
+  background-color: transparent;
+  transform: translateY(-1900%);
+} 
+.sel .dropdown-menu{
+  top: 40px;
 }
 </style>

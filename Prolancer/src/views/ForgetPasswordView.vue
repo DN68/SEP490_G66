@@ -63,6 +63,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+import api from '../../api';
 export default {
   data() {
     return {
@@ -73,7 +74,7 @@ export default {
   },
   methods: {
     resetPassword() {
-      axios
+      api
         .post("/accounts/forgotPassword", {
           email: this.email,
         })

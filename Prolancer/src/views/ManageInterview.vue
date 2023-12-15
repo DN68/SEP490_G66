@@ -602,7 +602,7 @@ import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -638,7 +638,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeInterviewStatus(status, interview) {
-      const data = await axios.put("/interviews/updateStatus", {
+      const data = await api.put("/interviews/updateStatus", {
         status: status,
         interviewID: interview.InterviewID,
       });
@@ -659,7 +659,7 @@ export default {
     },
     async updateInterview(selectedInterviewID) {
       console.log(this.newScheduledDate);
-      const data = await axios.put("/interviews/update", {
+      const data = await api.put("/interviews/update", {
         date: this.newScheduledDate,
         location: this.newLocation,
         id: selectedInterviewID,
@@ -680,7 +680,7 @@ export default {
     },
     async acceptInterview(interview) {
       console.log(interview);
-      await axios
+      await api
         .put("/interviews/sendSchedule", {
           freelancerID: interview.CreateByID,
           location: interview.Location,
@@ -705,7 +705,7 @@ export default {
         );
     },
     changeFreelancerAccountStatus(freelancerID) {
-      axios.get(`/freelancers/${freelancerID}/info`).then(
+      api.get(`/freelancers/${freelancerID}/info`).then(
         (res) => {
           console.log(res.data);
           this.changeAccountStatus("Active", res.data.AccountID);
@@ -718,7 +718,7 @@ export default {
       );
     },
     async changeAccountStatus(status, accountID) {
-      const data = await axios.put("/accounts/updateStatus", {
+      const data = await api.put("/accounts/updateStatus", {
         status: status,
         accountID: accountID,
       });
@@ -735,7 +735,7 @@ export default {
     },
     addFreelancerSkillScore(freelancerId) {
       console.log(freelancerId);
-      axios
+      api
         .post("/skills/add", {
           FreelancerID: freelancerId,
         })
@@ -759,7 +759,7 @@ export default {
     },
   },
   async created() {
-    await axios
+    await api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -779,7 +779,7 @@ export default {
     }
 
     // Get all interviews by status
-    const responseData = await axios.get("/interviews/index", {
+    const responseData = await api.get("/interviews/index", {
       params: {
         page: this.selectedPage,
         status: this.status,
@@ -792,7 +792,7 @@ export default {
     this.pagination = paging;
     console.log(this.pagination.totalRow);
     // console.log(this.status)
-    // const responseInterviewReqData = await axios.get("/orders/getInterviewRequest", {
+    // const responseInterviewReqData = await api.get("/orders/getInterviewRequest", {
     //   params: {
     //     user: this.user,
     //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
@@ -804,7 +804,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/interviews/index", {
+    const responseDateWithPage = await api.get("/interviews/index", {
       params: {
         page: this.selectedPage,
         // search: this.searchInterview,

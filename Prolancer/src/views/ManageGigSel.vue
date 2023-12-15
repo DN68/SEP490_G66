@@ -440,6 +440,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import VueJwtDecode from "vue-jwt-decode";
 
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -468,7 +469,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeGigStatus(status, gigID) {
-      const data = await axios.put("/gigs/updateStatus", {
+      const data = await api.put("/gigs/updateStatus", {
         status: status,
         gigID: gigID,
       });
@@ -493,7 +494,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -519,7 +520,7 @@ export default {
     },
 
     async getGig(currentPage) {
-      const responseData = await axios
+      const responseData = await api
         .get("/gigs/index/freelancer", {
           params: {
             page: currentPage,

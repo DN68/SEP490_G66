@@ -75,30 +75,6 @@
 
           <div
             class="col-md-2 status_item"
-            :class="{ status_item_active: this.status == 'Late' }"
-          >
-            <router-link
-              @click="
-                (this.status = 'Late'),
-                  (selectedPage = '1'),
-                  getOrder(selectedPage)
-              "
-              :to="{
-                path: '#',
-              }"
-              class="text-decoration-none"
-            >
-              <h6>
-                Late<span
-                  v-if="this.status == 'Late'"
-                  class="badge bg-secondary"
-                  >{{ pagination.totalRow }}</span
-                >
-              </h6>
-            </router-link>
-          </div>
-          <div
-            class="col-md-2 status_item"
             :class="{ status_item_active: this.status == 'Delivered' }"
           >
             <router-link
@@ -188,7 +164,7 @@
                   +
                   <span class="visually-hidden">unread messages</span>
                 </span>
-                Change Request
+                Order Change Request
               </h6>
             </router-link>
           </div>
@@ -247,7 +223,7 @@
                     <div class="ms-3">
                       <p class="fw-bold mb-1">
                         {{
-                          order.CustomerFirstName + " " + order.CustomerLastName
+                          order.CompanyName 
                         }}
                       </p>
                     </div>
@@ -443,9 +419,9 @@
                   class="text-center py-2"
                 >
                   <option class="" value="Active">
-                    <span>In Progress</span>
+                    <span>Active</span>
                   </option>
-                  <option class="" value="Late"><span>Late</span></option>
+                  <!-- <option class="" value="Late"><span>Late</span></option> -->
                   <option class="" value="Delivered">
                     <span>Delivered</span>
                   </option>
@@ -495,7 +471,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -531,7 +507,7 @@ export default {
 
   methods: {
     async getOrder(user, currentPage) {
-      const responseData = await axios
+      const responseData = await api
         .get("/orders/index", {
           params: {
             page: currentPage,
@@ -553,7 +529,7 @@ export default {
         });
     },
     async changeOrderStatus(status, orderID) {
-      const data = await axios.put("/orders/updateStatus", {
+      const data = await api.put("/orders/updateStatus", {
         status: status,
         orderID: orderID,
       });
@@ -577,7 +553,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -594,7 +570,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })

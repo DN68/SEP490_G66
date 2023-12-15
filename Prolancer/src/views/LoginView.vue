@@ -101,7 +101,7 @@
 <script>
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -131,7 +131,7 @@ export default {
   methods: {
     async Login() {
       if (this.checkInput) {
-        axios.post("/accounts/login", this.account).then(
+        api.post("/accounts/login", this.account).then(
           (res) => {
             if (this.rememberMe) {
               localStorage.setItem(

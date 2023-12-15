@@ -63,9 +63,10 @@
                         <input
                           type="number"
                           class="form-control form-icon-trailing me-2"
-                          style="width: 10%"
+                          style="width: 14%"
                           min="1"
                           v-model="orderRequest.TotalEstimation"
+                          max="1000"
                         />
                         hour
                       </div>
@@ -116,16 +117,25 @@
                         </h5>
                       </div>
                       <div class="text-start">
-                        <span >Start Date</span>
-                        <VueDatePicker v-model="orderRequest.StartFrom" class="my-2" :format="'yyyy-MM-dd hh:mm a'"/>
+                        <span>Start Date</span>
+                        <VueDatePicker
+                          v-model="orderRequest.StartFrom"
+                          class="my-2"
+                          :format="'yyyy-MM-dd hh:mm a'"
+                        />
                       </div>
                       <div class="text-start">
                         <span>End Date</span>
-                        <VueDatePicker v-model="orderRequest.EndAt" class="my-2" :format="'yyyy-MM-dd hh:mm a'"/>
+                        <VueDatePicker
+                          v-model="orderRequest.EndAt"
+                          class="my-2"
+                          :format="'yyyy-MM-dd hh:mm a'"
+                        />
                       </div>
                       <p>
-                      Note: Please check your start date and end date before go to the next step.
-                    </p>
+                        Note: Please check your start date and end date before
+                        go to the next step.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -159,9 +169,7 @@
                       <label class="form-label" for="textAreaExample6"></label>
                     </div>
 
-                    <p>
-                      2. You can send more requirement after start your order
-                    </p>
+                    <p>2. Comfirm</p>
 
                     <div class="confirm_submit">
                       <input
@@ -201,13 +209,17 @@
                     <div class="subtotal row">
                       <span class="col-md-6">Subtotal</span>
                       <span class="col-md-6 subtotal_price"
-                        >${{ gig.Price }}x{{ orderRequest.TotalEstimation }}</span
+                        >${{ gig.Price }}x{{
+                          orderRequest.TotalEstimation
+                        }}</span
                       >
                     </div>
                     <div class="service_fee row">
                       <span class="col-md-6">Service Fee</span>
                       <span class="col-md-6 service_price"
-                        >${{ gig.Price * orderRequest.TotalEstimation * 10/100  }}</span
+                        >${{
+                          (gig.Price * orderRequest.TotalEstimation * 10) / 100
+                        }}</span
                       >
                     </div>
                     <hr class="featurette-divider" />
@@ -216,7 +228,7 @@
                       <span class="col-md-6 total_all"
                         >${{
                           gig.Price * orderRequest.TotalEstimation +
-                          gig.Price * orderRequest.TotalEstimation * 10/100
+                          (gig.Price * orderRequest.TotalEstimation * 10) / 100
                         }}</span
                       >
                     </div>
@@ -258,6 +270,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 var moment = require("moment");
+import api from '../../api';
 export default {
   name: "OrderDetailPage",
   components: {
@@ -265,15 +278,14 @@ export default {
     VueDatePicker,
   },
   async mounted() {
-    const responseGig = await axios.get(
+    const responseGig = await api.get(
       "/gigs/details/" + this.$route.query.gigID
     );
     const gig = responseGig.data;
     this.gig = gig;
     console.log("Run here 1");
     // await this.onUpdateAccountInfo();
-    console.log("🚀 ~ file: HERE", JSON.stringify(this.user))
-
+    console.log("🚀 ~ file: HERE", JSON.stringify(this.user));
   },
   data() {
     return {
@@ -286,16 +298,15 @@ export default {
       gig: {},
 
       orderRequest: {
-
-        OrderRequestID:'',
-        CustomerID:'',
-        GigID:'',
-        JobDescription: '',
-        TotalEstimation:1,
-        StartFrom:new Date(),
-        EndAt:moment(new Date()).add(24 , "h"),
-        Description: '',
-        Status:'Pending'
+        OrderRequestID: "",
+        CustomerID: "",
+        GigID: "",
+        JobDescription: "",
+        TotalEstimation: 1,
+        StartFrom: new Date(),
+        EndAt: moment(new Date()).add(24, "h"),
+        Description: "",
+        Status: "Pending",
       },
       user: [],
       moment: moment,
@@ -305,24 +316,40 @@ export default {
     onUpdateAccountInfo(newAccountInfo) {
       // Update parent's currentAccountInfo based on the data received from the child
       this.user = newAccountInfo;
-      
-      console.log("🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:", JSON.stringify(this.user))
-      if(this.user==null){
-        this.$router.push('/login')
+
+      console.log(
+        "🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:",
+        JSON.stringify(this.user)
+      );
+      if (this.user == null) {
+        this.$router.push("/login");
       }
     },
     changeStep: function (step) {
-      var isafter =  moment(this.orderRequest.EndAt).isAfter(this.orderRequest.StartFrom);
-      if(!isafter){
-         alert('End date must be after start date!');
-         return
+      if (step == 2) {      
+        if (!/^(?:[1-9]\d{0,2}|10000)$/.test(this.orderRequest.TotalEstimation)) {
+        alert("Please input valid estimate number! From 1 to 10000!");
+        return;
         }
-      if (step == 2) {
         this.isstep2 = true;
         this.isstep1 = false;
         this.isstep3 = false;
         this.currentStep = 3;
       } else if (step == 3) {
+        var isAfterCurrentDate = moment(this.orderRequest.StartFrom).isBefore(
+          moment(new Date())
+        );
+        if (isAfterCurrentDate) {
+          alert("Start date can not before current date!");
+          return;
+        }
+        var isafter = moment(this.orderRequest.EndAt).isAfter(
+          this.orderRequest.StartFrom
+        );
+        if (!isafter) {
+          alert("End date must be after start date!");
+          return;
+        }
         this.isstep2 = false;
         this.isstep1 = false;
         this.isstep3 = true;
@@ -335,39 +362,36 @@ export default {
       }
     },
     async sendOrderRequest() {
+      if (!/^(?:[1-9]\d{0,2}|10000)$/.test(this.orderRequest.TotalEstimation)) {
+        alert("Please input valid estimate number! From 1 to 10000!");
+        return;
+      }
       if (this.orderRequest.JobDescription == "" || !this.confirmSubmit) {
-      
         alert("Please Submit Job Description And Click On Confirm Checkbox!");
+        return;
       } else {
         this.orderRequest.CustomerID = this.user.CustomerID;
         this.orderRequest.GigID = this.gig.GigID;
         console.log(this.orderRequest);
-        await axios
-        .post("/orderrequest/createOrderRequest", {
-          
-          orderRequest: this.orderRequest,
-        })
-        .then((response) => {
-          console.log(response.data);
-          toast.success("Send successfully!", {
-            theme: "colored",
-            autoClose: 2000,
-            onClose: () => location.reload(),
+        await api
+          .post("/orderrequest/createOrderRequest", {
+            orderRequest: this.orderRequest,
+          })
+          .then((response) => {
+            console.log(response.data);
+            toast.success("Send successfully!", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => {this.$router.push('/manageOrderRequest')}
+            });
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error here:", error);
+            toast.warn("Failed!", { autoClose: 2000 });
           });
-          
-        })
-        .catch((error) => {
-          // Handle the error
-          console.error("Error here:", error);
-          toast.warn("Failed!", { autoClose: 2000 });
-        });
-
-        
       }
     },
-
-    
-   
   },
 };
 </script>

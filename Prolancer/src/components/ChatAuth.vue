@@ -1,52 +1,68 @@
-<template>
-  <div style="height: 100vh">
-    <Header v-if="currentAccountInfo.Role == 'C'"></Header>
-    <HeaderSell v-else></HeaderSell>
-    <div v-if="isDataLoaded" style="height: 100vh">
-    <PrettyChatWindow
-      :projectId="projectId"
-      :username="currentAccountInfo.Username"
-      :secret="currentAccountInfo.AccountID"
-      :timezoneOffset="7"
-      style="background-color:#fff"
-    />
-    </div>
-  </div>
-  <!-- <div>{{ projectId }} </div> -->
-</template>
- 
-  
-  <script>
-import { PrettyChatWindow } from "react-chat-engine-pretty";
-import { applyReactInVue } from "veaury";
+<template></template>
+
+<script>
+import api from '../../api';
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 const projectID = process.env.VUE_APP_CHAT_ENGINE_PROJECT_ID;
 const privateKey = process.env.VUE_APP_CHAT_ENGINE_PRIVATE_KEY;
-import Header from "../components/Header.vue";
-import HeaderSell from "../components/HeaderSeller.vue";
-import api from '../../api';
 export default {
   data() {
     return {
-      projectId: projectID,
       currentChatAuthen: [],
       currentAccountInfo: [],
-      isDataLoaded: false,
     };
   },
-  components: {
-    PrettyChatWindow: applyReactInVue(PrettyChatWindow),Header,HeaderSell
-  },
+  components: {},
   async created() {
     await this.onUpdateAccountInfo();
-    // await this.loginRest(this.currentAccountInfo.Username, this.currentAccountInfo.AccountID);
-    // if (this.currentChatAuthen.length ==0 ) {
-    //   console.error("ChatAuthen Failed:" + this.currentAccountInfo.Username + "..."+ this.currentAccountInfo.AccountID);
-    //   await this.signupRest(this.currentAccountInfo.Username, this.currentAccountInfo.AccountID, this.currentAccountInfo.Email, this.currentAccountInfo.First_Name, this.currentAccountInfo.Last_Name);
-    // }
-    // console.log("Chat suscces This User " + this.username);
-    this.isDataLoaded = true;
+    if (Object.keys(this.currentAccountInfo).length >0) {
+      await this.loginRest(
+        this.currentAccountInfo.Username,
+        this.currentAccountInfo.AccountID
+      );
+      if (Object.keys(this.currentChatAuthen).length == 0) {
+        console.error(
+          "Chat Authen Failed:" +
+            this.currentAccountInfo.Username +
+            "..." +
+            this.currentAccountInfo.AccountID
+        );
+        if (this.currentAccountInfo.Role == "F") {
+          //Sign up as Freelancer
+          console.log("Sign up as Freelancer");
+          await this.signupRest(
+            this.currentAccountInfo.Username,
+            this.currentAccountInfo.AccountID,
+            this.currentAccountInfo.Email,
+            this.currentAccountInfo.First_Name,
+            this.currentAccountInfo.Last_Name +
+              " (" +
+              this.currentAccountInfo.Username +
+              ")"
+          );
+        }
+        //Sign up as Conpany
+        else {
+          console.log("Sign up as Conpany");
+          await this.signupRest(
+            this.currentAccountInfo.Username,
+            this.currentAccountInfo.AccountID,
+            this.currentAccountInfo.Email,
+            this.currentAccountInfo.CompanyName,
+            "Company"
+          );
+        }
+      } else {
+        console.log(
+          "Chat Auth Suscces This User " + this.currentChatAuthen.username
+        );
+      }
+    } else {
+      console.log(
+          "User guest not authen chat "
+        );
+    }
   },
   methods: {
     async loginRest(username, secret) {
@@ -60,13 +76,10 @@ export default {
         })
         .then((response) => {
           this.currentChatAuthen = response.data;
-          
         })
         .catch((error) => {
           // Handle the error
-          console.error("Error here:", error);
         });
-        
     },
 
     async signupRest(username, secret, email, first_name, last_name) {
@@ -136,20 +149,6 @@ export default {
   },
 };
 </script>
-   
-   <style>
-.ce-new-chat-button {
-  width: 32px;
-  position: relative;
-  bottom: 22px;
-}
 
-.ce-chat-card {
-  text-align: left !important; /* Align text to the left */
-}
-.ce-their-message {
-  text-align: left !important;
-}
-
-
+<style>
 </style>

@@ -148,6 +148,7 @@ import VueJwtDecode from "vue-jwt-decode";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+import api from '../../api';
 export default {
   name: "App",
   components: {
@@ -182,7 +183,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -207,7 +208,7 @@ export default {
       }
     },
     updateGig() {
-      axios
+      api
         .put(`/gigs/${this.$route.params.GigID}/update`, {
           Title: this.gig.Title,
           Description: this.gig.Description,
@@ -237,7 +238,7 @@ export default {
     },
   },
   mounted() {
-    axios.get(`/gigs/details/${this.$route.params.GigID}`).then(
+    api.get(`/gigs/details/${this.$route.params.GigID}`).then(
       (res) => {
         this.gig = res.data;
         console.log(this.gig);
@@ -246,11 +247,11 @@ export default {
         console.log(err.response);
       }
     );
-    axios.get("/categories/get").then((res) => {
+    api.get("/categories/get").then((res) => {
       this.categories = res.data;
       // console.log(res.data);
     }),
-      axios
+      api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -267,9 +268,9 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   background-color: #ededed;
-}
+} */
 
 .footer {
   width: 100%;

@@ -1,11 +1,11 @@
 <template>
+  <!-- Navbar -->
   <div>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
@@ -242,8 +242,8 @@ export default {
     }
   },
   mounted() {
-    axios
-      .get("http://localhost:3000/user/info", {
+    api
+      .get("/user/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(

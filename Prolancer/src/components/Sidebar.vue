@@ -17,7 +17,7 @@
             v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"
-            ><i class="bi bi-stack me-3"></i>
+            ><i class="bi bi-box-seam-fill me-3"></i>
             <span>Order Management</span>
           </router-link>
           <router-link
@@ -25,7 +25,7 @@
             v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"
-            ><i class="bi bi-stack me-3"></i>
+            ><i class="bi bi-journal-text me-3"></i>
             <span>Skill Test Management</span>
           </router-link>
           <router-link
@@ -33,23 +33,23 @@
             v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
             id="btn-gig"
-            ><i class="bi bi-stack me-3"></i>
+            ><i class="bi bi-card-checklist me-3"></i>
             <span>Interview Management</span>
           </router-link>
 
           <router-link to="/manageChangeRequest" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
-            id="btn-gig"><i class="bi bi-stack me-3"></i>
-            <span>Change Request Management</span>
+            id="btn-gig"><i class="bi bi-hourglass-top me-3"></i>
+            <span>Order Change Request Management</span>
           </router-link>
           <router-link to="/manageaccount/hirer" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
-            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            id="btn-gig"><i class="bi bi-file-earmark-person me-3"></i>
             <span>Hirer Management</span>
           </router-link>
           <router-link to="/manageaccount/freelancer" v-on:click="ChangeActive"
             class="list-group-item list-group-item-action py-2 ripple"
-            id="btn-gig"><i class="bi bi-stack me-3"></i>
+            id="btn-gig"><i class="bi bi-file-earmark-person me-3"></i>
             <span>Freelancer Management</span>
           </router-link>
           
@@ -130,9 +130,6 @@ $(document).ready(function () {
   cursor: pointer;
 }
 
-a {
-  padding-left: 80px;
-}
 .unset-border {
   border-right: unset;
   border-left: unset;

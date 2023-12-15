@@ -19,9 +19,7 @@
           </div>
         </div>
         <div class="text-start">
-          <router-link :to="'/manageOrderRequest'"> 
-        <i class="fa-solid fa-arrow-left-long text-danger " style="cursor: pointer;"></i>
-        </router-link>
+            <i  class="fa-solid fa-arrow-left-long text-danger " @click="goBack()" style="cursor: pointer;"></i>
         </div>
         <div class="order_detail_page row">
           <div
@@ -47,7 +45,7 @@
                         <span class="ordered_from_left">Ordered from </span>
 
                         <span class="ordered_from_right">{{
-                          order.CustomerFirstName + " " + order.CustomerLastName
+                          order.CompanyName 
                         }}</span>
 
                         <span class="" style="margin: 0 10px"> | </span>
@@ -74,7 +72,7 @@
                     <h5 class="text-end" style="font-size: 20px">
                       ${{
                         order.Price * order.TotalEstimation +
-                        order.Price * order.TotalEstimation * 0.1
+                        order.Price * order.TotalEstimation * 10/100
                       }}
                     </h5>
                   </div>
@@ -136,7 +134,7 @@
                         <th scope="row">SERVICE FEE</th>
                         <th colspan="2"></th>
                         <th class="order_price">
-                          ${{ order.Price * order.TotalEstimation * 0.1 }}
+                          ${{ order.Price * order.TotalEstimation * 10/100 }}
                         </th>
                       </tr>
 
@@ -146,7 +144,7 @@
                         <th class="order_price">
                           ${{
                             order.Price * order.TotalEstimation +
-                            order.Price * order.TotalEstimation * 0.1
+                            order.Price * order.TotalEstimation * 10/100
                           }}
                         </th>
                       </tr>
@@ -225,7 +223,7 @@
                     >
 
                     <span class="col-md-6 ordered_from_right text-end">{{
-                      order.CustomerFirstName + " " + order.CustomerLastName
+                      order.CompanyName + " "
                     }}</span>
                   </div>
                   <div class="delivery_time row">
@@ -245,7 +243,7 @@
                     <span class="col-md-6 total_price_right text-end"
                       >${{
                         order.Price * order.TotalEstimation +
-                        order.Price * order.TotalEstimation * 0.1
+                        order.Price * order.TotalEstimation * 10/100
                       }}
                     </span>
                   </div>
@@ -317,7 +315,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import VueJwtDecode from "vue-jwt-decode";
 import HeaderSell from "../components/HeaderSeller.vue";
-
+import api from '../../api';
 export default {
   name: "OrderDetailView",
   components: {
@@ -335,7 +333,7 @@ export default {
   },
   async created() {
     await this.onUpdateAccountInfo();
-    const responseOrder = await axios.get(
+    const responseOrder = await api.get(
       "/orderrequest/details/" + this.$route.params.id
     ).then((response) => {
             const order = response.data[0];
@@ -365,7 +363,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -379,7 +377,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -399,6 +397,9 @@ export default {
           };
         }
       }
+    },
+    goBack() {
+      this.$router.back();
     },
   },
 };
@@ -437,7 +438,7 @@ export default {
   color: #f31e1e;
 }
 
-.package-content {
+.order_detail_tab .package-content {
   margin-left: 20%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   border: 1px solid #dadbdd;

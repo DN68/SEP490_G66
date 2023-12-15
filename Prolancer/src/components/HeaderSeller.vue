@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top seller_header">
       <!-- Container wrapper -->
       <div class="container">
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="http://localhost:8080/">
+        <a class="navbar-brand" href="/">
           <img
             src="../assets/image/logo2.png"
             height="40"
@@ -17,14 +17,20 @@
           <!-- Left links -->
           <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
-              <a
+              <!-- <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/seldash"
+                href="'/seldash'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Dashboard</span
                 ></a
-              >
+              > -->
+              <router-link class="nav-link d-flex flex-column text-center" to="/seldash"
+                    >
+                    <span class="small" style="font-size: 20px; margin-left: 25px"
+                  >Dashboard</span
+                >
+              </router-link>
             </li>
             <li class="nav-item">
               <a
@@ -43,8 +49,8 @@
                 v-else-if="freelancer && freelancer.Status === 'Pending'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item">
               <a
@@ -65,8 +71,8 @@
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item">
               <a
@@ -87,8 +93,8 @@
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
-                ></a
-              >
+                >
+              </router-link>
             </li>
             <li class="nav-item dropdown" style="margin-left: 130%">
               <a
@@ -396,6 +402,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+import api from '../../api';
 export default {
   data() {
     return {
@@ -415,7 +422,7 @@ export default {
       // this.freelancer = null;
       this.$router.push("/error");
     } else {
-      axios
+      api
         .get("/freelancers/info", {
           headers: { token: localStorage.getItem("token") },
         })
