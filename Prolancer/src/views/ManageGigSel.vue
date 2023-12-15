@@ -438,7 +438,9 @@ import HeaderSeller from "../components/HeaderSeller.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import VueJwtDecode from "vue-jwt-decode";
 
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -467,7 +469,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeGigStatus(status, gigID) {
-      const data = await axios.put("/gigs/updateStatus", {
+      const data = await api.put("/gigs/updateStatus", {
         status: status,
         gigID: gigID,
       });
@@ -482,77 +484,94 @@ export default {
         toast.warn("Change Gig Status Failed!", { autoClose: 2000 });
       }
     },
+
+    async onUpdateAccountInfo() {
+      let token = localStorage.getItem("token");
+      //account is not authorized
+      if (!token) {
+        this.$router.push("/error");
+      } else {
+        let decoded = VueJwtDecode.decode(token);
+        console.log(decoded);
+        if (decoded.role === "F") {
+          await api
+            .get("/freelancers/info", {
+              headers: { token: localStorage.getItem("token") },
+            })
+            .then(
+              (res) => {
+                this.freelancer = res.data.freelancer;
+                // console.log(this.freelancer);
+                if(this.freelancer.Status != 'Active'){
+                  this.$router.push('/seldash')
+                }
+              },
+              (err) => {
+                console.log(err.response);
+              }
+            );
+        } else {
+          this.currentAccountInfo = {
+            Email: decoded.email,
+            Role: decoded.role,
+          };
+        }
+      }
+    },
+
+    async getGig(currentPage) {
+      const responseData = await api
+        .get("/gigs/index/freelancer", {
+          params: {
+            page: currentPage,
+            search: this.searchGig,
+            freelancerId: this.freelancer.FreelancerID,
+            status: this.status,
+          },
+        })
+        .then((response) => {
+          const gigs = response.data.gig;
+          console.log(gigs);
+          this.gigs = gigs;
+          const paging = response.data.pagination;
+          this.pagination = paging;
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error here:", error);
+          // toast.warn("Failed!", { autoClose: 2000 });
+        });
+    },
   },
   async created() {
-    await axios
-      .get("/freelancers/info", {
-        headers: { token: localStorage.getItem("token") },
-      })
-      .then(
-        (res) => {
-          this.freelancer = res.data.freelancer;
-          this.freelancerId = this.freelancer.FreelancerID;
-          if (this.freelancer.Role != "F") {
-            this.$router.push("/");
-          }
-        },
-        (err) => {
-          console.log(err.response);
-        }
-      );
-    if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
-    }
-    const responseAccountInfor = await axios.get("/freelancers/info", {
-      headers: { token: localStorage.getItem("token") },
-    });
-    const freelancerInfor = responseAccountInfor.data.freelancer;
-    this.freelancer = freelancerInfor;
-    console.log(this.freelancer.FreelancerID);
-    const responseData = await axios.get("/gigs/index/freelancer", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchGig,
-        freelancerId: this.freelancerId,
-        status: this.status,
-      },
-    });
-    const gigs = responseData.data.gig;
-    console.log(gigs);
-    this.gigs = gigs;
-    const paging = responseData.data.pagination;
-    this.pagination = paging;
-    console.log(this.pagination.totalRow);
-    // console.log(this.status)
-    // const responseOrderReqData = await axios.get("/orders/getOrderRequest", {
+    await this.onUpdateAccountInfo();
+    console.log(
+      "🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:",
+      JSON.stringify(this.freelancer)
+    );
+    await this.getGig(this.selectedPage);
+  },
+
+  async beforeRouteUpdate() {
+    // console.log("Run Here");
+    // const responseDateWithPage = await axios.get("/gigs/index/freelancer", {
     //   params: {
-    //     user: this.user,
-    //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
-    //     status: "Pending",
+    //     page: this.selectedPage,
+    //     search: this.searchGig,
+    //     freelancerId: this.freelancerId,
+    //     status: this.status,
     //   },
     // });
-    // const totalNewRequest = responseOrderReqData.data.pagination;
-    // this.totalOrderRequest = totalNewRequest.totalRow;
-  },
-  async beforeRouteUpdate() {
-    console.log("Run Here");
-    const responseDateWithPage = await axios.get("/gigs/index/freelancer", {
-      params: {
-        page: this.selectedPage,
-        search: this.searchGig,
-        freelancerId: this.freelancerId,
-        status: this.status,
-      },
-    });
 
-    const gigs = responseDateWithPage.data.gig;
-    this.gigs = gigs;
+    // const gigs = responseDateWithPage.data.gig;
+    // this.gigs = gigs;
 
-    const searchQuery = responseDateWithPage.data.searchQuery;
-    this.searchGig = searchQuery.search;
-    const paging = responseDateWithPage.data.pagination;
-    this.pagination = paging;
-    console.log("this.selectedPage " + (this.pagination.page + 1));
+    // const searchQuery = responseDateWithPage.data.searchQuery;
+    // this.searchGig = searchQuery.search;
+    // const paging = responseDateWithPage.data.pagination;
+    // this.pagination = paging;
+    // console.log("this.selectedPage " + (this.pagination.page + 1));
+    await this.getGig(this.selectedPage);
   },
 };
 </script>
@@ -656,5 +675,21 @@ export default {
 }
 .align-items-center {
   justify-content: center;
+}
+.gig_table {
+  max-height: 70vh;
+  overflow-y: scroll;  
+}
+
+.gig_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.gig_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.gig_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>

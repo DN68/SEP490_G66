@@ -23,6 +23,10 @@ router.get('/getMajorSkill',
 SkillController.getAllMajorSkill
 
 );
+router.post('/add', 
+SkillController.addManySkillScore
+
+);
 
 
 module.exports = router;

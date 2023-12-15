@@ -60,7 +60,10 @@
 
 <script>
 import axios from "axios";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
+import api from '../../api';
 export default {
   data() {
     return {
@@ -71,18 +74,20 @@ export default {
   },
   methods: {
     resetPassword() {
-      axios
+      api
         .post("/accounts/forgotPassword", {
           email: this.email,
         })
         .then(
           (res) => {
-            this.message = "New password has been sent to your email";
-            this.$refs.message.style.color = "green";
             this.isButtonDisabled = true;
-            this.message = "An email has been sent to your email. Return to login in 4 seconds";
+            toast.success("New password sent to mail", {
+              theme: "colored",
+              autoClose: 2000,
+              onClose: () => location.replace("/login"),
+            });
             const countdown = setTimeout(() => {
-              this.$router.push("/login")
+              this.$router.push("/login");
             }, 4000);
           },
           (err) => {

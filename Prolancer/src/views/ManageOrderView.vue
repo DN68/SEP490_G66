@@ -471,7 +471,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -507,7 +507,7 @@ export default {
 
   methods: {
     async getOrder(user, currentPage) {
-      const responseData = await axios
+      const responseData = await api
         .get("/orders/index", {
           params: {
             page: currentPage,
@@ -525,11 +525,11 @@ export default {
         .catch((error) => {
           // Handle the error
           console.error("Error here:", error);
-          toast.warn("Failed!", { autoClose: 2000 });
+          // toast.warn("Failed!", { autoClose: 2000 });
         });
     },
     async changeOrderStatus(status, orderID) {
-      const data = await axios.put("/orders/updateStatus", {
+      const data = await api.put("/orders/updateStatus", {
         status: status,
         orderID: orderID,
       });
@@ -548,26 +548,29 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        this.$router.push("/error");
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
             .then(
               (res) => {
                 this.currentAccountInfo = res.data.freelancer;
-                console.log(this.currentAccountInfo);
+                // console.log(this.currentAccountInfo);
+                if(this.currentAccountInfo.Status != 'Active'){
+                  this.$router.push('/seldash')
+                }
               },
               (err) => {
                 console.log(err.response);
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -761,5 +764,8 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   display: -webkit-box;
+}
+a{
+  padding-left: 0px
 }
 </style>

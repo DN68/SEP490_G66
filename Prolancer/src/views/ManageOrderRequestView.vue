@@ -1,7 +1,8 @@
 <template>
   <div>
     <Header v-if="currentAccountInfo.Role == 'C'"></Header>
-    <HeaderSell v-else></HeaderSell>
+    <HeaderSell v-else-if="currentAccountInfo.Role == 'F'"></HeaderSell>
+    <HeaderAdmin v-else></HeaderAdmin>
     <div>
       <div class="container">
         <div class="manage_title row">
@@ -514,7 +515,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -555,7 +556,7 @@ export default {
   methods: {
     async getOrderRequest(user, currentPage) {
       console.log("Here : " + JSON.stringify(user));
-      const responseData = await axios
+      const responseData = await api
         .get("/orderrequest/getOrderRequest", {
           params: {
             page: currentPage,
@@ -579,7 +580,7 @@ export default {
     async updateOrderRequestStatus(status, orderRequestID, selectedReason) {
       if (status == "Accept") {
         try {
-          const responseStep1 = await axios.put(
+          const responseStep1 = await api.put(
             "/orderrequest/changeOrderRequestStatus",
             {
               status: status,
@@ -587,7 +588,7 @@ export default {
             }
           );
           if (responseStep1) {
-            const responseStep2 = await axios.post("/orders/createOrder", {
+            const responseStep2 = await api.post("/orders/createOrder", {
               order: { OrderRequestID: orderRequestID },
             });
             if (responseStep2) {
@@ -605,7 +606,7 @@ export default {
         }
       } else if (status == "Cancel") {
         try {
-          const responseStep1 = await axios.put(
+          const responseStep1 = await api.put(
             "/orderrequest/changeOrderRequestStatus",
             {
               status: 'Cancelled',
@@ -627,7 +628,7 @@ export default {
           toast.warn("Failed!", { autoClose: 2000 });
         }
       } else {
-        const responseStep1 = await axios.put(
+        const responseStep1 = await api.put(
           "/orderrequest/changeOrderRequestStatus",
           {
             status: status,
@@ -635,7 +636,7 @@ export default {
           }
         );
         if (responseStep1) {
-          const responseStep2 = await axios.put(
+          const responseStep2 = await api.put(
             "/orderrequest/updateOrderRequestNote",
             {
               OrderRequestID: orderRequestID,
@@ -656,26 +657,28 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        this.$router.push("/error");
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded.role);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
             .then(
               (res) => {
                 this.currentAccountInfo = res.data.freelancer;
-                console.log(this.currentAccountInfo);
+                if(this.currentAccountInfo.Status != "Active"){
+                  this.$router.push('/seldash')
+                }
               },
               (err) => {
                 console.log(err.response);
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })

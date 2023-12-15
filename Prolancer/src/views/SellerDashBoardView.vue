@@ -91,7 +91,7 @@ import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 import ChartGig from "../components/chartgigsuccess.vue";
 import ChatAuth from "../components/ChatAuth.vue";
-
+import api from '../../api';
 export default {
   name: "App",
   components: {
@@ -109,10 +109,10 @@ export default {
   async mounted() {
     // this.fetchData();
     // console.log(localStorage.getItem("token"));
-    if (localStorage.getItem("token") == null) {
-      this.$router.push("/login");
+    if (localStorage.getItem("token") === null) {
+      this.$router.push("/error");
     } else {
-      await axios
+      await api
         .get("/accounts/info", {
           headers: { token: localStorage.getItem("token") },
         })
@@ -120,7 +120,7 @@ export default {
           (res) => {
             this.account = res.data.account;
             if (this.account.Role != "F") {
-              this.$router.push("/");
+              this.$router.push("/error");
             }
           },
           (err) => {
@@ -128,7 +128,7 @@ export default {
           }
         );
     }
-    await axios
+    await api
       .get("/freelancers/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -138,7 +138,7 @@ export default {
           // this.showAvatar(res.data.freelancer.Profile_Picture)
         },
         (err) => {
-          this.$router.push("/");
+          this.$router.push("/error");
           // console.log(err.response);
         }
       );
@@ -148,7 +148,7 @@ export default {
     // async showAvatar(imgName){
     //   const apiUrl = "/freelancers/image/" + imgName;
     //   console.log(apiUrl)
-    //   const resData = await axios.get(apiUrl, { responseType: "arraybuffer" });
+    //   const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
     //   console.log(resData);
     //   const blob = new Blob([resData.data], { type: "application/png" });
     //   // Create a URL for the Blob
@@ -159,7 +159,7 @@ export default {
     //   avatarElement.src = blobUrl
     // }
     // fetchData() {
-    //   this.$axios.get('/orderrequest/getGigTitle')
+    //   this.$api.get('/orderrequest/getGigTitle')
     //     .then(response => {
     //       this.chartData = response.data;
     //     })
@@ -204,7 +204,7 @@ html {
   display: flex;
   flex-direction: column;
 }
-#sidebarMenu {
+.sel #sidebarMenu {
   border: 1px #ccc solid;
   background-color: #fff;
   display: flex;
@@ -218,7 +218,7 @@ html {
   flex-direction: column;
   margin-bottom: 15px;
 }
-#sidebarMenu > img {
+.sel #sidebarMenu > img {
   width: 30%;
   margin: 20px;
 }
@@ -229,7 +229,7 @@ html {
   /* padding-left: 25px;
   border-left: 1px #ccc solid; */
 }
-.info-user h5 {
+.sel .info-user h5 {
   margin: 45px 55px;
   padding-left: 25px;
   border-left: 1px #ccc solid;
@@ -238,7 +238,7 @@ html {
   text-align: start;
   line-height: 1.6;
 }
-.dropdown-menu::before {
+.sel .dropdown-menu::before {
   content: "";
   height: 10px;
   left: 0;

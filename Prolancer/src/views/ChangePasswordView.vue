@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="change_password">
     <div class="header">
       <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
       <HeaderSeller v-if="role == 'F'"></HeaderSeller>
@@ -20,7 +20,14 @@
             class="form-control form-control-lg"
             placeholder="Enter your old password"
             v-model="inputOldPassword"
+            ref="inputOldPassword"
+            required
           />
+          <div>
+            <p class="errmessage" style="color: red">
+              {{ validationErrors.inputOldPassword }}
+            </p>
+          </div>
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >New Password</label
           >
@@ -30,7 +37,14 @@
             class="form-control form-control-lg"
             placeholder="Enter your new password"
             v-model="newPassword"
+            ref="newPassword"
+            required
           />
+          <div>
+            <p class="errmessage" style="color: red">
+              {{ validationErrors.newPassword }}
+            </p>
+          </div>
           <label class="form-label mt-5" style="float: left" for="form3Example3"
             >Re-enter New Password</label
           >
@@ -40,7 +54,14 @@
             class="form-control form-control-lg"
             placeholder="Enter your new password again"
             v-model="reNewPassword"
+            ref="reNewPassword"
+            required
           />
+          <div>
+            <p class="errmessage" style="color: red">
+              {{ validationErrors.reNewPassword }}
+            </p>
+          </div>
           <button
             id="btn-sub"
             type="submit"
@@ -49,7 +70,6 @@
           >
             Submit
           </button>
-          <span ref="message">{{ message }}</span>
         </div>
       </div>
     </div>
@@ -62,15 +82,18 @@ import HeaderAdmin from "../components/HeaderAdmin.vue";
 import HeaderSeller from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebarprf.vue";
 import axios from "axios";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
+import api from "../../api";
 export default {
   name: "App",
   components: {
     Headers,
     Sidebar,
     HeaderAdmin,
-    HeaderSeller
-},
+    HeaderSeller,
+  },
   data() {
     return {
       account: {},
@@ -78,7 +101,12 @@ export default {
       newPassword: "",
       reNewPassword: "",
       message: "",
-      role: ""
+      role: "",
+      validationErrors: {
+        inputOldPassword: "",
+        newPassword: "",
+        reNewPassword: "",
+      },
     };
   },
   created() {
@@ -88,14 +116,14 @@ export default {
     }
   },
   mounted() {
-    axios
+    api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
       .then(
         (res) => {
           this.account = res.data.account;
-          this.role = this.account.Role
+          this.role = this.account.Role;
         },
         (err) => {
           console.log(err.response);
@@ -109,42 +137,80 @@ export default {
         this.newPassword
       );
     },
+
     checkInput() {
-      if (!this.inputOldPassword) {
-        this.message = "you must enter password";
-        this.$refs.message.style.color = "red";
+      var errCount = 0;
+      //input validation here
+      if (!this.validateField("inputOldPassword")) {
+        errCount++;
+      }
+      if (!this.validateField("newPassword")) {
+        errCount++;
+      }
+      if (!this.validateField("reNewPassword")) {
+        errCount++;
+      }
+      //if no error -> true
+      if (errCount == 0) {
+        return true;
+      } else {
         return false;
       }
-      if (!this.newPassword) {
-        this.message = "you must enter new password";
-        this.$refs.message.style.color = "red";
-        return false;
-      }
-      if (!this.isValidPassword) {
-        this.message =
-          "Password must be of minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
-          this.$refs.message.style.color = "red";
-          return false;
-      }
-      if (!this.reNewPassword) {
-        this.message = "you must re-enter new password";
-        this.$refs.message.style.color = "red";
-        return false;
-      }
-      if (this.newPassword != this.reNewPassword) {
-        this.message = "Wrong password confirmation";
-        this.$refs.message.style.color = "red";
-        return false;
-      }
-      return true;
     },
   },
   methods: {
+    validateField(fieldName) {
+      const value = this[fieldName].trim();
+
+      if (value === "") {
+        this.validationErrors[fieldName] = `This field cannot be empty.`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+      // // old pass check
+      // if (fieldName == "inputOldPassword" && (this.inputOldPassword !== this.account.Password)) {
+      //   this.validationErrors[
+      //     fieldName
+      //   ] = "Wrong old password";
+      //   this.setBorderColor(fieldName, false);
+      //   return false;
+      // }
+      // new pass validation
+      if (fieldName == "newPassword" && !this.isValidPassword) {
+        this.validationErrors[
+          fieldName
+        ] = `"Password must be more than 8 characters, including at least one lowercase letter, one uppercase letter, a number, a special character"`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      if (
+        fieldName == "reNewPassword" &&
+        this.newPassword != this.reNewPassword
+      ) {
+        this.validationErrors[fieldName] = `Wrong password confirmation`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      //if field input OK
+      this.validationErrors[fieldName] = "";
+      this.setBorderColor(fieldName, true);
+      return true;
+    },
+    //Set border color
+    setBorderColor(fieldName, value) {
+      if (value == true) {
+        this.$refs[`${fieldName}`].style.borderColor = "initial";
+      } else {
+        this.$refs[`${fieldName}`].style.borderColor = "red";
+      }
+    },
     changePassword() {
-      console.log(this.account)
+      console.log(this.checkInput);
       if (this.checkInput) {
         // console.log("Wrong password confirm");
-        axios
+        api
           .put(`/accounts/${this.account.Email}/changepw`, {
             inputOldPassword: this.inputOldPassword,
             oldPassword: this.account.Password,
@@ -152,13 +218,20 @@ export default {
           })
           .then(
             (res) => {
-              this.$refs.message.style.color = "green";
-              this.message = "change pass success";
-              // this.$router.push("/logout");
+              console.log(res.data);
+              // if (res.status(200)) {
+              toast.success("Change password successfully", {
+                theme: "colored",
+                autoClose: 2000,
+                onClose: () => location.reload(),
+                // });
+              });
             },
             (err) => {
-              this.$refs.message.style.color = "red";
-              this.message = "Change pass failed, wrong old password !!!"
+              toast.error("Wrong old password", {
+                theme: "colored",
+                autoClose: 2000,
+              });
             }
           );
       }
@@ -168,7 +241,6 @@ export default {
 </script>
 
 <style scoped>
-
 .sidebar {
   float: left;
   width: 17%;
@@ -186,7 +258,7 @@ export default {
 
   z-index: 600;
   background-color: #ccc;
-    width: 83%;
+  width: 83%;
 }
 
 .container-change {

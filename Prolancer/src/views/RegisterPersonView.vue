@@ -203,7 +203,7 @@
 
 <script>
 import axios from "axios";
-
+import api from '../../api';
 export default {
   data() {
     return {
@@ -298,7 +298,7 @@ export default {
   methods: {
     async Register() {
       if (this.checkInput) {
-        axios
+        api
           .post("/users/create", {
             email: this.email,
             username: this.username,
@@ -319,7 +319,7 @@ export default {
       }
     },
     isEmailExist() {
-      axios.get(`/users/${this.email}/checkEmail`).then(
+      api.get(`/users/${this.email}/checkEmail`).then(
         (res) => {
           console.log(res.data);
           if (res.data) {
@@ -334,7 +334,7 @@ export default {
       );
     },
     isUsernameExist() {
-      axios.get(`/users/${this.username}/checkUsername`).then(
+      api.get(`/users/${this.username}/checkUsername`).then(
         (res) => {
           console.log(res.data);
           if (res.data) {

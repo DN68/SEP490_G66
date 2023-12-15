@@ -309,9 +309,6 @@
                       style="margin-bottom: 15px"
                       class="text-center py-2"
                     >
-                      <option class="" value="Pending">
-                        <span>Pending</span>
-                      </option>
                       <option class="" value="Active">
                         <span>Active</span>
                       </option>
@@ -549,7 +546,7 @@ import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+import api from '../../api';
 var moment = require("moment");
 
 export default {
@@ -571,7 +568,7 @@ export default {
       searchHirer: "",
       isshowModal: false,
       isShowInfoModal: false,
-      selectedStatus: "Pending",
+      selectedStatus: "Active",
     };
   },
   methods: {
@@ -580,7 +577,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     async changeAccountStatus(status, accountID) {
-      const data = await axios.put("/accounts/updateStatus", {
+      const data = await api.put("/accounts/updateStatus", {
         status: status,
         accountID: accountID,
       });
@@ -598,7 +595,7 @@ export default {
   },
   async created() {
     //Admin role permission
-    await axios
+    await api
       .get("/accounts/info", {
         headers: { token: localStorage.getItem("token") },
       })
@@ -606,7 +603,7 @@ export default {
         (res) => {
           this.account = res.data.account;
           if (this.account.Role != "A") {
-            this.$router.push("/");
+            this.$router.push("/error");
           }
         },
         (err) => {
@@ -614,15 +611,15 @@ export default {
         }
       );
     if (localStorage.getItem("token") === null) {
-      this.$router.push("/login");
+      this.$router.push("/error");
     }
-    // const responseAccountInfor = await axios.get("/accounts/info", {
+    // const responseAccountInfor = await api.get("/accounts/info", {
     //   headers: { token: localStorage.getItem("token") },
     // });
     // const accountInfor = responseAccountInfor.data.account;
     // this.account = accountInfor;
     // console.log(this.account.accountID);
-    const responseData = await axios.get("/customers/index", {
+    const responseData = await api.get("/customers/index", {
       params: {
         page: this.selectedPage,
         status: this.status,
@@ -636,7 +633,7 @@ export default {
     this.pagination = paging;
     console.log(this.pagination.totalRow);
     // console.log(this.status)
-    // const responseInterviewReqData = await axios.get("/orders/getInterviewRequest", {
+    // const responseInterviewReqData = await api.get("/orders/getInterviewRequest", {
     //   params: {
     //     user: this.user,
     //     requestType: this.user.role == "C" ? "Extend" : "Cancel",
@@ -648,7 +645,7 @@ export default {
   },
   async beforeRouteUpdate() {
     console.log("Run Here");
-    const responseDateWithPage = await axios.get("/customers/index", {
+    const responseDateWithPage = await api.get("/customers/index", {
       params: {
         page: this.selectedPage,
         search: this.searchHirer,
@@ -787,5 +784,21 @@ export default {
 .freelancerInfoForm td {
   text-align: right;
   padding-right: 25px;
+}
+.account_table {
+  max-height: 70vh;
+  overflow-y: scroll;  
+}
+
+.account_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.account_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.account_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>

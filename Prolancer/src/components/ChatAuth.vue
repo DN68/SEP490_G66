@@ -1,6 +1,7 @@
 <template></template>
 
 <script>
+import api from '../../api';
 import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 const projectID = process.env.VUE_APP_CHAT_ENGINE_PROJECT_ID;
@@ -110,7 +111,7 @@ export default {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -124,7 +125,7 @@ export default {
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })

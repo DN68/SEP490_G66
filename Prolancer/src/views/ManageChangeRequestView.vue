@@ -421,7 +421,7 @@ import "vue3-toastify/dist/index.css";
 import HeaderSell from "../components/HeaderSeller.vue";
 import Sidebar from "../components/Sidebar.vue";
 import VueJwtDecode from "vue-jwt-decode";
-
+import api from '../../api';
 export default {
   name: "CreateOrderDetailPage",
   components: {
@@ -453,7 +453,7 @@ export default {
   },
   methods: {
     async getChangeRequest(currentPage) {
-      const responseData = await axios
+      const responseData = await api
         .get("/changerequest/getChangeRequest", {
           params: {
             page: currentPage,
@@ -471,13 +471,13 @@ export default {
         .catch((error) => {
           // Handle the error
           console.error("Error here:", error);
-          toast.warn("Failed!", { autoClose: 2000 });
+          // toast.warn("Failed!", { autoClose: 2000 });
         });
     },
     async updateChangeRequestStatus(action, changeRequestObj) {
       if (action == "Accept") {
         try {
-          const responseStep1 = await axios.put(
+          const responseStep1 = await api.put(
             "/changerequest/changeChangeRequestStatus",
             {
               status: "Accept",
@@ -496,7 +496,7 @@ export default {
         }
       } else {
         try {
-          const responseStep1 = await axios.put(
+          const responseStep1 = await api.put(
             "/changerequest/changeChangeRequestStatus",
             {
               status: "Reject",
@@ -519,26 +519,29 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        this.$router.push("/error");
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);
         if (decoded.role === "F") {
-          await axios
+          await api
             .get("/freelancers/info", {
               headers: { token: localStorage.getItem("token") },
             })
             .then(
               (res) => {
                 this.currentAccountInfo = res.data.freelancer;
-                console.log("Freelancer " + this.currentAccountInfo);
+                // console.log("Freelancer " + this.currentAccountInfo);
+                if(this.currentAccountInfo.Status != 'Active'){
+                  this.$router.push('/seldash')
+                }
               },
               (err) => {
                 console.log(err.response);
               }
             );
         } else if (decoded.role === "C") {
-          await axios
+          await api
             .get("/customers/info", {
               headers: { token: localStorage.getItem("token") },
             })
@@ -564,7 +567,7 @@ export default {
       if (action == "Accept") {
         try {
           if (selectedRequest.Request_Type == "Cancel") {
-            const changeOrderStatusRes = await axios.put(
+            const changeOrderStatusRes = await api.put(
               "/orders/updateStatus",
               {
                 status: "Cancelled",
@@ -572,7 +575,7 @@ export default {
               }
             );
             if (changeOrderStatusRes.data.message == "Change Status Success") {
-              const changeOrderRequestStatusRes = await axios.put(
+              const changeOrderRequestStatusRes = await api.put(
                 "/changerequest/changeChangeRequestStatus",
                 {
                   status: "Accept",
@@ -597,7 +600,7 @@ export default {
             }
           } else {
             // alert("Extend :" + selectedRequest.Request_Extend_Day);
-            const updateOrderExtendDayRes = await axios.put(
+            const updateOrderExtendDayRes = await api.put(
               "/orders/updateOrderExtendDay",
               {
                 extendDay: selectedRequest.Request_Extend_Day,
@@ -608,7 +611,7 @@ export default {
               updateOrderExtendDayRes.data.message ==
               "Update Extend Day Success"
             ) {
-              const changeOrderRequestStatusRes = await axios.put(
+              const changeOrderRequestStatusRes = await api.put(
                 "/changerequest/changeChangeRequestStatus",
                 {
                   status: "Accept",
@@ -639,7 +642,7 @@ export default {
         }
       } else {
         try {
-          const responseStep1 = await axios.put(
+          const responseStep1 = await api.put(
             "/changerequest/changeChangeRequestStatus",
             {
               status: "Reject",

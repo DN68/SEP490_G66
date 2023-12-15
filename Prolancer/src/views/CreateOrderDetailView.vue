@@ -270,6 +270,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 var moment = require("moment");
+import api from '../../api';
 export default {
   name: "OrderDetailPage",
   components: {
@@ -277,7 +278,7 @@ export default {
     VueDatePicker,
   },
   async mounted() {
-    const responseGig = await axios.get(
+    const responseGig = await api.get(
       "/gigs/details/" + this.$route.query.gigID
     );
     const gig = responseGig.data;
@@ -372,7 +373,7 @@ export default {
         this.orderRequest.CustomerID = this.user.CustomerID;
         this.orderRequest.GigID = this.gig.GigID;
         console.log(this.orderRequest);
-        await axios
+        await api
           .post("/orderrequest/createOrderRequest", {
             orderRequest: this.orderRequest,
           })
