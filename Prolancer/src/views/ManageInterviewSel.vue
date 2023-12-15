@@ -769,7 +769,7 @@ export default {
 .formInput {
   width: 90%;
 }
-.align-items-center {
+.container-manaInterviewad .align-items-center {
   justify-content: center;
 }
 .interview_table {

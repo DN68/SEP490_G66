@@ -506,7 +506,7 @@ export default {
   },
 
   methods: {
-    async getOrder(user, currentPage) {
+    async getOrder( currentPage) {
       const responseData = await api
         .get("/orders/index", {
           params: {
