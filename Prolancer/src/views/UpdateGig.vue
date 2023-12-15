@@ -267,7 +267,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* html {
   background-color: #ededed;
 } */
@@ -323,5 +323,8 @@ export default {
 }
 .img-gig:hover {
   border: 1px blue dashed;
+}
+textarea{
+  width: 100%
 }
 </style>
