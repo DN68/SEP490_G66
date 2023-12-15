@@ -176,9 +176,9 @@
       <span ref="message">{{ message }}</span>
     </div>
   </div>
-  <div class="footer">
-    <Footer></Footer>
-  </div>
+  <footer class="panel panel-default">
+      <Footer></Footer>
+    </footer>
 </div>
 
 </template>

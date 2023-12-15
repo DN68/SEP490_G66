@@ -603,12 +603,9 @@ export default {
             // Add your filtering logic here based on searchOrder and sortBy
             // For example, let's assume you want to filter by gig name
             return (
-              order.CustomerFirstName.toLowerCase().includes(
+              order.CompanyName.toLowerCase().includes(
                 this.searchOrder.toLowerCase()
-              ) ||
-              order.CustomerLastName.toLowerCase().includes(
-                this.searchOrder.toLowerCase()
-              )
+              ) 
             );
           });
         }else if(this.currentAccountInfo.Role == "C"){
@@ -630,10 +627,7 @@ export default {
             // Add your filtering logic here based on searchOrder and sortBy
             // For example, let's assume you want to filter by gig name
             return (
-              order.FreelancerFirstName.toLowerCase().includes(
-                this.searchOrder.toLowerCase()
-              ) ||
-              order.FreelancerLastName.toLowerCase().includes(
+              order.CompanyName.toLowerCase().includes(
                 this.searchOrder.toLowerCase()
               ) || order.FreelancerFirstName.toLowerCase().includes(
                 this.searchOrder.toLowerCase()

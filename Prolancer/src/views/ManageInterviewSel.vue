@@ -1,7 +1,7 @@
 <template>
   <div>
     <Headerseller></Headerseller>
-    <div class="container-manaInterviewad">
+    <div class="container-manaInterviewsel">
       <div class="manage_title row">
         <div class="col-md-3"><h3>Manage Interviews</h3></div>
         <div class="col-md-3"><h3></h3></div>
@@ -664,7 +664,7 @@ export default {
 </script>
       
 <style>
-.container-manaInterviewad {
+.container-manaInterviewsel {
   margin-left: 5%;
   margin-right: 5%;
 }
@@ -769,7 +769,7 @@ export default {
 .formInput {
   width: 90%;
 }
-.container-manaInterviewad .align-items-center {
+.container-manaInterviewsel .align-items-center {
   justify-content: center;
 }
 .interview_table {
