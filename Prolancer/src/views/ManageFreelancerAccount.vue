@@ -744,6 +744,18 @@ export default {
 }
 .account_table {
   max-height: 70vh;
-  overflow: auto;
+  overflow-y: scroll;  
+}
+
+.account_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.account_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.account_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>

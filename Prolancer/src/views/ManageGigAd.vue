@@ -659,7 +659,19 @@ export default {
   justify-content: center;
 }
 .gig_table {
-    max-height: 70vh;
-    overflow: auto;
+  max-height: 70vh;
+  overflow-y: scroll;  
+}
+
+.gig_table::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.gig_table::-webkit-scrollbar-thumb {
+  background-color: #888; 
+}
+
+.gig_table::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 </style>
