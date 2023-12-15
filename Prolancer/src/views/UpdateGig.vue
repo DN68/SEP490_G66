@@ -133,9 +133,7 @@
         </div>
       </div>
     </div>
-   <footer class="panel panel-default">
-      <Footer></Footer>
-    </footer>
+   
   </div>
 </template>
 
@@ -267,7 +265,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* html {
   background-color: #ededed;
 } */

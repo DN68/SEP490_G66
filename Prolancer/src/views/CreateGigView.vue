@@ -176,9 +176,7 @@
       <span ref="message">{{ message }}</span>
     </div>
   </div>
-  <div class="footer">
-    <Footer></Footer>
-  </div>
+  
 </div>
 
 </template>
@@ -306,7 +304,7 @@ export default {
 #content {
   background-color: #ccc;
   padding-top: 2%;
-  padding-bottom: 2%;
+  bottom: 0;
 }
 
 .container-creagig {

@@ -264,10 +264,13 @@
                   accept=".pdf"
                 />
                 (.pdf only)
-               
               </div>
               <div>
-                <button type="button" class="btn btn-success" @click="showCV(currentAccountInfo.CV_Upload)">
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  @click="showCV(currentAccountInfo.CV_Upload)"
+                >
                   View CV
                 </button>
               </div>
@@ -307,7 +310,7 @@ import VueJwtDecode from "vue-jwt-decode";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import api from '../../api';
+import api from "../../api";
 export default {
   name: "App",
   components: {
@@ -367,7 +370,7 @@ export default {
               console.log(err.response);
             }
           );
-      } else if (decoded.role === "A"){
+      } else if (decoded.role === "A") {
         api
           .get("/accounts/info", {
             headers: { token: localStorage.getItem("token") },
@@ -476,7 +479,7 @@ export default {
                   theme: "colored",
                   autoClose: 2000,
                 });
-              }else{
+              } else {
                 toast.warn("Update CV Failed!", {
                   theme: "colored",
                   autoClose: 2000,
@@ -562,7 +565,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* html {
   background-color: #ededed;
 } */
@@ -580,17 +583,17 @@ export default {
 }
 #content {
   float: right;
-  width: 80%;
+  width: 89%;
   padding-top: 2%;
   /* position: fixed; */
   top: 0;
   bottom: 0;
   right: 0;
   padding: 85.8px 0 0;
-  margin-top: 3%;
 
-  z-index: 600;
+  /* z-index: 600; */
   position: sticky;
+  background-color: #ccc;
 }
 
 .container-profile {
