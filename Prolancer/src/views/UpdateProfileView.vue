@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="update_profile">
     <div class="header">
       <HeaderAdmin v-if="role == 'A'"></HeaderAdmin>
       <HeaderSeller v-if="role == 'F'"></HeaderSeller>
@@ -733,7 +733,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* html {
   background-color: #ededed;
 } */
@@ -749,19 +749,17 @@ export default {
   z-index: 600;
   margin-top: 15px;
 }
-#content {
+.update_profile #content {
   float: right;
-  width: 80%;
+  width: 89%;
   padding-top: 2%;
-  /* position: fixed; */
   top: 0;
   bottom: 0;
   right: 0;
   padding: 85.8px 0 0;
-  margin-top: 3%;
 
-  z-index: 600;
   position: sticky;
+  background-color: #ccc;
 }
 
 .container-profile {
@@ -792,7 +790,6 @@ export default {
 
 .field {
   float: left;
-  /* padding-right: 100px; */
   width: 60%;
   margin-left: 20%;
   position: absolute;

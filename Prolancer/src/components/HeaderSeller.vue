@@ -218,59 +218,7 @@
         </div>
       </div>
     </div>
-    <div class="header">
-      <!-- Sidebar -->
-      <nav
-        style="display: none; padding-top: 140px"
-        id="sidebarMenuNomarl"
-        :class="{ selected: isShow }"
-        class="sidebar collapse bg-white"
-      >
-        <div class="position-sticky">
-          <div class="list-group list-group-flush mx-3 mt-4">
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple active"
-              aria-current="true"
-            >
-              <i class="bi bi-house-door-fill me-3"></i><span>HomePage</span>
-            </a>
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-            >
-              <i class="bi bi-stack me-3"></i>
-              <span>Manage Orders</span>
-            </a>
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="bi bi-box-seam-fill me-3"></i>
-              <span>Favourite List</span></a
-            >
-
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="bi bi-mortarboard-fill me-3"></i
-              ><span>My Profile</span></a
-            >
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="fas fa-calendar fa-fw me-3"></i
-              ><span>Change Password</span></a
-            >
-
-            <a
-              href="#"
-              class="list-group-item list-group-item-action py-2 ripple"
-              ><i class="bi bi-box-arrow-left me-3"></i> <span>Logout</span></a
-            >
-          </div>
-        </div>
-      </nav>
-    </div>
+    
     <div>
       <div
         class="modal fade show"

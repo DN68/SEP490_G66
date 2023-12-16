@@ -706,12 +706,9 @@ export default {
             // Add your filtering logic here based on search and sortBy
             // For example, let's assume you want to filter by gig name
             return (
-              order.CustomerFirstName.toLowerCase().includes(
+              order.CompanyName.toLowerCase().includes(
                 this.search.toLowerCase()
-              ) ||
-              order.CustomerLastName.toLowerCase().includes(
-                this.search.toLowerCase()
-              )
+              ) 
             );
           });
         }else if(this.currentAccountInfo.Role == "C"){

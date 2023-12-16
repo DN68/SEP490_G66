@@ -1,5 +1,5 @@
 <template>
-  <div class="become">
+  <div class="become_seller">
     <div class="header">
       <router-link to="/">
         <img
@@ -996,7 +996,7 @@ export default {
 </script>
 
 <style>
-.header {
+.become_seller .header {
   width: 100%;
   height: 80px;
   position: relative;
