@@ -660,7 +660,7 @@ export default {
         alert("Interview date must be after today");
         return;
       }
-      if(this.newLocation.length == 0){
+      if (this.newLocation.length == 0) {
         alert("You have to input location (or meeting link)");
         return;
       }
@@ -685,30 +685,35 @@ export default {
       this.changeInterviewStatus("Cancelled", interview);
     },
     async acceptInterview(interview) {
-      console.log(interview);
-      await api
-        .put("/interviews/sendSchedule", {
-          freelancerID: interview.CreateByID,
-          location: interview.Location,
-          scheduledDate: interview.ScheduledDate,
-        })
-        .then(
-          (res) => {
-            this.changeInterviewStatus("Ongoing", interview);
-            this.addFreelancerSkillScore(interview.CreateByID);
+      if (interview.Location.trim() != "" && interview.ScheduledDate != null) {
+        console.log(interview);
+        await api
+          .put("/interviews/sendSchedule", {
+            freelancerID: interview.CreateByID,
+            location: interview.Location,
+            scheduledDate: interview.ScheduledDate,
+          })
+          .then(
+            (res) => {
+              this.changeInterviewStatus("Ongoing", interview);
+              this.addFreelancerSkillScore(interview.CreateByID);
 
-            toast.success("Send interview Schedule Successfully!", {
-              theme: "colored",
-              autoClose: 2000,
-              onClose: () => location.reload(),
-            });
-          },
-          (err) => {
-            toast.warn("Change interview Schedule Failed!", {
-              autoClose: 2000,
-            });
-          }
-        );
+              toast.success("Send interview Schedule Successfully!", {
+                theme: "colored",
+                autoClose: 2000,
+                onClose: () => location.reload(),
+              });
+            },
+            (err) => {
+              toast.warn("Change interview Schedule Failed!", {
+                autoClose: 2000,
+              });
+            }
+          );
+      }else{
+        alert("You must update all interview info before accepting");
+        return;
+      }
     },
     changeFreelancerAccountStatus(freelancerID) {
       api.get(`/freelancers/${freelancerID}/info`).then(
