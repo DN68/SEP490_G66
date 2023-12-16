@@ -3,6 +3,7 @@
     class="container"
     style="height: auto; max-width: -webkit-fill-available"
   >
+    <ChatAuth></ChatAuth>
     <header class="row">
       <Header></Header>
     </header>
@@ -183,7 +184,7 @@ export default {
     Footer,
     GigCarousel,
     GigList,
-    NavCategory,
+    NavCategory,ChatAuth
     // ProductCarouselSuggest,
   },
   data() {
