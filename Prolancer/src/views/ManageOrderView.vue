@@ -178,7 +178,7 @@
               <tr style="border-bottom: 2px solid #dcd8d8">
                 <th>ID</th>
                 <th
-                  class="th_user"
+                  class="th_user text-center"
                   v-if="
                     currentAccountInfo.Role == 'F' ||
                     currentAccountInfo.Role == 'A'
@@ -187,7 +187,7 @@
                   HIRER
                 </th>
                 <th
-                  class="th_user"
+                  class="th_user text-center"
                   v-if="
                     currentAccountInfo.Role == 'C' ||
                     currentAccountInfo.Role == 'A'
@@ -195,7 +195,7 @@
                 >
                   FREELANCER
                 </th>
-                <th class="th_gig">JOB DESCRIPTION</th>
+                <th class="th_gig text-center">JOB DESCRIPTION</th>
                 <th>DUE ON</th>
                 <th>TOTAL</th>
                 <th>STATUS</th>
