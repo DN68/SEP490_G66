@@ -407,7 +407,7 @@ export default {
   padding-bottom: 2%;
 }
 
-.container-creagig {
+.update_gig .container-creagig {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
