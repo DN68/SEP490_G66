@@ -251,7 +251,6 @@ export default {
 }
 .change_password #content {
   float: right;
-  width: 70%;
   padding-top: 10%;
   position: fixed;
   top: 0;
@@ -260,9 +259,9 @@ export default {
   padding: 85.8px 0 0;
   margin-top: 3%;
 
-  z-index: 600;
+  z-index: -600;
   background-color: #ccc;
-    width: 83%;
+  width: 88%;
 }
 
 .change_password .container-change {

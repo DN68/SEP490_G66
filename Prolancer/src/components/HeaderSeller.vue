@@ -33,16 +33,15 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <a
+              <router-link
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/manageorder"
+                to="/manageorder"
                 v-if="freelancer && freelancer.Status === 'Active'"
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
-                ></a
-              >
-              <a
+                ></router-link>
+              <router-link
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 @click="showModal()"
@@ -50,20 +49,20 @@
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
                 >
-            </a>
+            </router-link>
             </li>
             <li class="nav-item">
-              <a
+              <router-link
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/managegigsel"
+                to="/managegigsel"
                 v-if="freelancer && freelancer.Status === 'Active'"
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
-                ></a
+                ></router-link
               >
-              <a
+              <router-link
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 @click="showModal()"
@@ -72,20 +71,20 @@
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
                 >
-            </a>
+            </router-link>
             </li>
             <li class="nav-item">
-              <a
+              <router-link
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
-                href="/earning"
+                to="/earning"
                 v-if="freelancer && freelancer.Status === 'Active'"
               >
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
-                ></a
+                ></router-link
               >
-              <a
+              <router-link
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 v-if="freelancer && freelancer.Status === 'Pending'"
@@ -94,7 +93,7 @@
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
                 >
-            </a>
+            </router-link>
             </li>
             <li class="nav-item dropdown" style="margin-left: 130%">
               <a
