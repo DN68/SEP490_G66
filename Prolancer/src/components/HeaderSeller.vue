@@ -41,7 +41,7 @@
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
                 ></router-link>
-              <router-link
+              <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 @click="showModal()"
@@ -49,7 +49,7 @@
                 ><span class="small" style="font-size: 20px; margin-left: 25px"
                   >Orders</span
                 >
-            </router-link>
+            </a>
             </li>
             <li class="nav-item">
               <router-link
@@ -62,7 +62,7 @@
                   >Gigs</span
                 ></router-link
               >
-              <router-link
+              <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 @click="showModal()"
@@ -71,7 +71,7 @@
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Gigs</span
                 >
-            </router-link>
+            </a>
             </li>
             <li class="nav-item">
               <router-link
@@ -84,7 +84,7 @@
                   >Earnings</span
                 ></router-link
               >
-              <router-link
+              <a
                 class="nav-link d-flex flex-column text-center"
                 aria-current="page"
                 v-if="freelancer && freelancer.Status === 'Pending'"
@@ -93,7 +93,7 @@
                 <span class="small" style="font-size: 20px; margin-left: 25px"
                   >Earnings</span
                 >
-            </router-link>
+            </a>
             </li>
             <li class="nav-item dropdown" style="margin-left: 130%">
               <a
