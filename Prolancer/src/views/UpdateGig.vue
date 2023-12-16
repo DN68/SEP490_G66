@@ -48,14 +48,16 @@
               aria-label="Default select example"
               ref="category"
             >
-              <option :value="-1">Select a category</option>
+              <!-- <option :value="-1">Select a category</option>
               <option
                 v-for="category in categories"
                 :key="category.id"
                 :value="category.CategoryID"
               >
                 {{ category.Category_Name }}
-              </option>
+              </option> -->
+              <option :value="-1">Select a category</option>
+              <option value="1">Programming & Tech</option>
             </select>
             <div>
               <p class="errmessage" style="color: red">
