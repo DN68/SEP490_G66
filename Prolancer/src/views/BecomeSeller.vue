@@ -1023,18 +1023,18 @@ export default {
   margin-top: 5%;
   display: flex;
 }
-.become .become_header {
+.become_seller .become_header {
   margin: 20px 0;
   border-bottom: 1px solid #dcd8d8;
   padding-bottom: 20px;
 }
 
-.become .become_header .become_header_item {
+.become_seller .become_header .become_header_item {
   width: fit-content;
   font-weight: 600;
 }
 
-.become .active span {
+.become_seller .active span {
   color: #d73436;
 }
 .inputForm {
