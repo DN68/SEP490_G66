@@ -4,7 +4,7 @@
     style="height: auto; max-width: -webkit-fill-available"
   >
     <header class="row">
-      <Header></Header>
+      <Header @update-account-info="onUpdateAccountInfo"></Header>
     </header>
     <NavCategory></NavCategory>
 
@@ -339,6 +339,22 @@ export default {
           console.error("Error here:", error);
           toast.warn("Get Freelacn Score Failed!", { autoClose: 2000 });
         });
+    },
+    onUpdateAccountInfo(newAccountInfo) {
+      // Update parent's currentAccountInfo based on the data received from the child
+      this.user = newAccountInfo;
+
+      console.log(
+        "🚀 ~ file: CreateOrderDetailView.vue:369 ~ onUpdateAccountInfo ~ user:",
+        JSON.stringify(this.user)
+      );
+       if(this.user == null){
+        
+      }else if(this.user.Role == "F"){
+        this.$router.push("/error");
+      }else if(this.user.Role == "A"){
+        this.$router.push("/error");
+      }
     },
   },
 };
