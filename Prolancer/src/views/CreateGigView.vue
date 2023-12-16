@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="create_gig">
     <div class="header">
       <Headers></Headers>
     </div>
@@ -210,9 +210,6 @@
         <span ref="message">{{ message }}</span>
       </div>
     </div>
-    <div class="footer">
-      <Footer></Footer>
-    </div>
   </div>
 </template>
 
@@ -416,13 +413,13 @@ export default {
   bottom: 0;
   z-index: 600;
 }
-#content {
+.create_gig #content {
   background-color: #ccc;
   padding-top: 2%;
   padding-bottom: 2%;
 }
 
-.container-creagig {
+.create_gig .container-creagig {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
