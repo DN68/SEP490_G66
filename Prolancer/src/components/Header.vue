@@ -221,6 +221,7 @@ export default {
     //account is not authorized
     if (!token) {
       this.account = null;
+      this.$emit('update-account-info', null);
     } else {
       let decoded = VueJwtDecode.decode(token)
       console.log(decoded.role)
@@ -232,6 +233,7 @@ export default {
         .then(
           (res) => {
             this.currentAccountInfo = res.data.freelancer;
+            this.$emit('update-account-info', this.currentAccountInfo);
             console.log(this.currentAccountInfo)
           },
           (err) => {
@@ -253,6 +255,8 @@ export default {
             console.log(err.response);
           }
         );
+      }else if(decoded.role === "A"){
+        this.$emit('update-account-info', {Role: 'A'});
       }
       // api
       //   .get("/accounts/info", {

@@ -106,7 +106,7 @@ export default {
       let token = localStorage.getItem("token");
       //account is not authorized
       if (!token) {
-        this.$router.push("/login");
+        // Nothing
       } else {
         let decoded = VueJwtDecode.decode(token);
         console.log(decoded);

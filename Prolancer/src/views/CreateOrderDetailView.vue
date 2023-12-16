@@ -277,7 +277,7 @@ export default {
     Header,
     VueDatePicker,
   },
-  async mounted() {
+  async created() {
     const responseGig = await api.get(
       "/gigs/details/" + this.$route.query.gigID
     );
@@ -285,7 +285,7 @@ export default {
     this.gig = gig;
     console.log("Run here 1");
     // await this.onUpdateAccountInfo();
-    console.log("🚀 ~ file: HERE", JSON.stringify(this.user));
+    console.log("🚀 ~ file: HERE", JSON.stringify(this.user));  
   },
   data() {
     return {
@@ -308,7 +308,7 @@ export default {
         Description: "",
         Status: "Pending",
       },
-      user: [],
+      user: null,
       moment: moment,
     };
   },
@@ -323,6 +323,12 @@ export default {
       );
       if (this.user == null) {
         this.$router.push("/login");
+      }else if(this.user.Role == "F"){
+        this.$router.push("/error");
+      }else if(this.user.Role == "C"&&this.user.Status != "Active"){
+        this.$router.push("/error");
+      }else if(this.user.Role == "A"){
+        this.$router.push("/error");
       }
     },
     changeStep: function (step) {
