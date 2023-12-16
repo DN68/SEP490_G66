@@ -1,10 +1,8 @@
 <template>
-
-<div class="create_gig">
-
-  <div class="header">
-    <Headers></Headers>
-  </div>
+  <div>
+    <div class="header">
+      <Headers></Headers>
+    </div>
 
     <div id="content" class="">
       <div class="container-creagig">
@@ -67,7 +65,7 @@
                 {{ validationErrors.category }}
               </p>
             </div>
-            
+
             <!-- <select
             class="form-select righthalf"
             aria-label="Default select example"
@@ -77,6 +75,7 @@
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select> -->
+          </div>
         </div>
         <div class="line" style="text-align: left; margin-top: 35px">
           <div style="float: left; width: 30%">
@@ -215,14 +214,11 @@
       <Footer></Footer>
     </div>
   </div>
-
- 
-</div>
-
 </template>
 
 <script>
 import Headers from "../components/HeaderSeller.vue";
+import Sidebar from "../components/Sidebarprf.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
@@ -234,6 +230,7 @@ export default {
   name: "App",
   components: {
     Headers,
+    Sidebar,
     Footer,
   },
   data() {
@@ -419,7 +416,7 @@ export default {
   bottom: 0;
   z-index: 600;
 }
-.create_gig #content {
+#content {
   background-color: #ccc;
   padding-top: 2%;
   padding-bottom: 2%;
@@ -466,15 +463,10 @@ export default {
 .img-gig:hover {
   border: 1px blue dashed;
 }
-
 textarea {
   width: 100%;
 }
-.right {
-  display: inline-grid;
-}
-
-.create_gig textarea {
-  width: 100%;
+.right{
+  display: inline-grid
 }
 </style>
