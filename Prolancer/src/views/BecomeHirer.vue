@@ -889,7 +889,7 @@ export default {
 </script>
   
   <style>
-.header {
+.become .header {
   width: 100%;
   height: 80px;
   position: relative;
