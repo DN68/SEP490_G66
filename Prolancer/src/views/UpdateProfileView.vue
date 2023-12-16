@@ -360,6 +360,7 @@
                   type="button"
                   class="btn btn-success"
                   @click="showCV(currentAccountInfo.CV_Upload)"
+                  :disabled="isButtonDisabled"
                 >
                   View CV
                 </button>
@@ -401,6 +402,8 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import api from "../../api";
+import _ from 'lodash';
+
 export default {
   name: "App",
   components: {
@@ -416,6 +419,7 @@ export default {
       currentAccountInfo: {},
       role: "",
       checkPhone: false,
+      isButtonDisabled: false,
       validationErrors: {
         firstName: "",
         lastName: "",
@@ -577,7 +581,9 @@ export default {
         this.$refs[`${fieldName}`].style.borderColor = "red";
       }
     },
-    async showCV(cvName) {
+    showCV: _.debounce(async function(cvName) {
+      //disable button
+      this.isButtonDisabled = true;
       const apiUrl = "/cv/" + cvName;
       const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
       console.log(resData);
@@ -603,7 +609,11 @@ export default {
       pdfWindow.onbeforeunload = function () {
         URL.revokeObjectURL(this.blobUrl);
       };
-    },
+      // Enable after 3 sec
+      setTimeout(() => {
+        this.isButtonDisabled = false;
+      }, 1000);
+    }),
     updateProfile() {
       // console.log(this.user)
       if (this.currentAccountInfo.Role == "F") {
