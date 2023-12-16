@@ -67,7 +67,7 @@
                 {{ validationErrors.category }}
               </p>
             </div>
-
+            
             <!-- <select
             class="form-select righthalf"
             aria-label="Default select example"
@@ -77,7 +77,6 @@
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select> -->
-          </div>
         </div>
         <div class="line" style="text-align: left; margin-top: 35px">
           <div style="float: left; width: 30%">
@@ -471,12 +470,11 @@ export default {
 textarea {
   width: 100%;
 }
-.right{
-  display: inline-grid
+.right {
+  display: inline-grid;
 }
 
-.create_gig textarea{
+.create_gig textarea {
   width: 100%;
 }
-
 </style>
