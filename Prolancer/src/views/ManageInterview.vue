@@ -268,9 +268,7 @@
                 ></i>
                 &nbsp;
                 <i
-                  v-if="
-                    interview.Status == 'Pending'
-                  "
+                  v-if="interview.Status == 'Pending'"
                   @click="
                     (action = 'Cancel'),
                       (isshowConfirmRequestModal = !isshowConfirmRequestModal),
@@ -601,7 +599,7 @@ import Sidebar from "../components/Sidebar.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import api from '../../api';
+import api from "../../api";
 var moment = require("moment");
 
 export default {
@@ -657,6 +655,15 @@ export default {
       }
     },
     async updateInterview(selectedInterviewID) {
+      var isAfter = moment(this.newScheduledDate).isAfter(moment());
+      if (!isAfter) {
+        alert("Interview date must be after today");
+        return;
+      }
+      if(this.newLocation.length == 0){
+        alert("You have to input location (or meeting link)");
+        return;
+      }
       console.log(this.newScheduledDate);
       const data = await api.put("/interviews/update", {
         date: this.newScheduledDate,
@@ -728,7 +735,7 @@ export default {
         //   autoClose: 2000,
         //   onClose: () => location.reload(),
         // });
-        console.log("Change Account Status Successfully!")
+        console.log("Change Account Status Successfully!");
       } else {
         toast.warn("Change account Status Failed!", { autoClose: 2000 });
       }
@@ -754,7 +761,7 @@ export default {
             //   autoClose: 2000,
             //   onClose: () => location.reload(),
             // });
-            console.log("Freelancer skills score already added")
+            console.log("Freelancer skills score already added");
           }
         );
     },
@@ -936,15 +943,15 @@ export default {
 }
 .interview_table {
   max-height: 70vh;
-  overflow-y: scroll;  
+  overflow-y: scroll;
 }
 
 .interview_table::-webkit-scrollbar {
-  width: 12px; 
+  width: 12px;
 }
 
 .interview_table::-webkit-scrollbar-thumb {
-  background-color: #888; 
+  background-color: #888;
 }
 
 .interview_table::-webkit-scrollbar-track {
