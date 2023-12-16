@@ -129,7 +129,13 @@
                     id="form3Example3"
                     class="form-control form-control-lg"
                     v-model="currentAccountInfo.First_Name"
+                    ref="firstName"
                   />
+                  <div>
+                    <p class="errmessage" style="color: red">
+                      {{ validationErrors.firstName }}
+                    </p>
+                  </div>
                 </div>
                 <div class="right" style="width: 40%">
                   <label
@@ -143,7 +149,13 @@
                     id="form3Example3"
                     class="form-control form-control-lg"
                     v-model="currentAccountInfo.Last_Name"
+                    ref="lastName"
                   />
+                  <div>
+                    <p class="errmessage" style="color: red">
+                      {{ validationErrors.lastName }}
+                    </p>
+                  </div>
                 </div>
               </div>
               <label
@@ -157,7 +169,13 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.Phoneno"
+                ref="phoneNo"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.phoneNo }}
+                </p>
+              </div>
               <label
                 class="form-label mt-5"
                 style="float: left"
@@ -169,7 +187,13 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.Location"
+                ref="location"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.location }}
+                </p>
+              </div>
               <label
                 class="form-label mt-5"
                 style="float: left"
@@ -213,6 +237,54 @@
 
             <!-- if role is Freelancer -->
             <div v-if="role == 'F'">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: space-between;
+                "
+              >
+                <div class="left" style="width: 40%">
+                  <label
+                    class="form-label mt-5"
+                    style="float: left"
+                    for="form3Example3"
+                    >First Name</label
+                  >
+                  <input
+                    type="text"
+                    id="form3Example3"
+                    class="form-control form-control-lg"
+                    v-model="currentAccountInfo.First_Name"
+                    ref="firstName"
+                  />
+                  <div>
+                    <p class="errmessage" style="color: red">
+                      {{ validationErrors.firstName }}
+                    </p>
+                  </div>
+                </div>
+                <div class="right" style="width: 40%">
+                  <label
+                    class="form-label mt-5"
+                    style="float: left"
+                    for="form3Example3"
+                    >Last Name</label
+                  >
+                  <input
+                    type="text"
+                    id="form3Example3"
+                    class="form-control form-control-lg"
+                    v-model="currentAccountInfo.Last_Name"
+                    ref="lastName"
+                  />
+                  <div>
+                    <p class="errmessage" style="color: red">
+                      {{ validationErrors.lastName }}
+                    </p>
+                  </div>
+                </div>
+              </div>
               <label
                 class="form-label mt-5"
                 style="float: left"
@@ -224,7 +296,13 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.Phoneno"
+                ref="phoneNo"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.phoneNo }}
+                </p>
+              </div>
               <label
                 class="form-label mt-5"
                 style="float: left"
@@ -236,7 +314,13 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.Location"
+                ref="location"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.location }}
+                </p>
+              </div>
               <label
                 class="form-label mt-5"
                 style="float: left"
@@ -248,7 +332,13 @@
                 id="form3Example3"
                 class="form-control form-control-lg"
                 v-model="currentAccountInfo.Description"
+                ref="description"
               />
+              <div>
+                <p class="errmessage" style="color: red">
+                  {{ validationErrors.description }}
+                </p>
+              </div>
               <label
                 class="form-label mt-5"
                 style="float: left"
@@ -264,10 +354,14 @@
                   accept=".pdf"
                 />
                 (.pdf only)
-               
               </div>
               <div>
-                <button type="button" class="btn btn-success" @click="showCV(currentAccountInfo.CV_Upload)">
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  @click="showCV(currentAccountInfo.CV_Upload)"
+                  :disabled="isButtonDisabled"
+                >
                   View CV
                 </button>
               </div>
@@ -307,7 +401,9 @@ import VueJwtDecode from "vue-jwt-decode";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import api from '../../api';
+import api from "../../api";
+import _ from 'lodash';
+
 export default {
   name: "App",
   components: {
@@ -322,7 +418,21 @@ export default {
       user: {},
       currentAccountInfo: {},
       role: "",
+      checkPhone: false,
+      isButtonDisabled: false,
+      validationErrors: {
+        firstName: "",
+        lastName: "",
+        phoneNo: "",
+        location: "",
+        description: "",
+      },
+      inputCheckFreelancer: false,
+      inputCheckCustomer: false,
     };
+  },
+  computed:{
+    
   },
   created() {
     //user is not authorized
@@ -367,7 +477,7 @@ export default {
               console.log(err.response);
             }
           );
-      } else if (decoded.role === "A"){
+      } else if (decoded.role === "A") {
         api
           .get("/accounts/info", {
             headers: { token: localStorage.getItem("token") },
@@ -384,48 +494,96 @@ export default {
       }
     }
   },
-  // beforeRouteUpdate() {
-  //   let token = localStorage.getItem("token");
-  //   //account is not authorized
-  //   if (!token) {
-  //     this.account = null;
-  //   } else {
-  //     let decoded = VueJwtDecode.decode(token);
-  //     console.log(decoded.role);
-  //     if (decoded.role === "F") {
-  //       api
-  //         .get("/freelancers/info", {
-  //           headers: { token: localStorage.getItem("token") },
-  //         })
-  //         .then(
-  //           (res) => {
-  //             this.currentAccountInfo = res.data.freelancer;
-  //             this.role = "F";
-  //             console.log(this.currentAccountInfo);
-  //           },
-  //           (err) => {
-  //             console.log(err.response);
-  //           }
-  //         );
-  //     } else if (decoded.role === "C") {
-  //       api
-  //         .get("/customers/info", {
-  //           headers: { token: localStorage.getItem("token") },
-  //         })
-  //         .then(
-  //           (res) => {
-  //             this.currentAccountInfo = res.data.customer;
-  //             this.role = "C";
-  //           },
-  //           (err) => {
-  //             console.log(err.response);
-  //           }
-  //         );
-  //     }
-  //   }
-  // },
   methods: {
-    async showCV(cvName) {
+    isValidPhoneNumber(phone) {
+      this.checkPhone = /^(03[2-9]|05[2689]|07[06-9]|08[1-9]|09\d)\d{7}$/.test(
+        phone
+      );
+    },
+    validateField(fieldName) {
+      const value = this.$refs[fieldName].value.trim();
+      //check phone input
+      this.isValidPhoneNumber(this.currentAccountInfo.Phoneno)
+      console.log(this.checkPhone)
+
+      console.log(`${fieldName} ` + value);
+      if (value == "") {
+        this.validationErrors[fieldName] = `This field cannot be empty.`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      if (fieldName == "phoneNo" && !this.checkPhone) {
+        this.validationErrors[fieldName] = `Invalid phone number`;
+        this.setBorderColor(fieldName, false);
+        return false;
+      }
+
+      
+      //if field input OK
+      this.validationErrors[fieldName] = "";
+      this.setBorderColor(fieldName, true);
+      return true;
+    },
+    checkInputCustomer() {
+      var errCount = 0;
+      //input validation here
+      if (!this.validateField("firstName")) {
+        errCount++;
+      }
+      if (!this.validateField("lastName")) {
+        errCount++;
+      }
+      if (!this.validateField("phoneNo")) {
+        errCount++;
+      }
+      if (!this.validateField("location")) {
+        errCount++;
+      }
+      console.log(errCount);
+      //if no error -> true
+      if (errCount == 0) {
+        this.inputCheckCustomer = true;
+      } else {
+        this.inputCheckCustomer = false;
+      }
+    },
+    checkInputFreelancer() {
+      var errCount = 0;
+      //input validation here
+      if (!this.validateField("firstName")) {
+        errCount++;
+      }
+      if (!this.validateField("lastName")) {
+        errCount++;
+      }
+      if (!this.validateField("phoneNo")) {
+        errCount++;
+      }
+      if (!this.validateField("location")) {
+        errCount++;
+      }
+      if (!this.validateField("description")) {
+        errCount++;
+      }
+      console.log(errCount);
+      //if no error -> true
+      if (errCount == 0) {
+        this.inputCheckFreelancer = true;
+      } else {
+        this.inputCheckFreelancer = false;
+      }
+    },
+    setBorderColor(fieldName, value) {
+      if (value == true) {
+        this.$refs[`${fieldName}`].style.borderColor = "initial";
+      } else {
+        this.$refs[`${fieldName}`].style.borderColor = "red";
+      }
+    },
+    showCV: _.debounce(async function(cvName) {
+      //disable button
+      this.isButtonDisabled = true;
       const apiUrl = "/cv/" + cvName;
       const resData = await api.get(apiUrl, { responseType: "arraybuffer" });
       console.log(resData);
@@ -451,76 +609,89 @@ export default {
       pdfWindow.onbeforeunload = function () {
         URL.revokeObjectURL(this.blobUrl);
       };
-    },
+      // Enable after 3 sec
+      setTimeout(() => {
+        this.isButtonDisabled = false;
+      }, 1000);
+    }),
     updateProfile() {
       // console.log(this.user)
       if (this.currentAccountInfo.Role == "F") {
-        api
-          .put(
-            `/freelancers/info/${this.currentAccountInfo.AccountID}/update`,
-            {
-              First_Name: this.currentAccountInfo.First_Name,
-              Last_Name: this.currentAccountInfo.Last_Name,
-              Phoneno: this.currentAccountInfo.Phoneno,
-              Profile_Picture: this.currentAccountInfo.Profile_Picture,
-              Location: this.currentAccountInfo.Location,
-              Description: this.currentAccountInfo.Description,
-              MainCategoryID: this.currentAccountInfo.MainCategoryID,
-            }
-          )
-          .then(
-            (res) => {
-              //if cv updated successfully
-              if (this.updateCV()) {
+        this.checkInputFreelancer();
+        if (this.inputCheckFreelancer) {
+          api
+            .put(
+              `/freelancers/info/${this.currentAccountInfo.AccountID}/update`,
+              {
+                First_Name: this.currentAccountInfo.First_Name,
+                Last_Name: this.currentAccountInfo.Last_Name,
+                Phoneno: this.currentAccountInfo.Phoneno,
+                Profile_Picture: this.currentAccountInfo.Profile_Picture,
+                Location: this.currentAccountInfo.Location,
+                Description: this.currentAccountInfo.Description,
+                MainCategoryID: this.currentAccountInfo.MainCategoryID,
+              }
+            )
+            .then(
+              (res) => {
+                //if cv updated successfully
+                if (this.updateCV()) {
+                  toast.success("Profile updated successfully!", {
+                    theme: "colored",
+                    autoClose: 2000,
+                  });
+                } else {
+                  toast.warn("Update CV Failed!", {
+                    theme: "colored",
+                    autoClose: 2000,
+                  });
+                }
+              },
+              (err) => {
+                //message
+                toast.error("Profile updated failed", {
+                  theme: "colored",
+                  autoClose: 2000,
+                  // onClose: () => location.replace("/sendmessage"),
+                });
+              }
+            );
+        }
+      } else if (this.currentAccountInfo.Role == "C") {
+        this.checkInputCustomer();
+        if (this.inputCheckCustomer) {
+          api
+            .put(
+              `/customers/info/${this.currentAccountInfo.AccountID}/update`,
+              {
+                First_Name: this.currentAccountInfo.First_Name,
+                Last_Name: this.currentAccountInfo.Last_Name,
+                Phoneno: this.currentAccountInfo.Phoneno,
+                Profile_Picture: this.currentAccountInfo.Profile_Picture,
+                Location: this.currentAccountInfo.Location,
+                CompanyName: this.currentAccountInfo.CompanyName,
+                CompanyAddress: this.currentAccountInfo.CompanyAddress,
+                TaxCode: this.currentAccountInfo.TaxCode,
+              }
+            )
+            .then(
+              (res) => {
+                // console.log(res.data);
+                //message
                 toast.success("Profile updated successfully!", {
                   theme: "colored",
                   autoClose: 2000,
                 });
-              }else{
-                toast.warn("Update CV Failed!", {
+              },
+              (err) => {
+                //message
+                toast.error("Profile updated failed", {
                   theme: "colored",
                   autoClose: 2000,
                 });
               }
-            },
-            (err) => {
-              //message
-              toast.error("Profile updated failed", {
-                theme: "colored",
-                autoClose: 2000,
-                // onClose: () => location.replace("/sendmessage"),
-              });
-            }
-          );
-      } else if (this.currentAccountInfo.Role == "C") {
-        api
-          .put(`/customers/info/${this.currentAccountInfo.AccountID}/update`, {
-            First_Name: this.currentAccountInfo.First_Name,
-            Last_Name: this.currentAccountInfo.Last_Name,
-            Phoneno: this.currentAccountInfo.Phoneno,
-            Profile_Picture: this.currentAccountInfo.Profile_Picture,
-            Location: this.currentAccountInfo.Location,
-            CompanyName: this.currentAccountInfo.CompanyName,
-            CompanyAddress: this.currentAccountInfo.CompanyAddress,
-            TaxCode: this.currentAccountInfo.TaxCode,
-          })
-          .then(
-            (res) => {
-              // console.log(res.data);
-              //message
-              toast.success("Profile updated successfully!", {
-                theme: "colored",
-                autoClose: 2000,
-              });
-            },
-            (err) => {
-              //message
-              toast.error("Profile updated failed", {
-                theme: "colored",
-                autoClose: 2000,
-              });
-            }
-          );
+            );
+        }
       }
     },
     updateCV() {
