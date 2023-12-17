@@ -49,7 +49,7 @@
               >
                 <li>
                   <router-link class="dropdown-item" to="/change"
-                    >Change password</router-link
+                    >Change Password</router-link
                   >
                 </li>
                 <li>

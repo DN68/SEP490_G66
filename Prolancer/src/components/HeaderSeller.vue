@@ -126,7 +126,7 @@
                 </li>
                 <li>
                   <router-link class="dropdown-item" to="/manageinterviewsel"
-                    >Manage your interviews</router-link
+                    >Manage Interviews</router-link
                   >
                 </li>
                 <!-- <router-link
@@ -136,7 +136,7 @@
               > -->
                 <li>
                   <router-link class="dropdown-item" to="/change"
-                    >Change password</router-link
+                    >Change Password</router-link
                   >
                 </li>
                 <li>
@@ -155,10 +155,10 @@
                     class="dropdown-item"
                     to="/manageChangeRequest"
                     v-if="freelancer && freelancer.Status != 'Pending'"
-                    >Order change Request</router-link
+                    >Order Change Request</router-link
                   >
                   <button class="dropdown-item" @click="showModal()" v-else>
-                    Order change Request
+                    Order Change Request
                   </button>
                 </li>
                 <li>

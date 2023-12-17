@@ -122,12 +122,12 @@
                 </li> -->
                 <li>
                   <router-link class="dropdown-item" to="/change"
-                    >Change password</router-link
+                    >Change Password</router-link
                   >
                 </li>
                 <li>
                   <router-link class="dropdown-item" to="/manageOrderRequest"
-                    >Order request</router-link
+                    >Order Request</router-link
                   >
                 </li>
                 <li>
