@@ -12,7 +12,7 @@
         :class="{ 'col-md-9 ms-0': currentAccountInfo.Role == 'A' }"
       >
         <div class="manage_title row">
-          <div class="col-md-4"><h3>Manage Change Request</h3></div>
+          <div class="col-md-5"><h3>Manage Order Change Request</h3></div>
           <div class="text-start" v-if="currentAccountInfo.Role != 'A'">
             <!-- <router-link :to="'/manageOrder'">
               <i
@@ -71,7 +71,7 @@
               disabled
             >
               <h6>
-                Cancel
+                Cancel Request
                 <span
                   v-if="this.requestType == 'Cancel'"
                   class="badge bg-secondary"
@@ -99,7 +99,7 @@
               disabled
             >
               <h6>
-                Extend
+                Extend Request
                 <span
                   v-if="this.requestType == 'Extend'"
                   class="badge bg-secondary"

@@ -755,7 +755,7 @@ export default {
         .then(
           (res) => {
             // console.log("Added successfully");
-            console.log(res.data.code);
+            // console.log(res.data.code);
             this.verificationCode = res.data.code;
           },
           (err) => {

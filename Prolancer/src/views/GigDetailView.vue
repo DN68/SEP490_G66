@@ -141,12 +141,12 @@
                   </div>
                 </section>
               </div>
-              <div class="gig_review">
+              <!-- <div class="gig_review">
                 <div class="main_title">
                   <h5 class="">Reviews</h5>
                 </div>
                 <Review></Review>
-              </div>
+              </div> -->
             </div>
             <div class="col-md-5 order_tab">
               <div class="packages-tabs single">
