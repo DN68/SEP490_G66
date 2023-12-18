@@ -739,7 +739,7 @@ export default {
         .then(
           (res) => {
             // console.log("Added successfully");
-            console.log(res.data.code);
+            // console.log(res.data.code);
             this.verificationCode = res.data.code;
           },
           (err) => {
@@ -914,7 +914,7 @@ export default {
               );
 
             //message
-            toast.success("Upload CV Successfully!", {
+            toast.success("Register Successfully!", {
               theme: "colored",
               autoClose: 2000,
               onClose: () => location.replace("/sendmessage"),
@@ -923,7 +923,7 @@ export default {
           .catch((error) => {
             // Handle the error
             console.error("Error uploading file", error);
-            toast.warn("Upload CV Failed!", { autoClose: 2000 });
+            toast.warn("Register Failed!", { autoClose: 2000 });
           });
       } else {
         // Handle case when no file is selected

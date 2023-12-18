@@ -43,7 +43,7 @@ export default {
           );
         }
         //Sign up as Conpany
-        else {
+        else if (this.currentAccountInfo.Role == "C"){
           console.log("Sign up as Conpany");
           await this.signupRest(
             this.currentAccountInfo.Username,
