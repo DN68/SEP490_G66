@@ -3,14 +3,20 @@
     <nav id="navCategory" class="navbar navbar-inverse nav_category">
       <div class="nav-item col-md-2 col-lg-2 col-xl-2 mx-auto " v-for="ca in listCategories" :key="ca.CategoryID">
         <!-- Links -->
-          <router-link
+          <router-link v-if="ca.CategoryID==1"
           :to="{ path: '/giglist', query: { filterBy1: ca.CategoryID } }"
            class="dropdown-item dropdown-item1"
            >
         <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn=ca.CategoryID" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn==ca.CategoryID }">{{ca.Category_Name}}</span></h6>
 
           </router-link>
+          <router-link v-else
+          :to="{ path: '#' }"
+           class="dropdown-item dropdown-item1"
+           >
+        <h6 class="fw-bold my-1 navCategory"><span class="nav_title " @mouseover="isHovered=!isHovered,hoveredOn=ca.CategoryID" @mouseout="isHovered=!isHovered"  :class="{ 'isHovered': isHovered&&hoveredOn==ca.CategoryID }">{{ca.Category_Name}}</span></h6>
 
+          </router-link>
       </div>
     </nav>
   </div>

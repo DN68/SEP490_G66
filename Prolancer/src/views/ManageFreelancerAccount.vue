@@ -4,7 +4,7 @@
     <Sidebar></Sidebar>
     <div class="container-manageFreelancer">
       <div class="manage_title row">
-        <div class="col-md-3"><h3>Manage freelancers</h3></div>
+        <div class="col-md-3"><h3>Manage Freelancers</h3></div>
         <div class="col-md-3"><h3></h3></div>
         <div class="col-md-3 search_bar">
           <div class="input-group rounded">

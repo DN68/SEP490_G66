@@ -6,7 +6,7 @@
     <header class="row">
       <Header :searchText="searchQuery"></Header>
     </header>
-    <NavCategory></NavCategory>
+    <!-- <NavCategory></NavCategory> -->
     <div class="container">
       <div class="row">
         <!-- <aside class="col-sm-3">
