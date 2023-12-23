@@ -4,7 +4,7 @@
     <Sidebar></Sidebar>
     <div class="container-manaInterviewad">
       <div class="manage_title row">
-        <div class="col-md-3"><h3>Manage Hirers</h3></div>
+        <div class="col-md-3"><h3>Manage Customers</h3></div>
         <div class="col-md-3"><h3></h3></div>
         <div class="col-md-3 search_bar">
           <div class="input-group rounded">
@@ -159,7 +159,7 @@
             <tr style="border-bottom: 2px solid #dcd8d8">
               <th class="th_no">NO.</th>
               <th class="th_AccountID">ACCOUNTID</th>
-              <th class="th_Hirer">HIRER</th>
+              <th class="th_Hirer">CUSTOMER</th>
               <th class="th_Email">EMAIL</th>
               <th class="th_Status">STATUS</th>
               <th class="th_actions">ACTIONS</th>
